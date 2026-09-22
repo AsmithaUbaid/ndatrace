@@ -34,6 +34,9 @@ logger = get_logger("model_gateway")
 # match to the planning doc's Section 13 assumption.
 PRICING_PER_MILLION: dict[str, dict[str, float]] = {
     "openai/gpt-5-mini": {"input": 0.25, "output": 2.00},
+    # Added for the C01 model comparison / bake-off (different vendor,
+    # different architecture, not just a cheaper OpenAI tier).
+    "google/gemini-2.5-flash-lite": {"input": 0.10, "output": 0.40},
 }
 
 

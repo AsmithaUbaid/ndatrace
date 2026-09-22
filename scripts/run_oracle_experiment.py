@@ -78,7 +78,14 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sample-size", type=int, default=SAMPLE_SIZE,
                          help=f"Number of cases to sample (default: {SAMPLE_SIZE})")
+    parser.add_argument("--model", default=None,
+                         help="Override the model (default: settings.default_model). "
+                              "Sample selection uses the same seed regardless of model, "
+                              "for a fair apples-to-apples comparison across models.")
     args = parser.parse_args()
+
+    model_tag = (args.model or settings.default_model).replace("/", "_")
+    experiment_id = f"{EXPERIMENT_ID}_{model_tag}"
 
     dev_path = settings.data_path / "dev.json"
     dataset = parse_contractnli_file(dev_path)
@@ -99,13 +106,15 @@ def main() -> int:
     ]
 
     try:
-        gateway = ModelGateway()
+        gateway = ModelGateway(model=args.model)
     except ModelError as e:
         print(f"ERROR: {e}")
         return 1
 
+    print(f"Model: {gateway.model}")
+
     harness = EvaluationHarness(gold_cases=golds)
-    checkpoint_keys = harness.completed_case_keys(EXPERIMENT_ID)
+    checkpoint_keys = harness.completed_case_keys(experiment_id)
     if checkpoint_keys:
         print(f"Resuming: {len(checkpoint_keys)} cases already done in a previous run")
 
@@ -126,7 +135,7 @@ def main() -> int:
             tokens_in=result.tokens_in, tokens_out=result.tokens_out,
             cost_usd=result.cost_usd,
         )
-        harness.save_prediction_checkpoint(EXPERIMENT_ID, pred)
+        harness.save_prediction_checkpoint(experiment_id, pred)
 
         elapsed = time.time() - start
         mark = "OK" if result.label == ann.label else "X "
@@ -134,16 +143,16 @@ def main() -> int:
               f"gold={ann.label} pred={result.label} "
               f"(${result.cost_usd:.5f}, {elapsed:.0f}s elapsed)")
 
-    all_predictions = harness.load_checkpoint(EXPERIMENT_ID)
+    all_predictions = harness.load_checkpoint(experiment_id)
 
     config = ExperimentConfig(
-        experiment_id=EXPERIMENT_ID, experiment_name="Oracle-evidence baseline",
-        model=settings.default_model, prompt_version="v1", architecture="oracle",
+        experiment_id=experiment_id, experiment_name="Oracle-evidence baseline",
+        model=gateway.model, prompt_version="v1", architecture="oracle",
         split="dev", sample_size=len(sample), seed=SEED,
     )
     result = harness.evaluate(all_predictions, config)
-    harness.save_result(result, filename="runs/run_B04_oracle.jsonl")
-    harness.clear_checkpoint(EXPERIMENT_ID)
+    harness.save_result(result, filename=f"runs/run_{experiment_id}.jsonl")
+    harness.clear_checkpoint(experiment_id)
 
     m = result.metrics
     print("\n--- B04: Oracle-evidence baseline ---")
