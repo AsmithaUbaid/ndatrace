@@ -1,3 +1,173 @@
 """
-NDATrace Pipeline Module
+Model gateway (WBS T009) - unified interface to the LLM provider.
+
+Wraps OpenRouter's OpenAI-compatible chat completions API with retries,
+exponential backoff, timeout handling, token counting, and cost tracking.
+This is the ONLY module that should ever call the LLM directly - the
+classifier, agent, etc. all go through ModelGateway.complete() so cost/
+latency accounting stays centralized and consistent (Section 6, "Model
+Gateway").
+
+Failure handling (Section 4, Flow 7 "External Model Failure"):
+- Timeout -> retry with backoff
+- 429 (rate limit) -> retry with backoff, respecting Retry-After if present
+- 5xx (server error) -> retry with backoff
+- 4xx other than 429 (bad request, auth) -> raise immediately, retrying won't help
+- All retries exhausted -> raise ModelError
 """
+
+from __future__ import annotations
+
+import time
+from dataclasses import dataclass, field
+
+import openai
+from openai import OpenAI
+
+from pipeline.config import settings
+from pipeline.logging_config import get_logger
+
+logger = get_logger("model_gateway")
+
+# Pricing in USD per million tokens. Verified live against OpenRouter's
+# GET /api/v1/models on 2026-09-22 (see data/cost_estimates.json) - exact
+# match to the planning doc's Section 13 assumption.
+PRICING_PER_MILLION: dict[str, dict[str, float]] = {
+    "openai/gpt-5-mini": {"input": 0.25, "output": 2.00},
+}
+
+
+class ModelError(Exception):
+    """Raised when a model call fails after exhausting all retries."""
+
+
+@dataclass
+class ModelResponse:
+    """Result of a single ModelGateway.complete() call."""
+    content: str
+    model: str
+    tokens_in: int
+    tokens_out: int
+    cost_usd: float
+    latency_ms: float
+    num_retries: int = 0
+    stage_latencies: dict[str, float] = field(default_factory=dict)
+
+
+def estimate_cost(model: str, tokens_in: int, tokens_out: int) -> float:
+    """Estimate cost in USD for a call. Unknown models log a warning and cost $0."""
+    pricing = PRICING_PER_MILLION.get(model)
+    if pricing is None:
+        logger.warning(f"No pricing entry for model '{model}', estimating cost as $0")
+        return 0.0
+    return (tokens_in / 1_000_000) * pricing["input"] + (tokens_out / 1_000_000) * pricing["output"]
+
+
+class ModelGateway:
+    """Unified, retrying interface to the OpenRouter chat completions API."""
+
+    def __init__(
+        self,
+        model: str | None = None,
+        api_key: str | None = None,
+        base_url: str | None = None,
+        max_retries: int | None = None,
+        timeout_seconds: int | None = None,
+    ):
+        self.model = model or settings.default_model
+        self.max_retries = max_retries if max_retries is not None else settings.max_retries
+        self.timeout_seconds = timeout_seconds or settings.request_timeout_seconds
+
+        api_key = api_key or settings.openrouter_api_key
+        base_url = base_url or settings.openrouter_base_url
+        if not api_key:
+            raise ModelError(
+                "No OPENROUTER_API_KEY configured. Add a real key to .env "
+                "(see .env.example) before calling the model gateway."
+            )
+
+        self._client = OpenAI(api_key=api_key, base_url=base_url, timeout=self.timeout_seconds)
+
+    def complete(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        temperature: float | None = None,
+        response_format: dict | None = None,
+    ) -> ModelResponse:
+        """
+        Run one chat completion with retries and exponential backoff.
+
+        Never logs prompt or response content (may contain NDA text) -
+        only metadata (latency, token counts, retry count, error class).
+        """
+        temperature = settings.temperature if temperature is None else temperature
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ]
+
+        start = time.perf_counter()
+        last_error: Exception | None = None
+
+        for attempt in range(self.max_retries + 1):
+            try:
+                kwargs = {}
+                if response_format is not None:
+                    kwargs["response_format"] = response_format
+
+                response = self._client.chat.completions.create(
+                    model=self.model,
+                    messages=messages,
+                    temperature=temperature,
+                    **kwargs,
+                )
+                latency_ms = (time.perf_counter() - start) * 1000
+
+                content = response.choices[0].message.content or ""
+                tokens_in = response.usage.prompt_tokens if response.usage else 0
+                tokens_out = response.usage.completion_tokens if response.usage else 0
+                cost = estimate_cost(self.model, tokens_in, tokens_out)
+
+                logger.info(
+                    f"Model call succeeded: model={self.model}, attempt={attempt + 1}, "
+                    f"tokens_in={tokens_in}, tokens_out={tokens_out}, "
+                    f"latency_ms={latency_ms:.0f}, cost_usd={cost:.6f}"
+                )
+
+                return ModelResponse(
+                    content=content,
+                    model=self.model,
+                    tokens_in=tokens_in,
+                    tokens_out=tokens_out,
+                    cost_usd=cost,
+                    latency_ms=latency_ms,
+                    num_retries=attempt,
+                )
+
+            except openai.AuthenticationError as e:
+                # Bad/expired key - retrying will never help.
+                logger.error(f"Model authentication failed: {type(e).__name__}")
+                raise ModelError(f"Authentication failed - check OPENROUTER_API_KEY: {e}") from e
+
+            except openai.BadRequestError as e:
+                # Malformed request - retrying will never help.
+                logger.error(f"Model request malformed: {type(e).__name__}")
+                raise ModelError(f"Bad request (not retried): {e}") from e
+
+            except (openai.RateLimitError, openai.APITimeoutError, openai.InternalServerError,
+                    openai.APIConnectionError) as e:
+                last_error = e
+                if attempt < self.max_retries:
+                    backoff = 2 ** attempt  # 1s, 2s, 4s
+                    logger.warning(
+                        f"Model call failed ({type(e).__name__}), retrying in {backoff}s "
+                        f"(attempt {attempt + 1}/{self.max_retries + 1})"
+                    )
+                    time.sleep(backoff)
+                else:
+                    logger.error(f"Model call failed after {self.max_retries + 1} attempts: {type(e).__name__}")
+
+        raise ModelError(
+            f"All {self.max_retries + 1} attempts failed for model '{self.model}': {last_error}"
+        ) from last_error

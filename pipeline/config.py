@@ -29,8 +29,11 @@ class Settings(BaseSettings):
     )
 
     # --- Model ---
+    # Bare OpenRouter model ID (verified via GET /models 2026-09-22) - no
+    # "openrouter/" prefix, that's a litellm routing convention, not what
+    # OpenRouter's own REST API expects in the request body.
     default_model: str = Field(
-        default="openrouter/openai/gpt-4.1-mini",
+        default="openai/gpt-5-mini",
         description="Default LLM model identifier",
     )
     temperature: float = Field(default=0.0, ge=0.0, le=2.0)
