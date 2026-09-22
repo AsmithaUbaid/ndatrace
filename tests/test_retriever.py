@@ -5,6 +5,8 @@ model download/inference needed for these - fast and deterministic).
 
 from __future__ import annotations
 
+from unittest.mock import patch
+
 import numpy as np
 import pytest
 
@@ -76,3 +78,23 @@ def test_retriever_empty_document_returns_no_results():
     retriever = Retriever("", chunk_method="clause")
     assert retriever.chunks == []
     assert retriever.query("anything") == []
+
+
+def test_query_and_rerank_empty_document_returns_no_results():
+    retriever = Retriever("", chunk_method="sentence")
+    assert retriever.query_and_rerank("anything") == []
+
+
+def test_query_and_rerank_calls_rerank_with_wide_candidate_pool():
+    doc = "1. Reverse engineering clause.\n\n2. Solicitation clause.\n\n3. Destruction clause."
+    retriever = Retriever(doc, chunk_method="clause", chunk_size=15)
+
+    with patch("pipeline.reranker.rerank") as mock_rerank:
+        mock_rerank.return_value = "reranked result"
+        result = retriever.query_and_rerank("reverse", candidate_pool_size=2, top_k=1)
+
+    assert result == "reranked result"
+    call_args = mock_rerank.call_args
+    assert call_args.args[0] == "reverse"
+    assert len(call_args.args[1]) == 2  # candidate_pool_size was respected
+    assert call_args.kwargs["top_k"] == 1

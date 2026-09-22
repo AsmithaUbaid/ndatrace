@@ -52,3 +52,21 @@ class Retriever:
         query_embedding = embed_query(query_text, self.embedding_model)
         hits = search(self._index, query_embedding, top_k)
         return [RetrievalResult(chunk=chunk, score=score) for chunk, score in hits]
+
+    def query_and_rerank(
+        self, query_text: str, candidate_pool_size: int = 20, top_k: int = 10
+    ) -> list[RetrievalResult]:
+        """
+        Production retrieval path (CLAUDE.md Decisions Log, T023 round 3):
+        retrieve a wide candidate pool cheaply with the bi-encoder, then
+        rerank down to top_k with a cross-encoder. Improved recall,
+        precision, and MRR simultaneously over plain top-k retrieval in
+        the T023 experiments - use this over .query() unless there's a
+        specific reason not to pay for the extra reranking pass.
+        """
+        from pipeline.reranker import rerank  # local import: avoids a retriever<->reranker import cycle
+
+        if not self.chunks:
+            return []
+        candidates = self.query(query_text, top_k=candidate_pool_size)
+        return rerank(query_text, candidates, top_k=top_k)
