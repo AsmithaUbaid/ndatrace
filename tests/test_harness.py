@@ -7,6 +7,9 @@ snapshotting (A11) against a temporary results directory.
 
 from __future__ import annotations
 
+import pytest
+from pydantic import ValidationError
+
 from evaluation.harness import EvaluationHarness
 from evaluation.schemas import ExperimentConfig, GoldCase, Label, Prediction
 
@@ -95,3 +98,29 @@ def test_evaluate_raises_without_gold_cases(tmp_path):
         assert False, "expected ValueError"
     except ValueError:
         pass
+
+
+def test_experiment_config_sample_size_round_trips(tmp_path):
+    """
+    Regression test: sample_size was passed by run_oracle_experiment.py but
+    not declared on ExperimentConfig, so pydantic's default extra="ignore"
+    silently dropped it - the field never made it into saved results.
+    """
+    config = ExperimentConfig(experiment_id="exp_D", sample_size=150, seed=42)
+    assert config.sample_size == 150
+
+    harness = EvaluationHarness(results_dir=str(tmp_path), gold_cases=[make_gold("d1", "h1")])
+    result = harness.evaluate([make_pred("d1", "h1")], config)
+    harness.save_result(result, filename="run_d.jsonl")
+
+    loaded = harness.load_results("run_d.jsonl")
+    assert loaded[0].config.sample_size == 150
+
+
+def test_experiment_config_rejects_unknown_field():
+    """
+    extra="forbid": an undeclared field must raise immediately, not
+    silently vanish the way sample_size did before this fix.
+    """
+    with pytest.raises(ValidationError):
+        ExperimentConfig(experiment_id="exp_E", this_field_does_not_exist=123)

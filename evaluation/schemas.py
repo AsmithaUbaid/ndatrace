@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from enum import Enum
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Label(str, Enum):
@@ -102,6 +102,13 @@ class GoldCase(BaseModel):
 
 class ExperimentConfig(BaseModel):
     """Snapshot of the configuration used for an experiment run."""
+    # extra="forbid": an unknown field (e.g. a typo, or a field the caller
+    # assumed existed) must raise immediately, not silently vanish. This
+    # schema had exactly that bug - sample_size was passed by a caller but
+    # not declared here, so pydantic's default extra="ignore" behavior
+    # dropped it with no error, permanently losing it from saved results.
+    model_config = ConfigDict(extra="forbid")
+
     experiment_id: str = Field(description="Unique experiment identifier")
     experiment_name: str = Field(default="", description="Human-readable name")
     description: str = Field(default="", description="What this experiment tests")
@@ -120,6 +127,7 @@ class ExperimentConfig(BaseModel):
         description="Architecture variant: rule, full_context, oracle, rag, rag_agent",
     )
     split: str = Field(default="dev", description="Dataset split used")
+    sample_size: int = Field(default=0, description="Number of cases in this run (0 = full split)")
     seed: int = Field(default=42, description="Random seed for reproducibility (A12)")
     extra: dict = Field(default_factory=dict, description="Any additional config")
 
