@@ -14,7 +14,13 @@ from sentence_transformers import SentenceTransformer
 from pipeline.config import settings
 
 
-@lru_cache(maxsize=2)
+# maxsize=8, not 2: a comparison experiment can legitimately need several
+# distinct embedding models alive at once (e.g. comparing mpnet/bge/minilm
+# per document in a loop). A too-small cache silently thrashes - evicting
+# and reloading a multi-hundred-MB model from disk on almost every call -
+# which looks like a hang (near-zero CPU, long wall-clock stall) rather
+# than an obvious error. Hit exactly this bug once; keep the cache roomy.
+@lru_cache(maxsize=8)
 def _get_model(model_name: str) -> SentenceTransformer:
     return SentenceTransformer(model_name)
 

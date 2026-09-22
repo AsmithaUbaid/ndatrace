@@ -23,7 +23,10 @@ from pipeline.retriever import RetrievalResult
 DEFAULT_RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
 
-@lru_cache(maxsize=2)
+# See pipeline/embedder.py's _get_model for why this is 8, not 2 - a
+# too-small model cache thrashes (evict + reload a full model from disk on
+# almost every call) rather than erroring, which looks like a hang.
+@lru_cache(maxsize=8)
 def _get_reranker(model_name: str) -> CrossEncoder:
     return CrossEncoder(model_name)
 
