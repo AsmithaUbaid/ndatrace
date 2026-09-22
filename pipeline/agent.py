@@ -51,6 +51,10 @@ class AgentStep:
     action: str
     query: str
     result_summary: str
+    latency_ms: float
+    tokens_in: int
+    tokens_out: int
+    cost_usd: float
 
 
 @dataclass
@@ -122,11 +126,14 @@ def run_agent(
     hypothesis_text: str,
     initial_chunks: list[Chunk],
     gateway: ModelGateway,
+    doc_id: str = "",
     max_steps: int | None = None,
     max_seconds: int | None = None,
+    max_tokens: int | None = None,
 ) -> AgentResult:
     max_steps = settings.agent_max_steps if max_steps is None else max_steps
     max_seconds = settings.agent_max_seconds if max_seconds is None else max_seconds
+    max_tokens = settings.agent_max_tokens if max_tokens is None else max_tokens
 
     start = time.time()
     evidence_chunks: list[Chunk] = list(initial_chunks)
@@ -137,18 +144,39 @@ def run_agent(
     total_tokens_out = 0
     stopped_reason = "step_limit"
 
+    def _log_step(stage: str, step_latency_ms: float, tokens_in: int, tokens_out: int, cost_usd: float,
+                   label: str | None = None, confidence: float | None = None) -> None:
+        # Section 0B: log identifiers/metrics only - never the query text,
+        # chunk text, or any other NDA-derived content.
+        extra = {
+            "stage": stage, "doc_id": doc_id, "hypothesis_id": hypothesis_id,
+            "latency_ms": round(step_latency_ms, 1), "tokens_in": tokens_in,
+            "tokens_out": tokens_out, "cost_usd": cost_usd, "model": gateway.model,
+        }
+        if label is not None:
+            extra["label"] = label
+        if confidence is not None:
+            extra["confidence"] = confidence
+        logger.info(f"Agent {stage}", extra=extra)
+
     for step_num in range(1, max_steps + 1):
         if time.time() - start > max_seconds:
             stopped_reason = "time_limit"
             break
+        if total_tokens_in + total_tokens_out > max_tokens:
+            stopped_reason = "token_limit"
+            break
 
+        step_start = time.time()
         decision, response = _decide_next_action(hypothesis_text, evidence_chunks, gateway)
+        step_latency_ms = (time.time() - step_start) * 1000
         total_cost += response.cost_usd
         total_tokens_in += response.tokens_in
         total_tokens_out += response.tokens_out
 
         if decision is None or decision.get("action") not in VALID_ACTIONS:
             logger.warning("Agent: invalid or unparseable action, stopping")
+            _log_step("invalid_action", step_latency_ms, response.tokens_in, response.tokens_out, response.cost_usd)
             stopped_reason = "invalid_action"
             break
 
@@ -158,11 +186,16 @@ def run_agent(
             label = decision.get("label")
             if label not in VALID_LABELS:
                 logger.warning(f"Agent: conclude with invalid label {label!r}, stopping")
+                _log_step("invalid_conclusion", step_latency_ms, response.tokens_in, response.tokens_out, response.cost_usd)
                 stopped_reason = "invalid_conclusion"
                 break
-            steps.append(AgentStep(step_num, "conclude", "", f"Concluded: {label}"))
+            confidence = float(decision.get("confidence", 0.5))
+            _log_step("conclude", step_latency_ms, response.tokens_in, response.tokens_out, response.cost_usd,
+                       label=label, confidence=confidence)
+            steps.append(AgentStep(step_num, "conclude", "", f"Concluded: {label}",
+                                    step_latency_ms, response.tokens_in, response.tokens_out, response.cost_usd))
             return AgentResult(
-                label=label, confidence=float(decision.get("confidence", 0.5)),
+                label=label, confidence=confidence,
                 evidence=list(decision.get("evidence", [])),
                 explanation=str(decision.get("explanation", "")),
                 trace=AgentTrace(steps=steps, stopped_reason="concluded"),
@@ -174,6 +207,7 @@ def run_agent(
         call_key = (action, query)
         if call_key in seen_calls:
             logger.info(f"Agent: duplicate call to {action!r} with same query, stopping")
+            _log_step("duplicate_loop", step_latency_ms, response.tokens_in, response.tokens_out, response.cost_usd)
             stopped_reason = "duplicate_loop"
             break
         seen_calls.add(call_key)
@@ -182,7 +216,9 @@ def run_agent(
                                     retriever, evidence_chunks)
         added = [c for c in new_chunks if c not in evidence_chunks]
         evidence_chunks.extend(added)
-        steps.append(AgentStep(step_num, action, query, f"Added {len(added)} new chunk(s)"))
+        _log_step(action, step_latency_ms, response.tokens_in, response.tokens_out, response.cost_usd)
+        steps.append(AgentStep(step_num, action, query, f"Added {len(added)} new chunk(s)",
+                                step_latency_ms, response.tokens_in, response.tokens_out, response.cost_usd))
     else:
         stopped_reason = "step_limit"
 
@@ -190,12 +226,17 @@ def run_agent(
     # classify() call over everything gathered rather than returning
     # nothing. Whether this counts as a case the agent should have
     # abstained on is decided upstream by pipeline/confidence.py, not here.
+    fallback_start = time.time()
     context = " ".join(c.text for c in evidence_chunks)
     fallback = classify(context, hypothesis_text, gateway)
+    fallback_latency_ms = (time.time() - fallback_start) * 1000
     total_cost += fallback.cost_usd
     total_tokens_in += fallback.tokens_in
     total_tokens_out += fallback.tokens_out
-    steps.append(AgentStep(len(steps) + 1, "fallback_classify", "", f"Fallback: {fallback.label}"))
+    _log_step("fallback_classify", fallback_latency_ms, fallback.tokens_in, fallback.tokens_out, fallback.cost_usd,
+               label=fallback.label, confidence=fallback.confidence)
+    steps.append(AgentStep(len(steps) + 1, "fallback_classify", "", f"Fallback: {fallback.label}",
+                            fallback_latency_ms, fallback.tokens_in, fallback.tokens_out, fallback.cost_usd))
 
     return AgentResult(
         label=fallback.label, confidence=fallback.confidence,
