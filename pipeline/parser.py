@@ -152,8 +152,14 @@ def parse_contractnli_file(filepath: str | Path) -> ContractNLIDataset:
     with open(filepath, "r", encoding="utf-8") as f:
         raw = json.load(f)
 
-    # Extract hypothesis texts
-    hypotheses: dict[str, str] = raw.get("labels", {})
+    # Extract hypothesis texts. ContractNLI's real schema nests each entry as
+    # {"short_description": ..., "hypothesis": "..."} rather than a plain
+    # string; accept a plain string too for synthetic/test fixtures.
+    raw_labels = raw.get("labels", {})
+    hypotheses: dict[str, str] = {
+        hyp_id: (entry.get("hypothesis", "") if isinstance(entry, dict) else str(entry))
+        for hyp_id, entry in raw_labels.items()
+    }
     if not hypotheses:
         raise ValueError(f"No 'labels' (hypotheses) found in {filepath}")
 
@@ -189,7 +195,9 @@ def parse_contractnli_file(filepath: str | Path) -> ContractNLIDataset:
 
 def _parse_document(raw_doc: dict, hypotheses: dict[str, str]) -> NDADocument:
     """Parse a single document entry from the ContractNLI JSON."""
-    doc_id = raw_doc["id"]
+    # ContractNLI document IDs are ints in the raw JSON; normalise to str
+    # since evaluation.schemas (GoldCase, Prediction) require doc_id: str.
+    doc_id = str(raw_doc["id"])
     file_name = raw_doc.get("file_name", doc_id)
     text = raw_doc["text"]
     raw_spans = raw_doc.get("spans", [])

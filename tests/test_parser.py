@@ -54,6 +54,61 @@ def test_parse_contractnli_file_basic(tmp_path):
     assert doc.annotations["nda-1"].label == "Entailment"
 
 
+def test_hypothesis_text_extracted_from_real_contractnli_label_shape(tmp_path):
+    """
+    The real ContractNLI schema nests each label entry as
+    {"short_description": ..., "hypothesis": "..."}, not a plain string.
+    hypothesis_text must resolve to the actual sentence, not the dict.
+    """
+    data = {
+        "documents": [
+            {
+                "id": "doc1", "file_name": "doc1.pdf", "text": "text",
+                "spans": [[0, 4]],
+                "annotation_sets": [{"annotations": {"nda-1": {"choice": "Entailment", "spans": [0]}}}],
+            }
+        ],
+        "labels": {
+            "nda-1": {
+                "short_description": "No reverse engineering",
+                "hypothesis": "Receiving Party shall not reverse engineer Confidential Information.",
+            }
+        },
+    }
+    filepath = tmp_path / "dev.json"
+    filepath.write_text(json.dumps(data))
+
+    dataset = parse_contractnli_file(filepath)
+    doc = dataset.get_document("doc1")
+
+    assert isinstance(doc.annotations["nda-1"].hypothesis_text, str)
+    assert doc.annotations["nda-1"].hypothesis_text == (
+        "Receiving Party shall not reverse engineer Confidential Information."
+    )
+
+
+def test_document_id_is_normalised_to_str(tmp_path):
+    """
+    Real ContractNLI document IDs are ints in the raw JSON (e.g. 3, not
+    "3"). doc_id must be normalised to str since evaluation.schemas
+    (GoldCase, Prediction) require doc_id: str and reject int outright.
+    """
+    data = {
+        "documents": [{
+            "id": 456, "file_name": "doc.pdf", "text": "text", "spans": [],
+            "annotation_sets": [{"annotations": {}}],
+        }],
+        "labels": {"nda-1": {"hypothesis": "h"}},
+    }
+    filepath = tmp_path / "dev.json"
+    filepath.write_text(json.dumps(data))
+
+    dataset = parse_contractnli_file(filepath)
+    doc = dataset.documents[0]
+    assert doc.doc_id == "456"
+    assert isinstance(doc.doc_id, str)
+
+
 def test_get_evidence_text_matches_span_indices(tmp_path):
     text = "0123456789ABCDEFGHIJ"  # spans [0,10) and [11,20)
     data = make_contractnli_json("doc1", text, {"nda-1": "Contradiction"})
