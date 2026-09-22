@@ -1,0 +1,82 @@
+[
+  {
+    "case_id": "066",
+    "doc_id": "610",
+    "hypothesis_id": "nda-13",
+    "gold_label": "Entailment",
+    "category": "agent_behaviour",
+    "description": "Agent triggers on REVIEW routing. Adapted from the plan's original design (trigger on low self-confidence, e.g. 0.35) - T026 found self-confidence unusable (AUROC 0.554), so the real trigger is rule-baseline disagreement (T027). Real case: RAG predicted Entailment, the agent was invoked and investigated."
+  },
+  {
+    "case_id": "067",
+    "doc_id": "14",
+    "hypothesis_id": "nda-15",
+    "gold_label": "NotMentioned",
+    "category": "agent_behaviour",
+    "description": "Agent does NOT trigger when the rule baseline agrees with RAG. Real case: RAG predicted NotMentioned, rule baseline agreed - routed ACCEPT, agent never invoked (pipeline/confidence.py's route())."
+  },
+  {
+    "case_id": "068",
+    "doc_id": "14",
+    "hypothesis_id": "nda-2",
+    "gold_label": "Contradiction",
+    "category": "agent_behaviour",
+    "description": "Agent picks a relevant tool. Real trace: ['find_defined_term', 'fallback_classify'] - called find_defined_term for a hypothesis referencing a term that's likely defined elsewhere in the document (nda-2, about a specific defined-term scope limitation)."
+  },
+  {
+    "case_id": "069",
+    "doc_id": "610",
+    "hypothesis_id": "nda-13",
+    "gold_label": "Entailment",
+    "category": "agent_behaviour",
+    "description": "Agent stops after finding clear evidence, not the max step budget. Real case: concluded in 1 step(s) (cap is 5). Across all 67 real REVIEW cases, 52/67 concluded normally and none reached the 5-step cap - the model typically decides quickly rather than over-investigating."
+  },
+  {
+    "case_id": "070",
+    "doc_id": "79",
+    "hypothesis_id": "nda-10",
+    "gold_label": "Entailment",
+    "category": "agent_behaviour",
+    "description": "Agent detects a query loop. Real trace: ['search_clauses', 'search_clauses', 'fallback_classify'] - the model repeated the same tool+query combination, tripping duplicate-call detection (pipeline/agent.py) before hitting the step cap. 14/67 real cases (21%) hit this - the single most common non-'concluded' stop reason."
+  },
+  {
+    "case_id": "071",
+    "doc_id": "",
+    "hypothesis_id": "",
+    "gold_label": "NotMentioned",
+    "category": "agent_behaviour",
+    "description": "Agent respects the step cap (5). **No real production case reached the cap** [proxy: none of 67 real REVIEW cases needed more than 3 steps] - verified instead by tests/test_agent.py::test_agent_hits_step_limit_and_falls_back, which forces a 10-step-worth decision sequence with max_steps=3 and confirms exactly 3 calls are made before falling back."
+  },
+  {
+    "case_id": "072",
+    "doc_id": "",
+    "hypothesis_id": "",
+    "gold_label": "NotMentioned",
+    "category": "agent_behaviour",
+    "description": "Agent respects the cost/token cap. **No real production case approached the cap** (real per-case cost topped out around $0.0006, settings.agent_max_tokens is 3000) - verified instead by tests/test_agent.py::test_agent_respects_token_limit. Note: this cap was added during this eval-case build (a real gap - settings.agent_max_tokens existed in config but wasn't enforced in pipeline/agent.py until now)."
+  },
+  {
+    "case_id": "073",
+    "doc_id": "79",
+    "hypothesis_id": "nda-10",
+    "gold_label": "Entailment",
+    "category": "agent_behaviour",
+    "description": "Agent improves on RAG. Real case: RAG predicted NotMentioned, agent corrected it to Entailment (gold: Entailment). 6/67 real REVIEW cases (9.0%) show this pattern."
+  },
+  {
+    "case_id": "074",
+    "doc_id": "482",
+    "hypothesis_id": "nda-1",
+    "gold_label": "Entailment",
+    "category": "agent_behaviour",
+    "description": "Agent makes it worse - CRITICAL FAILURE. Real case: RAG correctly predicted Entailment (matches gold Entailment), agent flipped it to Contradiction (wrong). 3/67 real REVIEW cases (4.5%) show this pattern - real, tracked, and outweighed by recovery (9.0%) but not zero. This is the number T031's architecture decision should weigh, not just the net accuracy gain."
+  },
+  {
+    "case_id": "075",
+    "doc_id": "",
+    "hypothesis_id": "",
+    "gold_label": "NotMentioned",
+    "category": "agent_behaviour",
+    "description": "Agent abstains when stuck. **Deliberate design deviation, not a gap**: pipeline/agent.py does not implement a distinct 'abstain' action when the step/time/token limit is hit without a conclusion - it falls back to a plain classify() call over everything gathered instead (see pipeline/agent.py's docstring). Whether to abstain on the final answer is left entirely to pipeline/confidence.py upstream, so there is no separate agent-level abstain path to test here."
+  }
+]

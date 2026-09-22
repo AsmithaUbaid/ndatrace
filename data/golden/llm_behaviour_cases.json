@@ -1,0 +1,82 @@
+[
+  {
+    "case_id": "056",
+    "doc_id": "",
+    "hypothesis_id": "",
+    "gold_label": "NotMentioned",
+    "category": "llm_behaviour",
+    "description": "Valid JSON output - real historical evidence across this session's ~1193 real classify() calls (Oracle, RAG, prompt-tuning experiments): 17 needed a retry (invalid JSON on the first attempt, ~2% rate), and every single one succeeded on retry - zero calls ever fell through to the 'invalid JSON after retry' fallback across the whole session."
+  },
+  {
+    "case_id": "057",
+    "doc_id": "",
+    "hypothesis_id": "",
+    "gold_label": "NotMentioned",
+    "category": "llm_behaviour",
+    "description": "Only allowed labels - structural guarantee (pipeline/classifier.py's VALID_LABELS check forces NotMentioned on any unrecognized label) plus real evidence: an invalid label was never observed to reach a saved Prediction across the whole session's real runs (grepped for the 'invalid label' fallback log line - zero matches)."
+  },
+  {
+    "case_id": "058",
+    "doc_id": "synthetic",
+    "hypothesis_id": "synthetic",
+    "gold_label": "Entailment",
+    "category": "llm_behaviour",
+    "description": "No hallucinated quotes - real call against a 5-clause synthetic NDA. Predicted=Entailment, evidence verbatim-verified: True (hallucinated quotes: [])."
+  },
+  {
+    "case_id": "059",
+    "doc_id": "610",
+    "hypothesis_id": "nda-13",
+    "gold_label": "Entailment",
+    "category": "llm_behaviour",
+    "description": "Explanation supports label - Entailment. Real case, correctly predicted. Explanation contains entailment-appropriate language: True. Explanation: \"The NDA explicitly states that the receiving party may be receiving information from other parties that is similar to the disclosing party's confident\""
+  },
+  {
+    "case_id": "060",
+    "doc_id": "435",
+    "hypothesis_id": "nda-7",
+    "gold_label": "Contradiction",
+    "category": "llm_behaviour",
+    "description": "Explanation supports label - Contradiction. Real case, correctly predicted. Explanation contains contradiction-appropriate language: True. Explanation: 'The NDA explicitly states that Confidential Information will not be disclosed to any person, firm, or business, except for authorized representatives '"
+  },
+  {
+    "case_id": "061",
+    "doc_id": "69",
+    "hypothesis_id": "nda-18",
+    "gold_label": "NotMentioned",
+    "category": "llm_behaviour",
+    "description": "Explanation supports label - NotMentioned. Real case, correctly predicted. Explanation contains notmentioned-appropriate language: True. Explanation: \"The provided text contains a section titled 'Non-Solicitation' but it only addresses the confidentiality and return/destruction of information, not th\""
+  },
+  {
+    "case_id": "062",
+    "doc_id": "73",
+    "hypothesis_id": "nda-4",
+    "gold_label": "Entailment",
+    "category": "llm_behaviour",
+    "description": "Handles near-token-limit input - real call against the longest NDA in the 150-case sample (6243 tokens, full document, not retrieved chunks). Valid JSON: True, predicted=Entailment (gold=Entailment), explanation length=38 tokens."
+  },
+  {
+    "case_id": "063",
+    "doc_id": "456",
+    "hypothesis_id": "nda-20",
+    "gold_label": "NotMentioned",
+    "category": "llm_behaviour",
+    "description": "Handles shortest NDA in the sample (442 tokens). Valid JSON: True, predicted=NotMentioned (gold=NotMentioned)."
+  },
+  {
+    "case_id": "064",
+    "doc_id": "",
+    "hypothesis_id": "",
+    "gold_label": "NotMentioned",
+    "category": "llm_behaviour",
+    "description": "Explanation within token budget (<150 tokens) - checked across all 150 real saved explanations from the v2-prompt RAG run: max=69 tokens, avg=35.6 tokens, 0/150 exceed 150 (all within budget)."
+  },
+  {
+    "case_id": "065",
+    "doc_id": "synthetic",
+    "hypothesis_id": "synthetic",
+    "gold_label": "Entailment",
+    "category": "llm_behaviour",
+    "description": "No false safety refusal - real call against a clause using 'harm', 'damages', 'liability', 'injunctive relief'. Predicted=Entailment, valid_json=True, refused=False (expected False)."
+  }
+]

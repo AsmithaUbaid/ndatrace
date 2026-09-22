@@ -1,0 +1,1465 @@
+{
+  "n_review_cases": 67,
+  "rag_accuracy_on_review": 0.8059701492537313,
+  "agent_accuracy_on_review": 0.8507462686567164,
+  "n_recovery": 6,
+  "n_regression": 3,
+  "n_no_change": 58,
+  "avg_steps": 1.3134328358208955,
+  "stopped_reasons": {
+    "concluded": 52,
+    "duplicate_loop": 14,
+    "invalid_action": 1
+  },
+  "total_cost_usd": 0.016855400000000003,
+  "overall_rag_correct": 132,
+  "overall_with_agent": 135,
+  "n_total_sample": 150,
+  "outcomes": [
+    {
+      "doc_id": "610",
+      "hypothesis_id": "nda-13",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0002017,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "61",
+      "hypothesis_id": "nda-20",
+      "gold_label": "NotMentioned",
+      "rag_label": "Contradiction",
+      "agent_label": "Contradiction",
+      "rag_correct": false,
+      "agent_correct": false,
+      "outcome": "no_change",
+      "n_steps": 2,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0003545,
+      "steps": [
+        {
+          "action": "search_exceptions",
+          "query": "",
+          "summary": "Added 3 new chunk(s)"
+        },
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Contradiction"
+        }
+      ]
+    },
+    {
+      "doc_id": "205",
+      "hypothesis_id": "nda-5",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001741,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "79",
+      "hypothesis_id": "nda-10",
+      "gold_label": "Entailment",
+      "rag_label": "NotMentioned",
+      "agent_label": "Entailment",
+      "rag_correct": false,
+      "agent_correct": true,
+      "outcome": "recovery",
+      "n_steps": 3,
+      "stopped_reason": "duplicate_loop",
+      "cost_usd": 0.0005676,
+      "steps": [
+        {
+          "action": "search_clauses",
+          "query": "disclose fact agreement negotiated",
+          "summary": "Added 3 new chunk(s)"
+        },
+        {
+          "action": "search_clauses",
+          "query": "disclose the fact that Agreement was agreed or negotiated",
+          "summary": "Added 0 new chunk(s)"
+        },
+        {
+          "action": "fallback_classify",
+          "query": "",
+          "summary": "Fallback: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "69",
+      "hypothesis_id": "nda-18",
+      "gold_label": "NotMentioned",
+      "rag_label": "NotMentioned",
+      "agent_label": "NotMentioned",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001584,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: NotMentioned"
+        }
+      ]
+    },
+    {
+      "doc_id": "435",
+      "hypothesis_id": "nda-7",
+      "gold_label": "Contradiction",
+      "rag_label": "Contradiction",
+      "agent_label": "Contradiction",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0002144,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Contradiction"
+        }
+      ]
+    },
+    {
+      "doc_id": "20",
+      "hypothesis_id": "nda-13",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001552,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "12",
+      "hypothesis_id": "nda-5",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 2,
+      "stopped_reason": "duplicate_loop",
+      "cost_usd": 0.00036740000000000004,
+      "steps": [
+        {
+          "action": "inspect_neighbouring_clauses",
+          "query": "",
+          "summary": "Added 2 new chunk(s)"
+        },
+        {
+          "action": "fallback_classify",
+          "query": "",
+          "summary": "Fallback: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "81",
+      "hypothesis_id": "nda-13",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.000144,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "398",
+      "hypothesis_id": "nda-13",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0002038,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "82",
+      "hypothesis_id": "nda-19",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 2,
+      "stopped_reason": "duplicate_loop",
+      "cost_usd": 0.00039500000000000006,
+      "steps": [
+        {
+          "action": "inspect_neighbouring_clauses",
+          "query": "",
+          "summary": "Added 1 new chunk(s)"
+        },
+        {
+          "action": "fallback_classify",
+          "query": "",
+          "summary": "Fallback: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "17",
+      "hypothesis_id": "nda-5",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 2,
+      "stopped_reason": "duplicate_loop",
+      "cost_usd": 0.0004529,
+      "steps": [
+        {
+          "action": "search_clauses",
+          "query": "Receiving Party may share some Confidential Information with some of Receiving Party's employees",
+          "summary": "Added 0 new chunk(s)"
+        },
+        {
+          "action": "fallback_classify",
+          "query": "",
+          "summary": "Fallback: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "482",
+      "hypothesis_id": "nda-15",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 2,
+      "stopped_reason": "duplicate_loop",
+      "cost_usd": 0.00039640000000000004,
+      "steps": [
+        {
+          "action": "inspect_neighbouring_clauses",
+          "query": "",
+          "summary": "Added 1 new chunk(s)"
+        },
+        {
+          "action": "fallback_classify",
+          "query": "",
+          "summary": "Fallback: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "19",
+      "hypothesis_id": "nda-10",
+      "gold_label": "NotMentioned",
+      "rag_label": "NotMentioned",
+      "agent_label": "NotMentioned",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 3,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00039769999999999996,
+      "steps": [
+        {
+          "action": "search_clauses",
+          "query": "disclose the fact that Agreement was agreed or negotiated",
+          "summary": "Added 3 new chunk(s)"
+        },
+        {
+          "action": "search_clauses",
+          "query": "disclose fact agreement negotiated",
+          "summary": "Added 2 new chunk(s)"
+        },
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: NotMentioned"
+        }
+      ]
+    },
+    {
+      "doc_id": "72",
+      "hypothesis_id": "nda-3",
+      "gold_label": "NotMentioned",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": false,
+      "agent_correct": false,
+      "outcome": "no_change",
+      "n_steps": 2,
+      "stopped_reason": "duplicate_loop",
+      "cost_usd": 0.0004584,
+      "steps": [
+        {
+          "action": "inspect_neighbouring_clauses",
+          "query": "",
+          "summary": "Added 2 new chunk(s)"
+        },
+        {
+          "action": "fallback_classify",
+          "query": "",
+          "summary": "Fallback: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "478",
+      "hypothesis_id": "nda-15",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "invalid_action",
+      "cost_usd": 0.00014030000000000002,
+      "steps": [
+        {
+          "action": "fallback_classify",
+          "query": "",
+          "summary": "Fallback: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "440",
+      "hypothesis_id": "nda-8",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 2,
+      "stopped_reason": "duplicate_loop",
+      "cost_usd": 0.0004625,
+      "steps": [
+        {
+          "action": "inspect_neighbouring_clauses",
+          "query": "",
+          "summary": "Added 0 new chunk(s)"
+        },
+        {
+          "action": "fallback_classify",
+          "query": "",
+          "summary": "Fallback: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "478",
+      "hypothesis_id": "nda-20",
+      "gold_label": "Contradiction",
+      "rag_label": "Contradiction",
+      "agent_label": "Contradiction",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.000242,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Contradiction"
+        }
+      ]
+    },
+    {
+      "doc_id": "7",
+      "hypothesis_id": "nda-5",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 2,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00033660000000000005,
+      "steps": [
+        {
+          "action": "inspect_neighbouring_clauses",
+          "query": "",
+          "summary": "Added 2 new chunk(s)"
+        },
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "37",
+      "hypothesis_id": "nda-13",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001734,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "56",
+      "hypothesis_id": "nda-15",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00025370000000000004,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "56",
+      "hypothesis_id": "nda-16",
+      "gold_label": "NotMentioned",
+      "rag_label": "Entailment",
+      "agent_label": "NotMentioned",
+      "rag_correct": false,
+      "agent_correct": true,
+      "outcome": "recovery",
+      "n_steps": 2,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00029370000000000004,
+      "steps": [
+        {
+          "action": "inspect_neighbouring_clauses",
+          "query": "",
+          "summary": "Added 1 new chunk(s)"
+        },
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: NotMentioned"
+        }
+      ]
+    },
+    {
+      "doc_id": "64",
+      "hypothesis_id": "nda-15",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001759,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "14",
+      "hypothesis_id": "nda-2",
+      "gold_label": "Contradiction",
+      "rag_label": "Contradiction",
+      "agent_label": "Contradiction",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 2,
+      "stopped_reason": "duplicate_loop",
+      "cost_usd": 0.0004808000000000001,
+      "steps": [
+        {
+          "action": "find_defined_term",
+          "query": "Confidential Material",
+          "summary": "Added 0 new chunk(s)"
+        },
+        {
+          "action": "fallback_classify",
+          "query": "",
+          "summary": "Fallback: Contradiction"
+        }
+      ]
+    },
+    {
+      "doc_id": "482",
+      "hypothesis_id": "nda-1",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Contradiction",
+      "rag_correct": true,
+      "agent_correct": false,
+      "outcome": "regression",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00018170000000000003,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Contradiction"
+        }
+      ]
+    },
+    {
+      "doc_id": "33",
+      "hypothesis_id": "nda-13",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00017090000000000003,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "63",
+      "hypothesis_id": "nda-8",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00022150000000000002,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "405",
+      "hypothesis_id": "nda-4",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001905,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "73",
+      "hypothesis_id": "nda-4",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00023920000000000001,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "590",
+      "hypothesis_id": "nda-10",
+      "gold_label": "Entailment",
+      "rag_label": "NotMentioned",
+      "agent_label": "NotMentioned",
+      "rag_correct": false,
+      "agent_correct": false,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00017979999999999998,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: NotMentioned"
+        }
+      ]
+    },
+    {
+      "doc_id": "70",
+      "hypothesis_id": "nda-4",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0002346,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "37",
+      "hypothesis_id": "nda-5",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001496,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "32",
+      "hypothesis_id": "nda-7",
+      "gold_label": "Contradiction",
+      "rag_label": "Contradiction",
+      "agent_label": "Contradiction",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0002123,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Contradiction"
+        }
+      ]
+    },
+    {
+      "doc_id": "15",
+      "hypothesis_id": "nda-7",
+      "gold_label": "NotMentioned",
+      "rag_label": "Contradiction",
+      "agent_label": "Entailment",
+      "rag_correct": false,
+      "agent_correct": false,
+      "outcome": "no_change",
+      "n_steps": 2,
+      "stopped_reason": "duplicate_loop",
+      "cost_usd": 0.0003748,
+      "steps": [
+        {
+          "action": "inspect_neighbouring_clauses",
+          "query": "",
+          "summary": "Added 2 new chunk(s)"
+        },
+        {
+          "action": "fallback_classify",
+          "query": "",
+          "summary": "Fallback: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "19",
+      "hypothesis_id": "nda-7",
+      "gold_label": "Contradiction",
+      "rag_label": "Contradiction",
+      "agent_label": "Contradiction",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.000147,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Contradiction"
+        }
+      ]
+    },
+    {
+      "doc_id": "35",
+      "hypothesis_id": "nda-15",
+      "gold_label": "NotMentioned",
+      "rag_label": "Entailment",
+      "agent_label": "NotMentioned",
+      "rag_correct": false,
+      "agent_correct": true,
+      "outcome": "recovery",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.000149,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: NotMentioned"
+        }
+      ]
+    },
+    {
+      "doc_id": "63",
+      "hypothesis_id": "nda-12",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001685,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "69",
+      "hypothesis_id": "nda-19",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00032050000000000004,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "12",
+      "hypothesis_id": "nda-20",
+      "gold_label": "NotMentioned",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": false,
+      "agent_correct": false,
+      "outcome": "no_change",
+      "n_steps": 2,
+      "stopped_reason": "duplicate_loop",
+      "cost_usd": 0.0003928,
+      "steps": [
+        {
+          "action": "inspect_neighbouring_clauses",
+          "query": "",
+          "summary": "Added 1 new chunk(s)"
+        },
+        {
+          "action": "fallback_classify",
+          "query": "",
+          "summary": "Fallback: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "79",
+      "hypothesis_id": "nda-2",
+      "gold_label": "Contradiction",
+      "rag_label": "Contradiction",
+      "agent_label": "Contradiction",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00016790000000000002,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Contradiction"
+        }
+      ]
+    },
+    {
+      "doc_id": "39",
+      "hypothesis_id": "nda-5",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 2,
+      "stopped_reason": "duplicate_loop",
+      "cost_usd": 0.00045530000000000006,
+      "steps": [
+        {
+          "action": "inspect_neighbouring_clauses",
+          "query": "",
+          "summary": "Added 1 new chunk(s)"
+        },
+        {
+          "action": "fallback_classify",
+          "query": "",
+          "summary": "Fallback: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "54",
+      "hypothesis_id": "nda-2",
+      "gold_label": "Contradiction",
+      "rag_label": "Contradiction",
+      "agent_label": "Contradiction",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0002258,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Contradiction"
+        }
+      ]
+    },
+    {
+      "doc_id": "79",
+      "hypothesis_id": "nda-17",
+      "gold_label": "NotMentioned",
+      "rag_label": "Entailment",
+      "agent_label": "NotMentioned",
+      "rag_correct": false,
+      "agent_correct": true,
+      "outcome": "recovery",
+      "n_steps": 3,
+      "stopped_reason": "duplicate_loop",
+      "cost_usd": 0.0004911000000000001,
+      "steps": [
+        {
+          "action": "inspect_neighbouring_clauses",
+          "query": "",
+          "summary": "Added 1 new chunk(s)"
+        },
+        {
+          "action": "search_exceptions",
+          "query": "",
+          "summary": "Added 2 new chunk(s)"
+        },
+        {
+          "action": "fallback_classify",
+          "query": "",
+          "summary": "Fallback: NotMentioned"
+        }
+      ]
+    },
+    {
+      "doc_id": "37",
+      "hypothesis_id": "nda-15",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001605,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "406",
+      "hypothesis_id": "nda-4",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00022740000000000003,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "64",
+      "hypothesis_id": "nda-16",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "NotMentioned",
+      "rag_correct": true,
+      "agent_correct": false,
+      "outcome": "regression",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00015230000000000002,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: NotMentioned"
+        }
+      ]
+    },
+    {
+      "doc_id": "590",
+      "hypothesis_id": "nda-15",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00021060000000000002,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "205",
+      "hypothesis_id": "nda-13",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00020370000000000002,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "20",
+      "hypothesis_id": "nda-8",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001698,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "13",
+      "hypothesis_id": "nda-4",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001464,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "440",
+      "hypothesis_id": "nda-2",
+      "gold_label": "Contradiction",
+      "rag_label": "Contradiction",
+      "agent_label": "Contradiction",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0002429,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Contradiction"
+        }
+      ]
+    },
+    {
+      "doc_id": "29",
+      "hypothesis_id": "nda-13",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00019910000000000001,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "488",
+      "hypothesis_id": "nda-4",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001936,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "20",
+      "hypothesis_id": "nda-19",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00015740000000000003,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "482",
+      "hypothesis_id": "nda-7",
+      "gold_label": "Contradiction",
+      "rag_label": "Contradiction",
+      "agent_label": "Contradiction",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 2,
+      "stopped_reason": "duplicate_loop",
+      "cost_usd": 0.00041090000000000007,
+      "steps": [
+        {
+          "action": "inspect_neighbouring_clauses",
+          "query": "",
+          "summary": "Added 2 new chunk(s)"
+        },
+        {
+          "action": "fallback_classify",
+          "query": "",
+          "summary": "Fallback: Contradiction"
+        }
+      ]
+    },
+    {
+      "doc_id": "63",
+      "hypothesis_id": "nda-20",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.000171,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "61",
+      "hypothesis_id": "nda-2",
+      "gold_label": "Contradiction",
+      "rag_label": "Contradiction",
+      "agent_label": "Contradiction",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001871,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Contradiction"
+        }
+      ]
+    },
+    {
+      "doc_id": "75",
+      "hypothesis_id": "nda-5",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001962,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "64",
+      "hypothesis_id": "nda-13",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0002188,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "56",
+      "hypothesis_id": "nda-5",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00017480000000000002,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "590",
+      "hypothesis_id": "nda-20",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001745,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "64",
+      "hypothesis_id": "nda-5",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": true,
+      "agent_correct": true,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0001985,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "440",
+      "hypothesis_id": "nda-17",
+      "gold_label": "Contradiction",
+      "rag_label": "Entailment",
+      "agent_label": "Contradiction",
+      "rag_correct": false,
+      "agent_correct": true,
+      "outcome": "recovery",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00018270000000000002,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Contradiction"
+        }
+      ]
+    },
+    {
+      "doc_id": "16",
+      "hypothesis_id": "nda-17",
+      "gold_label": "Entailment",
+      "rag_label": "Entailment",
+      "agent_label": "Contradiction",
+      "rag_correct": true,
+      "agent_correct": false,
+      "outcome": "regression",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00014920000000000002,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Contradiction"
+        }
+      ]
+    },
+    {
+      "doc_id": "15",
+      "hypothesis_id": "nda-4",
+      "gold_label": "Entailment",
+      "rag_label": "Contradiction",
+      "agent_label": "Entailment",
+      "rag_correct": false,
+      "agent_correct": true,
+      "outcome": "recovery",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.00015769999999999998,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    },
+    {
+      "doc_id": "82",
+      "hypothesis_id": "nda-2",
+      "gold_label": "NotMentioned",
+      "rag_label": "Contradiction",
+      "agent_label": "Contradiction",
+      "rag_correct": false,
+      "agent_correct": false,
+      "outcome": "no_change",
+      "n_steps": 2,
+      "stopped_reason": "duplicate_loop",
+      "cost_usd": 0.0004583,
+      "steps": [
+        {
+          "action": "find_defined_term",
+          "query": "Confidential Information",
+          "summary": "Added 0 new chunk(s)"
+        },
+        {
+          "action": "fallback_classify",
+          "query": "",
+          "summary": "Fallback: Contradiction"
+        }
+      ]
+    },
+    {
+      "doc_id": "35",
+      "hypothesis_id": "nda-16",
+      "gold_label": "NotMentioned",
+      "rag_label": "Entailment",
+      "agent_label": "Entailment",
+      "rag_correct": false,
+      "agent_correct": false,
+      "outcome": "no_change",
+      "n_steps": 1,
+      "stopped_reason": "concluded",
+      "cost_usd": 0.0002388,
+      "steps": [
+        {
+          "action": "conclude",
+          "query": "",
+          "summary": "Concluded: Entailment"
+        }
+      ]
+    }
+  ]
+}

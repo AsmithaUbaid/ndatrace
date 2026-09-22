@@ -1,0 +1,42 @@
+[
+  {
+    "case_id": "081",
+    "doc_id": "610",
+    "hypothesis_id": "nda-13",
+    "gold_label": "Entailment",
+    "category": "evidence_quality",
+    "description": "Evidence supports the label - real Entailment case where the retrieved evidence covers at least one real gold span, and the final label was correct."
+  },
+  {
+    "case_id": "082",
+    "doc_id": "610",
+    "hypothesis_id": "nda-13",
+    "gold_label": "Entailment",
+    "category": "evidence_quality",
+    "description": "Evidence is complete - not cut mid-sentence. Checked all 196 gold spans across the 150-case sample against sentence-level chunk boundaries: 180/196 (91.8%) are fully contained in a single chunk, 16 span more than one. Sentence-level chunking (the winning method, T023 round 2) never splits mid-sentence by construction - most gold spans (annotator-drawn, not aligned to our chunk boundaries) still land inside one chunk, though a real minority don't."
+  },
+  {
+    "case_id": "083",
+    "doc_id": "",
+    "hypothesis_id": "",
+    "gold_label": "NotMentioned",
+    "category": "evidence_quality",
+    "description": "No false evidence for Not Mentioned - code-level guarantee via pipeline/evidence_validator.py, not a mined live case: empty evidence + NotMentioned is_valid=True (expected True); non-empty evidence + NotMentioned is_valid=False (expected False, correctly flagged as inconsistent). Also enforced by the classify() prompt's own rule (prompts/classify_v2.txt: 'If the label is NotMentioned, evidence must be an empty list')."
+  },
+  {
+    "case_id": "084",
+    "doc_id": "610",
+    "hypothesis_id": "nda-13",
+    "gold_label": "Entailment",
+    "category": "evidence_quality",
+    "description": "Best evidence is rank 1 - real case where the first-ranked retrieved span (post-rerank, post-rule-boost) is a genuine gold evidence span, not just present somewhere in the retrieved set."
+  },
+  {
+    "case_id": "085",
+    "doc_id": "435",
+    "hypothesis_id": "nda-7",
+    "gold_label": "Contradiction",
+    "category": "evidence_quality",
+    "description": "Contradiction evidence points to the contradicting clause - real case where retrieval covered the actual gold Contradiction span, and classification was correct."
+  }
+]
