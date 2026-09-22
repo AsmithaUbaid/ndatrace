@@ -1,5 +1,16 @@
 # Experiment Log
 
-| Date | Experiment | Result | Decision |
-|------|-----------|--------|----------|
-| TBD | B04 Oracle | TBD | Model selection |
+Each entry: the question we were answering, the method, the actual result, and
+the decision it drove. Full narrative and code are linked under Artifact —
+this table is the scannable index, not the full record. Populated
+incrementally as each experiment runs, per WBS T044.
+
+| ID | Question | Method | Result | Decision | Artifact |
+|----|----------|--------|--------|----------|----------|
+| A01–A07 | Is the ContractNLI dataset clean and leakage-safe? | Parse all 607 NDAs, check corruption/duplicates/split leakage/evidence-span validity/label distribution/token lengths | 607/607 parse (100%), 0% corrupt, 0.33% duplicates, 0 split leakage, 0 invalid spans. Entailment (48.6%) is the true majority class — corrects the planning doc's "NotMentioned is majority" assumption | **Proceed** — no re-splitting or cleaning needed; majority baseline must predict Entailment, not NotMentioned | `scripts/validate_dataset.py`, `data/validation_report.json`, `notebooks/01_data_validation.ipynb` |
+| A08–A13 | Can the evaluation harness compute every metric correctly, persist results append-only, and resume a crashed run? | Implement all Section 11 metrics + unit tests on synthetic hand-crafted cases; add per-prediction checkpointing | 46 unit tests passing; found and fixed a real bug (`agent_regression_rate` was declared but never computed) | **Proceed** — harness is trustworthy for scoring all future experiments | `evaluation/metrics.py`, `evaluation/harness.py`, `tests/test_metrics.py`, `tests/test_harness.py` |
+| Golden battery (Cat. 1) | Can we build 30 real, correctly-labeled regression cases spanning easy/medium/hard Entailment/Contradiction/NotMentioned from the dev set? | Pull real (doc, hypothesis) pairs from dev.json; approximate each design-doc slot's qualitative property with a keyword/regex/length proxy | 30 cases, 10/10/10 label balance, 29/30 proxies matched their intended property (1 honest fallback). Surfaced 2 real parser bugs (hypothesis_text was a dict not a string; doc_id was an int not a str) | **Proceed** — cases load cleanly through the harness; both parser bugs fixed with regression tests | `scripts/build_golden_cases.py`, `data/golden/golden_cases.json` |
+| B01 | What does always-predicting the majority class get? | Predict Entailment (the real majority) for every dev case | Accuracy 50.0%, macro-F1 0.222, 0% risk-sensitive recall, 0% joint correctness | **Floor set** — any real architecture must clear macro-F1 0.222 | `scripts/run_baselines.py`, `results/runs/run_B01_majority_baseline.jsonl` |
+| B02 | Can keyword matching alone classify NDA requirements? | Per-hypothesis positive/negative keyword rules for all 17 real hypotheses, no LLM | Accuracy 59.9%, macro-F1 0.493, risk-sensitive recall 55.8%, joint correctness 37.8% | **Non-AI floor set** — any LLM-based architecture must clear macro-F1 0.493 to justify its cost | `pipeline/rule_baseline.py`, `results/runs/run_B02_rule_baseline.jsonl` |
+| T004 | What will the planned P0 experiments cost, before running any of them? | Section 13 pricing ($0.25/M in, $2/M out) × real measured token stats (avg doc 2,302 tokens; avg gold-evidence 97.5 tokens) for B03/B04, planning doc's own estimates for the rest | $3.66 total projected — 24.4% of the $15 budget, well under the 80% warning threshold and cheaper than the doc's own ~$9.50 guess | **Proceed** — budget has more headroom than planned. Still needs T002 (real API key) to confirm against actual balance | `scripts/estimate_experiment_costs.py`, `data/cost_estimates.json` |
+| B04 | Is the model's reasoning ceiling set by retrieval quality or by the model itself? | Feed gold evidence directly to the model, classify | *Pending — needs OpenRouter API key (T002)* | *Pending* | — |
