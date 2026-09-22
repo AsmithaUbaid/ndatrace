@@ -136,7 +136,7 @@ def main() -> int:
             continue
 
         oracle_context = build_oracle_context(ann)
-        result = classify(oracle_context, ann.hypothesis_text, gateway)
+        result = classify(oracle_context, ann.hypothesis_text, gateway, doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id)
 
         pred = make_oracle_prediction(
             doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id,

@@ -99,7 +99,8 @@ def main() -> int:
                 continue
 
             context, retrieved_span_indices = contexts[key]
-            result = classify(context, ann.hypothesis_text, gateway, prompt_version=prompt_version)
+            result = classify(context, ann.hypothesis_text, gateway, prompt_version=prompt_version,
+                              doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id)
 
             pred = Prediction(
                 doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id,

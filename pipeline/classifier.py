@@ -63,10 +63,15 @@ def _parse_response(content: str) -> dict | None:
     return data if isinstance(data, dict) else None
 
 
-def _fallback_result(response, reason: str) -> ClassificationResult:
+def _fallback_result(response, reason: str, doc_id: str, hypothesis_id: str, model: str) -> ClassificationResult:
     """Safe default when structured output can't be recovered - never
     silently claim Entailment/Contradiction on a parse failure."""
-    logger.error(f"Classifier: {reason}")
+    logger.error(f"Classifier: {reason}", extra={
+        "stage": "classify_fallback", "doc_id": doc_id, "hypothesis_id": hypothesis_id,
+        "latency_ms": round(response.latency_ms, 1), "tokens_in": response.tokens_in,
+        "tokens_out": response.tokens_out, "cost_usd": response.cost_usd, "model": model,
+        "error_code": "invalid_output",
+    })
     return ClassificationResult(
         label="NotMentioned",
         confidence=0.0,
@@ -86,6 +91,8 @@ def classify(
     hypothesis: str,
     gateway: ModelGateway,
     prompt_version: str = "v2",
+    doc_id: str = "",
+    hypothesis_id: str = "",
 ) -> ClassificationResult:
     """
     Classify one (NDA, hypothesis) pair.
@@ -94,6 +101,10 @@ def classify(
     the full document (full-context baseline), gold evidence spans
     (Oracle), or retrieved chunks (RAG). This function has no opinion on
     where the text came from.
+
+    `doc_id`/`hypothesis_id` are optional and used only for the
+    structured audit log line (Section 0B) - never sent to the model,
+    never affects the classification itself.
     """
     system_prompt = load_prompt_template(prompt_version)
     user_message = _build_user_message(nda_text, hypothesis)
@@ -120,15 +131,25 @@ def classify(
         data = _parse_response(response.content)
 
     if data is None:
-        return _fallback_result(response, "Model did not return valid JSON after retry.")
+        return _fallback_result(response, "Model did not return valid JSON after retry.",
+                                 doc_id, hypothesis_id, gateway.model)
 
     label = data.get("label")
     if label not in VALID_LABELS:
-        return _fallback_result(response, f"Model returned invalid label: {label!r}")
+        return _fallback_result(response, f"Model returned invalid label: {label!r}",
+                                 doc_id, hypothesis_id, gateway.model)
+
+    confidence = float(data.get("confidence", 0.5))
+    logger.info("Classifier: classified", extra={
+        "stage": "classify", "doc_id": doc_id, "hypothesis_id": hypothesis_id,
+        "latency_ms": round(response.latency_ms, 1), "tokens_in": response.tokens_in,
+        "tokens_out": response.tokens_out, "cost_usd": response.cost_usd, "model": gateway.model,
+        "label": label, "confidence": confidence,
+    })
 
     return ClassificationResult(
         label=label,
-        confidence=float(data.get("confidence", 0.5)),
+        confidence=confidence,
         evidence=list(data.get("evidence", [])),
         explanation=str(data.get("explanation", "")),
         valid_json=True,

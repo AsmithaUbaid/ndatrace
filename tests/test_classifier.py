@@ -42,6 +42,31 @@ def test_build_user_message_survives_curly_braces_in_nda_text():
     assert tricky_text in message
 
 
+def test_classify_logs_a_structured_line_with_doc_id_and_no_raw_text(caplog):
+    import logging
+    gateway = fake_gateway(make_response(json.dumps({
+        "label": "Entailment", "confidence": 0.9,
+        "evidence": ["Receiving Party shall not disclose Confidential Information"],
+        "explanation": "Clear match.",
+    })))
+    gateway.model = "google/gemini-2.5-flash-lite"
+
+    with caplog.at_level(logging.INFO, logger="ndatrace.classifier"):
+        classify("Receiving Party shall not disclose Confidential Information.", "Some requirement",
+                 gateway, doc_id="doc-7", hypothesis_id="nda-1")
+
+    records = [r for r in caplog.records if r.name == "ndatrace.classifier"]
+    assert len(records) == 1
+    record = records[0]
+    assert record.doc_id == "doc-7"
+    assert record.hypothesis_id == "nda-1"
+    assert record.stage == "classify"
+    assert record.label == "Entailment"
+    assert hasattr(record, "cost_usd") and hasattr(record, "latency_ms")
+    assert "Confidential Information" not in record.getMessage()
+    assert not hasattr(record, "evidence")
+
+
 def test_classify_valid_json_first_try():
     response_json = json.dumps({
         "label": "Entailment", "confidence": 0.9,

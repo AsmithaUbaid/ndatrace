@@ -63,7 +63,7 @@ def main() -> int:
         return 1
 
     print("\nCalling model (full document text, no retrieval)...")
-    result = classify(doc.text, hypothesis_text, gateway)
+    result = classify(doc.text, hypothesis_text, gateway, doc_id=doc.doc_id, hypothesis_id=case["hypothesis_id"])
 
     print(f"\nPredicted label: {result.label} (confidence {result.confidence:.2f})")
     print(f"Gold label:      {case['gold_label']}")

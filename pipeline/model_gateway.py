@@ -132,11 +132,10 @@ class ModelGateway:
                 tokens_out = response.usage.completion_tokens if response.usage else 0
                 cost = estimate_cost(self.model, tokens_in, tokens_out)
 
-                logger.info(
-                    f"Model call succeeded: model={self.model}, attempt={attempt + 1}, "
-                    f"tokens_in={tokens_in}, tokens_out={tokens_out}, "
-                    f"latency_ms={latency_ms:.0f}, cost_usd={cost:.6f}"
-                )
+                logger.info("Model call succeeded", extra={
+                    "stage": "model_call", "model": self.model, "latency_ms": round(latency_ms, 1),
+                    "tokens_in": tokens_in, "tokens_out": tokens_out, "cost_usd": cost,
+                })
 
                 return ModelResponse(
                     content=content,

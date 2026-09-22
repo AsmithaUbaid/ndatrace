@@ -103,7 +103,7 @@ def main() -> int:
         context = " ".join(r.chunk.text for r in retrieved)
         retrieved_span_indices = map_chunks_to_gold_span_indices(doc.spans, [r.chunk for r in retrieved])
 
-        result = classify(context, ann.hypothesis_text, gateway)
+        result = classify(context, ann.hypothesis_text, gateway, doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id)
 
         pred = Prediction(
             doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id,
