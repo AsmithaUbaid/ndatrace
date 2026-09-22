@@ -84,8 +84,8 @@ def _format_evidence(chunks: list[Chunk]) -> str:
     return "\n".join(f"[{i}] {c.text}" for i, c in enumerate(chunks))
 
 
-def _decide_next_action(hypothesis: str, chunks: list[Chunk], gateway: ModelGateway):
-    system_prompt = _load_agent_prompt()
+def _decide_next_action(hypothesis: str, chunks: list[Chunk], gateway: ModelGateway, prompt_path: Path):
+    system_prompt = prompt_path.read_text()
     user_message = (
         f'Requirement to classify:\n"{hypothesis}"\n\n'
         f'Evidence gathered so far:\n"""\n{_format_evidence(chunks)}\n"""'
@@ -130,10 +130,17 @@ def run_agent(
     max_steps: int | None = None,
     max_seconds: int | None = None,
     max_tokens: int | None = None,
+    allowed_actions: set[str] | None = None,
+    prompt_path: Path | None = None,
 ) -> AgentResult:
     max_steps = settings.agent_max_steps if max_steps is None else max_steps
     max_seconds = settings.agent_max_seconds if max_seconds is None else max_seconds
     max_tokens = settings.agent_max_tokens if max_tokens is None else max_tokens
+    # Lets an ablation compare a smaller tool set without duplicating the
+    # whole loop - VALID_ACTIONS always includes "conclude" implicitly.
+    allowed_actions = (VALID_ACTIONS if allowed_actions is None
+                        else allowed_actions | {"conclude"})
+    prompt_path = AGENT_PROMPT_PATH if prompt_path is None else prompt_path
 
     start = time.time()
     evidence_chunks: list[Chunk] = list(initial_chunks)
@@ -168,13 +175,13 @@ def run_agent(
             break
 
         step_start = time.time()
-        decision, response = _decide_next_action(hypothesis_text, evidence_chunks, gateway)
+        decision, response = _decide_next_action(hypothesis_text, evidence_chunks, gateway, prompt_path)
         step_latency_ms = (time.time() - step_start) * 1000
         total_cost += response.cost_usd
         total_tokens_in += response.tokens_in
         total_tokens_out += response.tokens_out
 
-        if decision is None or decision.get("action") not in VALID_ACTIONS:
+        if decision is None or decision.get("action") not in allowed_actions:
             logger.warning("Agent: invalid or unparseable action, stopping")
             _log_step("invalid_action", step_latency_ms, response.tokens_in, response.tokens_out, response.cost_usd)
             stopped_reason = "invalid_action"
@@ -228,7 +235,7 @@ def run_agent(
     # abstained on is decided upstream by pipeline/confidence.py, not here.
     fallback_start = time.time()
     context = " ".join(c.text for c in evidence_chunks)
-    fallback = classify(context, hypothesis_text, gateway)
+    fallback = classify(context, hypothesis_text, gateway, doc_id=doc_id, hypothesis_id=hypothesis_id)
     fallback_latency_ms = (time.time() - fallback_start) * 1000
     total_cost += fallback.cost_usd
     total_tokens_in += fallback.tokens_in
