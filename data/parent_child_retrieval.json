@@ -1,0 +1,16 @@
+[
+  {
+    "label": "baseline_rerankL12_top7",
+    "recall": 0.7854131120417767,
+    "precision": 0.12398899803324193,
+    "mrr": 0.6052020650169117,
+    "n_cases": 614
+  },
+  {
+    "label": "parent_child_top7",
+    "recall": 0.9397891784292434,
+    "precision": 0.04415976168544834,
+    "mrr": 0.3778185859040675,
+    "n_cases": 614
+  }
+]

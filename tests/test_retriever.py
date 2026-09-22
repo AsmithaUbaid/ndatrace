@@ -10,7 +10,7 @@ from unittest.mock import patch
 import numpy as np
 import pytest
 
-from pipeline.retriever import HybridRetriever, Retriever
+from pipeline.retriever import HybridRetriever, RetrievalResult, Retriever
 
 
 def fake_embed_texts(texts, model_name=None):
@@ -98,6 +98,45 @@ def test_query_and_rerank_calls_rerank_with_wide_candidate_pool():
     assert call_args.args[0] == "reverse"
     assert len(call_args.args[1]) == 2  # candidate_pool_size was respected
     assert call_args.kwargs["top_k"] == 1
+
+
+def test_query_rerank_and_boost_empty_document_returns_no_results():
+    retriever = Retriever("", chunk_method="sentence")
+    assert retriever.query_rerank_and_boost("nda-11", "anything") == []
+
+
+def test_query_rerank_and_boost_no_rule_match_falls_back_to_rerank_only():
+    doc = "1. Reverse engineering clause.\n\n2. Solicitation clause."
+    retriever = Retriever(doc, chunk_method="clause", chunk_size=15)
+    fallback = [RetrievalResult(chunk=retriever.chunks[0], score=1.0)]
+
+    with patch("pipeline.reranker.rerank") as mock_rerank:
+        mock_rerank.return_value = fallback
+        # "unknown-hyp-id" has no entry in pipeline.rule_baseline.RULES, so
+        # classify_with_span returns (label, None) - no rule to fuse in.
+        result = retriever.query_rerank_and_boost("unknown-hyp-id", "reverse", top_k=1)
+
+    assert result == fallback
+
+
+def test_query_rerank_and_boost_fuses_rule_match_even_when_reranker_missed_it():
+    # "nda-11" (pipeline/rule_baseline.py) fires on "reverse engineer" - put
+    # it in a clause the (mocked) reranker doesn't return at all, and verify
+    # the fusion still surfaces it via Reciprocal Rank Fusion.
+    doc = (
+        "1. Do not reverse engineer anything.\n\n"
+        "2. Keep this confidential at all times.\n\n"
+        "3. Some unrelated clause about payment terms."
+    )
+    retriever = Retriever(doc, chunk_method="clause", chunk_size=15)
+    rule_chunk = retriever.chunks[0]
+    other_chunk = retriever.chunks[2]
+
+    with patch("pipeline.reranker.rerank") as mock_rerank:
+        mock_rerank.return_value = [RetrievalResult(chunk=other_chunk, score=0.9)]
+        result = retriever.query_rerank_and_boost("nda-11", "reverse engineering", candidate_pool_size=3, top_k=2)
+
+    assert rule_chunk in [r.chunk for r in result]
 
 
 def test_hybrid_retriever_finds_exact_term_bm25_would_catch():

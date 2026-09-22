@@ -38,6 +38,13 @@ def embed_texts(texts: list[str], model_name: str | None = None) -> np.ndarray:
     return embeddings.astype("float32")
 
 
+# maxsize=128: the product only ever queries with the 17 fixed ContractNLI
+# hypothesis texts (verified - each hypothesis_id has exactly one text,
+# reused verbatim across every document), so every query after the first
+# 17 (per embedding model) is a cache hit - free, and safe since queries
+# are read-only fixed strings, not user-typed input that would blow up
+# cache diversity.
+@lru_cache(maxsize=128)
 def embed_query(query: str, model_name: str | None = None) -> np.ndarray:
     """Embed a single query string. Returns a (dim,) float32 vector."""
     return embed_texts([query], model_name)[0]

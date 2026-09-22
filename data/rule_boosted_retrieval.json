@@ -1,0 +1,18 @@
+[
+  {
+    "label": "baseline_rerankL12_top7",
+    "recall": 0.7854131120417767,
+    "precision": 0.12398899803324193,
+    "mrr": 0.6052020650169117,
+    "n_rule_fired": 263,
+    "n_cases": 614
+  },
+  {
+    "label": "rule_boosted_rerankL12_top7",
+    "recall": 0.801346879685642,
+    "precision": 0.12611770306736142,
+    "mrr": 0.6447856220678951,
+    "n_rule_fired": 263,
+    "n_cases": 614
+  }
+]
