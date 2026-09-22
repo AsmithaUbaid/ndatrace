@@ -37,6 +37,10 @@ class ClassificationResult:
     cost_usd: float
     latency_ms: float
     raw_output: str
+    # None for prompt versions that don't ask for this field (v1-v3) - only
+    # v4+ requests an explicit "does this excerpt actually address the
+    # requirement" check before the model commits to a label.
+    addressed_directly: bool | None = None
 
 
 def load_prompt_template(version: str = "v1") -> str:
@@ -81,7 +85,7 @@ def classify(
     nda_text: str,
     hypothesis: str,
     gateway: ModelGateway,
-    prompt_version: str = "v1",
+    prompt_version: str = "v2",
 ) -> ClassificationResult:
     """
     Classify one (NDA, hypothesis) pair.
@@ -133,4 +137,5 @@ def classify(
         cost_usd=response.cost_usd,
         latency_ms=response.latency_ms,
         raw_output=response.content,
+        addressed_directly=data.get("addressed_directly"),
     )
