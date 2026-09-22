@@ -1,0 +1,172 @@
+[
+  {
+    "case_id": "031",
+    "doc_id": "12",
+    "hypothesis_id": "nda-11",
+    "gold_label": "NotMentioned",
+    "gold_span_indices": [],
+    "category": "negative_case",
+    "description": "Misleading wording - conditional \"may\" language could be misread as firm entailment"
+  },
+  {
+    "case_id": "032",
+    "doc_id": "9",
+    "hypothesis_id": "nda-11",
+    "gold_label": "NotMentioned",
+    "gold_span_indices": [],
+    "category": "negative_case",
+    "description": "Misleading wording - future tense (\"will establish/provide/implement\") is intent, not fulfilment"
+  },
+  {
+    "case_id": "033",
+    "doc_id": "3",
+    "hypothesis_id": "nda-1",
+    "gold_label": "Entailment",
+    "gold_span_indices": [
+      18
+    ],
+    "category": "negative_case",
+    "description": "Misleading wording - double negative (\"shall not fail to protect\") reads as positive; must not be misread as Contradiction [proxy: no keyword/structural match found in dev set; nearest available case used]"
+  },
+  {
+    "case_id": "034",
+    "doc_id": "70",
+    "hypothesis_id": "nda-7",
+    "gold_label": "Contradiction",
+    "gold_span_indices": [
+      5,
+      9
+    ],
+    "category": "negative_case",
+    "description": "Misleading wording - \"except as required by law\" carve-out limits an apparently firm requirement"
+  },
+  {
+    "case_id": "035",
+    "doc_id": "9",
+    "hypothesis_id": "nda-15",
+    "gold_label": "NotMentioned",
+    "gold_span_indices": [],
+    "category": "negative_case",
+    "description": "Wrong section evidence - a hypothesis keyword appears early (definitions-like) in the doc but the real gold answer is Not Mentioned, not a definitions-section false positive"
+  },
+  {
+    "case_id": "036",
+    "doc_id": "73",
+    "hypothesis_id": "nda-16",
+    "gold_label": "NotMentioned",
+    "gold_span_indices": [],
+    "category": "negative_case",
+    "description": "Wrong section evidence - topic language appears in the document's opening (recital-like) but no operative clause actually addresses it"
+  },
+  {
+    "case_id": "037",
+    "doc_id": "3",
+    "hypothesis_id": "nda-19",
+    "gold_label": "Entailment",
+    "gold_span_indices": [
+      65
+    ],
+    "category": "negative_case",
+    "description": "Wrong section evidence - correct label must rest on clause body content, not a heading-level keyword match"
+  },
+  {
+    "case_id": "038",
+    "doc_id": "17",
+    "hypothesis_id": "nda-7",
+    "gold_label": "Contradiction",
+    "gold_span_indices": [
+      22,
+      23
+    ],
+    "category": "negative_case",
+    "description": "Conflicting clauses - evidence spans multiple locations, approximating one clause granting and another limiting the same right"
+  },
+  {
+    "case_id": "039",
+    "doc_id": "9",
+    "hypothesis_id": "nda-5",
+    "gold_label": "Contradiction",
+    "gold_span_indices": [
+      13
+    ],
+    "category": "negative_case",
+    "description": "Conflicting clauses - amendment/override language should win over an earlier, superseded clause [proxy: no keyword/structural match found in dev set; nearest available case used]"
+  },
+  {
+    "case_id": "040",
+    "doc_id": "73",
+    "hypothesis_id": "nda-20",
+    "gold_label": "Contradiction",
+    "gold_span_indices": [
+      55
+    ],
+    "category": "negative_case",
+    "description": "Conflicting clauses - a specific exception should override an apparently general requirement"
+  },
+  {
+    "case_id": "041",
+    "doc_id": "29",
+    "hypothesis_id": "nda-19",
+    "gold_label": "Entailment",
+    "gold_span_indices": [
+      28
+    ],
+    "category": "negative_case",
+    "description": "Keyword absence - requirement is met but stated with paraphrased/different terminology than the hypothesis - rule-based baseline (B02) is expected to fail here, LLM should not"
+  },
+  {
+    "case_id": "042",
+    "doc_id": "3",
+    "hypothesis_id": "nda-7",
+    "gold_label": "Entailment",
+    "gold_span_indices": [
+      23,
+      43
+    ],
+    "category": "negative_case",
+    "description": "Keyword absence - legal synonym (\"covenant\"/\"undertakes\") used instead of the hypothesis's literal wording"
+  },
+  {
+    "case_id": "043",
+    "doc_id": "64",
+    "hypothesis_id": "nda-3",
+    "gold_label": "Entailment",
+    "gold_span_indices": [
+      28,
+      29,
+      30
+    ],
+    "category": "negative_case",
+    "description": "Keyword absence - an abbreviation/defined short-form is used in place of the full term"
+  },
+  {
+    "case_id": "044",
+    "doc_id": "7",
+    "hypothesis_id": "nda-10",
+    "gold_label": "Entailment",
+    "gold_span_indices": [
+      86
+    ],
+    "category": "negative_case",
+    "description": "Very long document - evidence located deep in a long NDA, retrieval must not degrade with document length"
+  },
+  {
+    "case_id": "045",
+    "doc_id": "73",
+    "hypothesis_id": "nda-10",
+    "gold_label": "Entailment",
+    "gold_span_indices": [
+      8,
+      9,
+      12,
+      18,
+      37,
+      44,
+      45,
+      46,
+      47
+    ],
+    "category": "negative_case",
+    "description": "Very long document - multiple relevant spans scattered across a long document, all must be retrievable"
+  }
+]
