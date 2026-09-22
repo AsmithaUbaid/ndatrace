@@ -15,6 +15,7 @@ from dataclasses import dataclass
 from pipeline.chunker import Chunk, clause_aware_chunk, fixed_size_chunk, sentence_chunk
 from pipeline.embedder import embed_query, embed_texts
 from pipeline.indexer import ChunkIndex, build_index, search
+from pipeline.sparse_retriever import SparseIndex, reciprocal_rank_fusion
 
 
 @dataclass
@@ -69,4 +70,46 @@ class Retriever:
         if not self.chunks:
             return []
         candidates = self.query(query_text, top_k=candidate_pool_size)
+        return rerank(query_text, candidates, top_k=top_k)
+
+
+class HybridRetriever:
+    """
+    Combines dense (semantic) and sparse (BM25) retrieval via Reciprocal
+    Rank Fusion (pipeline/sparse_retriever.py) - a chunk either method
+    considers relevant gets credit, rather than betting entirely on one
+    strategy's blind spots (BM25 misses paraphrases; dense search is less
+    discriminating on exact terms).
+    """
+
+    def __init__(
+        self,
+        doc_text: str,
+        chunk_method: str = "sentence",
+        chunk_size: int = 512,
+        chunk_overlap: int = 50,
+        embedding_model: str | None = None,
+    ):
+        self._dense = Retriever(doc_text, chunk_method, chunk_size, chunk_overlap, embedding_model)
+        self._sparse = SparseIndex(self._dense.chunks)
+
+    @property
+    def chunks(self) -> list[Chunk]:
+        return self._dense.chunks
+
+    def query(self, query_text: str, candidate_pool_size: int = 20, top_k: int = 10) -> list[RetrievalResult]:
+        if not self.chunks:
+            return []
+        dense_hits = [r.chunk for r in self._dense.query(query_text, top_k=candidate_pool_size)]
+        sparse_hits = [c for c, _ in self._sparse.search(query_text, top_k=candidate_pool_size)]
+        fused = reciprocal_rank_fusion(dense_hits, sparse_hits)
+        return [RetrievalResult(chunk=chunk, score=score) for chunk, score in fused[:top_k]]
+
+    def query_and_rerank(self, query_text: str, candidate_pool_size: int = 20, top_k: int = 10) -> list[RetrievalResult]:
+        """Hybrid retrieval followed by cross-encoder reranking - see Retriever.query_and_rerank."""
+        from pipeline.reranker import rerank
+
+        if not self.chunks:
+            return []
+        candidates = self.query(query_text, candidate_pool_size=candidate_pool_size, top_k=candidate_pool_size)
         return rerank(query_text, candidates, top_k=top_k)

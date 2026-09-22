@@ -10,7 +10,7 @@ from unittest.mock import patch
 import numpy as np
 import pytest
 
-from pipeline.retriever import Retriever
+from pipeline.retriever import HybridRetriever, Retriever
 
 
 def fake_embed_texts(texts, model_name=None):
@@ -98,3 +98,29 @@ def test_query_and_rerank_calls_rerank_with_wide_candidate_pool():
     assert call_args.args[0] == "reverse"
     assert len(call_args.args[1]) == 2  # candidate_pool_size was respected
     assert call_args.kwargs["top_k"] == 1
+
+
+def test_hybrid_retriever_finds_exact_term_bm25_would_catch():
+    # "reverse engineer" is an exact term BM25 should surface even if the
+    # fake dense embeddings (which only look for "confidential") don't rank it first.
+    doc = "1. Do not reverse engineer anything.\n\n2. Keep this confidential at all times."
+    retriever = HybridRetriever(doc, chunk_method="clause", chunk_size=15)
+    results = retriever.query("reverse engineer", top_k=2)
+    assert any("reverse engineer" in r.chunk.text.lower() for r in results)
+
+
+def test_hybrid_retriever_empty_document():
+    retriever = HybridRetriever("", chunk_method="sentence")
+    assert retriever.chunks == []
+    assert retriever.query("anything") == []
+
+
+def test_hybrid_retriever_query_and_rerank():
+    doc = "1. Reverse engineering clause.\n\n2. Solicitation clause."
+    retriever = HybridRetriever(doc, chunk_method="clause", chunk_size=15)
+
+    with patch("pipeline.reranker.rerank") as mock_rerank:
+        mock_rerank.return_value = "reranked result"
+        result = retriever.query_and_rerank("reverse", candidate_pool_size=5, top_k=1)
+
+    assert result == "reranked result"
