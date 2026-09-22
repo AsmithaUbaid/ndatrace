@@ -55,15 +55,24 @@ class Retriever:
         return [RetrievalResult(chunk=chunk, score=score) for chunk, score in hits]
 
     def query_and_rerank(
-        self, query_text: str, candidate_pool_size: int = 20, top_k: int = 10
+        self, query_text: str, candidate_pool_size: int = 20, top_k: int = 7
     ) -> list[RetrievalResult]:
         """
-        Production retrieval path (CLAUDE.md Decisions Log, T023 round 3):
+        Production retrieval path (CLAUDE.md Decisions Log, T023 rounds 3-5):
         retrieve a wide candidate pool cheaply with the bi-encoder, then
-        rerank down to top_k with a cross-encoder. Improved recall,
-        precision, and MRR simultaneously over plain top-k retrieval in
-        the T023 experiments - use this over .query() unless there's a
-        specific reason not to pay for the extra reranking pass.
+        rerank down to top_k with a cross-encoder (default: the larger
+        ms-marco-MiniLM-L-12-v2, see pipeline/reranker.py). Improved
+        recall, precision, and MRR simultaneously over plain top-k
+        retrieval - use this over .query() unless there's a specific
+        reason not to pay for the extra reranking pass. top_k=7: round 5's
+        sweep over k=[3,5,7,10] found MRR is nearly flat past k=5
+        (0.602->0.608 all the way to k=10 - reranking already puts real
+        evidence near the top for cases it finds at all), while recall
+        keeps climbing with k (74.5%->78.5%->82.8%). k=7 buys a real
+        recall gain (+4pt over k=5) without reopening the "k=10 is too
+        much context" call - recall never reaches ~90% even at k=10, so
+        the remaining miss rate is a retrieval ceiling for this method,
+        not a k-tuning problem (see confidence/abstention, T026-T027).
         """
         from pipeline.reranker import rerank  # local import: avoids a retriever<->reranker import cycle
 
