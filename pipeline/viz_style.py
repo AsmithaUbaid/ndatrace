@@ -74,13 +74,18 @@ def apply_style() -> None:
     })
 
 
-def style_axes(ax) -> None:
-    """Recessive spines/grid per the dataviz skill's mark specs. Call per-axes."""
+def style_axes(ax, grid_axis: str = "y") -> None:
+    """
+    Recessive spines/grid per the dataviz skill's mark specs. Call per-axes.
+
+    grid_axis: "y" for vertical bars/histograms (default), "x" for
+    horizontal bars, where values run along the x-axis instead.
+    """
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.spines["left"].set_visible(False)
-    ax.grid(axis="y", zorder=0)
-    ax.grid(axis="x", visible=False)
+    ax.grid(axis=grid_axis, zorder=0)
+    ax.grid(axis="x" if grid_axis == "y" else "y", visible=False)
     ax.tick_params(length=0)
 
 
