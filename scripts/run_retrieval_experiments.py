@@ -37,12 +37,18 @@ from pipeline.parser import parse_contractnli_file
 from pipeline.retriever import Retriever
 
 # Each config: (label, chunk_method, chunk_size, chunk_overlap, top_k)
+# chunk_size/chunk_overlap are ignored for "sentence" (no size budget - one
+# sentence/clause fragment per chunk, always).
 CONFIGS = [
-    ("clause_512_k5 (default)", "clause", 512, 0, 5),
+    ("clause_512_k5", "clause", 512, 0, 5),
     ("fixed_512_k5", "fixed", 512, 50, 5),
     ("clause_256_k5", "clause", 256, 0, 5),
     ("clause_512_k3", "clause", 512, 0, 3),
     ("clause_512_k10", "clause", 512, 0, 10),
+    ("clause_128_k5", "clause", 128, 0, 5),
+    ("sentence_k5", "sentence", 0, 0, 5),
+    ("sentence_k10", "sentence", 0, 0, 10),
+    ("sentence_k20", "sentence", 0, 0, 20),
 ]
 
 
@@ -106,19 +112,31 @@ def main() -> int:
     best_recall = max(results, key=lambda r: r["recall"])
     best_mrr = max(results, key=lambda r: r["mrr"])
 
+    # Practical pick, not just "highest MRR": among configs that clear the
+    # recall floor, prefer the smallest top-K within a small MRR margin of
+    # the best - a razor-thin MRR edge isn't worth 2x the retrieved context
+    # (more prompt cost, more disjointed text) if a smaller top-K is nearly
+    # as good and meaningfully more precise.
+    MRR_MARGIN = 0.01
+    RECALL_FLOOR = 0.70
+    viable = [r for r in results if r["recall"] >= RECALL_FLOOR]
+    near_best_mrr = [r for r in viable if best_mrr["mrr"] - r["mrr"] <= MRR_MARGIN]
+    # Prefer the one with best precision among the near-best-MRR set - a
+    # proxy for "smaller, more efficient retrieval" without hardcoding top_k.
+    practical_pick = max(near_best_mrr, key=lambda r: r["precision"]) if near_best_mrr else best_mrr
+
     print(f"\nBest Evidence Recall@K: {best_recall['label']} ({best_recall['recall']:.3f})")
     print(f"Best MRR (ranking quality): {best_mrr['label']} ({best_mrr['mrr']:.3f})")
+    print(f"Practical pick: {practical_pick['label']} (MRR {practical_pick['mrr']:.3f}, "
+          f"precision {practical_pick['precision']:.3f}, recall {practical_pick['recall']:.3f})")
 
     print("\n--- Decision Gate (Section 7, Stage 8) ---")
-    print(f"  All configs clear the 70% recall target (median dev doc is ~2,300 tokens, so a")
-    print(f"  512-token chunk size means most documents only have 4-8 chunks total - retrieving")
-    print(f"  top-5/top-10 from that returns nearly the whole document, which inflates recall")
-    print(f"  without reflecting real retrieval skill. MRR is the more honest signal here: it")
-    print(f"  measures whether the true evidence chunk ranks near the top, not just whether it")
-    print(f"  appears somewhere in a near-complete document dump - which is what matters once")
-    print(f"  RAG has to hand a SMALL number of chunks to the classifier, not the whole document.")
-    print(f"  Recommendation: '{best_mrr['label']}' (best MRR), not '{best_recall['label']}' "
-          f"(best raw recall, but that config's recall lead is mostly a same-chunk-count artifact).")
+    print(f"  Raw recall is misleading for short documents (median dev doc ~2,300 tokens means")
+    print(f"  most documents have few chunks total, so a large top-K just returns nearly the")
+    print(f"  whole document). MRR is more honest: does the true evidence rank near the top?")
+    print(f"  Among configs clearing the {RECALL_FLOOR:.0%} recall floor, '{practical_pick['label']}' is the")
+    print(f"  practical pick: within {MRR_MARGIN} MRR of the best ('{best_mrr['label']}', {best_mrr['mrr']:.3f}) but with")
+    print(f"  better precision and a smaller/cheaper retrieved context.")
 
     return 0
 

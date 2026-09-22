@@ -98,17 +98,69 @@ def _split_paragraphs(text: str) -> list[tuple[str, int, int]]:
     return paragraphs
 
 
+# A clause/sub-clause marker on its own ("1.", "12.", "(a)", "b)") - the
+# sentence splitter's punctuation+space+capital heuristic mistakes a
+# numbered marker's period for a sentence end, splitting "1." away from
+# its own clause text. Any fragment that's ONLY a bare marker gets
+# reattached to the sentence that follows it.
+_BARE_MARKER = re.compile(r"^\s*(?:\d+[.)]|\(?[a-zA-Z]\))\s*$")
+
+
 def _split_sentences(text: str, base_offset: int) -> list[tuple[str, int, int]]:
     """Split an oversized paragraph into sentences, offsets relative to the full document."""
-    sentences = []
+    raw: list[tuple[str, int, int]] = []
     pos = 0
     for part in _SENTENCE_SPLIT.split(text):
         if not part:
             continue
         idx = text.index(part, pos)
-        sentences.append((part, base_offset + idx, base_offset + idx + len(part)))
+        raw.append((part, base_offset + idx, base_offset + idx + len(part)))
         pos = idx + len(part)
+
+    sentences: list[tuple[str, int, int]] = []
+    i = 0
+    while i < len(raw):
+        part, start, end = raw[i]
+        if _BARE_MARKER.match(part) and i + 1 < len(raw):
+            next_part, _, next_end = raw[i + 1]
+            sentences.append((f"{part} {next_part}", start, next_end))
+            i += 2
+        else:
+            sentences.append((part, start, end))
+            i += 1
     return sentences
+
+
+def sentence_chunk(text: str) -> list[Chunk]:
+    """
+    Split into one chunk per sentence/clause fragment, no merging at all -
+    maximal granularity. Unlike clause_aware_chunk (which merges small
+    units up to a token budget), every unit becomes its own chunk.
+
+    Useful when the retrieval unit needs to closely match a fine-grained
+    annotation scheme (ContractNLI's candidate evidence spans are often
+    sentence-fragment sized) - a big aggregated chunk necessarily drags in
+    many unrelated candidate spans alongside the real evidence, which
+    tanks precision regardless of whether the right sentence was found.
+    """
+    if not text:
+        return []
+
+    paragraphs = _split_paragraphs(text)
+    chunks: list[Chunk] = []
+    index = 0
+
+    for para_text, para_start, para_end in paragraphs:
+        sentences = _split_sentences(para_text, para_start)
+        units = sentences if sentences else [(para_text, para_start, para_end)]
+        for sent_text, sent_start, sent_end in units:
+            chunks.append(Chunk(
+                text=sent_text, start_char=sent_start, end_char=sent_end,
+                chunk_index=index, method="sentence",
+            ))
+            index += 1
+
+    return chunks
 
 
 def clause_aware_chunk(text: str, chunk_size: int = 512) -> list[Chunk]:

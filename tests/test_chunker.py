@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from pipeline.chunker import ENCODING, clause_aware_chunk, fixed_size_chunk
+from pipeline.chunker import ENCODING, clause_aware_chunk, fixed_size_chunk, sentence_chunk
 
 
 def test_fixed_size_chunk_empty_text():
@@ -89,3 +89,28 @@ def test_clause_aware_chunk_never_exceeds_budget_by_much_for_normal_clauses():
     total_reconstructed = "".join(text[c.start_char:c.end_char] for c in chunks)
     # No text lost - every character should appear in some chunk (spacing aside).
     assert len(total_reconstructed) <= len(text)
+
+
+def test_sentence_chunk_empty_text():
+    assert sentence_chunk("") == []
+
+
+def test_sentence_chunk_never_merges_even_when_tiny():
+    """Unlike clause_aware_chunk, sentence_chunk never merges small units."""
+    text = "1. First clause here.\n\n2. Second clause here."
+    chunks = sentence_chunk(text)
+    assert len(chunks) == 2
+    assert all(c.method == "sentence" for c in chunks)
+
+
+def test_sentence_chunk_splits_multi_sentence_paragraph():
+    text = "This is sentence one. This is sentence two. This is sentence three."
+    chunks = sentence_chunk(text)
+    assert len(chunks) == 3
+
+
+def test_sentence_chunk_char_offsets_reconstruct_original_text():
+    text = "1. First clause here.\n\n2. Second sentence. Third sentence in same clause."
+    chunks = sentence_chunk(text)
+    for c in chunks:
+        assert text[c.start_char:c.end_char] == c.text

@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from pipeline.chunker import Chunk, clause_aware_chunk, fixed_size_chunk
+from pipeline.chunker import Chunk, clause_aware_chunk, fixed_size_chunk, sentence_chunk
 from pipeline.embedder import embed_query, embed_texts
 from pipeline.indexer import ChunkIndex, build_index, search
 
@@ -36,8 +36,10 @@ class Retriever:
             self.chunks: list[Chunk] = clause_aware_chunk(doc_text, chunk_size)
         elif chunk_method == "fixed":
             self.chunks = fixed_size_chunk(doc_text, chunk_size, chunk_overlap)
+        elif chunk_method == "sentence":
+            self.chunks = sentence_chunk(doc_text)
         else:
-            raise ValueError(f"Unknown chunk_method: {chunk_method!r} (expected 'clause' or 'fixed')")
+            raise ValueError(f"Unknown chunk_method: {chunk_method!r} (expected 'clause', 'fixed', or 'sentence')")
 
         self.embedding_model = embedding_model
         self.chunk_method = chunk_method
