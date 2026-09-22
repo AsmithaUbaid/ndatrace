@@ -159,9 +159,11 @@ def main() -> int:
 
     report = {
         "pricing_assumption": {
-            "model": "openrouter/openai/gpt-5-mini (per planning doc; not yet live-verified)",
+            "model": "openrouter/openai/gpt-5-mini",
             "input_price_per_million_usd": INPUT_PRICE_PER_MILLION,
             "output_price_per_million_usd": OUTPUT_PRICE_PER_MILLION,
+            "verified": "2026-09-22 via GET /api/v1/models - exact match to this assumption",
+            "batch_variant_available": "openai/gpt-5-mini:batch at half price ($0.125/M in, $1/M out)",
         },
         "real_measured_stats": real_stats,
         "experiments": experiments,
@@ -171,9 +173,9 @@ def main() -> int:
         "max_budget_usd": max_budget,
         "projected_pct_of_budget": projected_pct,
         "within_80_pct_target": projected_pct < warn_pct,
-        "note": "This projection needs only pricing + token counts. Confirming it against "
-                "the ACTUAL remaining OpenRouter balance still requires T002 (a real API key "
-                "in .env) - that step is separate from this cost projection.",
+        "note": "max_budget_usd is the real OpenRouter remaining balance, verified via "
+                "GET /auth/key (T002, see data/budget_plan.json) - not an assumption. "
+                "This total will need re-projecting if experiment scope changes.",
     }
 
     out_path = Path("data/cost_estimates.json")
@@ -189,9 +191,8 @@ def main() -> int:
     print(f"Projected spend: {projected_pct}% of budget "
           f"({'within' if report['within_80_pct_target'] else 'EXCEEDS'} {warn_pct}% target)")
     print(f"\nReport written to: {out_path}")
-    print("\nNOTE: this is a projection using documented pricing assumptions and real token "
-          "counts. It does not verify against your actual OpenRouter balance - that needs a "
-          "real API key in .env (T002).")
+    print("\nBudget figure is the real verified OpenRouter balance (T002, see "
+          "data/budget_plan.json) - re-run this script if experiment scope changes.")
 
     return 0
 

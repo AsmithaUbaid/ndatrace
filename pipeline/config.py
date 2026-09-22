@@ -74,7 +74,10 @@ class Settings(BaseSettings):
     database_url: str = Field(default="sqlite:///ndatrace.db")
 
     # --- Budget Safety ---
-    max_budget_usd: float = Field(default=15.00, ge=0.0)
+    # Verified via OpenRouter /auth/key on 2026-09-22: real remaining balance
+    # is $6.99 (key limit $10.00, already used $3.01) - not the originally
+    # assumed $15.00. See data/budget_plan.json.
+    max_budget_usd: float = Field(default=6.99, ge=0.0)
     warn_budget_pct: int = Field(default=80, ge=0, le=100)
 
     @property

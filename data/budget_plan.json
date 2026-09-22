@@ -1,0 +1,12 @@
+{
+  "verified_at": "2026-09-22",
+  "verification_method": "GET https://openrouter.ai/api/v1/auth/key (free metadata endpoint, no inference cost incurred)",
+  "key_limit_usd": 10.0,
+  "usage_all_time_usd": 3.005562469,
+  "remaining_balance_usd": 6.994437531,
+  "projected_experiment_cost_usd": 3.66,
+  "projected_pct_of_remaining_balance": 52.3,
+  "within_80_pct_target": true,
+  "correction": "The planning doc's .env.example assumed MAX_BUDGET_USD=15.00. Verified real remaining balance is $6.99, not $15. MAX_BUDGET_USD in .env corrected to 6.99.",
+  "note": "Projected cost ($3.66, from data/cost_estimates.json / T004) still fits comfortably within the real remaining balance, leaving ~$3.33 buffer. Re-verify balance after the Oracle experiment (highest early spend) before committing to later, more expensive experiments (RAG+agent, final test-set eval)."
+}
