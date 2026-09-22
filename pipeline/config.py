@@ -65,6 +65,14 @@ class Settings(BaseSettings):
     # --- Confidence / Abstention ---
     confidence_threshold: float = Field(default=0.7, ge=0.0, le=1.0)
 
+    # --- Safety gates ---
+    # Must be explicitly set True to feed gold evidence into a classifier
+    # call (Oracle-style). Never flip this in production code - only
+    # scripts/run_oracle_experiment.py sets it, and only for the duration
+    # of that script (WBS T026, eval case 090 - "Oracle experiment gated
+    # by explicit config flag").
+    oracle_mode: bool = Field(default=False)
+
     # --- Paths ---
     data_dir: str = Field(default="data/contractnli")
     results_dir: str = Field(default="results")

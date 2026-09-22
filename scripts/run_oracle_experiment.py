@@ -69,12 +69,23 @@ def stratified_sample(dataset, sample_size: int, seed: int) -> list:
 
 def build_oracle_context(ann) -> str:
     """What a perfect retriever would hand the classifier."""
+    if not settings.oracle_mode:
+        # Eval case 090 (Category 8, data leakage prevention): gold
+        # evidence must never reach a classifier call unless this script
+        # explicitly turned the flag on for its own run - never flip this
+        # check off, and never set oracle_mode=True outside this script.
+        raise RuntimeError(
+            "settings.oracle_mode is False - refusing to build gold-evidence "
+            "context. Only run_oracle_experiment.py may do this, and only "
+            "after explicitly setting settings.oracle_mode = True."
+        )
     if not ann.evidence_spans:
         return ""
     return " ".join(s.text for s in ann.evidence_spans)
 
 
 def main() -> int:
+    settings.oracle_mode = True
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sample-size", type=int, default=SAMPLE_SIZE,
                          help=f"Number of cases to sample (default: {SAMPLE_SIZE})")
