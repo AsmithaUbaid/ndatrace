@@ -1,0 +1,128 @@
+{
+  "A01_schema_validation": {
+    "train": {
+      "raw_count": 423,
+      "parsed_count": 423
+    },
+    "dev": {
+      "raw_count": 61,
+      "parsed_count": 61
+    },
+    "test": {
+      "raw_count": 123,
+      "parsed_count": 123
+    },
+    "total_raw": 607,
+    "total_parsed": 607,
+    "parse_success_rate": 1.0,
+    "pass": true
+  },
+  "A02_missing_corrupt": {
+    "train": {
+      "empty_text": 0,
+      "no_annotations": 0
+    },
+    "dev": {
+      "empty_text": 0,
+      "no_annotations": 0
+    },
+    "test": {
+      "empty_text": 0,
+      "no_annotations": 0
+    },
+    "total_docs": 607,
+    "total_corrupt": 0,
+    "corrupt_rate": 0.0,
+    "pass": true
+  },
+  "A03_duplicate_detection": {
+    "total_docs": 607,
+    "duplicate_groups": 1,
+    "duplicate_doc_count": 2,
+    "duplicate_rate": 0.0033,
+    "example_groups": [
+      [
+        "test/52",
+        "test/97"
+      ]
+    ],
+    "pass": true
+  },
+  "A04_leakage_test": {
+    "leaked_doc_count": 0,
+    "leaked_doc_ids": [],
+    "pass": true
+  },
+  "A05_label_distribution": {
+    "train": {
+      "Entailment": 3530,
+      "Contradiction": 841,
+      "NotMentioned": 2820
+    },
+    "dev": {
+      "Entailment": 519,
+      "Contradiction": 95,
+      "NotMentioned": 423
+    },
+    "test": {
+      "Entailment": 968,
+      "Contradiction": 220,
+      "NotMentioned": 903
+    },
+    "overall": {
+      "Entailment": 5017,
+      "Contradiction": 1156,
+      "NotMentioned": 4146
+    },
+    "overall_proportions": {
+      "Entailment": 0.4862,
+      "Contradiction": 0.112,
+      "NotMentioned": 0.4018
+    }
+  },
+  "A06_evidence_span_validation": {
+    "total_spans": 48058,
+    "invalid_spans": 0,
+    "invalid_rate": 0.0,
+    "examples": [],
+    "pass": true
+  },
+  "A07_token_length_analysis": {
+    "train": {
+      "min": 272,
+      "max": 11340,
+      "mean": 2117.9,
+      "median": 1905,
+      "p95": 4609
+    },
+    "dev": {
+      "min": 442,
+      "max": 6243,
+      "mean": 2301.8,
+      "median": 2131,
+      "p95": 4566
+    },
+    "test": {
+      "min": 308,
+      "max": 7861,
+      "mean": 2164.9,
+      "median": 1836,
+      "p95": 4672
+    },
+    "overall": {
+      "min": 272,
+      "max": 11340,
+      "mean": 2145.9,
+      "median": 1901,
+      "p95": 4632
+    }
+  },
+  "overall_pass": true,
+  "gate_checks": {
+    "A01": true,
+    "A02": true,
+    "A03": true,
+    "A04": true,
+    "A06": true
+  }
+}

@@ -20,8 +20,7 @@ __pycache__/
 Thumbs.db
 
 # Data (large files - download via scripts/download_data.sh)
-data/contractnli/*.json
-data/contractnli/*.zip
+data/contractnli/
 
 # Cache (derived, can be regenerated)
 cache/
