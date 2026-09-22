@@ -128,6 +128,34 @@ RULES: dict[str, KeywordRule] = {
 }
 
 
+def classify_with_span(hypothesis_id: str, doc_text: str) -> tuple[str, tuple[int, int] | None]:
+    """
+    Classify a (document, hypothesis) pair using keyword rules, also
+    returning the character span of the matching phrase (the rule
+    baseline's implicit "evidence") so it can be scored with the same
+    Evidence Recall@K/Precision/MRR formulas used for real retrieval
+    (evaluation.scorer.map_chunks_to_gold_span_indices treats it as a
+    single rank-1 "chunk"). Returns (label, None) when nothing matched.
+    """
+    rule = RULES.get(hypothesis_id)
+    if rule is None:
+        return "NotMentioned", None
+
+    text = doc_text.lower()
+
+    for neg in rule.negative:
+        idx = text.find(neg)
+        if idx != -1:
+            return "Contradiction", (idx, idx + len(neg))
+
+    for pos in rule.positive:
+        idx = text.find(pos)
+        if idx != -1:
+            return "Entailment", (idx, idx + len(pos))
+
+    return "NotMentioned", None
+
+
 def classify_by_keywords(hypothesis_id: str, doc_text: str) -> str:
     """
     Classify a (document, hypothesis) pair using keyword rules.
@@ -135,14 +163,5 @@ def classify_by_keywords(hypothesis_id: str, doc_text: str) -> str:
     Returns one of "Entailment", "Contradiction", "NotMentioned".
     Unknown hypothesis IDs default to "NotMentioned" (no rule = no evidence).
     """
-    rule = RULES.get(hypothesis_id)
-    if rule is None:
-        return "NotMentioned"
-
-    text = doc_text.lower()
-
-    if any(neg in text for neg in rule.negative):
-        return "Contradiction"
-    if any(pos in text for pos in rule.positive):
-        return "Entailment"
-    return "NotMentioned"
+    label, _ = classify_with_span(hypothesis_id, doc_text)
+    return label

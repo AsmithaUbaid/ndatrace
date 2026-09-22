@@ -1,0 +1,16 @@
+{
+  "rule_based": {
+    "label": "Rule-based keyword match",
+    "recall": 0.20438834600072386,
+    "precision": 0.7262357414448669,
+    "mrr": 0.7262357414448669,
+    "n_cases": 614
+  },
+  "semantic": {
+    "label": "Semantic retrieval (clause_256_k5)",
+    "recall": 0.8529212553642521,
+    "precision": 0.05650665785262982,
+    "mrr": 0.2829414373168544,
+    "n_cases": 614
+  }
+}

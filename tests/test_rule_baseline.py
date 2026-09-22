@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from pipeline.rule_baseline import RULES, classify_by_keywords
+from pipeline.rule_baseline import RULES, classify_by_keywords, classify_with_span
 
 
 def test_unknown_hypothesis_defaults_to_not_mentioned():
@@ -43,3 +43,31 @@ def test_all_17_hypotheses_have_rules():
 def test_every_rule_has_at_least_one_positive_phrase():
     for hyp_id, rule in RULES.items():
         assert len(rule.positive) > 0, f"{hyp_id} has no positive keywords"
+
+
+def test_classify_with_span_no_match_returns_none_span():
+    label, span = classify_with_span("nda-11", "This document is about widgets.")
+    assert label == "NotMentioned"
+    assert span is None
+
+
+def test_classify_with_span_positive_match_returns_correct_span():
+    text = "Some preamble text. Receiving Party shall not reverse engineer the widget."
+    label, span = classify_with_span("nda-11", text)
+    assert label == "Entailment"
+    start, end = span
+    assert text.lower()[start:end] == "reverse engineer"
+
+
+def test_classify_with_span_negative_match_returns_correct_span():
+    text = "Recipient may reverse engineer the licensed software freely."
+    label, span = classify_with_span("nda-11", text)
+    assert label == "Contradiction"
+    start, end = span
+    assert text.lower()[start:end] == "may reverse engineer"
+
+
+def test_classify_by_keywords_matches_classify_with_span_label():
+    """The thin wrapper must stay behaviorally identical to the span version."""
+    text = "Receiving Party shall not solicit any representatives."
+    assert classify_by_keywords("nda-18", text) == classify_with_span("nda-18", text)[0]
