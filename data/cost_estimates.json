@@ -1,0 +1,164 @@
+{
+  "pricing_assumption": {
+    "model": "openrouter/openai/gpt-5-mini (per planning doc; not yet live-verified)",
+    "input_price_per_million_usd": 0.25,
+    "output_price_per_million_usd": 2.0
+  },
+  "real_measured_stats": {
+    "avg_doc_tokens": 2301.8360655737706,
+    "avg_evidence_tokens": 97.54071661237785
+  },
+  "experiments": [
+    {
+      "id": "B03",
+      "name": "Full-context LLM baseline",
+      "calls": 500,
+      "input_tokens": 1300918,
+      "output_tokens": 75000,
+      "cost_usd": 0.48,
+      "source": "recomputed: 2302 real avg doc tokens (A07) + 300 overhead"
+    },
+    {
+      "id": "B04",
+      "name": "Oracle-evidence baseline",
+      "calls": 500,
+      "input_tokens": 198770,
+      "output_tokens": 75000,
+      "cost_usd": 0.2,
+      "source": "recomputed: 98 real avg gold-evidence tokens + 300 overhead"
+    },
+    {
+      "id": "D07",
+      "name": "Top-K comparison (downstream accuracy)",
+      "calls": 200,
+      "input_tokens": 200000,
+      "output_tokens": 30000,
+      "cost_usd": 0.11,
+      "source": "planning doc Section 8"
+    },
+    {
+      "id": "C01",
+      "name": "Model comparison (Oracle, 3 models)",
+      "calls": 300,
+      "input_tokens": 200000,
+      "output_tokens": 45000,
+      "cost_usd": 0.14,
+      "source": "planning doc Section 8"
+    },
+    {
+      "id": "C03",
+      "name": "Zero-shot vs few-shot",
+      "calls": 300,
+      "input_tokens": 250000,
+      "output_tokens": 45000,
+      "cost_usd": 0.15,
+      "source": "planning doc Section 8"
+    },
+    {
+      "id": "C04",
+      "name": "Prompt variants",
+      "calls": 300,
+      "input_tokens": 200000,
+      "output_tokens": 45000,
+      "cost_usd": 0.14,
+      "source": "planning doc Section 8"
+    },
+    {
+      "id": "C05",
+      "name": "Structured JSON output",
+      "calls": 200,
+      "input_tokens": 150000,
+      "output_tokens": 30000,
+      "cost_usd": 0.1,
+      "source": "planning doc Section 8"
+    },
+    {
+      "id": "C07",
+      "name": "Not Mentioned behaviour",
+      "calls": 100,
+      "input_tokens": 70000,
+      "output_tokens": 15000,
+      "cost_usd": 0.05,
+      "source": "planning doc Section 8"
+    },
+    {
+      "id": "E03",
+      "name": "Standard dense RAG E2E",
+      "calls": 500,
+      "input_tokens": 500000,
+      "output_tokens": 75000,
+      "cost_usd": 0.28,
+      "source": "planning doc Section 8"
+    },
+    {
+      "id": "E06",
+      "name": "RAG + agent E2E",
+      "calls": 700,
+      "input_tokens": 700000,
+      "output_tokens": 105000,
+      "cost_usd": 0.39,
+      "source": "planning doc Section 8"
+    },
+    {
+      "id": "G01",
+      "name": "Agent vs no-agent",
+      "calls": 200,
+      "input_tokens": 300000,
+      "output_tokens": 30000,
+      "cost_usd": 0.14,
+      "source": "planning doc Section 8"
+    },
+    {
+      "id": "G02",
+      "name": "Trigger-rule comparison",
+      "calls": 300,
+      "input_tokens": 400000,
+      "output_tokens": 45000,
+      "cost_usd": 0.19,
+      "source": "planning doc Section 8"
+    },
+    {
+      "id": "G04",
+      "name": "Max-step comparison",
+      "calls": 400,
+      "input_tokens": 500000,
+      "output_tokens": 60000,
+      "cost_usd": 0.24,
+      "source": "planning doc Section 8"
+    },
+    {
+      "id": "L03",
+      "name": "Golden-case test suite (12 cases)",
+      "calls": 12,
+      "input_tokens": 15000,
+      "output_tokens": 1800,
+      "cost_usd": 0.01,
+      "source": "planning doc Section 8"
+    },
+    {
+      "id": "L04",
+      "name": "Complete 17-requirement NDA run",
+      "calls": 17,
+      "input_tokens": 20000,
+      "output_tokens": 2550,
+      "cost_usd": 0.01,
+      "source": "planning doc Section 8"
+    },
+    {
+      "id": "FINAL",
+      "name": "Final locked test-set evaluation (runs once, no re-tuning)",
+      "calls": 1548,
+      "input_tokens": 2246021,
+      "output_tokens": 232200,
+      "cost_usd": 1.03,
+      "source": "recomputed: assumes RAG-sized context (~50% of avg doc tokens) + overhead"
+    }
+  ],
+  "total_input_tokens": 7250709,
+  "total_output_tokens": 911550,
+  "total_cost_usd": 3.66,
+  "max_budget_usd": 15.0,
+  "projected_pct_of_budget": 24.4,
+  "within_80_pct_target": true,
+  "note": "This projection needs only pricing + token counts. Confirming it against the ACTUAL remaining OpenRouter balance still requires T002 (a real API key in .env) - that step is separate from this cost projection."
+}
