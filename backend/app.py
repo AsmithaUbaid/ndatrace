@@ -1,0 +1,3 @@
+"""
+NDATrace FastAPI Application
+"""

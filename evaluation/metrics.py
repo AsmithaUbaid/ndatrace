@@ -1,0 +1,463 @@
+"""
+Metric computation functions — Section 11 of the planning document.
+
+All metrics are pure functions: they take predictions + gold data and
+return numbers.  No side effects, no file I/O, no network calls.
+This makes them easy to unit-test with synthetic data.
+"""
+
+from __future__ import annotations
+
+from collections import Counter
+from typing import Sequence
+
+from evaluation.schemas import GoldCase, Label, MetricResult, Prediction
+
+
+# =========================================================================
+# Classification Metrics
+# =========================================================================
+
+def label_accuracy(predictions: Sequence[Prediction], golds: Sequence[GoldCase]) -> float:
+    """Simple accuracy: correct / total (excludes abstentions)."""
+    matched = _match_predictions_to_golds(predictions, golds)
+    non_abstained = [(p, g) for p, g in matched if not p.abstained]
+    if not non_abstained:
+        return 0.0
+    correct = sum(1 for p, g in non_abstained if p.predicted_label == g.gold_label)
+    return correct / len(non_abstained)
+
+
+def per_class_metrics(
+    predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+) -> dict[str, dict[str, float]]:
+    """
+    Per-class precision, recall, F1 for each label.
+
+    Returns:
+        {"Entailment": {"precision": .., "recall": .., "f1": ..}, ...}
+    """
+    matched = _match_predictions_to_golds(predictions, golds)
+    non_abstained = [(p, g) for p, g in matched if not p.abstained]
+
+    classes = [Label.ENTAILMENT, Label.CONTRADICTION, Label.NOT_MENTIONED]
+    result: dict[str, dict[str, float]] = {}
+
+    for cls in classes:
+        tp = sum(1 for p, g in non_abstained
+                 if p.predicted_label == cls and g.gold_label == cls)
+        fp = sum(1 for p, g in non_abstained
+                 if p.predicted_label == cls and g.gold_label != cls)
+        fn = sum(1 for p, g in non_abstained
+                 if p.predicted_label != cls and g.gold_label == cls)
+
+        precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+        recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+        f1 = (2 * precision * recall / (precision + recall)
+              if (precision + recall) > 0 else 0.0)
+
+        result[cls.value] = {
+            "precision": precision,
+            "recall": recall,
+            "f1": f1,
+            "tp": tp,
+            "fp": fp,
+            "fn": fn,
+        }
+
+    return result
+
+
+def macro_f1(predictions: Sequence[Prediction], golds: Sequence[GoldCase]) -> float:
+    """Macro-F1: average of per-class F1 scores."""
+    pc = per_class_metrics(predictions, golds)
+    f1_scores = [v["f1"] for v in pc.values()]
+    return sum(f1_scores) / len(f1_scores) if f1_scores else 0.0
+
+
+def risk_sensitive_recall(
+    predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+) -> float:
+    """
+    Average of Contradiction recall and NotMentioned recall.
+    These are the two classes where a miss is dangerous.
+    """
+    pc = per_class_metrics(predictions, golds)
+    recall_c = pc.get(Label.CONTRADICTION.value, {}).get("recall", 0.0)
+    recall_nm = pc.get(Label.NOT_MENTIONED.value, {}).get("recall", 0.0)
+    return (recall_c + recall_nm) / 2
+
+
+# =========================================================================
+# Evidence Metrics
+# =========================================================================
+
+def evidence_recall_at_k(
+    predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+) -> float:
+    """
+    Evidence Recall@K: fraction of gold evidence spans retrieved.
+    Computed only for Entailment and Contradiction (NotMentioned has no gold evidence).
+    """
+    total_recall = 0.0
+    count = 0
+
+    matched = _match_predictions_to_golds(predictions, golds)
+    for pred, gold in matched:
+        if gold.gold_label == Label.NOT_MENTIONED or not gold.gold_span_indices:
+            continue
+        if pred.abstained:
+            continue
+
+        gold_set = set(gold.gold_span_indices)
+        retrieved_set = set(pred.retrieved_span_indices)
+        overlap = gold_set & retrieved_set
+
+        recall = len(overlap) / len(gold_set) if gold_set else 0.0
+        total_recall += recall
+        count += 1
+
+    return total_recall / count if count > 0 else 0.0
+
+
+def evidence_precision(
+    predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+) -> float:
+    """
+    Evidence Precision: among retrieved chunks, how many contain gold evidence.
+    Computed only for Entailment and Contradiction.
+    """
+    total_precision = 0.0
+    count = 0
+
+    matched = _match_predictions_to_golds(predictions, golds)
+    for pred, gold in matched:
+        if gold.gold_label == Label.NOT_MENTIONED or not gold.gold_span_indices:
+            continue
+        if pred.abstained or not pred.retrieved_span_indices:
+            continue
+
+        gold_set = set(gold.gold_span_indices)
+        retrieved_set = set(pred.retrieved_span_indices)
+        overlap = gold_set & retrieved_set
+
+        prec = len(overlap) / len(retrieved_set) if retrieved_set else 0.0
+        total_precision += prec
+        count += 1
+
+    return total_precision / count if count > 0 else 0.0
+
+
+def mean_reciprocal_rank(
+    predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+) -> float:
+    """
+    MRR: for each query, 1/rank of the first retrieved chunk that overlaps gold.
+    """
+    total_rr = 0.0
+    count = 0
+
+    matched = _match_predictions_to_golds(predictions, golds)
+    for pred, gold in matched:
+        if gold.gold_label == Label.NOT_MENTIONED or not gold.gold_span_indices:
+            continue
+        if pred.abstained or not pred.retrieved_span_indices:
+            continue
+
+        gold_set = set(gold.gold_span_indices)
+        rr = 0.0
+        for rank, span_idx in enumerate(pred.retrieved_span_indices, start=1):
+            if span_idx in gold_set:
+                rr = 1.0 / rank
+                break
+        total_rr += rr
+        count += 1
+
+    return total_rr / count if count > 0 else 0.0
+
+
+# =========================================================================
+# Joint Metric (Professor's Key Metric)
+# =========================================================================
+
+def joint_label_evidence_correctness(
+    predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+    tau_evidence: float = 0.5,
+) -> float:
+    """
+    Joint Label-and-Evidence Correctness.
+
+    A case is jointly correct if:
+    - predicted_label == gold_label AND evidence_recall@K >= tau_evidence
+      (for Entailment/Contradiction)
+    - predicted_label == NotMentioned AND gold_label == NotMentioned
+      (no evidence check needed)
+    """
+    matched = _match_predictions_to_golds(predictions, golds)
+    if not matched:
+        return 0.0
+
+    joint_correct = 0
+    total = len(matched)
+
+    for pred, gold in matched:
+        if pred.abstained:
+            continue
+
+        if pred.predicted_label != gold.gold_label:
+            continue
+
+        if gold.gold_label == Label.NOT_MENTIONED:
+            # Correct NotMentioned — no evidence check needed
+            joint_correct += 1
+        else:
+            # Entailment or Contradiction — need evidence recall check
+            gold_set = set(gold.gold_span_indices)
+            if not gold_set:
+                # No gold evidence to check — label match is enough
+                joint_correct += 1
+            else:
+                retrieved_set = set(pred.retrieved_span_indices)
+                overlap = gold_set & retrieved_set
+                recall = len(overlap) / len(gold_set)
+                if recall >= tau_evidence:
+                    joint_correct += 1
+
+    return joint_correct / total
+
+
+# =========================================================================
+# Abstention / Confidence Metrics
+# =========================================================================
+
+def coverage(predictions: Sequence[Prediction]) -> float:
+    """Fraction of cases where the system provides a label (not abstained)."""
+    if not predictions:
+        return 0.0
+    non_abstained = sum(1 for p in predictions if not p.abstained)
+    return non_abstained / len(predictions)
+
+
+def abstention_rate(predictions: Sequence[Prediction]) -> float:
+    """Fraction of cases where the system abstained."""
+    return 1.0 - coverage(predictions)
+
+
+def selective_accuracy(
+    predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+) -> float:
+    """Accuracy only among cases the system chose to answer."""
+    matched = _match_predictions_to_golds(predictions, golds)
+    non_abstained = [(p, g) for p, g in matched if not p.abstained]
+    if not non_abstained:
+        return 0.0
+    correct = sum(1 for p, g in non_abstained if p.predicted_label == g.gold_label)
+    return correct / len(non_abstained)
+
+
+def abstention_effectiveness(
+    predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+) -> float:
+    """
+    Of abstained cases, what fraction would have been wrong?
+    Higher = system correctly identifies its failures.
+    """
+    matched = _match_predictions_to_golds(predictions, golds)
+    abstained = [(p, g) for p, g in matched if p.abstained]
+    if not abstained:
+        return 0.0
+
+    # "Would be wrong" = predicted label (even though abstained) != gold
+    would_be_wrong = sum(
+        1 for p, g in abstained if p.predicted_label != g.gold_label
+    )
+    return would_be_wrong / len(abstained)
+
+
+def unsafe_non_abstention_rate(
+    predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+) -> float:
+    """
+    Cases where the system confidently gave the wrong answer.
+    This is the most dangerous metric — represents silent failures.
+    Target: < 10%.
+    """
+    matched = _match_predictions_to_golds(predictions, golds)
+    if not matched:
+        return 0.0
+
+    wrong_and_confident = sum(
+        1 for p, g in matched
+        if not p.abstained and p.predicted_label != g.gold_label
+    )
+    return wrong_and_confident / len(matched)
+
+
+# =========================================================================
+# Agent Metrics
+# =========================================================================
+
+def agent_routing_rate(predictions: Sequence[Prediction]) -> float:
+    """Fraction of cases sent to the agent."""
+    if not predictions:
+        return 0.0
+    return sum(1 for p in predictions if p.agent_used) / len(predictions)
+
+
+def agent_recovery_rate(
+    predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+    baseline_predictions: Sequence[Prediction] | None = None,
+) -> float:
+    """
+    Among agent-routed cases: fraction where agent got it right
+    AND the baseline (initial RAG) was wrong or abstained.
+    Requires baseline_predictions for comparison.
+    """
+    if baseline_predictions is None:
+        return 0.0
+
+    matched_agent = _match_predictions_to_golds(predictions, golds)
+    matched_base = _match_predictions_to_golds(baseline_predictions, golds)
+    base_lookup = {(p.doc_id, p.hypothesis_id): p for p, _ in matched_base}
+
+    agent_routed = [(p, g) for p, g in matched_agent if p.agent_used]
+    if not agent_routed:
+        return 0.0
+
+    recovered = 0
+    for pred, gold in agent_routed:
+        key = (pred.doc_id, pred.hypothesis_id)
+        base_pred = base_lookup.get(key)
+        if base_pred is None:
+            continue
+        base_wrong = base_pred.abstained or base_pred.predicted_label != gold.gold_label
+        agent_right = pred.predicted_label == gold.gold_label
+        if base_wrong and agent_right:
+            recovered += 1
+
+    return recovered / len(agent_routed)
+
+
+# =========================================================================
+# Cost / Latency Metrics
+# =========================================================================
+
+def cost_and_latency_summary(
+    predictions: Sequence[Prediction],
+) -> dict[str, float]:
+    """Compute aggregate cost and latency statistics."""
+    costs = []
+    latencies = []
+
+    for p in predictions:
+        if p.cost_latency:
+            costs.append(p.cost_latency.cost_usd)
+            latencies.append(p.cost_latency.latency_ms)
+
+    if not costs:
+        return {
+            "total_cost_usd": 0.0,
+            "mean_cost_per_req_usd": 0.0,
+            "p50_latency_ms": 0.0,
+            "p95_latency_ms": 0.0,
+        }
+
+    latencies.sort()
+    n = len(latencies)
+
+    return {
+        "total_cost_usd": sum(costs),
+        "mean_cost_per_req_usd": sum(costs) / len(costs),
+        "p50_latency_ms": latencies[n // 2],
+        "p95_latency_ms": latencies[int(n * 0.95)] if n >= 20 else latencies[-1],
+    }
+
+
+# =========================================================================
+# Compute All Metrics
+# =========================================================================
+
+def compute_all_metrics(
+    predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+    tau_evidence: float = 0.5,
+    baseline_predictions: Sequence[Prediction] | None = None,
+) -> MetricResult:
+    """Compute every metric and return a MetricResult."""
+    pc = per_class_metrics(predictions, golds)
+    cost_lat = cost_and_latency_summary(predictions)
+    matched = _match_predictions_to_golds(predictions, golds)
+    non_abstained = [(p, g) for p, g in matched if not p.abstained]
+
+    return MetricResult(
+        # Classification
+        accuracy=label_accuracy(predictions, golds),
+        macro_f1=macro_f1(predictions, golds),
+        risk_sensitive_recall=risk_sensitive_recall(predictions, golds),
+        per_class=pc,
+
+        # Evidence
+        evidence_recall_at_k=evidence_recall_at_k(predictions, golds),
+        evidence_precision=evidence_precision(predictions, golds),
+        mrr=mean_reciprocal_rank(predictions, golds),
+
+        # Joint
+        joint_label_evidence_correctness=joint_label_evidence_correctness(
+            predictions, golds, tau_evidence
+        ),
+
+        # Abstention
+        coverage=coverage(predictions),
+        selective_accuracy=selective_accuracy(predictions, golds),
+        abstention_rate=abstention_rate(predictions),
+        abstention_effectiveness=abstention_effectiveness(predictions, golds),
+        unsafe_non_abstention_rate=unsafe_non_abstention_rate(predictions, golds),
+
+        # Agent
+        agent_routing_rate=agent_routing_rate(predictions),
+        agent_recovery_rate=agent_recovery_rate(
+            predictions, golds, baseline_predictions
+        ),
+
+        # Cost/latency
+        total_cost_usd=cost_lat["total_cost_usd"],
+        mean_cost_per_req_usd=cost_lat["mean_cost_per_req_usd"],
+        p50_latency_ms=cost_lat["p50_latency_ms"],
+        p95_latency_ms=cost_lat["p95_latency_ms"],
+
+        # Counts
+        total_cases=len(matched),
+        correct_cases=sum(
+            1 for p, g in non_abstained if p.predicted_label == g.gold_label
+        ),
+        abstained_cases=sum(1 for p in predictions if p.abstained),
+    )
+
+
+# =========================================================================
+# Helpers
+# =========================================================================
+
+def _match_predictions_to_golds(
+    predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+) -> list[tuple[Prediction, GoldCase]]:
+    """Match predictions to gold cases by (doc_id, hypothesis_id)."""
+    gold_lookup = {(g.doc_id, g.hypothesis_id): g for g in golds}
+    matched = []
+    for pred in predictions:
+        key = (pred.doc_id, pred.hypothesis_id)
+        gold = gold_lookup.get(key)
+        if gold is not None:
+            matched.append((pred, gold))
+    return matched

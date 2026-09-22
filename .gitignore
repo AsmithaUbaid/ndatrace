@@ -1,0 +1,60 @@
+# Environment
+.env
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data (large files - download via scripts/download_data.sh)
+data/contractnli/*.json
+data/contractnli/*.zip
+
+# Cache (derived, can be regenerated)
+cache/
+
+# Logs
+logs/
+
+# Model files
+*.bin
+*.pt
+*.onnx
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Node / Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# Distribution
+dist/
+build/
+*.egg-info/
+
+# Database
+*.db
+*.sqlite3
+
+# Results (keep tracked - these are append-only experiment records)
+# results/ is NOT gitignored
+
+# Secrets
+.env.local
+.env.production
