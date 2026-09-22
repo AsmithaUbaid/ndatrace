@@ -13,6 +13,36 @@ from typing import Any, Optional
 from evaluation.schemas import CostLatencyRecord, Label, Prediction
 
 
+def map_chunks_to_gold_span_indices(doc_spans: list[tuple[int, int]], ranked_chunks: list) -> list[int]:
+    """
+    Map ranked retrieved chunks to the ContractNLI-annotated span indices
+    they cover, in rank order.
+
+    Retrieval-built chunks (pipeline/chunker.py) have their own character
+    boundaries, which don't line up with ContractNLI's pre-annotated
+    evidence spans (`doc.spans`, referenced by gold_span_indices). To reuse
+    evaluation.metrics' existing index-based Evidence Recall@K / MRR
+    formulas unmodified, this maps "which annotated spans does each
+    retrieved chunk overlap" into a flat list of span indices, ordered by
+    the rank of the chunk that first covers them - exactly the shape
+    Prediction.retrieved_span_indices expects.
+
+    `ranked_chunks` must be pre-sorted best-first (as Retriever.query()
+    already returns them). Each `chunk` needs .start_char/.end_char.
+    """
+    covered_in_order: list[int] = []
+    seen: set[int] = set()
+    for chunk in ranked_chunks:
+        for idx, (span_start, span_end) in enumerate(doc_spans):
+            if idx in seen:
+                continue
+            overlaps = span_start < chunk.end_char and span_end > chunk.start_char
+            if overlaps:
+                covered_in_order.append(idx)
+                seen.add(idx)
+    return covered_in_order
+
+
 def score_raw_output(
     doc_id: str,
     hypothesis_id: str,
