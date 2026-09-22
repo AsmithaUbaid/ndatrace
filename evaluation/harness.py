@@ -198,6 +198,44 @@ class EvaluationHarness:
                     results.append(ExperimentResult.model_validate_json(line))
         return results
 
+    def checkpoint_path(self, experiment_id: str) -> Path:
+        """Path to the incremental per-prediction checkpoint file for a run."""
+        return self.results_dir / "runs" / f"checkpoint_{experiment_id}.jsonl"
+
+    def save_prediction_checkpoint(self, experiment_id: str, prediction: Prediction) -> None:
+        """
+        Append one prediction to the run's checkpoint file immediately after
+        it's computed (A09: run resumption). If the process crashes mid-run,
+        load_checkpoint() lets the caller skip cases already done on restart.
+        """
+        path = self.checkpoint_path(experiment_id)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with open(path, "a", encoding="utf-8") as f:
+            f.write(prediction.model_dump_json() + "\n")
+
+    def load_checkpoint(self, experiment_id: str) -> list[Prediction]:
+        """Load whatever predictions were already checkpointed for this run."""
+        path = self.checkpoint_path(experiment_id)
+        if not path.exists():
+            return []
+        predictions = []
+        with open(path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    predictions.append(Prediction.model_validate_json(line))
+        return predictions
+
+    def completed_case_keys(self, experiment_id: str) -> set[tuple[str, str]]:
+        """(doc_id, hypothesis_id) pairs already checkpointed for this run."""
+        return {(p.doc_id, p.hypothesis_id) for p in self.load_checkpoint(experiment_id)}
+
+    def clear_checkpoint(self, experiment_id: str) -> None:
+        """Remove the checkpoint file once a run completes successfully."""
+        path = self.checkpoint_path(experiment_id)
+        if path.exists():
+            path.unlink()
+
     def evaluate_by_category(
         self,
         predictions: Sequence[Prediction],

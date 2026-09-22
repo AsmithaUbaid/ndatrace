@@ -7,7 +7,7 @@ All experiment results are stored as JSONL using these models.
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Optional
 
@@ -120,6 +120,7 @@ class ExperimentConfig(BaseModel):
         description="Architecture variant: rule, full_context, oracle, rag, rag_agent",
     )
     split: str = Field(default="dev", description="Dataset split used")
+    seed: int = Field(default=42, description="Random seed for reproducibility (A12)")
     extra: dict = Field(default_factory=dict, description="Any additional config")
 
 
@@ -158,8 +159,11 @@ class MetricResult(BaseModel):
 
     # Cost / Latency
     mean_cost_per_req_usd: float = 0.0
+    cost_per_correct_usd: float = 0.0
     p50_latency_ms: float = 0.0
+    p90_latency_ms: float = 0.0
     p95_latency_ms: float = 0.0
+    p99_latency_ms: float = 0.0
     total_cost_usd: float = 0.0
 
     # Counts
@@ -174,7 +178,7 @@ class ExperimentResult(BaseModel):
     metrics: MetricResult
     predictions: list[Prediction] = Field(default_factory=list)
     timestamp: str = Field(
-        default_factory=lambda: datetime.utcnow().isoformat() + "Z",
+        default_factory=lambda: datetime.now(timezone.utc).isoformat(),
     )
     duration_seconds: float = Field(default=0.0)
     error: Optional[str] = Field(default=None, description="Error if run failed")

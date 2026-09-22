@@ -348,12 +348,48 @@ def agent_recovery_rate(
     return recovered / len(agent_routed)
 
 
+def agent_regression_rate(
+    predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+    baseline_predictions: Sequence[Prediction] | None = None,
+) -> float:
+    """
+    Among agent-routed cases: fraction where the agent produced a wrong
+    label AND the baseline (initial RAG) was correct. This is the cost of
+    routing to the agent — cases it made worse.
+    """
+    if baseline_predictions is None:
+        return 0.0
+
+    matched_agent = _match_predictions_to_golds(predictions, golds)
+    matched_base = _match_predictions_to_golds(baseline_predictions, golds)
+    base_lookup = {(p.doc_id, p.hypothesis_id): p for p, _ in matched_base}
+
+    agent_routed = [(p, g) for p, g in matched_agent if p.agent_used]
+    if not agent_routed:
+        return 0.0
+
+    regressed = 0
+    for pred, gold in agent_routed:
+        key = (pred.doc_id, pred.hypothesis_id)
+        base_pred = base_lookup.get(key)
+        if base_pred is None:
+            continue
+        base_correct = not base_pred.abstained and base_pred.predicted_label == gold.gold_label
+        agent_wrong = pred.abstained or pred.predicted_label != gold.gold_label
+        if base_correct and agent_wrong:
+            regressed += 1
+
+    return regressed / len(agent_routed)
+
+
 # =========================================================================
 # Cost / Latency Metrics
 # =========================================================================
 
 def cost_and_latency_summary(
     predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase] | None = None,
 ) -> dict[str, float]:
     """Compute aggregate cost and latency statistics."""
     costs = []
@@ -368,18 +404,38 @@ def cost_and_latency_summary(
         return {
             "total_cost_usd": 0.0,
             "mean_cost_per_req_usd": 0.0,
+            "cost_per_correct_usd": 0.0,
             "p50_latency_ms": 0.0,
+            "p90_latency_ms": 0.0,
             "p95_latency_ms": 0.0,
+            "p99_latency_ms": 0.0,
         }
 
     latencies.sort()
     n = len(latencies)
 
+    def _percentile(pct: float) -> float:
+        idx = min(int(n * pct), n - 1)
+        return latencies[idx]
+
+    total_cost = sum(costs)
+    correct_non_abstained = 0
+    if golds is not None:
+        matched = _match_predictions_to_golds(predictions, golds)
+        correct_non_abstained = sum(
+            1 for p, g in matched if not p.abstained and p.predicted_label == g.gold_label
+        )
+
     return {
-        "total_cost_usd": sum(costs),
-        "mean_cost_per_req_usd": sum(costs) / len(costs),
-        "p50_latency_ms": latencies[n // 2],
-        "p95_latency_ms": latencies[int(n * 0.95)] if n >= 20 else latencies[-1],
+        "total_cost_usd": total_cost,
+        "mean_cost_per_req_usd": total_cost / len(costs),
+        "cost_per_correct_usd": (
+            total_cost / correct_non_abstained if correct_non_abstained > 0 else 0.0
+        ),
+        "p50_latency_ms": _percentile(0.50),
+        "p90_latency_ms": _percentile(0.90),
+        "p95_latency_ms": _percentile(0.95),
+        "p99_latency_ms": _percentile(0.99),
     }
 
 
@@ -395,7 +451,7 @@ def compute_all_metrics(
 ) -> MetricResult:
     """Compute every metric and return a MetricResult."""
     pc = per_class_metrics(predictions, golds)
-    cost_lat = cost_and_latency_summary(predictions)
+    cost_lat = cost_and_latency_summary(predictions, golds)
     matched = _match_predictions_to_golds(predictions, golds)
     non_abstained = [(p, g) for p, g in matched if not p.abstained]
 
@@ -428,12 +484,18 @@ def compute_all_metrics(
         agent_recovery_rate=agent_recovery_rate(
             predictions, golds, baseline_predictions
         ),
+        agent_regression_rate=agent_regression_rate(
+            predictions, golds, baseline_predictions
+        ),
 
         # Cost/latency
         total_cost_usd=cost_lat["total_cost_usd"],
         mean_cost_per_req_usd=cost_lat["mean_cost_per_req_usd"],
+        cost_per_correct_usd=cost_lat["cost_per_correct_usd"],
         p50_latency_ms=cost_lat["p50_latency_ms"],
+        p90_latency_ms=cost_lat["p90_latency_ms"],
         p95_latency_ms=cost_lat["p95_latency_ms"],
+        p99_latency_ms=cost_lat["p99_latency_ms"],
 
         # Counts
         total_cases=len(matched),
