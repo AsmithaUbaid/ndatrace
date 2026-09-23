@@ -1,0 +1,42 @@
+[
+  {
+    "case_id": "098",
+    "doc_id": "",
+    "hypothesis_id": "",
+    "gold_label": "NotMentioned",
+    "category": "logging_security",
+    "description": "Zero raw NDA text in the log file - checked 14 real log lines (from real classify()/agent calls) against 4 known NDA sentences that were actually classified. Leaked: [] (expected: empty list)."
+  },
+  {
+    "case_id": "099",
+    "doc_id": "",
+    "hypothesis_id": "",
+    "gold_label": "NotMentioned",
+    "category": "logging_security",
+    "description": "Zero API keys in the log file - checked 14 real log lines against 3 key patterns (sk-, Bearer, api_key=). Matches: [] (expected: empty list)."
+  },
+  {
+    "case_id": "100",
+    "doc_id": "",
+    "hypothesis_id": "",
+    "gold_label": "NotMentioned",
+    "category": "logging_security",
+    "description": "Every log line is valid JSON - 14 real lines checked, 0 parse failures (expected: 0)."
+  },
+  {
+    "case_id": "096",
+    "doc_id": "",
+    "hypothesis_id": "",
+    "gold_label": "NotMentioned",
+    "category": "logging_security",
+    "description": "All log lines for one request share the same request_id. **Blocked, not built**: `new_request_id()`/`new_trace_id()` exist in pipeline/logging_config.py but are never called anywhere - every real log line so far shows request_id='no-request', trace_id='no-trace'. Generating a real per-request ID is the request-handling layer's job (the FastAPI backend, T032-T033), which doesn't exist yet - same blocking dependency as Category 9, not a separate bug."
+  },
+  {
+    "case_id": "097",
+    "doc_id": "",
+    "hypothesis_id": "",
+    "gold_label": "NotMentioned",
+    "category": "logging_security",
+    "description": "Agent trace_id links to parent request_id. **Blocked, not built**: `new_request_id()`/`new_trace_id()` exist in pipeline/logging_config.py but are never called anywhere - every real log line so far shows request_id='no-request', trace_id='no-trace'. Generating a real per-request ID is the request-handling layer's job (the FastAPI backend, T032-T033), which doesn't exist yet - same blocking dependency as Category 9, not a separate bug."
+  }
+]

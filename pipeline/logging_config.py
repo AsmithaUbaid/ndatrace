@@ -133,13 +133,33 @@ def setup_logging(
 
 
 def reset_logging() -> None:
-    """Reset logging state (for tests)."""
+    """
+    Reset logging state (for tests). Also strips handlers from the root
+    logger, not just the `_configured` flag - otherwise a FileHandler
+    from an earlier test (pointing at that test's own tmp_path) stays
+    attached and a later test's log lines silently go to the wrong file.
+    """
     global _configured
     _configured = False
+    root = logging.getLogger()
+    for handler in root.handlers[:]:
+        root.removeHandler(handler)
+        handler.close()
 
 
 def get_logger(component: str) -> logging.Logger:
-    """Return a logger named after the pipeline component."""
+    """
+    Return a logger named after the pipeline component.
+
+    Ensures setup_logging() has run first (idempotent - see its
+    `_configured` guard) so every module that calls get_logger() gets
+    real JSONL output without having to remember a separate setup call.
+    Found the hard way: setup_logging() existed but nothing ever called
+    it, so every structured log line this session went nowhere.
+    """
+    if not _configured:
+        from pipeline.config import settings
+        setup_logging(level=settings.log_level)
     return logging.getLogger(f"ndatrace.{component}")
 
 
