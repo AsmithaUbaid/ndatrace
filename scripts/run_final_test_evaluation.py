@@ -6,11 +6,14 @@ RAG + selective agent). No re-tuning after seeing these results, per
 the plan's own rule and the instructor's revised final-evaluation
 strategy (CLAUDE.md's Decisions Log, 2026-09-23).
 
-Runs all four architectures on the FULL test split (123 documents x 17
-hypotheses = 2,091 examples, verified) using the LOCAL model
-(ModelGateway.local(), Llama 3.2 3B via Ollama - $0 cost, since the
-hosted-vs-local comparison only needs a stratified subsample on Gemini,
-built separately in scripts/run_hosted_vs_local_subsample.py):
+Runs all four architectures on a STRATIFIED SUBSAMPLE of the test split
+(default 500 of 2,091 examples - full-set-on-Groq hit an 8K-tokens/min
+free-tier cap making it slower than local despite zero heat; full-set-
+on-local was ~12-15h of sustained local compute/heat. 500 examples on
+local Ollama keeps runtime to ~3-4h while staying statistically
+meaningful - the same scale the instructor suggested for the hosted
+comparison, applied here too) using the LOCAL model (ModelGateway.local(),
+$0 cost):
 
   1. rule       - pipeline/rule_baseline.py, no LLM calls
   2. full_context - entire document + hypothesis, no retrieval
@@ -18,14 +21,17 @@ built separately in scripts/run_hosted_vs_local_subsample.py):
   4. rag_agent  - rag, then run_agent() on REVIEW-routed cases
      (pipeline/confidence.py's rule-agreement check)
 
-Each architecture checkpoints every prediction (resumable - this will
-run for many hours) and saves a final result file distinguishable from
-the earlier dev-sample runs (`_final_test_` in the filename, never
-overwriting a dev result).
+Each architecture checkpoints every prediction (resumable) and saves a
+final result file distinguishable from the earlier dev-sample runs
+(`_final_test_` in the filename, never overwriting a dev result).
+Experiment IDs are tagged with the model name so switching providers
+mid-project (as happened here) can never silently mix predictions from
+two different models into one result.
 
 Usage:
-    python scripts/run_final_test_evaluation.py                  # all 4, in order
-    python scripts/run_final_test_evaluation.py --architecture rag  # one only
+    python scripts/run_final_test_evaluation.py                       # all 4, 500-example subsample
+    python scripts/run_final_test_evaluation.py --sample-size 2091    # full test set
+    python scripts/run_final_test_evaluation.py --architecture rag    # one architecture only
 """
 
 from __future__ import annotations
@@ -47,12 +53,24 @@ from pipeline.model_gateway import ModelError, ModelGateway
 from pipeline.parser import parse_contractnli_file
 from pipeline.retriever import Retriever
 from pipeline.rule_baseline import classify_by_keywords
+from scripts.run_oracle_experiment import stratified_sample
 
 ARCHITECTURES = ["rule", "full_context", "rag", "rag_agent"]
+DEFAULT_SAMPLE_SIZE = 500
+SEED = 42
 
 
-def load_test_cases():
+def load_test_cases(sample_size: int | None):
     dataset = parse_contractnli_file(settings.data_path / "test.json")
+    if sample_size is not None and sample_size < len(dataset.all_cases()):
+        cases = stratified_sample(dataset, sample_size, SEED)
+        print(f"Test split: {dataset.num_documents} documents, {len(dataset.all_cases())} total "
+              f"cases - using a stratified subsample of {len(cases)} (seed={SEED})")
+        return cases
+    return _load_full_test_cases(dataset)
+
+
+def _load_full_test_cases(dataset):
     cases = dataset.all_cases()
     print(f"Test split: {dataset.num_documents} documents, {len(cases)} cases "
           f"(expected 123 x 17 = 2091)")
@@ -244,12 +262,17 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--architecture", choices=ARCHITECTURES, default=None,
                          help="Run only this architecture (default: all four, in order)")
-    parser.add_argument("--provider", choices=["groq", "local"], default="groq",
-                         help="Which $0 Llama backend to use (default: groq - avoids local "
-                              "compute/heat; falls back to local Ollama if no GROQ_API_KEY set)")
+    parser.add_argument("--provider", choices=["groq", "local"], default="local",
+                         help="Which $0 backend to use (default: local - Groq's free tier caps "
+                              "at ~8K tokens/min across all its models, making it slower overall "
+                              "than local despite zero heat; falls back to local automatically "
+                              "if no GROQ_API_KEY is set when --provider groq is requested)")
+    parser.add_argument("--sample-size", type=int, default=DEFAULT_SAMPLE_SIZE,
+                         help=f"Stratified subsample size (default: {DEFAULT_SAMPLE_SIZE}). "
+                              f"Pass 2091 (or higher) for the full test split.")
     args = parser.parse_args()
 
-    cases = load_test_cases()
+    cases = load_test_cases(args.sample_size)
     golds = build_golds(cases)
     harness = EvaluationHarness(gold_cases=golds)
 
