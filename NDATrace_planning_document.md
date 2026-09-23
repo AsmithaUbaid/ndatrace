@@ -2299,3 +2299,106 @@ This meets all academic requirements: progressive architecture comparison, profe
 ---
  
 "Planning is complete. No implementation or repository modification has been performed. Wait for explicit approval before beginning Phase 0."
+
+---
+
+# SECTION 22 — INSTRUCTOR FEEDBACK (Week 3 Problem Statement) & PLAN REVISIONS
+
+Feedback received 2026-09-23 from Ajay Vikram Singh on the Week 3 Problem Statement
+(`PE6201_Project_Problem_Statement_Asmitha.pdf`), ahead of the 4 October final submission. This
+section records what the feedback confirmed was already working, what it flagged as gaps, and the
+concrete plan revisions each gap drove - kept here (not silently edited into earlier sections) so
+the audit trail of *why* the plan changed is preserved, matching CLAUDE.md's Decisions Log style.
+
+## 22.1 Confirmed already working (no plan change)
+
+- The four-architecture technique ladder (rule-based → full-context → RAG → selective agentic
+  investigation), each layer earning its keep, is exactly what Sections 1/5 already specified and
+  what was actually built (T013-T015, T020-T024, T028-T030).
+- The explicit "I will not assume the agentic version is better" commitment (Section 7 of the
+  problem statement) was honored - the agent was tested for real (T030), not assumed, and even
+  re-tested when a tool-usage ablation was questioned.
+- Abstention effectiveness is measured, not just present (T026's F05 - "whether abstained cases
+  are disproportionately cases the system would otherwise get wrong").
+- The Oracle-retrieval arm ("feed gold evidence straight to the model, no retrieval, to find out
+  whether the ceiling is retrieval or reasoning") was already built and run (B04, T016) - this is
+  the plan's own Section 10 Oracle Decision Tree, executed exactly as designed.
+- Joint label-AND-evidence correctness (`evaluation/metrics.py`'s `joint_label_evidence_correctness`)
+  already exists and has been reported (T024: 0.813 for RAG) - it was not missing, it needs to be
+  **headlined** in the final report/README, not built.
+
+## 22.2 Real gaps found and their plan revisions
+
+**Gap 1 — No local model path existed, despite the problem statement (Section 5, "Compute: Rent +
+local") committing to Llama 3.2 3B for a hosted-vs-local comparison (C02).**
+`pipeline/model_gateway.py` only ever talked to OpenRouter. Fixed 2026-09-23: installed Ollama,
+pulled `llama3.2:3b`, added `ModelGateway.local()` (same complete()/retry/cost-tracking logic,
+pointed at Ollama's OpenAI-compatible `/v1` endpoint, $0 pricing registered). Verified end-to-end
+through the real classifier (correct label, valid JSON, $0 cost, 5.37s latency vs Gemini's ~1s).
+
+**Revised final-evaluation strategy:** the held-out test split is 123 documents × 17 hypotheses =
+**2,091 examples exactly** (verified against the real parsed data, matching the instructor's math).
+Two independent cost estimates exist for running the full 4-architecture ladder on this split:
+- The instructor's estimate (based on the Week 3 submission's GPT-5-mini example, $0.001059/9.21s
+  per case): standard RAG ~$2.21, full-context ~$4, one clean agentic pass ~$7.50 - against a
+  $10 lifetime key already partly drawn on for A1/A2. This does not fit.
+- This project's own real, measured cost using Gemini 2.5 Flash Lite (the model actually in use
+  since the C01 bake-off, 2026-09-22): RAG ≈$0.30, full-context ≈$0.71, RAG+agent ≈$0.54 for the
+  *entire* 2,091-example test set - about $1.55 total for all three paid architectures, against a
+  real remaining balance of ~$6.59 (of the original $6.99, ~$0.40 spent on experiments so far).
+  This fits comfortably.
+
+The switch to Gemini (already made for unrelated cost/latency reasons, C01) means the budget
+emergency the instructor's math predicts does not materialize the way it would have under GPT-5
+mini. **The local-model requirement is adopted anyway**, not because survival demands it, but
+because (a) it was explicitly promised in the approved problem statement and (b) it is the
+intended Class 5 (cost-to-serve, hosted-vs-local) result the course rubric maps to. Final-evaluation
+plan: run all four architectures on local Llama 3.2 3B across the full 2,091-example test set
+(free), then run Gemini on a stratified subsample of ~300 examples for the hosted-vs-local
+comparison section - converting what would have been a budget failure into the intended course
+result, per the instructor's own suggested fix.
+
+**Gap 2 — The primary metric (risk-sensitive recall) hides Contradiction-class performance.**
+`evaluation/metrics.py`'s `risk_sensitive_recall()` is `(recall_Contradiction + recall_NotMentioned)
+/ 2` - a plain average. Since NotMentioned is 40.2% of the label distribution and Contradiction only
+11.2%, a system can improve the combined number purely by getting better at the easier, more
+common class while making no progress on catching actual conflicts - the class that matters most in
+this workload. **Plan revision:** report Contradiction recall as its own separate headline metric,
+with a count-based interval given the small class size (~234 test examples, per the instructor's
+note) - not folded into a single averaged number. `risk_sensitive_recall()` itself is not removed
+(still a useful combined view) but is no longer the sole headline figure.
+
+**Gap 3 — Citation precision (applies to the Week 3 PDF; actionable for the final report, not code):**
+(a) the workload/staff-hours figure is vendor research (LegalOn Technologies' 2025 State of
+Contracting Survey, n=286) and must be labeled as such, not cited as neutral data; (b) the
+ContractNLI-follow-up citation link (`2024.nllp-1.pdf`) points at the whole EMNLP proceedings
+volume, not the specific paper - the correct reference is `2024.nllp-1.11` (Narendra, Shetty &
+Ratnaparkhi); (c) the 0.389 Span NLI BERT figure cited is the NDA-fine-tuned ablation, not the
+paper's actual headline result (0.357 ± 0.039; best-in-paper is 0.405, DeBERTa) - the final report
+must cite the headline number, not the ablation; (d) GPT-5 mini pricing should not be presented as
+current in the final report - this project already moved off it (C01) specifically because of a
+cost/latency comparison, and Gemini's verified pricing is what was actually used throughout.
+
+## 22.3 Augmentation already anticipated, one new finding
+
+**Output tokens as the real cost driver** (instructor's Augmentation 2: the Week 3 example's
+output ran 4.5x over the predicted 100 tokens, at $2/M vs $0.25/M input - explanation text, not
+retrieved context, was the actual cost driver for GPT-5 mini). Checked against this project's own
+real Gemini data (T018 v2, 150 real cases): average input 978 tokens, average output only 116
+tokens - **input cost dominates** (~2x output cost per case), the opposite pattern. This is not a
+contradiction of the instructor's finding; it is a consequence of a decision already made and
+tested earlier in this project (T009): GPT-5 mini is a reasoning model whose `completion_tokens`
+silently includes hidden reasoning tokens even for trivial JSON replies, inflating its real output
+cost far past what a visible response would suggest. Gemini does not exhibit this to the same
+degree. **The model bake-off (C01) already avoided the exact cost-blowup problem being flagged
+here** - worth stating plainly in the final report as a positive, evidenced finding, not just
+noting agreement with the instructor's observation.
+
+## 22.4 Scope alignment
+
+The instructor's suggested cut (four systems on the local model, one hosted comparison = five
+configurations, not eight) is adopted directly: Rule-based, Full-context, RAG, RAG+agent all run
+locally on the full test set; Gemini runs once, on a ~300-example stratified subsample, for the
+hosted-vs-local section. Streamlit interface remains last-and-thin (video demonstration only,
+per both this plan's original cut order and the instructor's explicit confirmation). Rule-based
+baseline is kept (cheap, and the Class 1 point per the instructor).
