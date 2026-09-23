@@ -58,7 +58,9 @@ class Settings(BaseSettings):
     # without the thermal cost.) ---
     groq_api_key: str = Field(default="")
     groq_base_url: str = Field(default="https://api.groq.com/openai/v1")
-    groq_model_name: str = Field(default="llama-3.2-3b-preview")
+    # gpt-oss-20b, not Llama - Groq's catalog no longer includes a
+    # general-purpose Llama chat model (verified live, 2026-09-23).
+    groq_model_name: str = Field(default="openai/gpt-oss-20b")
     request_timeout_seconds: int = Field(default=30, ge=1)
 
     # --- Embedding ---

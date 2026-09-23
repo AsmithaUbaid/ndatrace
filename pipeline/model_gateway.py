@@ -40,9 +40,15 @@ PRICING_PER_MILLION: dict[str, dict[str, float]] = {
     # Local, via Ollama - no per-call API fee (problem statement's
     # hosted-vs-local comparison, C02). Uses local compute instead.
     "llama3.2:3b": {"input": 0.0, "output": 0.0},
-    # Groq's free tier - same model family as the local arm, run on
-    # Groq's hardware instead (avoids taxing the dev machine).
-    "llama-3.2-3b-preview": {"input": 0.0, "output": 0.0},
+    # Groq's free tier, run on Groq's hardware instead of locally (avoids
+    # taxing the dev machine). Groq's catalog no longer includes a
+    # general-purpose Llama chat model (checked live, 2026-09-23 - only
+    # llama-prompt-guard, a content classifier, not usable here) - this
+    # is a real deviation from the problem statement's literal "Llama
+    # 3.2 3B" commitment, kept honest rather than silently substituted.
+    # gpt-oss-20b is what's actually available and working.
+    "openai/gpt-oss-20b": {"input": 0.0, "output": 0.0},
+    "llama-3.2-3b-preview": {"input": 0.0, "output": 0.0},  # kept registered in case Groq relists it
 }
 
 
