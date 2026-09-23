@@ -50,6 +50,15 @@ class Settings(BaseSettings):
     # Ollama's default local port, OpenAI-compatible /v1 endpoint.
     local_base_url: str = Field(default="http://localhost:11434/v1")
     local_model_name: str = Field(default="llama3.2:3b")
+
+    # --- Groq (free-tier hosted Llama - same model family as "local", but
+    # runs on Groq's hardware instead of the laptop. Added when local
+    # inference was overheating the dev machine during the T041 final
+    # test-set run - functionally the same $0-cost comparison arm, just
+    # without the thermal cost.) ---
+    groq_api_key: str = Field(default="")
+    groq_base_url: str = Field(default="https://api.groq.com/openai/v1")
+    groq_model_name: str = Field(default="llama-3.2-3b-preview")
     request_timeout_seconds: int = Field(default=30, ge=1)
 
     # --- Embedding ---

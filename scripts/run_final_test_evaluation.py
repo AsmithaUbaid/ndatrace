@@ -233,6 +233,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--architecture", choices=ARCHITECTURES, default=None,
                          help="Run only this architecture (default: all four, in order)")
+    parser.add_argument("--provider", choices=["groq", "local"], default="groq",
+                         help="Which $0 Llama backend to use (default: groq - avoids local "
+                              "compute/heat; falls back to local Ollama if no GROQ_API_KEY set)")
     args = parser.parse_args()
 
     cases = load_test_cases()
@@ -246,11 +249,18 @@ def main() -> int:
 
     if any(a in to_run for a in ("full_context", "rag", "rag_agent")):
         try:
-            gateway = ModelGateway.local()
+            if args.provider == "groq":
+                gateway = ModelGateway.groq()
+            else:
+                gateway = ModelGateway.local()
         except ModelError as e:
-            print(f"ERROR: {e}")
-            return 1
-        print(f"Local model: {gateway.model}")
+            if args.provider == "groq":
+                print(f"Groq unavailable ({e}), falling back to local Ollama.")
+                gateway = ModelGateway.local()
+            else:
+                print(f"ERROR: {e}")
+                return 1
+        print(f"Model: {gateway.model} (provider: {args.provider})")
 
     if "full_context" in to_run:
         run_full_context(cases, golds, harness, gateway)

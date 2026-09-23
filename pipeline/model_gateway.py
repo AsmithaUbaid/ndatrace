@@ -40,6 +40,9 @@ PRICING_PER_MILLION: dict[str, dict[str, float]] = {
     # Local, via Ollama - no per-call API fee (problem statement's
     # hosted-vs-local comparison, C02). Uses local compute instead.
     "llama3.2:3b": {"input": 0.0, "output": 0.0},
+    # Groq's free tier - same model family as the local arm, run on
+    # Groq's hardware instead (avoids taxing the dev machine).
+    "llama-3.2-3b-preview": {"input": 0.0, "output": 0.0},
 }
 
 
@@ -114,6 +117,34 @@ class ModelGateway:
             model=model or settings.local_model_name,
             api_key="ollama",
             base_url=base_url or settings.local_base_url,
+            max_retries=max_retries, timeout_seconds=timeout_seconds,
+        )
+
+    @classmethod
+    def groq(
+        cls,
+        model: str | None = None,
+        base_url: str | None = None,
+        max_retries: int | None = None,
+        timeout_seconds: int | None = None,
+    ) -> "ModelGateway":
+        """
+        Gateway pointed at Groq's free-tier hosted Llama - same model
+        family as .local(), but runs on Groq's hardware instead of this
+        machine. Added specifically because local inference during the
+        T041 final test-set run was overheating the dev laptop; this is
+        functionally the same $0-cost comparison arm without that cost.
+        Requires GROQ_API_KEY in .env (free signup at console.groq.com).
+        """
+        if not settings.groq_api_key:
+            raise ModelError(
+                "No GROQ_API_KEY configured. Sign up free at console.groq.com, "
+                "generate a key, and add it to .env (see .env.example)."
+            )
+        return cls(
+            model=model or settings.groq_model_name,
+            api_key=settings.groq_api_key,
+            base_url=base_url or settings.groq_base_url,
             max_retries=max_retries, timeout_seconds=timeout_seconds,
         )
 

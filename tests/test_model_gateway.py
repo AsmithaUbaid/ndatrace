@@ -147,6 +147,26 @@ def test_local_gateway_allows_model_override():
     assert gw.model == "llama3.2:1b"
 
 
+def test_groq_gateway_raises_without_api_key(monkeypatch):
+    monkeypatch.setattr("pipeline.model_gateway.settings.groq_api_key", "")
+    with pytest.raises(ModelError, match="GROQ_API_KEY"):
+        ModelGateway.groq()
+
+
+def test_groq_gateway_uses_configured_defaults(monkeypatch):
+    monkeypatch.setattr("pipeline.model_gateway.settings.groq_api_key", "gsk-test-key")
+    with patch("pipeline.model_gateway.OpenAI") as mock_openai:
+        gw = ModelGateway.groq()
+    assert gw.model == "llama-3.2-3b-preview"
+    call_kwargs = mock_openai.call_args.kwargs
+    assert call_kwargs["base_url"] == "https://api.groq.com/openai/v1"
+    assert call_kwargs["api_key"] == "gsk-test-key"
+
+
+def test_groq_model_pricing_is_zero():
+    assert estimate_cost("llama-3.2-3b-preview", tokens_in=10_000, tokens_out=5_000) == 0.0
+
+
 def test_local_model_pricing_is_zero():
     assert estimate_cost("llama3.2:3b", tokens_in=10_000, tokens_out=5_000) == 0.0
 
