@@ -83,11 +83,65 @@ def risk_sensitive_recall(
     """
     Average of Contradiction recall and NotMentioned recall.
     These are the two classes where a miss is dangerous.
+
+    NOT a substitute for reporting Contradiction recall on its own
+    (see contradiction_recall_with_ci below) - Contradiction is only
+    ~11% of the label distribution vs NotMentioned's ~40%, so this
+    average can look fine while Contradiction detection alone is bad
+    (e.g. one prompt variant this project tested had Contradiction
+    recall crash to 21.4% while barely moving the combined number).
+    A system can hit a target on this metric purely by improving on
+    the easier, more common class - instructor feedback (CLAUDE.md's
+    Decisions Log, 2026-09-23) flagged exactly this.
     """
     pc = per_class_metrics(predictions, golds)
     recall_c = pc.get(Label.CONTRADICTION.value, {}).get("recall", 0.0)
     recall_nm = pc.get(Label.NOT_MENTIONED.value, {}).get("recall", 0.0)
     return (recall_c + recall_nm) / 2
+
+
+def wilson_score_interval(successes: int, n: int, z: float = 1.96) -> tuple[float, float]:
+    """
+    Wilson score interval for a binomial proportion - more reliable than
+    a normal-approximation interval at small n (e.g. Contradiction is a
+    minority class, ~234 examples on the full ContractNLI test split).
+    z=1.96 is the default (95% confidence).
+    """
+    if n == 0:
+        return (0.0, 0.0)
+    p_hat = successes / n
+    denom = 1 + z**2 / n
+    center = p_hat + z**2 / (2 * n)
+    half_width = z * ((p_hat * (1 - p_hat) / n + z**2 / (4 * n**2)) ** 0.5)
+    low = (center - half_width) / denom
+    high = (center + half_width) / denom
+    return (max(0.0, low), min(1.0, high))
+
+
+def contradiction_recall_with_ci(
+    predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+) -> dict[str, float]:
+    """
+    Contradiction recall reported as its OWN headline metric, with raw
+    counts and a 95% Wilson interval - not folded into
+    risk_sensitive_recall's average. Instructor feedback (2026-09-23):
+    "Report Contradiction recall separately and make it the headline;
+    note it is ~234 test examples, so report counts and an interval."
+    """
+    matched = _match_predictions_to_golds(predictions, golds)
+    non_abstained = [(p, g) for p, g in matched if not p.abstained]
+    contradiction_golds = [(p, g) for p, g in non_abstained if g.gold_label == Label.CONTRADICTION]
+
+    n = len(contradiction_golds)
+    correct = sum(1 for p, g in contradiction_golds if p.predicted_label == Label.CONTRADICTION)
+    recall = correct / n if n > 0 else 0.0
+    ci_low, ci_high = wilson_score_interval(correct, n)
+
+    return {
+        "recall": recall, "n": n, "correct": correct,
+        "ci_low": ci_low, "ci_high": ci_high,
+    }
 
 
 # =========================================================================
@@ -454,12 +508,18 @@ def compute_all_metrics(
     cost_lat = cost_and_latency_summary(predictions, golds)
     matched = _match_predictions_to_golds(predictions, golds)
     non_abstained = [(p, g) for p, g in matched if not p.abstained]
+    contradiction = contradiction_recall_with_ci(predictions, golds)
 
     return MetricResult(
         # Classification
         accuracy=label_accuracy(predictions, golds),
         macro_f1=macro_f1(predictions, golds),
         risk_sensitive_recall=risk_sensitive_recall(predictions, golds),
+        contradiction_recall=contradiction["recall"],
+        contradiction_n=contradiction["n"],
+        contradiction_correct=contradiction["correct"],
+        contradiction_recall_ci_low=contradiction["ci_low"],
+        contradiction_recall_ci_high=contradiction["ci_high"],
         per_class=pc,
 
         # Evidence

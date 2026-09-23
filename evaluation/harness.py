@@ -159,7 +159,10 @@ class EvaluationHarness:
         logger.info(
             f"Evaluation complete: accuracy={metrics.accuracy:.3f}, "
             f"macro_f1={metrics.macro_f1:.3f}, "
-            f"joint={metrics.joint_label_evidence_correctness:.3f}"
+            f"joint={metrics.joint_label_evidence_correctness:.3f}, "
+            f"contradiction_recall={metrics.contradiction_recall:.3f} "
+            f"(n={metrics.contradiction_n}, 95% CI "
+            f"[{metrics.contradiction_recall_ci_low:.3f}, {metrics.contradiction_recall_ci_high:.3f}])"
         )
 
         return result

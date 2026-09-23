@@ -139,6 +139,17 @@ class MetricResult(BaseModel):
     macro_f1: float = 0.0
     risk_sensitive_recall: float = 0.0
 
+    # Contradiction recall, reported as its own headline metric (not
+    # folded into risk_sensitive_recall's average) with a 95% Wilson
+    # interval, since it's a minority class (~11% of labels) where the
+    # combined metric above can hide poor performance. Instructor
+    # feedback, 2026-09-23 - see CLAUDE.md's Decisions Log.
+    contradiction_recall: float = 0.0
+    contradiction_n: int = 0
+    contradiction_correct: int = 0
+    contradiction_recall_ci_low: float = 0.0
+    contradiction_recall_ci_high: float = 0.0
+
     # Per-class
     per_class: dict[str, dict[str, float]] = Field(
         default_factory=dict,

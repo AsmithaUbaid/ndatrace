@@ -17,6 +17,7 @@ from evaluation.metrics import (
     agent_regression_rate,
     agent_routing_rate,
     compute_all_metrics,
+    contradiction_recall_with_ci,
     coverage,
     cost_and_latency_summary,
     evidence_precision,
@@ -29,6 +30,7 @@ from evaluation.metrics import (
     risk_sensitive_recall,
     selective_accuracy,
     unsafe_non_abstention_rate,
+    wilson_score_interval,
 )
 from evaluation.schemas import CostLatencyRecord, GoldCase, Label, Prediction
 
@@ -361,6 +363,79 @@ def test_cost_and_latency_summary_empty():
 # =========================================================================
 # Integration smoke test
 # =========================================================================
+
+def test_wilson_score_interval_zero_n_returns_zero():
+    assert wilson_score_interval(0, 0) == (0.0, 0.0)
+
+
+def test_wilson_score_interval_bounds_are_ordered_and_within_range():
+    low, high = wilson_score_interval(successes=8, n=10)
+    assert 0.0 <= low <= high <= 1.0
+
+
+def test_wilson_score_interval_narrows_with_more_data_same_proportion():
+    """Same observed recall (80%), more examples -> a tighter interval."""
+    low_small, high_small = wilson_score_interval(successes=8, n=10)
+    low_large, high_large = wilson_score_interval(successes=800, n=1000)
+    assert (high_large - low_large) < (high_small - low_small)
+
+
+def test_contradiction_recall_with_ci_all_correct():
+    golds = [gold("d1", "h1", "Contradiction"), gold("d1", "h2", "Contradiction")]
+    preds = [pred("d1", "h1", "Contradiction"), pred("d1", "h2", "Contradiction")]
+    result = contradiction_recall_with_ci(preds, golds)
+    assert result["recall"] == pytest.approx(1.0)
+    assert result["n"] == 2
+    assert result["correct"] == 2
+    assert result["ci_low"] < 1.0  # even 2/2 correct has real uncertainty at n=2
+
+
+def test_contradiction_recall_with_ci_ignores_other_classes():
+    """A perfect Entailment/NotMentioned run with zero real Contradictions must not fake a 0% recall."""
+    golds = [gold("d1", "h1", "Entailment"), gold("d1", "h2", "NotMentioned")]
+    preds = [pred("d1", "h1", "Entailment"), pred("d1", "h2", "NotMentioned")]
+    result = contradiction_recall_with_ci(preds, golds)
+    assert result["n"] == 0
+    assert result["recall"] == 0.0
+
+
+def test_contradiction_recall_with_ci_excludes_abstained_cases():
+    golds = [gold("d1", "h1", "Contradiction")]
+    preds = [pred("d1", "h1", "Contradiction", abstained=True)]
+    result = contradiction_recall_with_ci(preds, golds)
+    assert result["n"] == 0
+
+
+def test_risk_sensitive_recall_can_hide_bad_contradiction_recall():
+    """
+    The exact failure mode instructor feedback flagged: NotMentioned
+    (the more common class here) being perfect can keep the averaged
+    metric looking fine while Contradiction recall alone is bad.
+    """
+    golds = [
+        gold("d1", "h1", "Contradiction"), gold("d1", "h2", "Contradiction"),
+        gold("d1", "h3", "NotMentioned"), gold("d1", "h4", "NotMentioned"),
+    ]
+    preds = [
+        pred("d1", "h1", "NotMentioned"),  # Contradiction missed
+        pred("d1", "h2", "Contradiction"),  # Contradiction caught
+        pred("d1", "h3", "NotMentioned"), pred("d1", "h4", "NotMentioned"),  # both correct
+    ]
+    combined = risk_sensitive_recall(preds, golds)
+    contradiction_only = contradiction_recall_with_ci(preds, golds)
+    assert contradiction_only["recall"] == pytest.approx(0.5)
+    assert combined > contradiction_only["recall"]  # NotMentioned's 100% pulls the average up
+
+
+def test_compute_all_metrics_includes_contradiction_recall_fields():
+    preds = [pred(g.doc_id, g.hypothesis_id, g.gold_label.value, g.gold_span_indices)
+             for g in BALANCED_GOLDS]
+    result = compute_all_metrics(preds, BALANCED_GOLDS)
+    assert result.contradiction_n == 2  # BALANCED_GOLDS has 2 Contradiction cases
+    assert result.contradiction_recall == pytest.approx(1.0)
+    assert result.contradiction_correct == 2
+    assert 0.0 <= result.contradiction_recall_ci_low <= result.contradiction_recall_ci_high <= 1.0
+
 
 def test_compute_all_metrics_smoke():
     """compute_all_metrics should populate every MetricResult field without error."""
