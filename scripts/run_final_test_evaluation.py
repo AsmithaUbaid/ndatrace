@@ -90,8 +90,19 @@ def run_rule(cases, golds, harness: EvaluationHarness) -> None:
     _finalize(harness, experiment_id, "Rule-based (no LLM)", "none", golds)
 
 
+def _model_tag(gateway: ModelGateway) -> str:
+    """
+    Sanitized model identifier for experiment IDs - keeps checkpoints/
+    results from different providers (Groq vs local Ollama) from ever
+    colliding. Found the hard way: switching providers mid-run silently
+    resumed a checkpoint full of the OTHER provider's predictions, which
+    would have corrupted the final locked test-set result.
+    """
+    return gateway.model.replace("/", "_").replace(":", "_")
+
+
 def run_full_context(cases, golds, harness: EvaluationHarness, gateway: ModelGateway) -> None:
-    experiment_id = "T041_final_test_full_context"
+    experiment_id = f"T041_final_test_full_context_{_model_tag(gateway)}"
     checkpoint_keys = harness.completed_case_keys(experiment_id)
     if checkpoint_keys:
         print(f"Resuming full_context: {len(checkpoint_keys)} cases already done")
@@ -121,7 +132,7 @@ def run_full_context(cases, golds, harness: EvaluationHarness, gateway: ModelGat
 
 def run_rag(cases, golds, harness: EvaluationHarness, gateway: ModelGateway,
             retrievers: dict[str, Retriever]) -> None:
-    experiment_id = "T041_final_test_rag"
+    experiment_id = f"T041_final_test_rag_{_model_tag(gateway)}"
     checkpoint_keys = harness.completed_case_keys(experiment_id)
     if checkpoint_keys:
         print(f"Resuming rag: {len(checkpoint_keys)} cases already done")
@@ -157,7 +168,7 @@ def run_rag(cases, golds, harness: EvaluationHarness, gateway: ModelGateway,
 
 def run_rag_agent(cases, golds, harness: EvaluationHarness, gateway: ModelGateway,
                    retrievers: dict[str, Retriever]) -> None:
-    experiment_id = "T041_final_test_rag_agent"
+    experiment_id = f"T041_final_test_rag_agent_{_model_tag(gateway)}"
     checkpoint_keys = harness.completed_case_keys(experiment_id)
     if checkpoint_keys:
         print(f"Resuming rag_agent: {len(checkpoint_keys)} cases already done")
