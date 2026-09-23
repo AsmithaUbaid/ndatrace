@@ -16,15 +16,28 @@ different, incomparable scales, but rank position is always comparable.
 
 from __future__ import annotations
 
+import re
+
 from rank_bm25 import BM25Okapi
 
 from pipeline.chunker import Chunk
 
 RRF_K = 60  # standard constant from the original RRF paper (Cormack et al. 2009)
 
+# Word-boundary tokenizer, not .split() - a plain .lower().split() (code-audit
+# finding, 2026-09-24) treats "confidential," and "confidential" as different
+# tokens, since trailing punctuation from real NDA prose never gets stripped.
+# Legal text is punctuation-heavy (commas, semicolons, parentheticals), so this
+# silently fragmented BM25's vocabulary. Fixed here even though hybrid
+# BM25+dense retrieval isn't the adopted production path (Decisions Log:
+# "no measured benefit over dense+rerank") - it's still real, reachable code
+# (scripts/run_full_retrieval_comparison.py exercises it) and shouldn't ship
+# with a known correctness bug just because it lost the architecture bake-off.
+_WORD_RE = re.compile(r"[a-z0-9]+")
+
 
 def _tokenize(text: str) -> list[str]:
-    return text.lower().split()
+    return _WORD_RE.findall(text.lower())
 
 
 class SparseIndex:

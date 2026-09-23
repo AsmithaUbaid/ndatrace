@@ -6,6 +6,9 @@ fastapi==0.115.6
 uvicorn[standard]==0.34.0
 python-multipart==0.0.20
 
+# === Document parsing (PDF upload, T034) ===
+pypdf==6.19.0
+
 # === Data Validation ===
 pydantic==2.10.4
 pydantic-settings==2.7.1

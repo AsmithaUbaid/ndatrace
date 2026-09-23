@@ -256,6 +256,31 @@ def _parse_document(raw_doc: dict, hypotheses: dict[str, str]) -> NDADocument:
     )
 
 
+def load_hypotheses(data_dir: str | Path = "data/contractnli") -> dict[str, dict[str, str]]:
+    """
+    Load just the 17 standard hypothesis definitions (id -> {short_description,
+    hypothesis}), without parsing any documents - used by the backend to list
+    reviewable requirements without the cost of parsing all 123 NDAs at startup.
+    Reads test.json (falls back to dev.json/train.json) since the label set is
+    identical across every split.
+    """
+    data_dir = Path(data_dir)
+    for split_name in ("test", "dev", "train"):
+        filepath = data_dir / f"{split_name}.json"
+        if filepath.exists():
+            with open(filepath, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+            raw_labels = raw.get("labels", {})
+            return {
+                hyp_id: {
+                    "short_description": entry.get("short_description", "") if isinstance(entry, dict) else "",
+                    "hypothesis": entry.get("hypothesis", "") if isinstance(entry, dict) else str(entry),
+                }
+                for hyp_id, entry in raw_labels.items()
+            }
+    raise FileNotFoundError(f"No ContractNLI split file found under {data_dir}")
+
+
 def load_all_splits(data_dir: str | Path = "data/contractnli") -> dict[str, ContractNLIDataset]:
     """
     Load all available ContractNLI splits (train, dev, test).

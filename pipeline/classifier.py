@@ -90,7 +90,7 @@ def classify(
     nda_text: str,
     hypothesis: str,
     gateway: ModelGateway,
-    prompt_version: str = "v2",
+    prompt_version: str = "v6",
     doc_id: str = "",
     hypothesis_id: str = "",
 ) -> ClassificationResult:

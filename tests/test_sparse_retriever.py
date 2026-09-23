@@ -7,11 +7,33 @@ algorithm, no model download needed, so these run fast and for real
 from __future__ import annotations
 
 from pipeline.chunker import Chunk
-from pipeline.sparse_retriever import SparseIndex, reciprocal_rank_fusion
+from pipeline.sparse_retriever import SparseIndex, _tokenize, reciprocal_rank_fusion
 
 
 def make_chunk(text: str, i: int = 0) -> Chunk:
     return Chunk(text=text, start_char=0, end_char=len(text), chunk_index=i, method="sentence")
+
+
+def test_tokenize_strips_trailing_punctuation():
+    """Code-audit finding, 2026-09-24: a plain .lower().split() treated
+    'confidential,' and 'confidential' as different tokens - real NDA
+    prose is punctuation-heavy, so this silently fragmented BM25's
+    vocabulary. _tokenize must strip punctuation, not just lowercase."""
+    assert _tokenize("Confidential, Information; shall not (reverse-engineer).") == [
+        "confidential", "information", "shall", "not", "reverse", "engineer",
+    ]
+
+
+def test_sparse_index_matches_despite_punctuation():
+    chunks = [
+        make_chunk("The Receiving Party shall treat all Confidential, Information as secret.", 0),
+        make_chunk("This agreement is governed by California law.", 1),
+        make_chunk("Notices shall be delivered in writing to each party.", 2),
+    ]
+    idx = SparseIndex(chunks)
+    results = idx.search("confidential information", top_k=3)
+    assert results[0][0].chunk_index == 0
+    assert results[0][1] > 0  # a real, non-zero BM25 score - not a vocabulary miss
 
 
 def test_sparse_index_empty_chunks():

@@ -1,0 +1,22 @@
+{
+  "purpose": "Validates the C-1 routing-independence fix (2026-09-24 code audit) on the 150-case dev sample before committing to the full test-set re-run.",
+  "script": "scripts/validate_decoupled_routing_signal.py",
+  "n_cases": 150,
+  "extra_validation_cost_usd": 0.0215,
+  "model": "google/gemini-2.5-flash-lite",
+  "signals": {
+    "old_circular": {
+      "description": "rule label vs. RAG prediction classified over rule-boosted retrieval (query_rerank_and_boost) - the original T026 measurement, later found circular.",
+      "auroc": 0.657,
+      "coverage": 0.553,
+      "selective_accuracy": 0.940
+    },
+    "new_decoupled": {
+      "description": "rule label vs. a fresh classification over plain, non-rule-boosted retrieval (query_and_rerank) - the fix.",
+      "auroc": 0.660,
+      "coverage": 0.560,
+      "selective_accuracy": 0.940
+    }
+  },
+  "conclusion": "The decoupled signal survives essentially unchanged. C-1 (rule used twice, once in retrieval and once in routing) is a real methodology finding, but was not measurably inflating the reported AUROC/coverage/selective-accuracy numbers on this sample. Cleared to proceed with the corrected pipeline (pipeline/orchestrator.py) for the full T041 re-run."
+}

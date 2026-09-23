@@ -38,7 +38,7 @@ from pipeline.retriever import Retriever
 
 logger = get_logger("agent")
 
-AGENT_PROMPT_PATH = Path(__file__).resolve().parent.parent / "prompts" / "agent_step_v1.txt"
+AGENT_PROMPT_PATH = Path(__file__).resolve().parent.parent / "prompts" / "agent_step_v2.txt"
 VALID_ACTIONS = {
     "search_clauses", "find_defined_term", "search_exceptions",
     "retrieve_more_evidence", "inspect_neighbouring_clauses", "conclude",

@@ -40,7 +40,7 @@ from pipeline.parser import parse_contractnli_file
 from pipeline.retriever import Retriever
 from scripts.run_oracle_experiment import SEED, stratified_sample
 
-PROMPT_VERSIONS = ["v5"]
+PROMPT_VERSIONS = ["v6"]
 SAMPLE_SIZE = 150
 
 

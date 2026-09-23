@@ -25,6 +25,7 @@ from evaluation.metrics import (
     joint_label_evidence_correctness,
     label_accuracy,
     macro_f1,
+    mcnemar_test,
     mean_reciprocal_rank,
     per_class_metrics,
     risk_sensitive_recall,
@@ -447,3 +448,58 @@ def test_compute_all_metrics_smoke():
     assert result.macro_f1 == pytest.approx(1.0)
     assert result.total_cases == len(BALANCED_GOLDS)
     assert result.total_cost_usd == pytest.approx(0.06)
+
+
+# =========================================================================
+# Significance testing (McNemar's test, T032 code-audit fix)
+# =========================================================================
+
+def test_mcnemar_identical_predictions_gives_p_value_one():
+    """No discordant pairs at all - two systems that agree everywhere
+    can't be shown to differ, and the test must say so (p=1.0), not
+    divide by zero."""
+    preds_a = [pred(g.doc_id, g.hypothesis_id, g.gold_label.value) for g in BALANCED_GOLDS]
+    preds_b = [pred(g.doc_id, g.hypothesis_id, g.gold_label.value) for g in BALANCED_GOLDS]
+    result = mcnemar_test(preds_a, preds_b, BALANCED_GOLDS)
+    assert result["n_discordant"] == 0
+    assert result["p_value"] == 1.0
+    assert result["significant_at_0.05"] is False
+
+
+def test_mcnemar_small_discordant_count_is_not_significant():
+    """T030's exact scenario: 6 recovered vs 3 regressed out of a small
+    subset. b=6, c=3 (n_discordant=9) is real-world-sized noise - the
+    exact binomial test should NOT call this significant at alpha=0.05,
+    confirming the code-audit's concern that '+3 cases on 150 samples is
+    noise' was correct without a real test to check it."""
+    wrong_golds = [gold(f"d{i}", "h1", "Entailment") for i in range(9)]
+    # First 6: A right, B wrong (A's "wins"). Last 3: A wrong, B right (B's "wins").
+    preds_a = (
+        [pred(f"d{i}", "h1", "Entailment") for i in range(6)]
+        + [pred(f"d{i}", "h1", "Contradiction") for i in range(6, 9)]
+    )
+    preds_b = (
+        [pred(f"d{i}", "h1", "Contradiction") for i in range(6)]
+        + [pred(f"d{i}", "h1", "Entailment") for i in range(6, 9)]
+    )
+    result = mcnemar_test(preds_a, preds_b, wrong_golds)
+    assert result["b_a_only_correct"] == 6
+    assert result["c_b_only_correct"] == 3
+    assert result["n_discordant"] == 9
+    assert result["significant_at_0.05"] is False
+
+
+def test_mcnemar_large_lopsided_discordance_is_significant():
+    """A system that wins nearly every discordant case over a large
+    enough sample should register as a real, significant difference."""
+    n = 60
+    golds_n = [gold(f"d{i}", "h1", "Entailment") for i in range(n)]
+    # A right on all 60; B right on only the last 5 (55 discordant pairs, all favoring A).
+    preds_a = [pred(f"d{i}", "h1", "Entailment") for i in range(n)]
+    preds_b = (
+        [pred(f"d{i}", "h1", "Contradiction") for i in range(n - 5)]
+        + [pred(f"d{i}", "h1", "Entailment") for i in range(n - 5, n)]
+    )
+    result = mcnemar_test(preds_a, preds_b, golds_n)
+    assert result["n_discordant"] == 55
+    assert result["significant_at_0.05"] is True

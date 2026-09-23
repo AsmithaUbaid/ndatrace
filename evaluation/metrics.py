@@ -360,6 +360,57 @@ def unsafe_non_abstention_rate(
 # Agent Metrics
 # =========================================================================
 
+def mcnemar_test(
+    predictions_a: Sequence[Prediction],
+    predictions_b: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+) -> dict:
+    """
+    McNemar's test on paired correct/incorrect outcomes for two systems
+    over the SAME cases (WBS T032 support; added 2026-09-24 - a
+    code-audit finding was that the agent's claimed +N-case gain
+    (T030: 6 recovered / 3 regressed of 67) had no significance test, so
+    "noise vs. real effect" was never actually checked).
+
+    Only the discordant pairs matter: b = A right, B wrong; c = A wrong,
+    B right. Uses the exact binomial test (recommended whenever b+c < 25,
+    per Edwards 1948) rather than the chi-square approximation, since
+    T030's agent-routed subset (67 cases) produces a small discordant
+    count either way.
+    """
+    from scipy import stats
+
+    matched_a = {(p.doc_id, p.hypothesis_id): p for p, _ in _match_predictions_to_golds(predictions_a, golds)}
+    matched_b = {(p.doc_id, p.hypothesis_id): p for p, _ in _match_predictions_to_golds(predictions_b, golds)}
+    gold_lookup = {(g.doc_id, g.hypothesis_id): g for g in golds}
+
+    common_keys = set(matched_a) & set(matched_b)
+    b = 0  # A correct, B incorrect
+    c = 0  # A incorrect, B correct
+    for key in common_keys:
+        gold = gold_lookup[key]
+        a_correct = not matched_a[key].abstained and matched_a[key].predicted_label == gold.gold_label
+        b_correct = not matched_b[key].abstained and matched_b[key].predicted_label == gold.gold_label
+        if a_correct and not b_correct:
+            b += 1
+        elif b_correct and not a_correct:
+            c += 1
+
+    n_discordant = b + c
+    if n_discordant == 0:
+        p_value = 1.0
+    else:
+        # Two-sided exact binomial test: under H0, each discordant pair is
+        # equally likely to favor A or B, so min(b, c) ~ Binomial(n, 0.5).
+        p_value = stats.binomtest(min(b, c), n_discordant, 0.5, alternative="two-sided").pvalue
+
+    return {
+        "n_common": len(common_keys), "b_a_only_correct": b, "c_b_only_correct": c,
+        "n_discordant": n_discordant, "p_value": float(p_value),
+        "significant_at_0.05": bool(p_value < 0.05),
+    }
+
+
 def agent_routing_rate(predictions: Sequence[Prediction]) -> float:
     """Fraction of cases sent to the agent."""
     if not predictions:

@@ -45,11 +45,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from evaluation.harness import EvaluationHarness
 from evaluation.schemas import CostLatencyRecord, ExperimentConfig, GoldCase, Label, Prediction
-from pipeline.agent import run_agent
 from pipeline.classifier import classify
-from pipeline.confidence import Route, route
 from pipeline.config import settings
 from pipeline.model_gateway import ModelError, ModelGateway
+from pipeline.orchestrator import review_requirement
 from pipeline.parser import parse_contractnli_file
 from pipeline.retriever import Retriever
 from pipeline.rule_baseline import classify_by_keywords
@@ -211,6 +210,14 @@ def run_rag(cases, golds, harness: EvaluationHarness, gateway: ModelGateway,
 
 def run_rag_agent(cases, golds, harness: EvaluationHarness, gateway: ModelGateway,
                    retrievers: dict[str, Retriever]) -> None:
+    """
+    Uses pipeline/orchestrator.py's review_requirement() rather than
+    re-implementing the retrieve->classify->route->agent logic inline
+    (Section 0A: scripts import from pipeline/, never duplicate it - this
+    also carries the routing-independence fix, code-audit finding C-1,
+    2026-09-24: the rule-agreement check now compares against a plain,
+    non-rule-boosted classification instead of the rule-boosted one).
+    """
     experiment_id = f"T041_final_test_rag_agent_{_model_tag(gateway)}"
     checkpoint_keys = harness.completed_case_keys(experiment_id)
     if checkpoint_keys:
@@ -225,35 +232,15 @@ def run_rag_agent(cases, golds, harness: EvaluationHarness, gateway: ModelGatewa
             retrievers[doc.doc_id] = Retriever(doc.text, chunk_method="sentence")
         retriever = retrievers[doc.doc_id]
 
-        retrieved = retriever.query_rerank_and_boost(ann.hypothesis_id, ann.hypothesis_text)
-        context = " ".join(r.chunk.text for r in retrieved)
         try:
-            rag_result = classify(context, ann.hypothesis_text, gateway,
-                                   doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id)
-
-            rule_label = classify_by_keywords(ann.hypothesis_id, doc.text)
-            decision = route(self_confidence=rag_result.confidence, rule_agrees=(rule_label == rag_result.label))
-
-            if decision.route == Route.REVIEW:
-                initial_chunks = [r.chunk for r in retrieved]
-                agent_result = run_agent(retriever, ann.hypothesis_id, ann.hypothesis_text, initial_chunks,
-                                          gateway, doc_id=doc.doc_id)
-                final_label, final_conf = agent_result.label, agent_result.confidence
-                final_explanation = agent_result.explanation
-                cost = rag_result.cost_usd + agent_result.cost_usd
-                tin = rag_result.tokens_in + agent_result.tokens_in
-                tout = rag_result.tokens_out + agent_result.tokens_out
-                latency = rag_result.latency_ms + agent_result.latency_ms
-            else:
-                final_label, final_conf = rag_result.label, rag_result.confidence
-                final_explanation = rag_result.explanation
-                cost, tin, tout, latency = rag_result.cost_usd, rag_result.tokens_in, rag_result.tokens_out, rag_result.latency_ms
-
+            result = review_requirement(doc.text, ann.hypothesis_id, ann.hypothesis_text, gateway,
+                                         retriever=retriever, doc_id=doc.doc_id)
             pred = Prediction(
                 doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id,
-                predicted_label=Label(final_label), confidence=final_conf,
-                explanation=final_explanation, agent_used=(decision.route == Route.REVIEW),
-                cost_latency=CostLatencyRecord(latency_ms=latency, tokens_in=tin, tokens_out=tout, cost_usd=cost),
+                predicted_label=Label(result.label), confidence=result.confidence,
+                explanation=result.explanation, agent_used=result.agent_used,
+                cost_latency=CostLatencyRecord(latency_ms=result.latency_ms, tokens_in=result.tokens_in,
+                                                tokens_out=result.tokens_out, cost_usd=result.cost_usd),
             )
         except ModelError as e:
             pred = _fallback_prediction(doc.doc_id, ann.hypothesis_id, e)
@@ -261,17 +248,31 @@ def run_rag_agent(cases, golds, harness: EvaluationHarness, gateway: ModelGatewa
         if i % 50 == 0:
             print(f"  [rag_agent {i}/{len(cases)}] {time.time()-start:.0f}s elapsed")
 
-    _finalize(harness, experiment_id, "RAG + selective agent", gateway.model, golds)
+    # Load the already-finalized plain "rag" result as the baseline for
+    # agent_recovery_rate/agent_regression_rate - without this, both metrics
+    # silently default to 0.0 (evaluation/metrics.py returns 0.0 when
+    # baseline_predictions is None), which was happening in every T041
+    # result saved before this fix (2026-09-24 gap found alongside C-1).
+    rag_experiment_id = f"T041_final_test_rag_{_model_tag(gateway)}"
+    rag_results = harness.load_results(f"runs/run_{rag_experiment_id}.jsonl")
+    baseline_predictions = rag_results[-1].predictions if rag_results else None
+    if baseline_predictions is None:
+        print(f"  WARNING: no saved rag result found for baseline - "
+              f"agent_recovery_rate/agent_regression_rate will be 0.0")
+
+    _finalize(harness, experiment_id, "RAG + selective agent", gateway.model, golds,
+              baseline_predictions=baseline_predictions)
 
 
-def _finalize(harness: EvaluationHarness, experiment_id: str, arch_name: str, model: str, golds: list[GoldCase]) -> None:
+def _finalize(harness: EvaluationHarness, experiment_id: str, arch_name: str, model: str, golds: list[GoldCase],
+              baseline_predictions: list[Prediction] | None = None) -> None:
     all_predictions = harness.load_checkpoint(experiment_id)
     config = ExperimentConfig(
         experiment_id=experiment_id, experiment_name=arch_name,
-        model=model, prompt_version="v2", architecture=experiment_id,
+        model=model, prompt_version="v6", architecture=experiment_id,
         split="test", sample_size=len(all_predictions), seed=0,
     )
-    result = harness.evaluate(all_predictions, config)
+    result = harness.evaluate(all_predictions, config, baseline_predictions=baseline_predictions)
     harness.save_result(result, filename=f"runs/run_{experiment_id}.jsonl")
     harness.clear_checkpoint(experiment_id)
 
@@ -283,6 +284,9 @@ def _finalize(harness: EvaluationHarness, experiment_id: str, arch_name: str, mo
     print(f"  Contradiction recall:  {m.contradiction_recall:.3f} (n={m.contradiction_n}, "
           f"95% CI [{m.contradiction_recall_ci_low:.3f}, {m.contradiction_recall_ci_high:.3f}])")
     print(f"  Joint label+evidence:  {m.joint_label_evidence_correctness:.3f}")
+    if baseline_predictions is not None:
+        print(f"  Agent recovery rate:   {m.agent_recovery_rate:.3f}")
+        print(f"  Agent regression rate: {m.agent_regression_rate:.3f}")
     print(f"  Total cost: ${m.total_cost_usd:.4f}\n")
 
 
