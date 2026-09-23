@@ -119,6 +119,25 @@ def _model_tag(gateway: ModelGateway) -> str:
     return gateway.model.replace("/", "_").replace(":", "_")
 
 
+def _fallback_prediction(doc_id: str, hypothesis_id: str, error: Exception) -> Prediction:
+    """
+    Safe default when the model fails even after retries (Section 4 Flow
+    7 "External Model Failure", Section 12 Reliability Testing: "Model
+    timeout handled gracefully, no crash"). Found the hard way: a real
+    test-split document made local Llama loop and hit Ollama's own
+    "token repeat limit" abort - deterministic given temperature=0, so
+    retrying the identical request just fails the same way every time.
+    Never silently claim a positive label on failure - same convention
+    as pipeline/classifier.py's own _fallback_result.
+    """
+    print(f"  MODEL FAILURE on {doc_id}/{hypothesis_id}: {error} - recording as NotMentioned, continuing")
+    return Prediction(
+        doc_id=doc_id, hypothesis_id=hypothesis_id, predicted_label=Label.NOT_MENTIONED,
+        confidence=0.0, explanation=f"Model call failed after retries: {error}",
+        cost_latency=CostLatencyRecord(latency_ms=0.0, tokens_in=0, tokens_out=0, cost_usd=0.0),
+    )
+
+
 def run_full_context(cases, golds, harness: EvaluationHarness, gateway: ModelGateway) -> None:
     experiment_id = f"T041_final_test_full_context_{_model_tag(gateway)}"
     checkpoint_keys = harness.completed_case_keys(experiment_id)
@@ -130,17 +149,20 @@ def run_full_context(cases, golds, harness: EvaluationHarness, gateway: ModelGat
         key = (doc.doc_id, ann.hypothesis_id)
         if key in checkpoint_keys:
             continue
-        result = classify(doc.text, ann.hypothesis_text, gateway,
-                           doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id)
-        pred = Prediction(
-            doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id,
-            predicted_label=Label(result.label), confidence=result.confidence,
-            explanation=result.explanation,
-            cost_latency=CostLatencyRecord(
-                latency_ms=result.latency_ms, tokens_in=result.tokens_in,
-                tokens_out=result.tokens_out, cost_usd=result.cost_usd,
-            ),
-        )
+        try:
+            result = classify(doc.text, ann.hypothesis_text, gateway,
+                               doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id)
+            pred = Prediction(
+                doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id,
+                predicted_label=Label(result.label), confidence=result.confidence,
+                explanation=result.explanation,
+                cost_latency=CostLatencyRecord(
+                    latency_ms=result.latency_ms, tokens_in=result.tokens_in,
+                    tokens_out=result.tokens_out, cost_usd=result.cost_usd,
+                ),
+            )
+        except ModelError as e:
+            pred = _fallback_prediction(doc.doc_id, ann.hypothesis_id, e)
         harness.save_prediction_checkpoint(experiment_id, pred)
         if i % 50 == 0:
             print(f"  [full_context {i}/{len(cases)}] {time.time()-start:.0f}s elapsed")
@@ -166,17 +188,20 @@ def run_rag(cases, golds, harness: EvaluationHarness, gateway: ModelGateway,
 
         retrieved = retriever.query_rerank_and_boost(ann.hypothesis_id, ann.hypothesis_text)
         context = " ".join(r.chunk.text for r in retrieved)
-        result = classify(context, ann.hypothesis_text, gateway,
-                           doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id)
-        pred = Prediction(
-            doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id,
-            predicted_label=Label(result.label), confidence=result.confidence,
-            explanation=result.explanation,
-            cost_latency=CostLatencyRecord(
-                latency_ms=result.latency_ms, tokens_in=result.tokens_in,
-                tokens_out=result.tokens_out, cost_usd=result.cost_usd,
-            ),
-        )
+        try:
+            result = classify(context, ann.hypothesis_text, gateway,
+                               doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id)
+            pred = Prediction(
+                doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id,
+                predicted_label=Label(result.label), confidence=result.confidence,
+                explanation=result.explanation,
+                cost_latency=CostLatencyRecord(
+                    latency_ms=result.latency_ms, tokens_in=result.tokens_in,
+                    tokens_out=result.tokens_out, cost_usd=result.cost_usd,
+                ),
+            )
+        except ModelError as e:
+            pred = _fallback_prediction(doc.doc_id, ann.hypothesis_id, e)
         harness.save_prediction_checkpoint(experiment_id, pred)
         if i % 50 == 0:
             print(f"  [rag {i}/{len(cases)}] {time.time()-start:.0f}s elapsed")
@@ -202,33 +227,36 @@ def run_rag_agent(cases, golds, harness: EvaluationHarness, gateway: ModelGatewa
 
         retrieved = retriever.query_rerank_and_boost(ann.hypothesis_id, ann.hypothesis_text)
         context = " ".join(r.chunk.text for r in retrieved)
-        rag_result = classify(context, ann.hypothesis_text, gateway,
-                               doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id)
+        try:
+            rag_result = classify(context, ann.hypothesis_text, gateway,
+                                   doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id)
 
-        rule_label = classify_by_keywords(ann.hypothesis_id, doc.text)
-        decision = route(self_confidence=rag_result.confidence, rule_agrees=(rule_label == rag_result.label))
+            rule_label = classify_by_keywords(ann.hypothesis_id, doc.text)
+            decision = route(self_confidence=rag_result.confidence, rule_agrees=(rule_label == rag_result.label))
 
-        if decision.route == Route.REVIEW:
-            initial_chunks = [r.chunk for r in retrieved]
-            agent_result = run_agent(retriever, ann.hypothesis_id, ann.hypothesis_text, initial_chunks,
-                                      gateway, doc_id=doc.doc_id)
-            final_label, final_conf = agent_result.label, agent_result.confidence
-            final_explanation = agent_result.explanation
-            cost = rag_result.cost_usd + agent_result.cost_usd
-            tin = rag_result.tokens_in + agent_result.tokens_in
-            tout = rag_result.tokens_out + agent_result.tokens_out
-            latency = rag_result.latency_ms + agent_result.latency_ms
-        else:
-            final_label, final_conf = rag_result.label, rag_result.confidence
-            final_explanation = rag_result.explanation
-            cost, tin, tout, latency = rag_result.cost_usd, rag_result.tokens_in, rag_result.tokens_out, rag_result.latency_ms
+            if decision.route == Route.REVIEW:
+                initial_chunks = [r.chunk for r in retrieved]
+                agent_result = run_agent(retriever, ann.hypothesis_id, ann.hypothesis_text, initial_chunks,
+                                          gateway, doc_id=doc.doc_id)
+                final_label, final_conf = agent_result.label, agent_result.confidence
+                final_explanation = agent_result.explanation
+                cost = rag_result.cost_usd + agent_result.cost_usd
+                tin = rag_result.tokens_in + agent_result.tokens_in
+                tout = rag_result.tokens_out + agent_result.tokens_out
+                latency = rag_result.latency_ms + agent_result.latency_ms
+            else:
+                final_label, final_conf = rag_result.label, rag_result.confidence
+                final_explanation = rag_result.explanation
+                cost, tin, tout, latency = rag_result.cost_usd, rag_result.tokens_in, rag_result.tokens_out, rag_result.latency_ms
 
-        pred = Prediction(
-            doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id,
-            predicted_label=Label(final_label), confidence=final_conf,
-            explanation=final_explanation, agent_used=(decision.route == Route.REVIEW),
-            cost_latency=CostLatencyRecord(latency_ms=latency, tokens_in=tin, tokens_out=tout, cost_usd=cost),
-        )
+            pred = Prediction(
+                doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id,
+                predicted_label=Label(final_label), confidence=final_conf,
+                explanation=final_explanation, agent_used=(decision.route == Route.REVIEW),
+                cost_latency=CostLatencyRecord(latency_ms=latency, tokens_in=tin, tokens_out=tout, cost_usd=cost),
+            )
+        except ModelError as e:
+            pred = _fallback_prediction(doc.doc_id, ann.hypothesis_id, e)
         harness.save_prediction_checkpoint(experiment_id, pred)
         if i % 50 == 0:
             print(f"  [rag_agent {i}/{len(cases)}] {time.time()-start:.0f}s elapsed")
