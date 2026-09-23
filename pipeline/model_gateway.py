@@ -37,6 +37,9 @@ PRICING_PER_MILLION: dict[str, dict[str, float]] = {
     # Added for the C01 model comparison / bake-off (different vendor,
     # different architecture, not just a cheaper OpenAI tier).
     "google/gemini-2.5-flash-lite": {"input": 0.10, "output": 0.40},
+    # Local, via Ollama - no per-call API fee (problem statement's
+    # hosted-vs-local comparison, C02). Uses local compute instead.
+    "llama3.2:3b": {"input": 0.0, "output": 0.0},
 }
 
 
@@ -90,6 +93,29 @@ class ModelGateway:
             )
 
         self._client = OpenAI(api_key=api_key, base_url=base_url, timeout=self.timeout_seconds)
+
+    @classmethod
+    def local(
+        cls,
+        model: str | None = None,
+        base_url: str | None = None,
+        max_retries: int | None = None,
+        timeout_seconds: int | None = None,
+    ) -> "ModelGateway":
+        """
+        Gateway pointed at a local Ollama instance instead of OpenRouter -
+        the problem statement's hosted-vs-local comparison (C02). Ollama
+        exposes an OpenAI-compatible /v1 endpoint, so this reuses the same
+        complete()/retry/cost-tracking logic unchanged; only the base_url,
+        api_key (Ollama ignores it, but the openai client requires a
+        non-empty string), and pricing (registered at $0 above) differ.
+        """
+        return cls(
+            model=model or settings.local_model_name,
+            api_key="ollama",
+            base_url=base_url or settings.local_base_url,
+            max_retries=max_retries, timeout_seconds=timeout_seconds,
+        )
 
     def complete(
         self,

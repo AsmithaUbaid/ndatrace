@@ -44,6 +44,12 @@ class Settings(BaseSettings):
     )
     temperature: float = Field(default=0.0, ge=0.0, le=2.0)
     max_retries: int = Field(default=3, ge=0)
+
+    # --- Local model (hosted-vs-local comparison, C02, problem statement's
+    # "Compute: Rent + local" commitment) ---
+    # Ollama's default local port, OpenAI-compatible /v1 endpoint.
+    local_base_url: str = Field(default="http://localhost:11434/v1")
+    local_model_name: str = Field(default="llama3.2:3b")
     request_timeout_seconds: int = Field(default=30, ge=1)
 
     # --- Embedding ---

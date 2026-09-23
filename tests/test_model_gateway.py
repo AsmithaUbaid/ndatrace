@@ -131,5 +131,25 @@ def test_estimate_cost_known_model():
     assert cost == pytest.approx(0.25 + 2.00)
 
 
+def test_local_gateway_uses_ollama_defaults():
+    with patch("pipeline.model_gateway.OpenAI") as mock_openai:
+        gw = ModelGateway.local()
+    assert gw.model == "llama3.2:3b"
+    mock_openai.assert_called_once()
+    call_kwargs = mock_openai.call_args.kwargs
+    assert call_kwargs["base_url"] == "http://localhost:11434/v1"
+    assert call_kwargs["api_key"] == "ollama"
+
+
+def test_local_gateway_allows_model_override():
+    with patch("pipeline.model_gateway.OpenAI"):
+        gw = ModelGateway.local(model="llama3.2:1b")
+    assert gw.model == "llama3.2:1b"
+
+
+def test_local_model_pricing_is_zero():
+    assert estimate_cost("llama3.2:3b", tokens_in=10_000, tokens_out=5_000) == 0.0
+
+
 def test_estimate_cost_unknown_model_returns_zero():
     assert estimate_cost("some/unknown-model", tokens_in=1000, tokens_out=1000) == 0.0
