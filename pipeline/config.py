@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     # sample, same harness, scored against gpt-5-mini. Gemini won on a
     # weighted scorecard - 12x cheaper, 6x faster, tied on risk-sensitive
     # recall (1.000 both), ~1.4pt lower accuracy (96.7% vs 95.3%). See
-    # CLAUDE.md's Decisions Log and docs/experiments.md's C01 row.
+    # docs/decisions.md and docs/experiments.md's C01 row.
     default_model: str = Field(
         default="google/gemini-2.5-flash-lite",
         description="Default LLM model identifier",

@@ -4,7 +4,7 @@ FINAL LOCKED TEST-SET EVALUATION (WBS T041) - runs exactly once, on the
 held-out test split, after architecture freeze (T031, 2026-09-23:
 RAG + selective agent). No re-tuning after seeing these results, per
 the plan's own rule and the instructor's revised final-evaluation
-strategy (CLAUDE.md's Decisions Log, 2026-09-23).
+strategy (docs/decisions.md, 2026-09-23).
 
 Runs all four architectures on a STRATIFIED SUBSAMPLE of the test split
 (default 500 of 2,091 examples - full-set-on-Groq hit an 8K-tokens/min

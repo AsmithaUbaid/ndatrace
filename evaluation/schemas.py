@@ -143,7 +143,7 @@ class MetricResult(BaseModel):
     # folded into risk_sensitive_recall's average) with a 95% Wilson
     # interval, since it's a minority class (~11% of labels) where the
     # combined metric above can hide poor performance. Instructor
-    # feedback, 2026-09-23 - see CLAUDE.md's Decisions Log.
+    # feedback, 2026-09-23 - see docs/decisions.md.
     contradiction_recall: float = 0.0
     contradiction_n: int = 0
     contradiction_correct: int = 0

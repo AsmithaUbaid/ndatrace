@@ -1,0 +1,2957 @@
+{
+  "purpose": "Untouched architecture-validation set - never used in the 150-case dev sample, prompt tuning, retrieval tuning, regression cases, or agent experiments. See docs/evaluation_protocol.md and docs/decisions.md ADR-009's 2026-09-25 update.",
+  "source_split": "train.json",
+  "selection_method": "plain random sample of whole documents (document-level, not individual cases), seed=99, deliberately distinct from seed=42 used elsewhere",
+  "n_documents": 20,
+  "n_cases": 340,
+  "doc_ids": [
+    "150",
+    "151",
+    "178",
+    "204",
+    "219",
+    "237",
+    "247",
+    "248",
+    "322",
+    "324",
+    "334",
+    "382",
+    "416",
+    "420",
+    "462",
+    "481",
+    "530",
+    "548",
+    "570",
+    "593"
+  ],
+  "label_distribution": {
+    "NotMentioned": 133,
+    "Entailment": 170,
+    "Contradiction": 37
+  },
+  "overlap_verification": {
+    "dev.json": 61,
+    "test.json": 123,
+    "data/golden/*.json case files": 25
+  },
+  "overlap_verification_result": "zero overlap confirmed against dev.json, test.json, and every data/golden/*.json case file",
+  "cases": [
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        43,
+        78,
+        79,
+        80
+      ]
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        34
+      ]
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        72,
+        122
+      ]
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        77
+      ]
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        34
+      ]
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        69
+      ]
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        35,
+        40
+      ]
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        35,
+        38
+      ]
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        69
+      ]
+    },
+    {
+      "doc_id": "150",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        20,
+        55,
+        56
+      ]
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        8
+      ]
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        44
+      ]
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        8,
+        12,
+        50
+      ]
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        42
+      ]
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        8
+      ]
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        16,
+        23
+      ]
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        40
+      ]
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        26
+      ]
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        8,
+        11,
+        50
+      ]
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        16,
+        23
+      ]
+    },
+    {
+      "doc_id": "151",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        19
+      ]
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        27
+      ]
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        16
+      ]
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        26
+      ]
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        18,
+        22
+      ]
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        23,
+        24
+      ]
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        16
+      ]
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        15
+      ]
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        23
+      ]
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        18,
+        21
+      ]
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        15
+      ]
+    },
+    {
+      "doc_id": "178",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        15
+      ]
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        23
+      ]
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        25
+      ]
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        8
+      ]
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        8
+      ]
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        27
+      ]
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        23
+      ]
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        8
+      ]
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        15
+      ]
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        20
+      ]
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        15
+      ]
+    },
+    {
+      "doc_id": "204",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        14
+      ]
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        23
+      ]
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        25
+      ]
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        8
+      ]
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        29
+      ]
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        11,
+        15
+      ]
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        23
+      ]
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        8
+      ]
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        9
+      ]
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        18
+      ]
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        11,
+        14
+      ]
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        9
+      ]
+    },
+    {
+      "doc_id": "219",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        5,
+        7,
+        21
+      ]
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        28,
+        32,
+        33
+      ]
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        45
+      ]
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        39,
+        40
+      ]
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        19,
+        23
+      ]
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        41
+      ]
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        16
+      ]
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        27
+      ]
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        29
+      ]
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        19,
+        22
+      ]
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        27
+      ]
+    },
+    {
+      "doc_id": "237",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        27,
+        29,
+        30
+      ]
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        31,
+        37,
+        38
+      ]
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        68
+      ]
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        31,
+        44
+      ]
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        25,
+        26
+      ]
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        86
+      ]
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        51,
+        52
+      ]
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        31,
+        34,
+        35,
+        37,
+        38,
+        39
+      ]
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        25
+      ]
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        88
+      ]
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        45,
+        65
+      ]
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        31,
+        34,
+        35
+      ]
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        49
+      ]
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        51,
+        52
+      ]
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        65
+      ]
+    },
+    {
+      "doc_id": "247",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        32
+      ]
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        30
+      ]
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        28
+      ]
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        17
+      ]
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        13,
+        14
+      ]
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        33
+      ]
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        21,
+        25
+      ]
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        32
+      ]
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        13
+      ]
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        27
+      ]
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        21,
+        24
+      ]
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        19
+      ]
+    },
+    {
+      "doc_id": "248",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        18
+      ]
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        11,
+        15
+      ]
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        18
+      ]
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        13
+      ]
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        14
+      ]
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        13
+      ]
+    },
+    {
+      "doc_id": "322",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        55
+      ]
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        59
+      ]
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        55
+      ]
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        11,
+        14
+      ]
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        55
+      ]
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        17,
+        21,
+        22,
+        23
+      ]
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        32,
+        33,
+        34
+      ]
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        11,
+        13
+      ]
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        17,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "doc_id": "324",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        43
+      ]
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        24,
+        25,
+        26,
+        28
+      ]
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        16
+      ]
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        46,
+        104
+      ]
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        16,
+        19
+      ]
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        45
+      ]
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        16
+      ]
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        58,
+        65,
+        68
+      ]
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        11,
+        35
+      ]
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        29,
+        33,
+        44
+      ]
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        55
+      ]
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        16,
+        19
+      ]
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        11,
+        35
+      ]
+    },
+    {
+      "doc_id": "334",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        29,
+        30,
+        31
+      ]
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        14
+      ]
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        31,
+        32
+      ]
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        19,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ]
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        29
+      ]
+    },
+    {
+      "doc_id": "382",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        9,
+        34
+      ]
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        12
+      ]
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        7
+      ]
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        7,
+        10
+      ]
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        39,
+        40
+      ]
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        18,
+        22
+      ]
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        28
+      ]
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        7,
+        8,
+        10
+      ]
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        29
+      ]
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        25,
+        26,
+        27
+      ]
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        18,
+        21
+      ]
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        29
+      ]
+    },
+    {
+      "doc_id": "416",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        13,
+        15
+      ]
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        7,
+        8
+      ]
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        7,
+        9
+      ]
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        24
+      ]
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        7,
+        10
+      ]
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        14
+      ]
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        17,
+        20
+      ]
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        15
+      ]
+    },
+    {
+      "doc_id": "420",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        14
+      ]
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        18,
+        20
+      ]
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        17
+      ]
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        2
+      ]
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        5
+      ]
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        9,
+        14
+      ]
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        18
+      ]
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        5
+      ]
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        6
+      ]
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        6
+      ]
+    },
+    {
+      "doc_id": "462",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        13
+      ]
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        9
+      ]
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        6
+      ]
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        10
+      ]
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        10
+      ]
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        10
+      ]
+    },
+    {
+      "doc_id": "481",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        22
+      ]
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        8,
+        9
+      ]
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        8,
+        9
+      ]
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        27
+      ]
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        10,
+        14
+      ]
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        21
+      ]
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        8,
+        9
+      ]
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        18
+      ]
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        23,
+        24
+      ]
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        20
+      ]
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        10,
+        12
+      ]
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        16,
+        18
+      ]
+    },
+    {
+      "doc_id": "530",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        17
+      ]
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        48,
+        126
+      ]
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        47,
+        48
+      ]
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        26
+      ]
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        129,
+        130
+      ]
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        48,
+        126
+      ]
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        65,
+        66,
+        67
+      ]
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        45
+      ]
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        45
+      ]
+    },
+    {
+      "doc_id": "548",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        45,
+        47
+      ]
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        31
+      ]
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        8
+      ]
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        67
+      ]
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        25,
+        26,
+        27
+      ]
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        8
+      ]
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        46,
+        47
+      ]
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        15
+      ]
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        22
+      ]
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        9,
+        10
+      ]
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        15
+      ]
+    },
+    {
+      "doc_id": "570",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        14
+      ]
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        33
+      ]
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        21
+      ]
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-19",
+      "hypothesis_text": "Some obligations of Agreement may survive termination of Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        42,
+        114
+      ]
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        23,
+        27
+      ]
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        39,
+        40
+      ]
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        21
+      ]
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        84
+      ]
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        17,
+        29
+      ]
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-8",
+      "hypothesis_text": "Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        36
+      ]
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        23,
+        26
+      ]
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-5",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        17,
+        29
+      ]
+    },
+    {
+      "doc_id": "593",
+      "hypothesis_id": "nda-4",
+      "hypothesis_text": "Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        29
+      ]
+    }
+  ]
+}

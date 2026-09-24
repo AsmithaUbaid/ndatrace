@@ -1,5 +1,13 @@
 # NDATrace — Curated 100 Eval Cases (Project Scope)
- 
+
+> **Note (2026-09-25):** This is the original planning document for these cases, preserved as-is
+> for historical reference. It mixes several conceptually different kinds of cases (benchmark,
+> regression, robustness/security, agent-behaviour, system/API) that are evaluated separately, and
+> its "define correct before any code is written" framing should be read narrowly — see
+> `docs/evaluation_case_design.md` for the current, reorganized version with real execution status,
+> results, and known discrepancies (e.g. a case-ID collision, the injection category growing from
+> 10 to 11 cases after a real vulnerability was found in production use).
+
 **Purpose:** These 100 cases define "correct" before any code is written. Build them as `expected_outcomes.json` before Phase 0.  
 **Pattern:** Same as A2's `expected_outcomes_A.json` — each case has ID, input, expected output, detection method.  
 **Cost:** < $1 for hand-designed cases. Dataset runs (~$8-10) are separate.  

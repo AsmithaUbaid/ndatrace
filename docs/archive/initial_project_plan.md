@@ -1,10 +1,20 @@
+> **Historical planning document, written before implementation.** Some architecture choices, file
+> paths, schedules, thresholds, and assumptions described below were superseded by later
+> experiments — see the root `README.md`, `docs/architecture.md`, `docs/decisions.md`, and
+> `docs/experiments.md` for the current state. This document is preserved unmodified below (aside
+> from two inline historical-status annotations) as the real record of what was planned at project
+> start; it is not authoritative for current status.
+
 # NDATrace — Evidence-Grounded NDA Requirement Review
 ## Complete Project Planning Document
  
 **Project:** NTU PE6201 Emerging AI Technologies — End-of-Course Project  
 **Author:** Asmitha Ubaidulla  
 **Date:** 20 September 2026  
-**Status:** GREENFIELD — No existing repository found. All planning is from scratch.  
+**Status (as of original authoring, 20 Sep 2026):** GREENFIELD — No existing repository found. All
+planning is from scratch. **This status is now historical** — the repository has since been built
+out (pipeline/backend/frontend, dozens of completed experiments). For current status, see the root
+`README.md` and `docs/decisions.md`, not this line.  
 **Deadline:** 4 October 2026  
 **Working days available:** 10 (Mon–Fri, 21 Sep – 2 Oct; weekends are buffer only)
  
@@ -177,7 +187,9 @@ Run Oracle experiment on Day 2. This one experiment tells you whether your model
  
 # SECTION 2 — CURRENT-STATE ASSESSMENT
  
-**Status: GREENFIELD — No repository exists.**
+**Status: GREENFIELD — No repository exists.** *(Historical — this was the real state on
+20 Sep 2026, the day this section was written. Frozen as-is since it's the actual gap analysis
+that drove the WBS. See `docs/decisions.md` for what has since been built.)*
  
 All items below are "does not exist" with "N/A" for reusability. This table serves as the gap analysis.
  

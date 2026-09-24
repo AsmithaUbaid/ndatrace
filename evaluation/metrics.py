@@ -91,7 +91,7 @@ def risk_sensitive_recall(
     (e.g. one prompt variant this project tested had Contradiction
     recall crash to 21.4% while barely moving the combined number).
     A system can hit a target on this metric purely by improving on
-    the easier, more common class - instructor feedback (CLAUDE.md's
+    the easier, more common class - instructor feedback (docs/decisions.md's
     Decisions Log, 2026-09-23) flagged exactly this.
     """
     pc = per_class_metrics(predictions, golds)

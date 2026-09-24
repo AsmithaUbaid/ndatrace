@@ -21,7 +21,7 @@ from sentence_transformers import CrossEncoder
 from pipeline.retriever import RetrievalResult
 
 # L-12, not L-6: the T023 round-4 comparison showed the larger cross-encoder
-# genuinely wins (MRR 0.602 vs 0.567 at the same top-5, see CLAUDE.md's
+# genuinely wins (MRR 0.602 vs 0.567 at the same top-5, see docs/decisions.md's
 # Decisions Log) - not just marginally better, a real step up.
 DEFAULT_RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-12-v2"
 

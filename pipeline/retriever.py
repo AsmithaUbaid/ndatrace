@@ -60,7 +60,7 @@ class Retriever:
         self, query_text: str, candidate_pool_size: int = 20, top_k: int = 7
     ) -> list[RetrievalResult]:
         """
-        Dense retrieve-then-rerank (CLAUDE.md Decisions Log, T023 rounds 3-5):
+        Dense retrieve-then-rerank (docs/decisions.md, T023 rounds 3-5):
         retrieve a wide candidate pool cheaply with the bi-encoder, then
         rerank down to top_k with a cross-encoder (default: the larger
         ms-marco-MiniLM-L-12-v2, see pipeline/reranker.py). Improved
@@ -91,7 +91,7 @@ class Retriever:
         self, hypothesis_id: str, query_text: str, candidate_pool_size: int = 20, top_k: int = 7
     ) -> list[RetrievalResult]:
         """
-        Production retrieval path (CLAUDE.md Decisions Log, T023 round 7):
+        Production retrieval path (docs/decisions.md, T023 round 7):
         dense retrieve-then-rerank (see query_and_rerank), then fuse in the
         rule-based keyword match (pipeline/rule_baseline.py) via the same
         Reciprocal Rank Fusion used for BM25+dense, whenever the rule

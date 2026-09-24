@@ -35,7 +35,7 @@ from pipeline.rule_baseline import classify_with_span
 
 FakeChunk = namedtuple("FakeChunk", ["start_char", "end_char"])
 
-# Best config from T023 (highest MRR, see CLAUDE.md's Decisions Log).
+# Best config from T023 (highest MRR, see docs/decisions.md).
 SEMANTIC_CHUNK_METHOD, SEMANTIC_CHUNK_SIZE, SEMANTIC_TOP_K = "clause", 256, 5
 
 

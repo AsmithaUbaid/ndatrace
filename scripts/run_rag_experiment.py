@@ -7,7 +7,7 @@ whether they overlap the gold evidence span.
 Oracle (B04) fed the model gold evidence directly, bypassing retrieval
 entirely - it measures the model's reasoning ceiling, not whether our
 actual retrieval pipeline (sentence chunking -> retrieve-20 ->
-rerank(L-12) -> top-7 -> rule-boost via RRF, CLAUDE.md's Decisions Log)
+rerank(L-12) -> top-7 -> rule-boost via RRF, docs/decisions.md)
 gives the model *sufficient, complete* context to classify correctly.
 Evidence Recall@K/Precision/MRR (T023, all 9 retrieval rounds) only check
 character-span overlap with ContractNLI's annotated spans - they can't

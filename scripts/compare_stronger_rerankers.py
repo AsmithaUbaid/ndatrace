@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Round 10 (CLAUDE.md Decisions Log's retrieval revisit condition, finally
+Round 10 (docs/decisions.md's retrieval revisit condition, finally
 tried): T023 round 4 found the reranker size matters more than the
 embedding model or hybrid retrieval - upgrading L-6 -> L-12 was the
 single biggest win after the initial reranking round. The Decisions Log

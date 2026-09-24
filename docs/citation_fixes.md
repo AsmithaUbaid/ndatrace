@@ -3,7 +3,7 @@
 Four precision issues flagged in instructor feedback on the Week 3 Problem Statement
 (`PE6201_Project_Problem_Statement_Asmitha.pdf`), received 2026-09-23. These are report-writing
 fixes, not code changes — recorded here so they aren't lost before the final report is drafted.
-See `CLAUDE.md`'s Decisions Log ("Instructor feedback... Gap 3") for the original context.
+See `docs/decisions.md`'s Decisions Log ("Instructor feedback... Gap 3") for the original context.
 
 ## 1. Workload/staff-hours figure — label as vendor research
 

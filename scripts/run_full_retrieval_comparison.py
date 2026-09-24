@@ -2,7 +2,7 @@
 """
 Comprehensive retrieval comparison - the "try everything" pass.
 
-Rounds 1-3 (see docs/experiments.md, CLAUDE.md Decisions Log) established:
+Rounds 1-3 (see docs/experiments.md, docs/decisions.md) established:
 sentence-level chunking beats clause/fixed, and cross-encoder reranking
 helps. This round asks what's left: does a different embedding model do
 better than the default (all-mpnet-base-v2)? Does hybrid BM25+dense
