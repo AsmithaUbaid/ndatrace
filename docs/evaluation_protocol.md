@@ -28,21 +28,39 @@ development evidence, and the test-set run (T041) is the first genuinely indepen
 
 ## Freeze protocol
 
-Before the final test-set run (T041), the following were locked and not changed based on test-set
-results:
+**T041 is not one run at two sample sizes — it is two distinct configurations, corrected and named
+here 2026-09-25 after a forensic timestamp/git-history review (`docs/decisions.md` ADR-010):**
 
+- **T041-A** (interim, 500-case stratified subsample, 2026-09-23 between 11:14 and 17:56 UTC): model
+  `google/gemini-2.5-flash-lite` / local Llama, **prompt v2** / `agent_step_v1.txt`, and for RAG+agent
+  the **original inline, circular routing signal** (pre-C1-fix).
+- **T041-B** (the full 2,091-case test set, 2026-09-24 between 03:00 and 05:31 UTC — **these are the
+  numbers cited everywhere in this repo as "the T041 result"**): model unchanged, **prompt v6** /
+  `agent_step_v2.txt` (the current shipped default), and for RAG+agent the **decoupled routing fix**
+  via `pipeline/orchestrator.py::review_requirement()` (ADR-006).
+
+**A previously-stated caveat here was wrong and is retracted**: earlier versions of this document
+said "T041 used prompt v2, not the current v6 default." That was true only for T041-A. **T041-B's
+numbers — the full 2,091-case results (81.2% / 78.7% / 77.7% accuracy for full-context / RAG /
+RAG+agent) — are already v6, already using the decoupled routing fix, and already reflect
+everything currently shipped.** Do not describe them as predating the security fix.
+
+What was genuinely locked before T041-B and not changed based on its results:
 - Model: `google/gemini-2.5-flash-lite` (hosted), Llama 3.2 3B via Ollama (local)
-- Prompt version: at the time T041 first ran, this was v2/`agent_step_v1.txt` — **not** the current
-  v6/`agent_step_v2.txt` default (the v6 security fix was found and adopted the same day T041 ran,
-  after the run had started). See `docs/decisions.md` ADR-004 and ADR-010 for the exact timeline.
-  This means the T041 numbers currently in the repository predate the security fix and should be
-  read as "final under the pre-v6 configuration," not "final under everything currently shipped."
+- Prompt version: v6 / `agent_step_v2.txt` (already in place before T041-B started — see above)
 - Retrieval configuration: sentence chunking → mpnet → retrieve-20 → rerank L-12 → top-7 →
   rule-boost RRF fusion (ADR-002)
 - Routing: rule-agreement-based ACCEPT/REVIEW (ADR-005), with the decoupled independent signal
   fix already in place (ADR-006)
 - Agent: 5 tools, bounded ReAct loop (ADR-007)
 - Evaluation scripts: `scripts/run_final_test_evaluation.py`
+
+**A real qualification that remains, correctly stated rather than overstated**: T041-B is not a
+pristine first exposure to the test split — T041-A had already scored a 500-case subsample of the
+same split before T041-B ran. The v2→v6 and routing changes were triggered by an independently
+discovered live security issue and a code-audit finding, not by looking at T041-A's scores, so this
+is not test-set tuning in the overfitting sense — but the split had genuinely been partially
+observed before T041-B's numbers were produced, and that should be disclosed, not implied away.
 
 ## Metrics
 
@@ -78,27 +96,45 @@ homogeneous benchmark and should not be reported as a single pass rate.
 ## Current evaluation status (as of 2026-09-25)
 
 - Architecture: **frozen** (ADR-009), on repeatedly-reused development evidence (see "What's
-  missing" above) — no independent architecture-validation run exists. **A real, unresolved
-  contradiction was found 2026-09-25** while reconstructing `notebooks/07_selective_agent_
-  experiments.ipynb`: on the full 2,091-case hosted test set, the selective agent's accuracy
-  (77.7%) is now *below* plain RAG's (78.7%), reversing the dev-sample and 500-case-subsample
-  finding that justified including the agent (`docs/decisions.md` ADR-007). Not statistically
-  significant either way (p=0.088), but the point estimate has flipped. This is disclosed as an
-  open question, not resolved by re-freezing the architecture as part of this documentation pass.
-- Final test (T041): **run**, but with two important caveats:
-  1. Used prompt v2/`agent_step_v1.txt`, not the current v6/`agent_step_v2.txt` default.
-  2. **Verified directly against the result files on 2026-09-25**: of the 7 T041 result files, only
-     `run_T041_final_test_full_context_google_gemini-2.5-flash-lite.jsonl` (the hosted full-context
-     architecture, full 2,091-case set) has a corrected, trustworthy joint value (0.812, matching
-     accuracy as it must for full-context). The hosted `rag` and `rag_agent` files have since
+  missing" above) — no independent architecture-validation run existed until AV01 (below). **A
+  real, unresolved finding, and now a stronger one than first stated**: on T041-B (the full
+  2,091-case hosted test set, already v6 + decoupled routing — see the Freeze protocol section
+  above), the selective agent's accuracy (77.7%) is *below* plain RAG's (78.7%), reversing the
+  dev-sample finding that justified including the agent (`docs/decisions.md` ADR-007). McNemar's
+  test on T041-B: b=87, c=65, p=0.088 — not significant, but the point estimate favors plain RAG.
+  **Because T041-B already uses the current shipped prompt and routing configuration, this cannot
+  be explained away as "it was still running the old v2/circular-routing setup" — it wasn't.** An
+  independent architecture-validation run (AV01, `data/architecture_validation_manifest.json`) has
+  since produced the same qualitative finding on untouched data — see `docs/decisions.md` ADR-009's
+  update and the AV01 analysis for the full breakdown.
+- Official test evaluation: **run, in two distinct configurations (T041-A and T041-B — see the
+  Freeze protocol section above), not one run at two sample sizes.** T041-B (full 2,091 cases,
+  already v6 + decoupled routing) is what's cited as "the T041 result" throughout this repo.
+  Caveats that actually apply to T041-B:
+  1. **Not a pristine first exposure to the test split** — T041-A had already scored a 500-case
+     subsample of the same split before T041-B ran (see the Freeze protocol section for why this
+     is disclosed rather than treated as invalidating).
+  2. **Joint label+evidence correctness was broken in the code that executed both phases.**
+     Verified directly against the result files on 2026-09-25: of the 7 T041 result files, only
+     `run_T041_final_test_full_context_google_gemini-2.5-flash-lite.jsonl` (hosted full-context,
+     T041-B, full 2,091-case set) has a corrected, trustworthy joint value (0.812, matching accuracy
+     as it must for full-context) — and that correction is itself a **post-hoc backfilled metric**
+     (`scripts/backfill_joint_metric.py`, applied after the fact to already-saved predictions), not
+     something the original run computed correctly. The hosted `rag` and `rag_agent` T041-B files
      completed their full 2,091-case runs (`sample_size: 2091` in the latest record) but their
-     latest `joint_label_evidence_correctness` values (0.327 and 0.342) are in the same range as
-     the pre-fix, known-broken numbers — the backfill script was not re-run against these newer,
-     larger result files. All three local-Llama files (`full_context`, `rag`, `rag_agent`, still at
-     `sample_size: 500`) show the same pattern (0.31 / 0.304 / 0.316) and have not been backfilled
-     at all. **Treat every T041 joint value except hosted full-context's 0.812 as unverified until
-     `scripts/backfill_joint_metric.py` is re-run against these files** — not attempted as part of
-     this documentation cleanup, since it would change reported numbers and this pass is scoped to
-     documentation, not further data correction.
+     latest `joint_label_evidence_correctness` values (0.327 and 0.342) are in the same broken range
+     as before the fix — the backfill script was not re-run against these larger files. All three
+     local-Llama files (T041-A-scale, `sample_size: 500`) show the same pattern (0.31 / 0.304 /
+     0.316) and have not been backfilled at all. **Treat every T041 joint value except hosted
+     full-context's 0.812 as unverified** until the backfill script is re-run against these files —
+     not attempted as part of this documentation cleanup, since it would change reported numbers.
 - Long-document stress test (RAG vs. full-context scalability): **proposed, not yet run** — see
   `docs/architecture.md`'s open questions.
+- Architecture-validation run (AV01): **complete** — 340 cases, 20 documents from ContractNLI's
+  training split, verified zero overlap with every prior pool (dev sample, retrieval tuning,
+  golden/regression cases, agent experiment, and the official test split). Frozen at the current
+  shipped configuration (v6, decoupled routing) throughout — never used to compare prompt versions
+  or architectures against each other before freezing, avoiding the exact contamination this
+  document warns about elsewhere. Full-context and RAG were statistically indistinguishable
+  (McNemar p=1.000); RAG+agent underperformed both, with a 6.6% correction precision against a
+  12.5% harm rate on routed cases.

@@ -149,12 +149,47 @@ the reasoning across versions:
     containing no genuine evidence and default to NotMentioned. Same rule added to the agent's
     decision prompt (`prompts/agent_step_v2.txt`).
   - **Validated on the same 150-case dev sample**: accuracy 89.3% / macro-F1 0.864 / risk-sensitive
-    recall 0.844 — not worse than v2, marginally better overall. Full Category 3 battery: 11/11
-    resisted (was 9/10 under v2), including case 051 (deliberately unpatched under v5), resolved
-    for free under v6.
+    recall 0.844. Full Category 3 battery: 11/11 resisted (was 9/10 under v2), including case 051
+    (deliberately unpatched under v5), resolved for free under v6.
 
-**Decision:** v6 (classifier) + `agent_step_v2.txt` (agent) are the production defaults
-(`pipeline/classifier.py`'s `classify()`, `pipeline/agent.py`'s `AGENT_PROMPT_PATH`).
+**A real trade-off, not glossed over: v6's Contradiction recall (78.6%, 11/14) is lower than v2's
+and v5's (both 85.7%, 12/14).** This is not a rounding artifact of a small sample being reported
+imprecisely — it was directly investigated (2026-09-25) with a paired case-by-case comparison
+between v5 and v6 on the identical 150-case sample, rather than accepting the two percentages at
+face value:
+
+- **The entire recall difference is exactly one case** (doc 435, hypothesis nda-7, out of 14
+  Contradiction cases total). v5 (and v2) predicted Contradiction correctly; v6 predicted
+  Entailment.
+- **The error is characterizable, not random noise**: the hypothesis asks whether the Receiving
+  Party may share information with third parties "including consultants, agents and professional
+  advisors." The actual clause permits disclosure only to a much narrower set (representatives
+  needed for negotiation, and employees bound by similar confidentiality terms) — correctly read by
+  v2/v5 as a Contradiction (the actual permission is narrower than the broad third-party class the
+  hypothesis asks about). v6's explanation shows it noticed the same clause but treated "some
+  disclosure is permitted" as satisfying the hypothesis, missing the scope mismatch between the
+  narrow permitted class and the broader one asked about — a real, specific reading error, not an
+  arbitrary flip.
+- **Overall (not just Contradiction), v5 vs. v6 paired comparison across all 150 cases**: v6 got 6
+  cases right that v5 got wrong; v5 got 1 case right that v6 got wrong (this same Contradiction
+  case) — net +5 cases, consistent with the accuracy gap (86.0%→89.3% ≈ +5/150). McNemar's exact
+  test on this pairing: n_discordant=7, p=0.125 — **not statistically significant** at this sample
+  size, so "v6 is better overall" is a real but unproven-at-significance directional finding, not an
+  established fact.
+- **The methodological caveat stands regardless of the above**: v6 was developed and evaluated on
+  the same repeatedly-reused 150-case dev sample as v2/v3/v4/v5 (`docs/evaluation_protocol.md`'s
+  development-reuse warning applies here too) — its accuracy/macro-F1 advantage is real on this
+  sample but not independently validated on data untouched by any prompt-tuning decision.
+
+**Decision, stated with the trade-off explicit rather than as an unqualified win:** v6 (classifier)
++ `agent_step_v2.txt` (agent) are the current implementation defaults
+(`pipeline/classifier.py`'s `classify()`, `pipeline/agent.py`'s `AGENT_PROMPT_PATH`) **because it
+achieved the highest development accuracy and macro-F1, and because it independently fixes the
+zero-real-content injection vulnerability this section documents.** Contradiction recall decreased
+by one case relative to v2/v5 on this sample, and the comparison was conducted on the repeatedly
+reused development sample; **v6's overall superiority over v2/v5 is therefore not considered
+independently validated** — it is the current default under the measured trade-off above, not a
+proven best choice on every metric.
 
 **A second, independent bug found in the same review pass:** `pipeline/orchestrator.py`'s
 `review_document()` had zero per-hypothesis error isolation — a single failed hypothesis (of up to
@@ -382,47 +417,81 @@ changes based on test-set results, per the "no re-tuning on test-set results" ru
 
 ---
 
-## ADR-010 — Final locked test-set evaluation (T041) and the joint-metric bug
+## ADR-010 — Final locked test-set evaluation (T041): two distinct configurations, not one run at two sample sizes, plus the joint-metric bug
 
-**Status:** Complete for hosted `full_context` (full 2,091-case test set); hosted `rag`/`rag_agent`
-were run on a 500-case stratified subsample; local Llama run on the same 500-case subsample for
-all four architectures. See `docs/evaluation_protocol.md` for exactly which numbers are "final"
-vs. interim.
+**Status:** Complete for all three LLM-dependent hosted architectures on the full 2,091-case test
+set, plus a 500-case local-Llama comparison. **Corrected 2026-09-25**: a forensic review of the
+saved timestamps and git history found that "T041" is not one configuration run at two sample
+sizes — it is two genuinely different configurations, named here **T041-A** and **T041-B** so they
+are never conflated again.
 
-**A critical bug was found and fixed 2026-09-24, after the initial T041 run completed:**
-`scripts/run_final_test_evaluation.py` never populated `Prediction.retrieved_span_indices` for any
-architecture, so the joint label+evidence correctness metric — reported throughout this project as
-a headline metric — silently degenerated into measuring only the NotMentioned-correct fraction for
-every T041 result, on every architecture, both providers. Confirmed precisely: the reported joint
-value (0.334 for hosted full_context) exactly equalled that run's NotMentioned-only-correct
-fraction.
+### T041-A — interim 500-case runs
 
-This did **not** affect the dev-sample joint numbers reported elsewhere (ADR-003's RAG e2e result,
-the prompt-version comparisons in ADR-004) — those used a different, correctly-written script
-(`scripts/run_rag_experiment.py`) from the start.
+| Architecture | Timestamp (UTC) | Prompt | Routing (rag_agent only) |
+|---|---|---|---|
+| Full-context | 2026-09-23T11:14:32 / 17:03:07 | v2 | — |
+| RAG | 2026-09-23T11:39:29 / 17:26:46 | v2 | — |
+| RAG + agent | 2026-09-23T17:56:21 | v2 | **Original inline implementation with the circular routing signal** (rule-agreement checked against the rule-boosted classification itself — the bug code-audit finding C-1 describes) |
 
-**Fix:** all four architectures in `run_final_test_evaluation.py` now populate
-`retrieved_span_indices` correctly (rule: its matched span; full-context: all spans in the
-document, correct by construction; rag/rag_agent: the real retrieved chunks via
-`map_chunks_to_gold_span_indices`). Already-completed result files were retroactively corrected at
-**zero additional LLM cost** (`scripts/backfill_joint_metric.py` — retrieval is deterministic, so
-existing predictions were re-scored with correctly populated evidence spans and an updated record
-appended, per the append-only convention).
+### T041-B — full 2,091-case runs (the numbers headlined everywhere in this repo as "the T041 result")
 
-**Corrected, final numbers — hosted full-context, full 2,091-case test set** (this architecture's
-run completed the full set before the backfill, so this is the most authoritative single number in
-the project): accuracy 81.16%, macro-F1 0.760, Contradiction recall 59.1% (n=220, 95% CI
-[52.5%, 65.4%]), joint 0.812 (now correctly equal to accuracy, as it must be for full-context),
-total cost $0.685.
+| Architecture | Timestamp (UTC) | Prompt | Routing (rag_agent only) |
+|---|---|---|---|
+| Full-context | 2026-09-24T03:00:25 / 03:06:28 | **v6** | — |
+| RAG | 2026-09-24T03:44:22 | **v6** | — |
+| RAG + agent | 2026-09-24T05:31:38 | **v6** | **`pipeline/orchestrator.py`'s decoupled routing (the C-1 fix)** |
 
-**Corrected numbers — hosted RAG, 500-case subsample** (interim measurement taken mid-backfill):
-joint 0.326 → 0.754. **This correction has not been carried forward**: the hosted `rag` and
-`rag_agent` runs have since completed on the full 2,091-case test set, but as of 2026-09-25 their
-latest saved records still show joint values in the pre-fix broken range (0.327 and 0.342
-respectively — see `docs/evaluation_protocol.md`'s "Current evaluation status" for the verified
-per-file state). The same is true for all three local-Llama T041 files, which have not been
-backfilled at all. Re-running `scripts/backfill_joint_metric.py` against the now-complete files is
-real, outstanding work, not done as part of this documentation cleanup.
+All three T041-B runs happened 7.9–10.5 hours **after** commit `dd797d1` (2026-09-23T19:03:53 UTC,
+"Build backend/frontend, fix a routing-independence bug and a live prompt-injection gap"), which
+changed `pipeline/classifier.py`'s default `prompt_version` from `"v2"` to `"v6"` and replaced
+`run_rag_agent()`'s inline circular-routing logic with a call to the newly-built
+`pipeline/orchestrator.py::review_requirement()` (the decoupled routing fix). Both changes landed in
+the same commit and are confirmed present in every T041-B record.
+
+**The previously-stated caveat — "T041 used prompt v2, not the current v6 default" — is wrong for
+T041-B and should not be repeated.** It was true only for T041-A. **The 2,091-case results (81.2% /
+78.7% / 77.7% accuracy for full-context / RAG / RAG+agent) are already v6 results, and the RAG+agent
+number already reflects the decoupled routing fix.** This means the RAG+agent underperformance
+relative to RAG and full-context cannot be explained away as "it was still running the old
+prompt/routing" — it wasn't. See `docs/evaluation_protocol.md` for the corrected freeze-protocol
+language.
+
+**Three real qualifications remain, precisely stated (not overstated into "the test set is
+invalid" and not understated into "this is a pristine one-shot test either):**
+
+1. **The 2,091-case (T041-B) runs are not a pristine first exposure to the test split.** The
+   500-case interim runs (T041-A) had already scored the model against a stratified subsample of
+   the same test split before T041-B executed. The configuration change (v2→v6, circular→decoupled
+   routing) was motivated by an independently discovered live prompt-injection vulnerability and a
+   code-audit finding, not by looking at T041-A's scores — so this is not "tuning on the test set"
+   in the overfitting sense — but the split had genuinely been partially exposed before the
+   authoritative numbers were produced, and that should be stated plainly rather than implied away.
+2. **T041-A and T041-B's RAG+agent results are not comparable as "the same architecture at two
+   sample sizes."** They ran genuinely different routing logic (circular vs. decoupled). Any
+   comparison between them is a comparison of two different configurations, not a sample-size
+   effect.
+3. **The joint label+evidence correctness metric was broken in the code that actually executed
+   both T041-A and T041-B.** `scripts/run_final_test_evaluation.py` never populated
+   `Prediction.retrieved_span_indices` for any architecture at the time either phase ran (confirmed
+   directly: the fix is absent from every commit up to and including `dd797d1`, so both phases
+   executed with the bug still live). The joint metric — reported throughout this project as a
+   headline metric — silently degenerated into measuring only the NotMentioned-correct fraction.
+   Confirmed precisely: the reported joint value (0.334 for hosted full_context) exactly equalled
+   that run's NotMentioned-only-correct fraction. **Any corrected joint value now on record is a
+   post-hoc backfilled metric** (`scripts/backfill_joint_metric.py`, applied after the fact to the
+   already-saved predictions — retrieval is deterministic, so this required zero new LLM calls but
+   it is a reconstruction, not something the original run computed correctly). This did **not**
+   affect the dev-sample joint numbers reported elsewhere (ADR-003, ADR-004) — those used a
+   different, correctly-written script (`scripts/run_rag_experiment.py`) from the start.
+
+**Corrected (backfilled) joint values, T041-B, full 2,091-case set**: only hosted full-context has
+been backfilled and verified (accuracy 81.16%, macro-F1 0.760, Contradiction recall 59.1% (n=220,
+95% CI [52.5%, 65.4%]), joint 0.812 — now correctly equal to accuracy, as it must be for
+full-context, total cost $0.685). Hosted RAG and RAG+agent completed the full 2,091-case set but, as
+of 2026-09-25, their latest saved records still show joint values in the pre-fix broken range (0.327
+and 0.342) — the backfill script was not re-run against these larger files. All three local-Llama
+T041 files (500-case only) have not been backfilled at all. See `docs/evaluation_protocol.md`'s
+"Current evaluation status" for the exact per-file state.
 
 **A genuine, real finding: on local Llama 3.2 3B, full-context is *worse* than the zero-cost
 rule-based baseline (49.2% vs 57.6%)** — the opposite ordering from Gemini, where full-context led.
@@ -430,15 +499,26 @@ A weaker local model appears to get distracted by the full document rather than 
 completeness, while the deterministic keyword rule has no such failure mode. This is exactly the
 kind of finding the hosted-vs-local comparison was built to surface, and it complicates ADR-008's
 "full-context always has an advantage from seeing everything" framing — that advantage is
-model-dependent, not universal.
+model-dependent, not universal. (This local comparison used the 500-case T041-A-equivalent sample
+size, run separately on the local provider — see the evidence files below.)
 
-**McNemar's test, rag vs. rag_agent, re-run on this final data:**
-- Hosted (Gemini): b=11, c=23, n_discordant=34, p=0.058 (borderline, not significant).
-- Local (Llama): b=6, c=9, n_discordant=15, p=0.607 (clearly not significant — a weaker model gets
-  less benefit from the agent layer than the stronger hosted model does).
+**McNemar's test, RAG vs. RAG+agent, T041-B (full 2,091-case, hosted, both already under v6 +
+decoupled routing — recomputed directly from the saved predictions, not the T041-A-based estimate
+this entry previously and incorrectly cited):** b=87 (RAG-only-correct), c=65 (RAG+agent-only-correct),
+n_discordant=152, **p=0.088 — not significant**, and the point estimate favors plain RAG (regression
+exceeds recovery), the opposite direction from T041-A's small-sample estimate (b=11, c=23, p=0.058,
+which favored the agent). **Because T041-A and T041-B ran different routing logic, these two
+McNemar results are not even measuring the same comparison — T041-B's is the one that reflects the
+actually-shipped decoupled-routing architecture** and is the number that should be cited going
+forward. Full reproduction: `notebooks/07_selective_agent_experiments.ipynb`.
 
-**Evidence files:** `results/runs/run_T041_final_test_*.jsonl` (each carries 2–3 records reflecting
-the original run, then the backfill correction, per the append-only rule).
+**Local Llama (500-case, T041-A-scale sample size), for reference:** b=6, c=9, n_discordant=15,
+p=0.607 (clearly not significant).
+
+**Evidence files:** `results/runs/run_T041_final_test_*.jsonl` (each carries 2–4 records — the
+T041-A record(s), the T041-B record, and for full-context an additional backfill-corrected record —
+per the append-only rule; timestamps within each file are the ground truth for which record is
+which phase, not position alone).
 
 ---
 

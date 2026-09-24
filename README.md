@@ -36,19 +36,30 @@ routing-independence fix in `docs/decisions.md` for why).
 
 - **Architecture: frozen** (RAG + selective agent — see the final architecture-freeze decision in
   `docs/decisions.md`) — but frozen on
-  repeatedly-reused development-sample evidence, not an independent validation run. See
-  `docs/evaluation_protocol.md` for exactly what that means.
-- **The official ContractNLI test-set evaluation (the final, locked benchmark run): completed**,
-  but with two disclosed caveats — it used prompt v2, not
-  the current v6 security-hardened default, and only one of the seven result files (hosted
-  full-context, full 2,091-case set) has a fully verified evidence-correctness metric. See
-  `docs/evaluation_protocol.md`'s "Current evaluation status" section for the exact per-file state.
-- **A real, unresolved contradiction**: at full test-set scale, the selective agent's accuracy
-  (77.7%) is now measured *below* plain RAG's (78.7%) on the hosted model — the opposite of the
-  development-sample finding that justified including it. Not statistically significant either way
-  (p=0.088), and the architecture freeze is not being retroactively reversed over it, but it is
-  disclosed plainly rather than hidden — see the agent include/exclude decision in
-  `docs/decisions.md` and `notebooks/07_selective_agent_experiments.ipynb`.
+  repeatedly-reused development-sample evidence. An independent architecture-validation run (AV01,
+  340 cases from documents never used in any prior tuning decision) has since been completed — see
+  below.
+- **The official ContractNLI test-set evaluation ran in two distinct configurations, not one run
+  at two sample sizes** (corrected 2026-09-25 after a forensic timestamp/git review — see
+  `docs/decisions.md` ADR-010): an interim 500-case run under prompt v2, and the full 2,091-case
+  run under the current v6 default with the decoupled routing fix already in place. **The full
+  2,091-case numbers (81.2% / 78.7% / 77.7% accuracy for full-context / RAG / RAG+agent) are
+  already v6 — they are not stale relative to what currently ships.** The remaining caveat: only
+  one of the seven result files (hosted full-context) has a fully verified evidence-correctness
+  metric; the joint-metric values elsewhere are known-broken pending a re-run of the backfill
+  script. See `docs/evaluation_protocol.md`'s "Current evaluation status" for the exact per-file
+  state.
+- **A real, unresolved finding, now stronger than first stated**: on the full 2,091-case test set
+  (already v6, already using the decoupled routing fix), the selective agent's accuracy (77.7%) is
+  measured *below* plain RAG's (78.7%) — the opposite of the development-sample finding that
+  justified including it, and this time it cannot be attributed to a stale prompt or routing
+  configuration. Not statistically significant (p=0.088), and the architecture freeze is not being
+  retroactively reversed over it, but it is disclosed plainly. **An independent architecture-
+  validation run (AV01) found the same pattern on 340 untouched cases**: full-context and RAG were
+  statistically indistinguishable, and the agent introduced nearly twice as many errors (19) as it
+  corrected (10) — a 6.6% correction precision against a 12.5% harm rate. See the agent
+  include/exclude decision in `docs/decisions.md` and `notebooks/07_selective_agent_
+  experiments.ipynb`.
 - **Long-document scalability is an untested design hypothesis**, not a validated result — see
   `docs/architecture.md`'s proposed (not yet run) stress test.
 
@@ -103,8 +114,10 @@ decision: `docs/decisions.md`. Corresponding notebooks: `notebooks/` (see `noteb
   0.657–0.660) — hard abstention was rejected in favor of ACCEPT/REVIEW routing. See the
   confidence/abstention design decision in `docs/decisions.md`.
 - A real prompt-injection vulnerability was found live through the product UI (a document that was
-  entirely an injected instruction, no real clause content) — fixed in the current prompt version
-  at zero accuracy cost. See the prompt-version decision in `docs/decisions.md`.
+  entirely an injected instruction, no real clause content) — fixed in the current prompt version,
+  with higher overall accuracy than the prior default but one fewer correct Contradiction case
+  (a real, disclosed trade-off, traced to a single specific misread case, not overall noise). See
+  the prompt-version decision in `docs/decisions.md`.
 - A real, systematic weakness was found in exception/carve-out clause reconciliation: 4/4 such
   cases in the negative-case battery failed. See the golden-battery finding in `docs/decisions.md`.
 - A real bug silently broke the joint label+evidence correctness metric — headlined throughout this
