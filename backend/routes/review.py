@@ -96,12 +96,24 @@ def get_review(review_id: str) -> ReviewResponse:
     )
 
 
+MAX_PDF_SIZE_BYTES = 10 * 1024 * 1024  # 10MB - real NDAs are a few pages; this is a generous cap
+
+
 @router.post("/extract-pdf")
 async def extract_pdf(file: UploadFile = File(...)) -> dict:
     if file.content_type not in ("application/pdf", "application/x-pdf"):
         raise HTTPException(status_code=400, detail=f"Expected a PDF file, got: {file.content_type}")
 
-    file_bytes = await file.read()
+    # WBS K05 (found missing entirely, 2026-09-24 audit): no size limit meant
+    # an arbitrarily large upload would be read entirely into memory with no
+    # cap. Read one byte over the limit to detect oversized files without
+    # necessarily buffering the whole thing if the client streams it.
+    file_bytes = await file.read(MAX_PDF_SIZE_BYTES + 1)
+    if len(file_bytes) > MAX_PDF_SIZE_BYTES:
+        raise HTTPException(
+            status_code=413,
+            detail=f"PDF too large (max {MAX_PDF_SIZE_BYTES // (1024*1024)}MB)",
+        )
     try:
         text = extract_text_from_pdf(file_bytes)
     except PdfExtractionError as e:

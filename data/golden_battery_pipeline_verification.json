@@ -1,0 +1,470 @@
+{
+  "category_1_golden": {
+    "file": "data/golden/golden_cases.json",
+    "n_cases": 30,
+    "n_scored": 30,
+    "n_correct": 24,
+    "accuracy": 0.8,
+    "results": [
+      {
+        "case_id": "001",
+        "doc_id": "456",
+        "hypothesis_id": "nda-2",
+        "gold_label": "Entailment",
+        "predicted_label": "NotMentioned",
+        "correct": false,
+        "agent_used": false,
+        "description": "Easy entailment - single clause, short NDA, obvious match"
+      },
+      {
+        "case_id": "002",
+        "doc_id": "3",
+        "hypothesis_id": "nda-11",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "correct": true,
+        "agent_used": false,
+        "description": "Easy entailment - standard boilerplate confidentiality language"
+      },
+      {
+        "case_id": "003",
+        "doc_id": "73",
+        "hypothesis_id": "nda-3",
+        "gold_label": "Entailment",
+        "predicted_label": "NotMentioned",
+        "correct": false,
+        "agent_used": true,
+        "description": "Easy entailment - distinct NDA from case 001/002"
+      },
+      {
+        "case_id": "004",
+        "doc_id": "3",
+        "hypothesis_id": "nda-16",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "correct": true,
+        "agent_used": false,
+        "description": "Medium entailment - single-span evidence, distinct document"
+      },
+      {
+        "case_id": "005",
+        "doc_id": "3",
+        "hypothesis_id": "nda-15",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "correct": true,
+        "agent_used": true,
+        "description": "Medium entailment - legal jargon (\"strictest confidence\" / \"receiving party\")"
+      },
+      {
+        "case_id": "006",
+        "doc_id": "3",
+        "hypothesis_id": "nda-10",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "correct": true,
+        "agent_used": false,
+        "description": "Medium entailment - evidence split across two spans in one clause"
+      },
+      {
+        "case_id": "007",
+        "doc_id": "3",
+        "hypothesis_id": "nda-4",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "correct": true,
+        "agent_used": true,
+        "description": "Hard entailment - evidence scattered across 3+ spans"
+      },
+      {
+        "case_id": "008",
+        "doc_id": "33",
+        "hypothesis_id": "nda-7",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "correct": true,
+        "agent_used": false,
+        "description": "Hard entailment - evidence buried in a deeply nested sub-clause"
+      },
+      {
+        "case_id": "009",
+        "doc_id": "13",
+        "hypothesis_id": "nda-8",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "correct": true,
+        "agent_used": false,
+        "description": "Hard entailment - evidence implied by combination of clauses (multi-span)"
+      },
+      {
+        "case_id": "010",
+        "doc_id": "73",
+        "hypothesis_id": "nda-15",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "correct": true,
+        "agent_used": true,
+        "description": "Entailment in the longest NDA in the dev split"
+      },
+      {
+        "case_id": "011",
+        "doc_id": "7",
+        "hypothesis_id": "nda-17",
+        "gold_label": "Contradiction",
+        "predicted_label": "NotMentioned",
+        "correct": false,
+        "agent_used": false,
+        "description": "Easy contradiction - explicit carve-out / exclusion"
+      },
+      {
+        "case_id": "012",
+        "doc_id": "15",
+        "hypothesis_id": "nda-17",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "correct": true,
+        "agent_used": false,
+        "description": "\"Shall not\" negative language"
+      },
+      {
+        "case_id": "013",
+        "doc_id": "61",
+        "hypothesis_id": "nda-7",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "correct": true,
+        "agent_used": true,
+        "description": "Explicit exclusion list (\"does not cover\" / \"does not apply\")"
+      },
+      {
+        "case_id": "014",
+        "doc_id": "12",
+        "hypothesis_id": "nda-2",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "correct": true,
+        "agent_used": true,
+        "description": "Exception sub-clause negates an apparently supportive main clause"
+      },
+      {
+        "case_id": "015",
+        "doc_id": "54",
+        "hypothesis_id": "nda-2",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "correct": true,
+        "agent_used": true,
+        "description": "Time-limited obligation contradicts an open-ended requirement"
+      },
+      {
+        "case_id": "016",
+        "doc_id": "3",
+        "hypothesis_id": "nda-2",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "correct": true,
+        "agent_used": false,
+        "description": "Scope limitation contradicts a broad requirement"
+      },
+      {
+        "case_id": "017",
+        "doc_id": "10",
+        "hypothesis_id": "nda-1",
+        "gold_label": "Contradiction",
+        "predicted_label": "NotMentioned",
+        "correct": false,
+        "agent_used": true,
+        "description": "Contradiction via a narrowing defined term"
+      },
+      {
+        "case_id": "018",
+        "doc_id": "16",
+        "hypothesis_id": "nda-2",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "correct": true,
+        "agent_used": true,
+        "description": "Contradiction only visible when two clauses are read together"
+      },
+      {
+        "case_id": "019",
+        "doc_id": "9",
+        "hypothesis_id": "nda-7",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "correct": true,
+        "agent_used": true,
+        "description": "Contradiction buried in a schedule/appendix reference [proxy: no keyword/structural match found in dev set; nearest available case used]"
+      },
+      {
+        "case_id": "020",
+        "doc_id": "488",
+        "hypothesis_id": "nda-2",
+        "gold_label": "Contradiction",
+        "predicted_label": "NotMentioned",
+        "correct": false,
+        "agent_used": true,
+        "description": "Contradiction in the shortest NDA in the dev split"
+      },
+      {
+        "case_id": "021",
+        "doc_id": "14",
+        "hypothesis_id": "nda-18",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "correct": true,
+        "agent_used": false,
+        "description": "Easy NM - requirement topic appears genuinely absent from the NDA"
+      },
+      {
+        "case_id": "022",
+        "doc_id": "456",
+        "hypothesis_id": "nda-11",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "correct": true,
+        "agent_used": false,
+        "description": "Easy NM - very short NDA with limited scope"
+      },
+      {
+        "case_id": "023",
+        "doc_id": "3",
+        "hypothesis_id": "nda-18",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "correct": true,
+        "agent_used": false,
+        "description": "NM - standard NDA missing a non-solicitation clause"
+      },
+      {
+        "case_id": "024",
+        "doc_id": "7",
+        "hypothesis_id": "nda-20",
+        "gold_label": "NotMentioned",
+        "predicted_label": "Contradiction",
+        "correct": false,
+        "agent_used": true,
+        "description": "NM - related but distinct concept present (e.g. retention vs. destruction)"
+      },
+      {
+        "case_id": "025",
+        "doc_id": "3",
+        "hypothesis_id": "nda-8",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "correct": true,
+        "agent_used": false,
+        "description": "NM - similar wording present (\"reasonable care\") but different legal meaning"
+      },
+      {
+        "case_id": "026",
+        "doc_id": "7",
+        "hypothesis_id": "nda-11",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "correct": true,
+        "agent_used": false,
+        "description": "NM - topic possibly referenced only in preamble, not an operative clause"
+      },
+      {
+        "case_id": "027",
+        "doc_id": "9",
+        "hypothesis_id": "nda-13",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "correct": true,
+        "agent_used": false,
+        "description": "Hard NM - NDA partially addresses related sub-requirements"
+      },
+      {
+        "case_id": "028",
+        "doc_id": "7",
+        "hypothesis_id": "nda-18",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "correct": true,
+        "agent_used": false,
+        "description": "Hard NM - \"confidential\" appears in the NDA but not in the relevant context"
+      },
+      {
+        "case_id": "029",
+        "doc_id": "73",
+        "hypothesis_id": "nda-11",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "correct": true,
+        "agent_used": false,
+        "description": "Hard NM - long NDA with many clauses, none matching this requirement"
+      },
+      {
+        "case_id": "030",
+        "doc_id": "456",
+        "hypothesis_id": "nda-16",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "correct": true,
+        "agent_used": false,
+        "description": "NM despite a superficially comprehensive NDA (distinct remaining case)"
+      }
+    ]
+  },
+  "category_2_negative": {
+    "file": "data/golden/negative_cases.json",
+    "n_cases": 15,
+    "n_scored": 15,
+    "n_correct": 10,
+    "accuracy": 0.667,
+    "results": [
+      {
+        "case_id": "031",
+        "doc_id": "12",
+        "hypothesis_id": "nda-11",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "correct": true,
+        "agent_used": false,
+        "description": "Misleading wording - conditional \"may\" language could be misread as firm entailment"
+      },
+      {
+        "case_id": "032",
+        "doc_id": "9",
+        "hypothesis_id": "nda-11",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "correct": true,
+        "agent_used": false,
+        "description": "Misleading wording - future tense (\"will establish/provide/implement\") is intent, not fulfilment"
+      },
+      {
+        "case_id": "033",
+        "doc_id": "3",
+        "hypothesis_id": "nda-1",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "correct": true,
+        "agent_used": true,
+        "description": "Misleading wording - double negative (\"shall not fail to protect\") reads as positive; must not be misread as Contradiction [proxy: no keyword/structural match found in dev set; nearest available case used]"
+      },
+      {
+        "case_id": "034",
+        "doc_id": "70",
+        "hypothesis_id": "nda-7",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "correct": false,
+        "agent_used": true,
+        "description": "Misleading wording - \"except as required by law\" carve-out limits an apparently firm requirement"
+      },
+      {
+        "case_id": "035",
+        "doc_id": "9",
+        "hypothesis_id": "nda-15",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "correct": true,
+        "agent_used": false,
+        "description": "Wrong section evidence - a hypothesis keyword appears early (definitions-like) in the doc but the real gold answer is Not Mentioned, not a definitions-section false positive"
+      },
+      {
+        "case_id": "036",
+        "doc_id": "73",
+        "hypothesis_id": "nda-16",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "correct": true,
+        "agent_used": true,
+        "description": "Wrong section evidence - topic language appears in the document's opening (recital-like) but no operative clause actually addresses it"
+      },
+      {
+        "case_id": "037",
+        "doc_id": "3",
+        "hypothesis_id": "nda-19",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "correct": true,
+        "agent_used": false,
+        "description": "Wrong section evidence - correct label must rest on clause body content, not a heading-level keyword match"
+      },
+      {
+        "case_id": "038",
+        "doc_id": "17",
+        "hypothesis_id": "nda-7",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "correct": false,
+        "agent_used": true,
+        "description": "Conflicting clauses - evidence spans multiple locations, approximating one clause granting and another limiting the same right"
+      },
+      {
+        "case_id": "039",
+        "doc_id": "9",
+        "hypothesis_id": "nda-5",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "correct": false,
+        "agent_used": true,
+        "description": "Conflicting clauses - amendment/override language should win over an earlier, superseded clause [proxy: no keyword/structural match found in dev set; nearest available case used]"
+      },
+      {
+        "case_id": "040",
+        "doc_id": "73",
+        "hypothesis_id": "nda-20",
+        "gold_label": "Contradiction",
+        "predicted_label": "NotMentioned",
+        "correct": false,
+        "agent_used": false,
+        "description": "Conflicting clauses - a specific exception should override an apparently general requirement"
+      },
+      {
+        "case_id": "041",
+        "doc_id": "29",
+        "hypothesis_id": "nda-19",
+        "gold_label": "Entailment",
+        "predicted_label": "NotMentioned",
+        "correct": false,
+        "agent_used": false,
+        "description": "Keyword absence - requirement is met but stated with paraphrased/different terminology than the hypothesis - rule-based baseline (B02) is expected to fail here, LLM should not"
+      },
+      {
+        "case_id": "042",
+        "doc_id": "3",
+        "hypothesis_id": "nda-7",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "correct": true,
+        "agent_used": false,
+        "description": "Keyword absence - legal synonym (\"covenant\"/\"undertakes\") used instead of the hypothesis's literal wording"
+      },
+      {
+        "case_id": "043",
+        "doc_id": "64",
+        "hypothesis_id": "nda-3",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "correct": true,
+        "agent_used": true,
+        "description": "Keyword absence - an abbreviation/defined short-form is used in place of the full term"
+      },
+      {
+        "case_id": "044",
+        "doc_id": "7",
+        "hypothesis_id": "nda-10",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "correct": true,
+        "agent_used": false,
+        "description": "Very long document - evidence located deep in a long NDA, retrieval must not degrade with document length"
+      },
+      {
+        "case_id": "045",
+        "doc_id": "73",
+        "hypothesis_id": "nda-10",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "correct": true,
+        "agent_used": false,
+        "description": "Very long document - multiple relevant spans scattered across a long document, all must be retrievable"
+      }
+    ]
+  }
+}

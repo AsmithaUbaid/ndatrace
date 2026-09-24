@@ -45,13 +45,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from evaluation.harness import EvaluationHarness
 from evaluation.schemas import CostLatencyRecord, ExperimentConfig, GoldCase, Label, Prediction
+from evaluation.scorer import map_chunks_to_gold_span_indices
 from pipeline.classifier import classify
 from pipeline.config import settings
 from pipeline.model_gateway import ModelError, ModelGateway
 from pipeline.orchestrator import review_requirement
 from pipeline.parser import parse_contractnli_file
 from pipeline.retriever import Retriever
-from pipeline.rule_baseline import classify_by_keywords
+from pipeline.rule_baseline import classify_with_span
 from scripts.run_oracle_experiment import stratified_sample
 
 ARCHITECTURES = ["rule", "full_context", "rag", "rag_agent"]
@@ -98,8 +99,20 @@ def run_rule(cases, golds, harness: EvaluationHarness) -> None:
         key = (doc.doc_id, ann.hypothesis_id)
         if key in checkpoint_keys:
             continue
-        label = classify_by_keywords(ann.hypothesis_id, doc.text)
-        pred = Prediction(doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id, predicted_label=Label(label))
+        label, span = classify_with_span(ann.hypothesis_id, doc.text)
+        # Real gap found and fixed 2026-09-24: retrieved_span_indices was
+        # never populated anywhere in this script, silently making the
+        # joint label+evidence metric equal to just "NotMentioned-correct
+        # fraction" for every T041 run (confirmed: reported joint 0.334
+        # exactly equals the NotMentioned-only accuracy on that same run).
+        # The rule's one matched span (if it fired) IS its "evidence".
+        span_indices = []
+        if span is not None:
+            for idx, (s_start, s_end) in enumerate(doc.spans):
+                if min(s_end, span[1]) > max(s_start, span[0]):
+                    span_indices.append(idx)
+        pred = Prediction(doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id, predicted_label=Label(label),
+                           retrieved_span_indices=span_indices)
         harness.save_prediction_checkpoint(experiment_id, pred)
         if i % 200 == 0:
             print(f"  [rule {i}/{len(cases)}] {time.time()-start:.0f}s elapsed")
@@ -151,10 +164,14 @@ def run_full_context(cases, golds, harness: EvaluationHarness, gateway: ModelGat
         try:
             result = classify(doc.text, ann.hypothesis_text, gateway,
                                doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id)
+            # Full-context sees the ENTIRE document, so every annotated span
+            # is trivially "available" to it - not populating this (the
+            # original bug) silently zeroed out the joint metric for every
+            # Entailment/Contradiction case regardless of true evidence use.
             pred = Prediction(
                 doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id,
                 predicted_label=Label(result.label), confidence=result.confidence,
-                explanation=result.explanation,
+                explanation=result.explanation, retrieved_span_indices=list(range(len(doc.spans))),
                 cost_latency=CostLatencyRecord(
                     latency_ms=result.latency_ms, tokens_in=result.tokens_in,
                     tokens_out=result.tokens_out, cost_usd=result.cost_usd,
@@ -187,13 +204,14 @@ def run_rag(cases, golds, harness: EvaluationHarness, gateway: ModelGateway,
 
         retrieved = retriever.query_rerank_and_boost(ann.hypothesis_id, ann.hypothesis_text)
         context = " ".join(r.chunk.text for r in retrieved)
+        retrieved_span_indices = map_chunks_to_gold_span_indices(doc.spans, [r.chunk for r in retrieved])
         try:
             result = classify(context, ann.hypothesis_text, gateway,
                                doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id)
             pred = Prediction(
                 doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id,
                 predicted_label=Label(result.label), confidence=result.confidence,
-                explanation=result.explanation,
+                explanation=result.explanation, retrieved_span_indices=retrieved_span_indices,
                 cost_latency=CostLatencyRecord(
                     latency_ms=result.latency_ms, tokens_in=result.tokens_in,
                     tokens_out=result.tokens_out, cost_usd=result.cost_usd,
@@ -235,10 +253,19 @@ def run_rag_agent(cases, golds, harness: EvaluationHarness, gateway: ModelGatewa
         try:
             result = review_requirement(doc.text, ann.hypothesis_id, ann.hypothesis_text, gateway,
                                          retriever=retriever, doc_id=doc.doc_id)
+            # review_requirement() doesn't expose which chunks it used, so
+            # this recomputes the SAME deterministic (free, no LLM call)
+            # rule-boosted retrieval purely to record which annotated spans
+            # were available to the final answer - same fix as run_rag's,
+            # needed independently here since orchestrator.py's ReviewResult
+            # never carried chunk info out.
+            retrieved = retriever.query_rerank_and_boost(ann.hypothesis_id, ann.hypothesis_text)
+            retrieved_span_indices = map_chunks_to_gold_span_indices(doc.spans, [r.chunk for r in retrieved])
             pred = Prediction(
                 doc_id=doc.doc_id, hypothesis_id=ann.hypothesis_id,
                 predicted_label=Label(result.label), confidence=result.confidence,
                 explanation=result.explanation, agent_used=result.agent_used,
+                retrieved_span_indices=retrieved_span_indices,
                 cost_latency=CostLatencyRecord(latency_ms=result.latency_ms, tokens_in=result.tokens_in,
                                                 tokens_out=result.tokens_out, cost_usd=result.cost_usd),
             )

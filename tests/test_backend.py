@@ -194,3 +194,32 @@ def test_review_escalates_to_agent_on_rule_disagreement(client):
         r = client.post("/review", json=payload)
         assert r.status_code == 200
         assert r.json()["results"][0]["agent_used"] is True
+
+
+# =========================================================================
+# Reliability / document robustness (WBS T040: K04, K05, K06)
+# =========================================================================
+
+def test_empty_pdf_file_returns_422(client):
+    """K04: an empty file upload should be rejected gracefully, not crash."""
+    r = client.post("/extract-pdf", files={"file": ("empty.pdf", b"", "application/pdf")})
+    assert r.status_code == 422
+
+
+def test_oversized_pdf_returns_413(client):
+    """K05: a file over the size cap must be rejected before being fully
+    processed - found missing entirely during the 2026-09-24 audit."""
+    from backend.routes.review import MAX_PDF_SIZE_BYTES
+    oversized = b"%PDF-1.4\n" + b"0" * (MAX_PDF_SIZE_BYTES + 1)
+    r = client.post("/extract-pdf", files={"file": ("huge.pdf", oversized, "application/pdf")})
+    assert r.status_code == 413
+
+
+def test_unsupported_format_rejected(client):
+    """K06: a non-PDF file (wrong content-type) must be rejected, not
+    silently misread as if it were a PDF."""
+    r = client.post(
+        "/extract-pdf",
+        files={"file": ("contract.docx", b"not a real docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")},
+    )
+    assert r.status_code == 400

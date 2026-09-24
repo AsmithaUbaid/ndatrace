@@ -5,7 +5,7 @@
     "hypothesis_id": "",
     "gold_label": "NotMentioned",
     "category": "llm_behaviour",
-    "description": "Valid JSON output - real historical evidence across this session's ~1193 real classify() calls (Oracle, RAG, prompt-tuning experiments): 17 needed a retry (invalid JSON on the first attempt, ~2% rate), and every single one succeeded on retry - zero calls ever fell through to the 'invalid JSON after retry' fallback across the whole session."
+    "description": "Valid JSON output - real historical evidence across this session's ~1344 real classify() calls (Oracle, RAG, prompt-tuning experiments): 19 needed a retry (invalid JSON on the first attempt, ~2% rate), and every single one succeeded on retry - zero calls ever fell through to the 'invalid JSON after retry' fallback across the whole session."
   },
   {
     "case_id": "057",
@@ -53,7 +53,7 @@
     "hypothesis_id": "nda-4",
     "gold_label": "Entailment",
     "category": "llm_behaviour",
-    "description": "Handles near-token-limit input - real call against the longest NDA in the 150-case sample (6243 tokens, full document, not retrieved chunks). Valid JSON: True, predicted=Entailment (gold=Entailment), explanation length=38 tokens."
+    "description": "Handles near-token-limit input - real call against the longest NDA in the 150-case sample (6243 tokens, full document, not retrieved chunks). Valid JSON: True, predicted=Entailment (gold=Entailment), explanation length=34 tokens."
   },
   {
     "case_id": "063",

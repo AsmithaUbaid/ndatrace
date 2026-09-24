@@ -1,0 +1,12 @@
+{
+  "source": "results/runs/run_T018_prompt_v6.jsonl",
+  "model": "google/gemini-2.5-flash-lite",
+  "n_cases": 150,
+  "total_output_tokens": 17251,
+  "total_explanation_tokens": 5366,
+  "avg_explanation_tokens_per_case": 35.8,
+  "explanation_pct_of_output_tokens": 31.1,
+  "total_cost_usd": 0.02312,
+  "explanation_cost_usd": 0.002146,
+  "explanation_pct_of_total_cost": 9.3
+}

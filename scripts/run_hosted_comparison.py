@@ -20,11 +20,13 @@ run_final_test_evaluation.py directly rather than duplicating the
 pipeline logic - only the gateway differs.
 
 Usage:
-    python scripts/run_hosted_comparison.py
+    python scripts/run_hosted_comparison.py                    # 500-case subsample (default)
+    python scripts/run_hosted_comparison.py --sample-size 2091  # full test set
 """
 
 from __future__ import annotations
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -44,7 +46,12 @@ from scripts.run_final_test_evaluation import (
 
 
 def main() -> int:
-    cases = load_test_cases(DEFAULT_SAMPLE_SIZE)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--sample-size", type=int, default=DEFAULT_SAMPLE_SIZE,
+                         help=f"Number of test cases (default: {DEFAULT_SAMPLE_SIZE}; pass 2091 for the full set)")
+    args = parser.parse_args()
+
+    cases = load_test_cases(args.sample_size)
     golds = build_golds(cases)
     harness = EvaluationHarness(gold_cases=golds)
 

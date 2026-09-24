@@ -5,7 +5,7 @@
     "hypothesis_id": "",
     "gold_label": "NotMentioned",
     "category": "logging_security",
-    "description": "Zero raw NDA text in the log file - checked 14 real log lines (from real classify()/agent calls) against 4 known NDA sentences that were actually classified. Leaked: [] (expected: empty list)."
+    "description": "Zero raw NDA text in the log file - checked 33744 real log lines (from real classify()/agent calls) against 4 known NDA sentences that were actually classified. Leaked: [] (expected: empty list)."
   },
   {
     "case_id": "099",
@@ -13,7 +13,7 @@
     "hypothesis_id": "",
     "gold_label": "NotMentioned",
     "category": "logging_security",
-    "description": "Zero API keys in the log file - checked 14 real log lines against 3 key patterns (sk-, Bearer, api_key=). Matches: [] (expected: empty list)."
+    "description": "Zero API keys in the log file - checked 33744 real log lines against 3 key patterns (sk-, Bearer, api_key=). Matches: [] (expected: empty list)."
   },
   {
     "case_id": "100",
@@ -21,7 +21,7 @@
     "hypothesis_id": "",
     "gold_label": "NotMentioned",
     "category": "logging_security",
-    "description": "Every log line is valid JSON - 14 real lines checked, 0 parse failures (expected: 0)."
+    "description": "Every log line is valid JSON - 33744 real lines checked, 0 parse failures (expected: 0)."
   },
   {
     "case_id": "096",

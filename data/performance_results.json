@@ -1,0 +1,34 @@
+{
+  "H01_single_request_latency": {
+    "n_reps": 10,
+    "p50_ms": 1844.5,
+    "p90_ms": 2462.7,
+    "p95_ms": 4012.2,
+    "max_ms": 5561.6,
+    "hypothesis_under_15s": true
+  },
+  "H03_full_nda_latency": {
+    "n_reps": 3,
+    "avg_total_seconds": 34.5,
+    "avg_per_requirement_ms": 2030.4,
+    "hypothesis_2_to_5_min": false,
+    "raw_total_seconds": [
+      33.7,
+      33.8,
+      36.1
+    ]
+  },
+  "H05_memory_usage": {
+    "backend_pid": 87727,
+    "peak_rss_mb": 110.7,
+    "peak_rss_gb": 0.108,
+    "hypothesis_under_2gb": true
+  },
+  "H06_rate_limits": {
+    "n_requests": 17,
+    "n_429_rate_limited": 0,
+    "elapsed_seconds": 33.9,
+    "actual_rpm": 30.1,
+    "hypothesis_well_within_limits": true
+  }
+}
