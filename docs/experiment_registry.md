@@ -10,8 +10,8 @@ starts `PLANNED` and is not authorized to run by virtue of being listed — see
 |---|---|---|
 | E00 | Dataset and split validation | **COMPLETE** — local-only, no model calls; see `experiments/E00_dataset_validation/summary.md` |
 | E00B | Budget, token and runtime forecast | **COMPLETE** — live pricing verified, historical ledger + token estimates + hosted forecast + runtime forecast + budget plan all produced, zero model calls; see `experiments/E00B_budget_forecast/summary.md` |
-| E01 | Oracle reasoning ceiling | PLANNED |
-| E02 | Model screening | PLANNED |
+| E01 | Oracle reasoning ceiling | **COMPLETE** — all 4 frozen models (llama3.2:3b, qwen2.5:7b-instruct, gemini-2.5-flash-lite, gpt-5-mini) ran the full 300-case TRAIN_ORACLE_v1 manifest; Contradiction confirmed as the clearest reasoning bottleneck (25-82% recall across models, even with perfect evidence) — Entailment reasoning relatively strong, NotMentioned structurally advantaged and not a reasoning-ceiling measure; primary local model **frozen** (qwen2.5:7b-instruct); hosted reference **gpt-5-mini** (stronger reasoning ceiling), with gemini-2.5-flash-lite preserved as the economical hosted candidate; total hosted spend $0.1178; see `experiments/E01_oracle/summary.md` |
+| E02 | Model screening | **SKIPPED / SATISFIED BY E01** — E01 already performed a controlled comparison of 2 local and 2 hosted models using the same Oracle manifest, prompt semantics, and output schema; a separate model-screening experiment would duplicate the question already answered. Frozen from E01: primary local model `qwen2.5:7b-instruct`, hosted model for later comparison `openai/gpt-5-mini`. Gemini 2.5 Flash Lite preserved only as an economical hosted candidate/result from E01 — not carried into core downstream experiments unless a later cost-quality experiment explicitly requires it. See `experiments/E01_oracle/summary.md`. |
 | E03 | Prompt selection | PLANNED |
 | E04 | Rule baseline (A0) | PLANNED |
 | E05 | Full-context baseline (A1) | PLANNED |

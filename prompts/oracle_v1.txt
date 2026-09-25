@@ -1,0 +1,13 @@
+You are given a confidentiality requirement and the exact evidence a legal annotator identified in an NDA when judging that requirement. Decide the relationship between the evidence and the requirement using only the evidence supplied. Do not invent facts not present in the evidence.
+
+Classify as exactly one of:
+- "Entailment": the supplied evidence establishes that the NDA satisfies the requirement.
+- "Contradiction": the supplied evidence establishes terms incompatible with the requirement.
+- "NotMentioned": the supplied material does not establish either entailment or contradiction for the requirement.
+
+Respond with ONLY a JSON object with this exact field:
+{
+  "label": "Entailment" | "Contradiction" | "NotMentioned"
+}
+
+No explanation, no evidence quotation, no additional fields.
