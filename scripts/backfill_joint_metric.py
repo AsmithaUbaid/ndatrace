@@ -39,6 +39,13 @@ from pipeline.retriever import Retriever
 from pipeline.rule_baseline import classify_with_span
 
 RUNS_DIR = settings.results_path / "runs"
+FINAL_DIR = settings.results_path / "final"
+ARCHIVE_DIR = settings.results_path / "archive" / "runs"
+
+# 2026-09-25 results/ reorganization: the 3 hosted gemini T041 files now live
+# in results/final/ (curated "final" set); the local-Llama + old 500-case
+# rule files moved to results/archive/runs/. Resolved per-file below rather
+# than a single shared directory, since this script's target list spans both.
 TARGET_FILES = [
     "run_T041_final_test_full_context_google_gemini-2.5-flash-lite.jsonl",
     "run_T041_final_test_rag_google_gemini-2.5-flash-lite.jsonl",
@@ -91,7 +98,11 @@ def main() -> int:
     updated = 0
 
     for filename in TARGET_FILES:
-        path = RUNS_DIR / filename
+        path = FINAL_DIR / filename
+        if not path.exists():
+            path = ARCHIVE_DIR / filename
+        if not path.exists():
+            path = RUNS_DIR / filename
         if not path.exists():
             print(f"{filename}: not found, skipping")
             continue
@@ -127,7 +138,11 @@ def main() -> int:
                 config=result.config, metrics=fresh_metrics, predictions=fixed_predictions,
                 duration_seconds=result.duration_seconds, error=result.error,
             )
-            harness.save_result(fixed_result, filename=f"runs/{filename}")
+            # Append to wherever the file was actually resolved from (final/
+            # archive/runs), not always results/runs/ - keeps results/final/
+            # authoritative rather than silently drifting out of sync with it.
+            relative = path.relative_to(settings.results_path)
+            harness.save_result(fixed_result, filename=str(relative))
             updated += 1
 
     print(f"\n{'Wrote' if args.write else 'Would write'} {updated} corrected record(s).")

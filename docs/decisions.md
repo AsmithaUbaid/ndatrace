@@ -341,7 +341,7 @@ confirmation that the 5-tool set isn't over-provisioned relative to a leaner alt
 independently significant result (same small-sample caveats as above apply).
 
 **Evidence files:** `data/agent_experiment.json`,
-`results/runs/run_T041_final_test_rag_google_gemini-2.5-flash-lite.jsonl` vs.
+`results/final/run_T041_final_test_rag_google_gemini-2.5-flash-lite.jsonl` vs.
 `..._rag_agent_...jsonl`.
 
 ---
@@ -484,14 +484,28 @@ invalid" and not understated into "this is a pristine one-shot test either):**
    affect the dev-sample joint numbers reported elsewhere (ADR-003, ADR-004) — those used a
    different, correctly-written script (`scripts/run_rag_experiment.py`) from the start.
 
-**Corrected (backfilled) joint values, T041-B, full 2,091-case set**: only hosted full-context has
-been backfilled and verified (accuracy 81.16%, macro-F1 0.760, Contradiction recall 59.1% (n=220,
-95% CI [52.5%, 65.4%]), joint 0.812 — now correctly equal to accuracy, as it must be for
-full-context, total cost $0.685). Hosted RAG and RAG+agent completed the full 2,091-case set but, as
-of 2026-09-25, their latest saved records still show joint values in the pre-fix broken range (0.327
-and 0.342) — the backfill script was not re-run against these larger files. All three local-Llama
-T041 files (500-case only) have not been backfilled at all. See `docs/evaluation_protocol.md`'s
-"Current evaluation status" for the exact per-file state.
+**Corrected (backfilled) joint values, T041-B, full 2,091-case set — all three hosted architectures
+now fixed** (`scripts/backfill_joint_metric.py --write`, re-run 2026-09-25 against all 7 T041 result
+files, zero LLM/API calls since retrieval is deterministic):
+
+| Architecture | Accuracy | Macro-F1 | Contradiction recall | Joint (corrected) |
+|---|---:|---:|---:|---:|
+| Full-context (hosted) | 81.16% | 0.760 | 59.1% (n=220, 95% CI [52.5%, 65.4%]) | 0.812 |
+| RAG (hosted) | 78.72% | — | — | 0.754 |
+| RAG + agent (hosted) | 77.67% | — | — | 0.747 |
+
+Full-context's joint correctly equals its accuracy, as it must by construction. RAG and RAG+agent's
+joint values below their own accuracy (0.754 < 0.787, 0.747 < 0.777) mean a real fraction of their
+correct labels were not backed by correctly-retrieved evidence — a genuinely different, more
+informative number than either the pre-fix broken values or a naive assumption that joint should
+track accuracy. All three local-Llama T041 files (500-case, T041-A-equivalent scale) are also now
+backfilled: rule 0.494, full-context 0.492, RAG 0.524, RAG+agent 0.532. See
+`docs/evaluation_protocol.md`'s "Current evaluation status" for the full per-file state. Result
+files: the three hosted files now live in `results/final/`; local-Llama and the superseded 500-case
+rule file are in `results/archive/runs/` (2026-09-25 results/ reorganization) — see also
+`results/final/run_T041_final_test_rule_full.jsonl`, a new rule-baseline run against the *full*
+2,091-case test set (accuracy 59.0%, Contradiction recall 16.8%, joint 0.501 — correct from the
+start, no backfill needed), added alongside the hosted three as the fourth "final" T041 result.
 
 **A genuine, real finding: on local Llama 3.2 3B, full-context is *worse* than the zero-cost
 rule-based baseline (49.2% vs 57.6%)** — the opposite ordering from Gemini, where full-context led.
@@ -515,9 +529,11 @@ forward. Full reproduction: `notebooks/07_selective_agent_experiments.ipynb`.
 **Local Llama (500-case, T041-A-scale sample size), for reference:** b=6, c=9, n_discordant=15,
 p=0.607 (clearly not significant).
 
-**Evidence files:** `results/runs/run_T041_final_test_*.jsonl` (each carries 2–4 records — the
-T041-A record(s), the T041-B record, and for full-context an additional backfill-corrected record —
-per the append-only rule; timestamps within each file are the ground truth for which record is
+**Evidence files:** the three hosted `run_T041_final_test_*_google_gemini-2.5-flash-lite.jsonl` files
+now live in `results/final/`; the local-Llama and superseded 500-case rule files are in
+`results/archive/runs/` (each carries 2–5 records — the T041-A record(s), the T041-B record, and one
+or more backfill-corrected records — per the append-only rule; timestamps within each file are the
+ground truth for which record is
 which phase, not position alone).
 
 ---

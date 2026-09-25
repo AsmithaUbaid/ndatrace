@@ -244,7 +244,7 @@ def run_rag_agent(cases, golds, harness: EvaluationHarness, gateway: ModelGatewa
         if i % 50 == 0:
             print(f"  [rag_agent {i}/{len(cases)}] {time.time()-start:.0f}s elapsed")
 
-    rag_results = harness.load_results("runs/run_AV01_architecture_validation_rag.jsonl")
+    rag_results = harness.load_results("final/run_AV01_architecture_validation_rag.jsonl")
     baseline_predictions = rag_results[-1].predictions if rag_results else None
     if baseline_predictions is None:
         print("  WARNING: no saved AV01 rag result found - run rag before rag_agent for "
@@ -286,7 +286,7 @@ def run_paired_comparisons(golds: list[GoldCase]) -> None:
     harness = EvaluationHarness(gold_cases=golds)
     files = {
         "full_context": "runs/run_AV01_architecture_validation_full_context.jsonl",
-        "rag": "runs/run_AV01_architecture_validation_rag.jsonl",
+        "rag": "final/run_AV01_architecture_validation_rag.jsonl",
         "rag_agent": "runs/run_AV01_architecture_validation_rag_agent.jsonl",
     }
     preds = {}

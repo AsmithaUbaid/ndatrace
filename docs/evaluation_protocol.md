@@ -115,19 +115,18 @@ homogeneous benchmark and should not be reported as a single pass rate.
      subsample of the same split before T041-B ran (see the Freeze protocol section for why this
      is disclosed rather than treated as invalidating).
   2. **Joint label+evidence correctness was broken in the code that executed both phases.**
-     Verified directly against the result files on 2026-09-25: of the 7 T041 result files, only
-     `run_T041_final_test_full_context_google_gemini-2.5-flash-lite.jsonl` (hosted full-context,
-     T041-B, full 2,091-case set) has a corrected, trustworthy joint value (0.812, matching accuracy
-     as it must for full-context) — and that correction is itself a **post-hoc backfilled metric**
-     (`scripts/backfill_joint_metric.py`, applied after the fact to already-saved predictions), not
-     something the original run computed correctly. The hosted `rag` and `rag_agent` T041-B files
-     completed their full 2,091-case runs (`sample_size: 2091` in the latest record) but their
-     latest `joint_label_evidence_correctness` values (0.327 and 0.342) are in the same broken range
-     as before the fix — the backfill script was not re-run against these larger files. All three
-     local-Llama files (T041-A-scale, `sample_size: 500`) show the same pattern (0.31 / 0.304 /
-     0.316) and have not been backfilled at all. **Treat every T041 joint value except hosted
-     full-context's 0.812 as unverified** until the backfill script is re-run against these files —
-     not attempted as part of this documentation cleanup, since it would change reported numbers.
+     Fixed and fully backfilled 2026-09-25 (`scripts/backfill_joint_metric.py --write`, re-run
+     against all 7 T041 result files — zero LLM/API calls, retrieval is deterministic). All three
+     hosted T041-B files (full 2,091-case set) now carry a corrected, trustworthy joint value:
+     full-context 0.812 (matching accuracy, as it must for full-context), RAG 0.754, RAG+agent
+     0.747. The local-Llama files (T041-A-scale, `sample_size: 500`) are also now corrected: rule
+     0.494, full-context 0.492, RAG 0.524, RAG+agent 0.532. **Every one of these corrected values is
+     a post-hoc backfilled metric** (`scripts/backfill_joint_metric.py`, applied after the fact to
+     already-saved predictions), not something the original run computed correctly — that provenance
+     should always be stated alongside the number, not silently presented as if the run itself got
+     it right the first time. Result files: the three hosted files now live in `results/final/`; the
+     local-Llama and superseded 500-case rule files moved to `results/archive/runs/` (2026-09-25
+     results/ reorganization).
 - Long-document stress test (RAG vs. full-context scalability): **proposed, not yet run** — see
   `docs/architecture.md`'s open questions.
 - Architecture-validation run (AV01): **complete** — 340 cases, 20 documents from ContractNLI's
