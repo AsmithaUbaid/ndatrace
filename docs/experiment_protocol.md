@@ -29,6 +29,35 @@ re-grade the historical T-series experiments (`docs/decisions.md`, `docs/experim
     may not silently determine a reconstruction-v2 config value. If a historical number is
     used as a starting point, say so explicitly and re-verify it under E00–E12, not assume it.
 
+## TRAIN_WORKING / TRAIN_ORACLE / TRAIN_PROMPT manifest generation rule
+
+Reconstruction-v2 uses the official ContractNLI TRAIN/DEV/TEST split as-is — no fourth
+operational split (`docs/evaluation_protocol.md` Part 1 section 3). Fixed TRAIN subsets
+(`TRAIN_WORKING` and further subsets of it, e.g. `TRAIN_ORACLE`/`TRAIN_PROMPT`) may be created
+only for cost/runtime control, never as a substitute for DEV's validation/architecture-selection
+role. When these are eventually created (E00B informs feasible sample size/runtime, but does not
+decide the partition — **model performance must never be used to determine the partition**):
+
+- Partition at NDA **document** level first, then include all of that document's hypothesis
+  cases (§5 of `docs/evaluation_protocol.md` Part 1) — never scatter one document's cases across
+  differently-purposed subsets.
+- Use a fixed, recorded random seed (distinct from any other manifest's seed, per the existing
+  convention of seed=99/123 for AV01/PVAL01).
+- Generate the manifests **once**, before Oracle or any model result exists — not derived from,
+  or adjusted in response to, any model output.
+- Never resample either manifest because a result was inconvenient. A bad result is a finding, not
+  grounds for a new random draw (rule 19 above).
+
+## Notebook convention
+
+Every major reconstruction-v2 experiment (E00–E17) should have a reproducible analysis notebook
+where useful, at `experiments/E##_short_name/E##_short_name.ipynb`. The notebook's job:
+experiment walkthrough, loading the frozen manifest/config, displaying counts/results, analysis,
+plots/tables, failure inspection, and stating the conclusion/decision reached. **Reusable system
+logic stays in Python modules/scripts** (`pipeline/`, `evaluation/`, `scripts/`) that the notebook
+imports — never reimplemented in notebook cells (§0A of the planning document; same rule the
+historical T-series notebooks were meant to follow).
+
 ## Where things live
 
 - Per-experiment write-up: `experiments/E##_short_name/README.md` (template:
