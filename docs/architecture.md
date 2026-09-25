@@ -1,7 +1,7 @@
 # NDATrace Architecture
 
 This describes the **currently implemented** system, verified directly against
-`pipeline/orchestrator.py`, `backend/routes/*.py`, and `backend/app.py` as of 2026-09-25 — not an
+`pipeline/orchestrator.py`, `backend/routes/*.py`, and `backend/app.py` — not an
 aspirational design. See `docs/decisions.md` for why each component looks the way it does, and
 `docs/evaluation_protocol.md` for what evidence backs the architecture choice.
 
@@ -124,7 +124,7 @@ in the current system, not just as a standalone baseline architecture:
 - For the joint label+evidence correctness metric (used only in offline experiment scripts, not in
   the live backend), the retrieved chunks are mapped back to ContractNLI's own gold span indices
   via `evaluation/scorer.py`'s `map_chunks_to_gold_span_indices`. **This mapping was not being
-  populated at all in `scripts/run_final_test_evaluation.py` until 2026-09-24** — see
+  populated at all in `scripts/run_final_test_evaluation.py` until it was found and fixed** — see
   `docs/decisions.md` ADR-010 for the full bug writeup; it does not affect the live `/review`
   endpoint, only offline evaluation scripts.
 
@@ -161,8 +161,8 @@ on each:
 - **The selective agent's benefit is statistically inconclusive, and the full-scale hosted test-set
   result actually points the opposite direction from the dev-sample rationale.** McNemar's test
   never reaches significance in any sample tested (dev: p=0.51; hosted 500-case: p=0.058; hosted
-  full 2,091-case: p=0.088 — recomputed 2026-09-25 in `notebooks/07_selective_agent_
-  experiments.ipynb`, where regression now numerically exceeds recovery). See ADR-007's 2026-09-25
+  full 2,091-case: p=0.088 — recomputed in `notebooks/07_selective_agent_
+  experiments.ipynb`, where regression now numerically exceeds recovery). See ADR-007's later
   update for the full disclosure.
 - **Full-context remains competitive, and on the hosted full test-set is the single
   highest-accuracy architecture measured (81.2%).** It was excluded from production on a

@@ -25,13 +25,13 @@ that lives in `results/runs/run_T041_*.jsonl` and is summarized in `docs/decisio
 as an input, but its own analysis (break-even point, savings projection) is a downstream business
 calculation, not itself part of the accuracy evaluation.
 
-**Renumbering note (2026-09-25):** `10_cost_to_serve_analysis.ipynb` was previously numbered `09` —
+**Renumbering note:** `10_cost_to_serve_analysis.ipynb` was previously numbered `09` —
 moved to make room for `09_complete_experiment_story.ipynb`, which caps the technical experiment
 ladder (01–08) with one coherent narrative, before the cost analysis's downstream business framing.
 
 ## Notebooks 07 and 08 — reconstruction note
 
-These two notebooks did not exist as notebooks until this documentation cleanup (2026-09-25),
+These two notebooks did not exist as notebooks until this documentation cleanup,
 despite being referenced in an earlier version of this README. The underlying experiments were real
 and were run — as standalone scripts (`scripts/run_agent_experiment.py`,
 `scripts/run_hosted_comparison.py`, `scripts/run_final_test_evaluation.py`,

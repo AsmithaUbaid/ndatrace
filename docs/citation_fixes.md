@@ -1,7 +1,7 @@
 # Citation Fixes for the Final Report
 
 Four precision issues flagged in instructor feedback on the Week 3 Problem Statement
-(`PE6201_Project_Problem_Statement_Asmitha.pdf`), received 2026-09-23. These are report-writing
+(`PE6201_Project_Problem_Statement_Asmitha.pdf`). These are report-writing
 fixes, not code changes — recorded here so they aren't lost before the final report is drafted.
 See `docs/decisions.md`'s Decisions Log ("Instructor feedback... Gap 3") for the original context.
 
@@ -46,7 +46,7 @@ The Problem Statement's cost-to-serve section uses GPT-5 mini pricing ($0.25/M i
 output) as the live reference point. Two things have changed since:
 - This pricing is confirmed **legacy** as of the instructor's review — don't cite it as current
   in the final report.
-- This project's own C01 model bake-off (2026-09-22) already moved the default model to
+- This project's own C01 model bake-off already moved the default model to
   **`google/gemini-2.5-flash-lite`** ($0.10/M input, $0.40/M output, live-verified via OpenRouter)
   specifically for cost/latency reasons — that's what was actually used throughout every real
   experiment in this project (T018 onward).
@@ -62,7 +62,7 @@ which only appears now as a documented fallback in `pipeline/model_gateway.py`'s
 the problem statement committed to "Llama 3.2 3B Instruct locally" for the hosted-vs-local
 comparison (C02). Local Llama 3.2 3B via Ollama was built and used for the bulk of the final
 evaluation. Groq (a free-tier hosted alternative, tried to avoid heating the dev machine) no
-longer offers a general-purpose Llama chat model on its free tier (checked live, 2026-09-23) - only
+longer offers a general-purpose Llama chat model on its free tier (checked live) - only
 `llama-prompt-guard`, a content-moderation classifier. Where Groq is used at all in this project
 (see `pipeline/model_gateway.py`'s `ModelGateway.groq()`), it runs `openai/gpt-oss-20b` instead.
 The final report should state this plainly rather than let a reader assume "Llama" was used
