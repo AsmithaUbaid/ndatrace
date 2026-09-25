@@ -29,12 +29,12 @@ development evidence, and the test-set run (T041) is the first genuinely indepen
 ## Freeze protocol
 
 **T041 is not one run at two sample sizes — it is two distinct configurations, corrected and named
-here 2026-09-25 after a forensic timestamp/git-history review (`docs/decisions.md` ADR-010):**
+here after a forensic timestamp/git-history review (`docs/decisions.md` ADR-010):**
 
-- **T041-A** (interim, 500-case stratified subsample, 2026-09-23 between 11:14 and 17:56 UTC): model
+- **T041-A** (interim, 500-case stratified subsample, run first): model
   `google/gemini-2.5-flash-lite` / local Llama, **prompt v2** / `agent_step_v1.txt`, and for RAG+agent
   the **original inline, circular routing signal** (pre-C1-fix).
-- **T041-B** (the full 2,091-case test set, 2026-09-24 between 03:00 and 05:31 UTC — **these are the
+- **T041-B** (the full 2,091-case test set, run later, after a commit changed the default prompt and routing — **these are the
   numbers cited everywhere in this repo as "the T041 result"**): model unchanged, **prompt v6** /
   `agent_step_v2.txt` (the current shipped default), and for RAG+agent the **decoupled routing fix**
   via `pipeline/orchestrator.py::review_requirement()` (ADR-006).
@@ -71,7 +71,7 @@ observed before T041-B's numbers were produced, and that should be disclosed, no
 | Contradiction recall (+ 95% Wilson CI) | Recall on the Contradiction class alone, with a confidence interval given the small class size (~11% of labels) | Headline risk metric — added after instructor feedback flagged that the earlier averaged "risk-sensitive recall" hid Contradiction-specific weakness |
 | Risk-sensitive recall | (recall_Contradiction + recall_NotMentioned) / 2 | Superseded as the headline risk metric by Contradiction recall alone; still recorded |
 | Evidence Recall@K / Precision / MRR | Retrieval-only metrics: does the retrieved set contain the gold span, how much of it is relevant, how high does it rank | Retrieval configuration decisions (ADR-002) |
-| Joint label+evidence correctness | Label is correct AND the retrieved/available spans overlap the gold evidence span | The metric this project's rubric weighs most heavily. **Was silently broken for the entire T041 run until 2026-09-24 — see `docs/decisions.md` ADR-010.** |
+| Joint label+evidence correctness | Label is correct AND the retrieved/available spans overlap the gold evidence span | The metric this project's rubric weighs most heavily. **Was silently broken for the entire T041 run until it was found and fixed — see `docs/decisions.md` ADR-010.** |
 | Cost (USD), latency (ms) | Real measured API cost and wall-clock latency per case | Architecture/model tradeoff discussion |
 | AUROC (confidence/routing signal) | Discriminative power of a candidate routing signal for correct vs. incorrect predictions | Confidence/abstention design (ADR-005) |
 | McNemar's exact test | Paired significance test for two classifiers on the same cases | Agent include/exclude decision (ADR-007); do not report a small-sample accuracy delta without it |
@@ -90,12 +90,12 @@ exists and why it must never be used to make further tuning decisions.
 ## Case-category taxonomy
 
 See `docs/evaluation_case_design.md` for the full breakdown of the 76-case catalogue (Categories
-1–7, after a 2026-09-25 correction removed 10 non-single-case aggregate/structural entries) plus the
+1–7, after a correction removed 10 non-single-case aggregate/structural entries) plus the
 code-level Categories 8–10, into benchmark, regression, robustness, agent-behaviour, and system/API
 categories — these are not one homogeneous benchmark and should not be reported as a single pass
 rate.
 
-## Current evaluation status (as of 2026-09-25)
+## Current evaluation status
 
 - Architecture: **frozen** (ADR-009), on repeatedly-reused development evidence (see "What's
   missing" above) — no independent architecture-validation run existed until AV01 (below). **A
@@ -117,7 +117,7 @@ rate.
      subsample of the same split before T041-B ran (see the Freeze protocol section for why this
      is disclosed rather than treated as invalidating).
   2. **Joint label+evidence correctness was broken in the code that executed both phases.**
-     Fixed and fully backfilled 2026-09-25 (`scripts/backfill_joint_metric.py --write`, re-run
+     Fixed and fully backfilled (`scripts/backfill_joint_metric.py --write`, re-run
      against all 7 T041 result files — zero LLM/API calls, retrieval is deterministic). All three
      hosted T041-B files (full 2,091-case set) now carry a corrected, trustworthy joint value:
      full-context 0.812 (matching accuracy, as it must for full-context), RAG 0.754, RAG+agent
@@ -127,7 +127,7 @@ rate.
      already-saved predictions), not something the original run computed correctly — that provenance
      should always be stated alongside the number, not silently presented as if the run itself got
      it right the first time. Result files: the three hosted files now live in `results/final/`; the
-     local-Llama and superseded 500-case rule files moved to `results/archive/runs/` (2026-09-25
+     local-Llama and superseded 500-case rule files moved to `results/archive/runs/` (a later
      results/ reorganization).
 - Long-document stress test (RAG vs. full-context scalability): **proposed, not yet run** — see
   `docs/architecture.md`'s open questions.

@@ -32,7 +32,7 @@ worth knowing up front: the production path makes **two** classifier calls per r
 one, to keep the routing decision independent of the retrieval it's judging — see the
 routing-independence fix in `docs/decisions.md` for why).
 
-## Current status (2026-09-25)
+## Current status
 
 - **Architecture: frozen** (RAG + selective agent — see the final architecture-freeze decision in
   `docs/decisions.md`) — but frozen on
@@ -40,7 +40,7 @@ routing-independence fix in `docs/decisions.md` for why).
   340 cases from documents never used in any prior tuning decision) has since been completed — see
   below.
 - **The official ContractNLI test-set evaluation ran in two distinct configurations, not one run
-  at two sample sizes** (corrected 2026-09-25 after a forensic timestamp/git review — see
+  at two sample sizes** (found via a forensic timestamp/git review — see
   `docs/decisions.md` ADR-010): an interim 500-case run under prompt v2, and the full 2,091-case
   run under the current v6 default with the decoupled routing fix already in place. **The full
   2,091-case numbers (81.2% / 78.7% / 77.7% accuracy for full-context / RAG / RAG+agent) are

@@ -1,7 +1,7 @@
 # NDATrace API Documentation
 
 Documents only the endpoints that actually exist in `backend/app.py` and `backend/routes/*.py`, as
-of 2026-09-25. CORS is currently permissive (`allow_origins=["*"]`) for local development — see
+CORS is currently permissive (`allow_origins=["*"]`) for local development — see
 `backend/app.py`'s comment noting this should be tightened before any non-local deployment (not
 done, since this project has no deployment target beyond local demo).
 
@@ -63,7 +63,7 @@ submitted NDA and persists the result to SQLite. **File:** `backend/routes/revie
   failing, see below).
 
 **Partial failure is not an error response.** `review_document()` isolates errors per hypothesis
-(fixed 2026-09-24 — see `docs/decisions.md` ADR-004's second bug finding): if one hypothesis (of up
+(fixed — see `docs/decisions.md` ADR-004's second bug finding): if one hypothesis (of up
 to 17) fails after retries are exhausted, that item in `results` has `label: "NotMentioned"`,
 `confidence: 0.0`, and a non-null `error` string; every other hypothesis's real result is still
 returned in the same 200 response.
@@ -93,7 +93,7 @@ frontend to pre-fill the NDA text box. **File:** `backend/routes/review.py`.
 
 **Error responses:**
 - `400` — content-type is not `application/pdf`/`application/x-pdf`.
-- `413` — file exceeds the 10MB size cap (`MAX_PDF_SIZE_BYTES`, added 2026-09-24 as a real gap fix —
+- `413` — file exceeds the 10MB size cap (`MAX_PDF_SIZE_BYTES`, added as a real gap fix —
   no size limit existed at all before then; see `docs/decisions.md`'s WBS T040/K05 note).
 - `422` — PDF could not be parsed (`PdfExtractionError`).
 
