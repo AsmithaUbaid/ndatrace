@@ -1,0 +1,165 @@
+{
+  "planning_budget_usd": 5.0,
+  "planning_budget_source": "user-reported current balance",
+  "date_recorded": "2026-09-26",
+  "historical_env_value_MAX_BUDGET_USD": 6.99,
+  "historical_env_value_status": "STALE, not trusted, not overwritten -- see .env comment dated 2026-09-22",
+  "protected_reserve_fraction": 0.25,
+  "protected_reserve_usd": 1.25,
+  "allowed_budget_usd": 3.75,
+  "historical_total_hosted_spend_usd": 3.0011,
+  "historical_spend_note": "This is a SEPARATE ledger (real past T-series spend, already incurred, not part of the current $5 remaining balance). Per section 19's rule, NOT subtracted from the $5 planning budget -- $5 is used directly as the forward planning budget.",
+  "scenarios": {
+    "LEAN": {
+      "description": "Oracle n=150 (2 hosted models) + a small 150-case E15 spot-check on one hosted model only, half the E03 exploration deferred to base-case",
+      "estimated_cost_usd": 0.3001,
+      "within_allowed_budget": true
+    },
+    "RECOMMENDED": {
+      "description": "Oracle n=300 (2 hosted models) + E03 prompt selection (150-case TRAIN subset x 4 variants, 1 hosted model) + E15 (300-case stratified TEST subsample x 3 architectures, 1 hosted model) + 10% rerun reserve",
+      "oracle_cost_usd": 0.3348,
+      "e03_cost_usd": 0.0791,
+      "e15_cost_usd": 0.2654,
+      "rerun_reserve_usd": 0.0679,
+      "estimated_total_cost_usd": 0.7472,
+      "within_allowed_budget": true,
+      "remaining_after_recommended_usd": 3.0028
+    },
+    "MAXIMUM_SAFE": {
+      "description": "Oracle n=500 (2 hosted models) + E03 (300-case TRAIN subset x 4 variants) + E15 (500-case stratified TEST subsample x 3 architectures) -- still preserves the 25% reserve, never spends the full $5",
+      "estimated_cost_usd": 1.1586,
+      "within_allowed_budget": true
+    }
+  },
+  "compact_vs_verbose": {
+    "instructor_cited_figures": {
+      "found_locally": true,
+      "location": "docs/archive/initial_project_plan.md section 22.2",
+      "verification_result": "These are the INSTRUCTOR's estimate, based on a GPT-5-mini example from the Week 3 submission (~644 input / ~449 output tokens, ~$0.001059/9.21s per case) -- NOT this project's own measured NDATrace data. Not found anywhere in this project's own result files under those exact values. Reported here as correctly attributed, not treated as an NDATrace project fact.",
+      "cited_values": {
+        "input_tokens": 644,
+        "output_tokens": 449,
+        "cost_usd": 0.001059,
+        "latency_s": 9.21
+      }
+    },
+    "this_projects_own_real_measured_data": {
+      "source": "results/archive/runs/run_T024_rag.jsonl (RAG, prompt v2, Gemini, n=150)",
+      "mean_input_tokens": 853.6,
+      "median_input_tokens": 848.0,
+      "mean_output_tokens": 116.1,
+      "median_output_tokens": 106.5,
+      "mean_cost_usd": 0.0001318,
+      "median_cost_usd": 0.000127
+    },
+    "explanation_cost_finding_T019": {
+      "source": "data/explanation_cost.json (real, already computed, not re-derived)",
+      "explanation_pct_of_output_tokens": 31.1,
+      "explanation_pct_of_total_cost": 9.3,
+      "conclusion": "Explanation text is a real, measured, non-trivial share of output tokens but only a small share of total cost, because input tokens dominate cost for this project's real prompt/context sizes -- consistent with the C01 finding that input, not output, is this project's actual cost driver."
+    },
+    "oracle_scenario_compact_vs_verbose": {
+      "gemini_compact_usd_per_case": 7.45e-05,
+      "gemini_verbose_usd_per_case": 9.77e-05,
+      "gpt5mini_compact_usd_per_case": 0.0002033,
+      "gpt5mini_verbose_usd_per_case": 0.0003193
+    },
+    "design_rule": "Bulk evaluation outputs should default to minimal structured JSON (label + evidence IDs only). Verbose natural-language explanations should only be generated in experiments that specifically evaluate explanation/faithfulness quality (axis D of docs/project_contract.md section 9), not in every bulk run."
+  },
+  "historical_per_case_costs": {
+    "oracle_v1_gemini": {
+      "label": "B04 Oracle, Gemini 2.5 Flash Lite, v1 prompt",
+      "n_cases": 150,
+      "total_cost_usd": 0.012512200000000001,
+      "usd_per_case": 8.34e-05
+    },
+    "oracle_v1_gpt5mini": {
+      "label": "B04 Oracle, GPT-5 mini, v1 prompt",
+      "n_cases": 150,
+      "total_cost_usd": 0.154889,
+      "usd_per_case": 0.0010326
+    },
+    "rag_v2_gemini": {
+      "label": "T024 RAG, Gemini, v2 prompt",
+      "n_cases": 150,
+      "total_cost_usd": 0.0197665,
+      "usd_per_case": 0.0001318
+    },
+    "full_context_test_gemini": {
+      "label": "T041 full-context, Gemini, full 2091-case TEST",
+      "n_cases": 2091,
+      "total_cost_usd": 0.6851487,
+      "usd_per_case": 0.0003277
+    },
+    "rag_test_gemini": {
+      "label": "T041 RAG, Gemini, full 2091-case TEST",
+      "n_cases": 2091,
+      "total_cost_usd": 0.3169166,
+      "usd_per_case": 0.0001516
+    },
+    "rag_agent_test_gemini": {
+      "label": "T041 RAG+agent, Gemini, full 2091-case TEST",
+      "n_cases": 2091,
+      "total_cost_usd": 0.8476647,
+      "usd_per_case": 0.0004054
+    },
+    "note": "GPT-5-mini's real per-case Oracle cost ($0.001033) is ~5x its naive token-formula estimate (~$0.0002) due to hidden reasoning tokens billed as output (docs/decisions.md ADR-001) -- historical actual cost is used as the primary forecast basis for GPT-5-mini, not the token formula alone. Gemini's real per-case Oracle cost ($0.0000834) sits between the compact ($0.0000746) and verbose ($0.0000978) token-formula estimates, cross-validating the methodology for models without hidden reasoning tokens."
+  },
+  "local_runtime_measurements": {
+    "local_llama3.2_3b_full_context": {
+      "n": 500,
+      "mean_latency_ms": 7684.8
+    },
+    "local_llama3.2_3b_rag": {
+      "n": 500,
+      "mean_latency_ms": 4533.4
+    },
+    "local_llama3.2_3b_rag_agent": {
+      "n": 500,
+      "mean_latency_ms": 9194.3
+    },
+    "hosted_gemini_full_context": {
+      "n": 2091,
+      "mean_latency_ms": 1111.1
+    },
+    "hosted_gemini_rag": {
+      "n": 2091,
+      "mean_latency_ms": 1032.3
+    },
+    "hosted_gemini_rag_agent": {
+      "n": 2091,
+      "mean_latency_ms": 2671.1
+    },
+    "note_single_call_measurements_not_used_as_primary": "docs/decisions.md/CLAUDE.md separately record single-call spot checks: local Ollama ~5.37s, Groq gpt-oss-20b ~0.79s. These are n=1 and NOT used as the primary runtime forecast basis here -- the n=500 real per-architecture means above are used instead, as they reflect actual measured variance across real cases, not one lucky/unlucky call."
+  },
+  "hard_budget_gate": {
+    "implementation": "evaluation/budget.py::check_budget() -- pure function, no network calls, must be called before any hosted experiment executes",
+    "rule": "if actual_spend_so_far + projected_experiment_cost > (planning_budget - reserve): block the run",
+    "actual_spend_source": "evaluation/budget.py::check_budget_against_ledger() reads reconstruction_spend_so_far() from the running ledger below -- NEVER the historical T-series ledger, which is a separate, audit-only record."
+  },
+  "reconstruction_v2_spend_ledger": {
+    "path": "results/budget/reconstruction_spend_ledger.csv",
+    "status": "READY -- append-only, currently empty (no reconstruction-v2 hosted call has been made yet)",
+    "current_total_usd": 0.0,
+    "write_function": "evaluation.budget.record_spend(experiment_id, provider, model, input_tokens, output_tokens, cost_usd, run_id) -- call after every real successful hosted call, starting with E01",
+    "read_function": "evaluation.budget.reconstruction_spend_so_far() -- sums cost_usd across every recorded row"
+  },
+  "answers": {
+    "A_hosted_budget_available_usd": 5.0,
+    "B_protected_reserve_usd": 1.25,
+    "C_E01_oracle_budget_envelope_usd": "up to ~$0.56 (n=500, 2 hosted models, historical-cost basis) -- Oracle is NOT the binding constraint at any realistic sample size",
+    "D_feasible_oracle_subset_size": "150-300 cases recommended (matches the historical convention for direct comparability, and is far below any budget constraint)",
+    "E_can_2_hosted_oracle_models_fit": true,
+    "F_budget_remaining_for_E03_E15_after_oracle_usd": 3.4152,
+    "G_recommended_bulk_output_token_cap": "~20-30 tokens (compact structured JSON: label + evidence_ids only) for bulk experiments; verbose explanations reserved for explanation-quality-focused experiments only",
+    "H_experiments_that_should_be_local_only": [
+      "E00 (done)",
+      "E04 rule baseline",
+      "E06 retrieval optimisation (no LLM calls)",
+      "E09 agent justification analysis (reuses existing predictions)",
+      "the bulk of E12/E14 architecture comparison (local-first per the reconstruction brief)"
+    ],
+    "I_runs_that_would_exceed_safe_budget": "Running the FULL 2,091-case TEST split on 2+ hosted models across all 4 architectures repeatedly (as the historical T-series did across T041-A and T041-B) would approach $1.5-2 per full pass -- affordable once, but NOT to be repeated casually; each hosted TEST-split run should go through the budget gate first.",
+    "J_local_runtime_estimate": "Full 2,091-case TEST set, all 3 non-rule local architectures sequentially: ~4.5h (full-context) + ~2.6h (RAG) + ~5.3h (RAG+agent, measured) = ~12.4 hours total if run back-to-back on one machine (real measured per-case means from the n=500 local T041-A run, scaled to 2,091 cases). Rule baseline is near-instant. See runtime_forecast.csv for scenario detail."
+  }
+}

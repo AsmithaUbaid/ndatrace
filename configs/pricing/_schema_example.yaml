@@ -1,9 +1,17 @@
 # Placeholder / schema example only — NOT a real price. Do not use for cost calculations.
 provider: "<example-provider>"
 model: "<example-model-id>"
-input_price_per_million: 0.0
-output_price_per_million: 0.0
-cached_input_price_if_known: null
+published_input_price_per_million: 0.0
+published_output_price_per_million: 0.0
+published_cached_input_price_per_million: null
+account_tier: "<pay-as-you-go | free (rate-limited) | local compute>"
+effective_cost_assumption_input_per_million: 0.0
+effective_cost_assumption_output_per_million: 0.0
+effective_cost_assumption_note: "<why the effective rate equals or differs from published>"
 reasoning_token_notes_if_applicable: null
 date_checked: "<YYYY-MM-DD>"
 source_note: "<where this was verified, e.g. provider pricing page URL>"
+free_tier_limits: null
+lifecycle:
+  status: "<e.g. 'stable, no announced retirement' or 'provider-specific, see detail'>"
+  detail: null

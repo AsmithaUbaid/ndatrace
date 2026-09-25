@@ -1,0 +1,20 @@
+provider: "groq"
+model: "openai/gpt-oss-20b"
+published_input_price_per_million: 0.075
+published_output_price_per_million: 0.30
+published_cached_input_price_per_million: 0.0375
+account_tier: "free (rate-limited) -- pay-as-you-go paid tier also available at the published rate"
+effective_cost_assumption_input_per_million: 0.075
+effective_cost_assumption_output_per_million: 0.30
+effective_cost_assumption_note: "Forecasts use the PUBLISHED PAID rate, not $0, even though a free tier exists. A Free Plan is an account/tier condition, not the model's canonical published price, and a future Oracle run is NOT guaranteed to stay within the free tier's rate limits (correction applied this pass -- the earlier version of this file wrongly encoded $0/token as the model price). If reconstruction-v2 later explicitly commits to running a specific experiment under the free tier and its rate limits, that is a model-selection decision to make at that time, not assumed here."
+date_checked: "2026-09-26"
+source_note: "Groq's published self-serve rate card, confirmed via web search this phase: $0.075/M input, $0.30/M output, $0.0375/M cached input for gpt-oss-20b."
+free_tier_limits:
+  requests_per_minute: 30
+  requests_per_day: 1000
+  tokens_per_minute: 8000
+  tokens_per_day: 200000
+  note: "Organization-level limits on Groq's free developer tier (no credit card, no credits system) -- confirmed via web search 2026-09-26. A rate limit, not a price -- does not make the model's canonical price $0."
+lifecycle:
+  status: "no announced retirement found"
+  detail: null
