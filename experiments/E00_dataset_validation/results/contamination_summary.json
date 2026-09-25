@@ -1,0 +1,20 @@
+{
+  "full_inventory_and_per_experiment_table": "docs/data_contamination_register.md",
+  "historical_experiments_that_touched_official_TEST": [
+    "scripts/run_final_test_evaluation.py (T041-A 500-case subsample, T041-B full 2091 cases)",
+    "scripts/run_full_rule_baseline_test.py (full 2091 cases, zero-cost deterministic rule baseline)",
+    "scripts/run_hosted_comparison.py (hosted-vs-local, same seed=42 subsample as T041)",
+    "scripts/analyze_test_set_results.py (read-only post-hoc audit of already-saved T041 predictions)",
+    "scripts/extract_failure_examples.py (read-only, pulls quotable examples for report)",
+    "scripts/run_reliability_tests.py (K02/K03: document length/structure only, no labels read)",
+    "scripts/build_architecture_validation_set.py / build_prompt_validation_set.py (test.json read ONLY to compute doc-id exclusion set; no labels or text inspected)"
+  ],
+  "historical_experiments_that_touched_official_DEV_for_tuning": [
+    "scripts/run_oracle_experiment.py (150-case stratified sample, seed=42)",
+    "scripts/run_prompt_experiment.py, run_rag_experiment.py, run_full_context_baseline.py, run_confidence_analysis.py, run_agent_experiment.py (same 150-case seed=42 sample reused)",
+    "scripts/build_golden_cases.py, build_negative_cases.py, build_agent_eval_cases.py, build_evidence_quality_cases.py, build_llm_behavior_eval_cases.py (all sourced from dev.json)"
+  ],
+  "role_conflation_finding": "Historically DEV was used for both development/tuning and validation purposes simultaneously via the reused 150-case sample -- disclosed in docs/data_contamination_register.md section 3 as a methodological limitation of the historical T-series work. Reconstruction-v2 uses the official TRAIN/DEV/TEST split as-is (TRAIN=development/tuning, DEV=validation/architecture selection, TEST=final evaluation) and does its own independent DEV-based selection going forward -- this disclosed history does not reassign DEV's role (see docs/data_contamination_register.md section 4 for why a fourth split was considered and rejected).",
+  "clean_precedent_found": "AV01 (architecture validation, 20 train docs, seed=99) and PVAL01 (prompt validation, 26 train docs, seed=123) already follow good practice for TRAIN-subset creation: document-level sampling, verified disjoint from all other pools including TEST (test.json read only for ID-exclusion, never content).",
+  "standing_rule_adopted": "Prior DEV- or TEST-split knowledge may motivate a reconstruction-v2 hypothesis but must never be cited to justify a reconstruction-v2 config choice. See docs/data_contamination_register.md section 5."
+}

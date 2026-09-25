@@ -118,6 +118,36 @@ def wilson_score_interval(successes: int, n: int, z: float = 1.96) -> tuple[floa
     return (max(0.0, low), min(1.0, high))
 
 
+def recall_with_ci(
+    cls: Label,
+    predictions: Sequence[Prediction],
+    golds: Sequence[GoldCase],
+) -> dict[str, float]:
+    """
+    Generic per-class recall with raw counts and a 95% Wilson interval.
+    Works for any Label — Contradiction is reported prominently as the
+    project's headline risk metric via contradiction_recall_with_ci()
+    below, but the same machinery applies to NotMentioned or Entailment
+    without a bespoke per-class function (reconstruction-v2 correction:
+    a prior version of this module added a one-off
+    not_mentioned_recall_with_ci() candidate; this generic function
+    replaces that need).
+    """
+    matched = _match_predictions_to_golds(predictions, golds)
+    non_abstained = [(p, g) for p, g in matched if not p.abstained]
+    class_golds = [(p, g) for p, g in non_abstained if g.gold_label == cls]
+
+    n = len(class_golds)
+    correct = sum(1 for p, g in class_golds if p.predicted_label == cls)
+    recall = correct / n if n > 0 else 0.0
+    ci_low, ci_high = wilson_score_interval(correct, n)
+
+    return {
+        "recall": recall, "n": n, "correct": correct,
+        "ci_low": ci_low, "ci_high": ci_high,
+    }
+
+
 def contradiction_recall_with_ci(
     predictions: Sequence[Prediction],
     golds: Sequence[GoldCase],
@@ -129,19 +159,7 @@ def contradiction_recall_with_ci(
     "Report Contradiction recall separately and make it the headline;
     note it is ~234 test examples, so report counts and an interval."
     """
-    matched = _match_predictions_to_golds(predictions, golds)
-    non_abstained = [(p, g) for p, g in matched if not p.abstained]
-    contradiction_golds = [(p, g) for p, g in non_abstained if g.gold_label == Label.CONTRADICTION]
-
-    n = len(contradiction_golds)
-    correct = sum(1 for p, g in contradiction_golds if p.predicted_label == Label.CONTRADICTION)
-    recall = correct / n if n > 0 else 0.0
-    ci_low, ci_high = wilson_score_interval(correct, n)
-
-    return {
-        "recall": recall, "n": n, "correct": correct,
-        "ci_low": ci_low, "ci_high": ci_high,
-    }
+    return recall_with_ci(Label.CONTRADICTION, predictions, golds)
 
 
 # =========================================================================
@@ -250,8 +268,16 @@ def joint_label_evidence_correctness(
     A case is jointly correct if:
     - predicted_label == gold_label AND evidence_recall@K >= tau_evidence
       (for Entailment/Contradiction)
-    - predicted_label == NotMentioned AND gold_label == NotMentioned
-      (no evidence check needed)
+    - predicted_label == NotMentioned == gold_label AND no evidence is
+      claimed/returned (retrieved_span_indices is empty) — ContractNLI
+      provides no gold evidence for NotMentioned by definition (verified:
+      100% of NotMentioned cases have empty spans across all 3 splits), so
+      a NotMentioned prediction that nonetheless cites evidence is
+      fabricating support for an absence and must fail the joint check,
+      even though its label is correct (docs/evaluation_protocol.md,
+      reconstruction-v2 correction to this function's original behaviour,
+      which counted any correct-NotMentioned label as jointly correct
+      regardless of whether evidence was claimed).
     """
     matched = _match_predictions_to_golds(predictions, golds)
     if not matched:
@@ -268,8 +294,9 @@ def joint_label_evidence_correctness(
             continue
 
         if gold.gold_label == Label.NOT_MENTIONED:
-            # Correct NotMentioned — no evidence check needed
-            joint_correct += 1
+            # Correct NotMentioned only counts if no evidence was fabricated/claimed.
+            if not pred.retrieved_span_indices:
+                joint_correct += 1
         else:
             # Entailment or Contradiction — need evidence recall check
             gold_set = set(gold.gold_span_indices)
@@ -621,15 +648,34 @@ def compute_all_metrics(
 # Helpers
 # =========================================================================
 
+def _case_key(doc_id: str, hypothesis_id: str, split: str = "") -> tuple[str, str, str]:
+    """
+    Canonical case-matching key.
+
+    Split-qualified — (split, doc_id, hypothesis_id) — matching the frozen reconstruction-v2
+    case-ID scheme f"{split}::{document_id}::{hypothesis_id}"
+    (docs/evaluation_protocol.md Part 1 section 8). `split` defaults to "" for every historical
+    Prediction/GoldCase record, which never set it — those keep matching on (doc_id,
+    hypothesis_id) exactly as before, since two "" splits are equal. A record with a split set
+    only matches another record with the SAME split explicitly set; it will not silently match a
+    legacy record that left split blank, and won't match a record from a different split even if
+    doc_id happens to collide (verified in this dataset it currently doesn't - see
+    docs/data_contamination_register.md - but this key stops relying on that being permanently
+    true). This is additive: no code that never sets `split` changes behavior at all.
+    """
+    return (split, doc_id, hypothesis_id)
+
+
 def _match_predictions_to_golds(
     predictions: Sequence[Prediction],
     golds: Sequence[GoldCase],
 ) -> list[tuple[Prediction, GoldCase]]:
-    """Match predictions to gold cases by (doc_id, hypothesis_id)."""
-    gold_lookup = {(g.doc_id, g.hypothesis_id): g for g in golds}
+    """Match predictions to gold cases via _case_key() — see its docstring for the
+    split-qualification compatibility rule."""
+    gold_lookup = {_case_key(g.doc_id, g.hypothesis_id, g.split): g for g in golds}
     matched = []
     for pred in predictions:
-        key = (pred.doc_id, pred.hypothesis_id)
+        key = _case_key(pred.doc_id, pred.hypothesis_id, pred.split)
         gold = gold_lookup.get(key)
         if gold is not None:
             matched.append((pred, gold))

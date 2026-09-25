@@ -1,0 +1,63 @@
+{
+  "splits": {
+    "train": {
+      "documents": 423,
+      "unique_doc_ids": 423,
+      "total_cases": 7191,
+      "hypotheses": 17,
+      "class_counts": {
+        "NotMentioned": 2820,
+        "Entailment": 3530,
+        "Contradiction": 841
+      },
+      "cases_with_nonempty_gold_spans_by_class": {
+        "Entailment": 3530,
+        "Contradiction": 841
+      }
+    },
+    "dev": {
+      "documents": 61,
+      "unique_doc_ids": 61,
+      "total_cases": 1037,
+      "hypotheses": 17,
+      "class_counts": {
+        "Entailment": 519,
+        "Contradiction": 95,
+        "NotMentioned": 423
+      },
+      "cases_with_nonempty_gold_spans_by_class": {
+        "Entailment": 519,
+        "Contradiction": 95
+      }
+    },
+    "test": {
+      "documents": 123,
+      "unique_doc_ids": 123,
+      "total_cases": 2091,
+      "hypotheses": 17,
+      "class_counts": {
+        "NotMentioned": 903,
+        "Entailment": 968,
+        "Contradiction": 220
+      },
+      "cases_with_nonempty_gold_spans_by_class": {
+        "Entailment": 968,
+        "Contradiction": 220
+      }
+    }
+  },
+  "split_overlap_check": {
+    "train_dev_id_overlap": 0,
+    "train_test_id_overlap": 0,
+    "dev_test_id_overlap": 0,
+    "train_dev_filename_overlap": 0,
+    "train_test_filename_overlap": 0,
+    "dev_test_filename_overlap": 0,
+    "result": "ZERO overlap across all pairs, both by doc id and by filename"
+  },
+  "not_mentioned_evidence_policy_audit": {
+    "method": "checked every annotation across all 3 splits for empty vs non-empty spans list",
+    "finding": "NotMentioned has non-empty spans in 0% of cases across train/dev/test; Entailment and Contradiction have non-empty spans in 100% of cases across all 3 splits",
+    "conclusion": "NotMentioned evidence-absence is definitional in the raw ContractNLI annotation, not an NDATrace convention -- frozen per docs/evaluation_protocol.md section 10"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "command": "pytest tests/test_metrics.py tests/test_scorer.py tests/test_harness.py -q",
+  "outcome": "64 passed",
+  "revision": "third pass -- role structure confirmed as the official TRAIN/DEV/TEST split with no fourth operational split, TEST terminology corrected away from 'blind'/'unseen' -- see docs/evaluation_protocol.md Part 1 sections 2-4",
+  "tests_added_first_pass": [
+    "tests/test_metrics.py::test_evidence_recall_at_k_no_hit",
+    "tests/test_metrics.py::test_mean_reciprocal_rank_no_hit",
+    "tests/test_metrics.py::test_joint_correctness_wrong_label_correct_evidence"
+  ],
+  "tests_added_first_correction_pass": [
+    "tests/test_metrics.py::test_joint_correctness_not_mentioned_empty_evidence_passes",
+    "tests/test_metrics.py::test_joint_correctness_not_mentioned_fabricated_evidence_fails",
+    "tests/test_metrics.py::test_joint_correctness_majority_rule_multi_span",
+    "tests/test_metrics.py::test_recall_with_ci_is_generic_across_classes"
+  ],
+  "tests_added_second_correction_pass": [
+    "tests/test_metrics.py::test_match_legacy_records_without_split_still_match",
+    "tests/test_metrics.py::test_match_same_split_qualified_records_match",
+    "tests/test_metrics.py::test_match_different_splits_with_colliding_doc_id_do_not_match",
+    "tests/test_metrics.py::test_match_split_qualified_does_not_cross_match_legacy_blank"
+  ],
+  "code_changes_first_correction_pass": {
+    "evaluation/metrics.py::joint_label_evidence_correctness": "NotMentioned case now also requires empty retrieved_span_indices to count as jointly correct (previously any correct-NotMentioned label passed regardless of claimed evidence -- a real gap, since ContractNLI provides zero gold evidence for NotMentioned by definition, so any claimed evidence there is fabricated).",
+    "evaluation/metrics.py::recall_with_ci": "new generic per-class recall+CI function, added instead of a bespoke not_mentioned_recall_with_ci(); contradiction_recall_with_ci() now delegates to it (recall_with_ci(Label.CONTRADICTION, ...)), same return shape, verified identical via test."
+  },
+  "code_changes_second_correction_pass": {
+    "evaluation/schemas.py": "Prediction.split and GoldCase.split added, both str default '' -- purely additive, does not break loading historical JSONL result files (missing field uses default).",
+    "evaluation/metrics.py::_case_key": "new helper, returns (split, doc_id, hypothesis_id); split defaults to '' so historical records (which never set it) match exactly as before.",
+    "evaluation/metrics.py::_match_predictions_to_golds": "now keys via _case_key() instead of a bare (doc_id, hypothesis_id) tuple -- split-qualified when split is set, legacy-compatible when it isn't."
+  },
+  "evidence_threshold_audit": {
+    "stage_1_chunk_to_span_mapping": "evaluation/scorer.py map_chunks_to_gold_span_indices() -- binary any-character-overlap rule, span_start < chunk.end_char and span_end > chunk.start_char; not containment; verified via 7 existing tests in tests/test_scorer.py",
+    "stage_2_recall_threshold": "evaluation/metrics.py -- recall = |gold_span_index_set intersect retrieved_span_index_set| / |gold_span_index_set|; tau_evidence default 0.5 compared against this per-case fraction",
+    "numerator": "count of gold span indices also present in the retrieved set",
+    "denominator": "total count of gold span indices for that case (never the retrieved count)",
+    "gold_span_count_distribution_test_split": {"1": 519, "2": 404, "3": 133, "4": 61, "5": 33, "6": 19, "7": 15, "8": 1, "10": 1, "14": 1, "18": 1},
+    "gold_span_count_distribution_note": "43.7% of Entailment/Contradiction test cases have exactly 1 gold span (tau=0.5 equivalent to requiring full coverage for these); mean approx 2.02 spans/case",
+    "conclusion": "tau=0.5 acts as a majority-of-gold-spans rule for n>=2, full-coverage requirement for n=1 -- a defensible interim default, but NOT scientifically frozen. Frozen: explicit evidence identification, the two-stage matching semantics, the set-based recall calculation, and the joint metric's structure. NOT frozen: the exact tau=0.5 value -- evidence_recall_threshold=0.5 is kept only as the historical/interim configured default. E06 may investigate/sensitivity-test tau using TRAIN development data. The final tau must be frozen before architecture comparison/final TEST. Do not use TEST to select tau."
+  },
+  "not_mentioned_evidence_policy": {
+    "classification_metrics": "correct label is sufficient, no evidence check",
+    "joint_metric_revised": "correct label AND no evidence claimed/returned (retrieved_span_indices empty) required for joint PASS -- fabricated evidence on a correct NotMentioned label now fails the joint check"
+  },
+  "a0_a1_evidence_identification_policy": {
+    "decision": "rejected the historical convention that full-context 'sees everything' automatically satisfies the joint metric's evidence requirement",
+    "new_policy": "every architecture (A0-A3) must explicitly identify the evidence span/clause IDs it relied on; joint metric is computed only from identified evidence, never from evidence merely being present somewhere in model context",
+    "implementation_status": "NOT built this phase (no pipeline/model code changed, per instructions). pipeline/classifier.py (A1) and pipeline/rule_baseline.py (A0) do not yet produce identified evidence under this policy -- flagged as a real blocker for E12, to be resolved in E04/E05"
+  },
+  "case_id_scheme": {
+    "frozen_format": "f\"{split}::{document_id}::{hypothesis_id}\"",
+    "status": "frozen for all future reconstruction-v2 manifests, and NOW IMPLEMENTED in evaluation/schemas.py and evaluation/metrics.py._match_predictions_to_golds() -- legacy records (split='') match exactly as before, split-qualified records only match other records with the identical split explicitly set. No manifests generated yet -- this is matching infrastructure ready for when they are."
+  },
+  "split_role_structure": {
+    "final_decision": "official ContractNLI three-way split used as-is -- TRAIN (Role A: all development/tuning -- Oracle, model screening, prompt selection, retrieval tuning, agent development; fixed TRAIN subsets only for cost/runtime-controlled diagnostics), DEV (Role B: validation and architecture/configuration selection, used only after candidate configs are sufficiently frozen from TRAIN development; freeze the configuration before TEST), TEST (Role C: final held-out benchmark under the reconstruction-v2 protocol, no tuning after viewing results). No fourth operational split.",
+    "historical_exposure": "DEV's and TEST's historical exposure is disclosed in docs/data_contamination_register.md as a methodological limitation of the historical T-series work, not treated as disqualifying either split from its standard role.",
+    "test_terminology": "TEST is referred to as 'the final held-out benchmark under the reconstruction-v2 protocol', never as 'blind' or 'perfectly unseen', because historical T-series runs already scored against it (disclosed, not undoable)."
+  }
+}

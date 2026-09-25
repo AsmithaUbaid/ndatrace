@@ -38,6 +38,13 @@ class Prediction(BaseModel):
     """A single prediction from the pipeline."""
     doc_id: str = Field(description="Document ID from ContractNLI")
     hypothesis_id: str = Field(description="Hypothesis ID (e.g., nda-1)")
+    split: str = Field(
+        default="",
+        description="Source split (train/dev/test), for the reconstruction-v2 split-qualified "
+                     "case ID scheme (docs/evaluation_protocol.md Part 1 section 8). Empty by "
+                     "default so historical records (which never set this) keep matching on "
+                     "(doc_id, hypothesis_id) alone — see _match_predictions_to_golds().",
+    )
     predicted_label: Label = Field(description="Model's predicted label")
     confidence: float = Field(
         default=1.0, ge=0.0, le=1.0,
@@ -81,6 +88,10 @@ class GoldCase(BaseModel):
     """A ground-truth case for evaluation."""
     doc_id: str
     hypothesis_id: str
+    split: str = Field(
+        default="",
+        description="Source split (train/dev/test) — see Prediction.split for the matching rule.",
+    )
     gold_label: Label
     gold_span_indices: list[int] = Field(
         default_factory=list,
