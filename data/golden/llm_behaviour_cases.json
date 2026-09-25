@@ -1,21 +1,5 @@
 [
   {
-    "case_id": "056",
-    "doc_id": "",
-    "hypothesis_id": "",
-    "gold_label": "NotMentioned",
-    "category": "llm_behaviour",
-    "description": "Valid JSON output - real historical evidence across this session's ~1344 real classify() calls (Oracle, RAG, prompt-tuning experiments): 19 needed a retry (invalid JSON on the first attempt, ~2% rate), and every single one succeeded on retry - zero calls ever fell through to the 'invalid JSON after retry' fallback across the whole session."
-  },
-  {
-    "case_id": "057",
-    "doc_id": "",
-    "hypothesis_id": "",
-    "gold_label": "NotMentioned",
-    "category": "llm_behaviour",
-    "description": "Only allowed labels - structural guarantee (pipeline/classifier.py's VALID_LABELS check forces NotMentioned on any unrecognized label) plus real evidence: an invalid label was never observed to reach a saved Prediction across the whole session's real runs (grepped for the 'invalid label' fallback log line - zero matches)."
-  },
-  {
     "case_id": "058",
     "doc_id": "synthetic",
     "hypothesis_id": "synthetic",
@@ -62,14 +46,6 @@
     "gold_label": "NotMentioned",
     "category": "llm_behaviour",
     "description": "Handles shortest NDA in the sample (442 tokens). Valid JSON: True, predicted=NotMentioned (gold=NotMentioned)."
-  },
-  {
-    "case_id": "064",
-    "doc_id": "",
-    "hypothesis_id": "",
-    "gold_label": "NotMentioned",
-    "category": "llm_behaviour",
-    "description": "Explanation within token budget (<150 tokens) - checked across all 150 real saved explanations from the v2-prompt RAG run: max=69 tokens, avg=35.6 tokens, 0/150 exceed 150 (all within budget)."
   },
   {
     "case_id": "065",

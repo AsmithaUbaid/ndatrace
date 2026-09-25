@@ -14,29 +14,5 @@
     "gold_label": "NotMentioned",
     "category": "confidence_abstention",
     "description": "High confidence + wrong = overconfidence FAILURE. Real case: self_confidence=1.00, predicted=Contradiction, gold=NotMentioned (WRONG). 15/150 cases (10%) in the full sample match this pattern - this is exactly why T026 found self-confidence unusable as an abstention gate (AUROC 0.554): confidently wrong answers are common enough to matter, and indistinguishable by confidence alone from confidently right ones."
-  },
-  {
-    "case_id": "078",
-    "doc_id": "",
-    "hypothesis_id": "",
-    "gold_label": "NotMentioned",
-    "category": "confidence_abstention",
-    "description": "Low confidence + wrong = good self-awareness. **No matching case exists in the 150-case sample** [proxy: no case found; this is itself the finding, not a selection failure]. All 8 cases with self_confidence < 0.5 were actually CORRECT (100% empirical accuracy in that bucket, per T026's calibration table) - the model's rare low-confidence moments are, if anything, its most reliable ones, the opposite of the expected pattern. This is a real, honest data point, not a gap in case selection: it independently confirms T026's finding that self-confidence is not just weak but actively miscalibrated in places."
-  },
-  {
-    "case_id": "079",
-    "doc_id": "",
-    "hypothesis_id": "",
-    "gold_label": "NotMentioned",
-    "category": "confidence_abstention",
-    "description": "Abstained cases are hard - aggregate check, target >50% of abstained cases would have been wrong. **Target NOT met**: at the selected threshold (signal=rule_agrees), abstention effectiveness is only 19.4% - the 'would-abstain' bucket is still 80.6% correct on its own. This is why pipeline/confidence.py routes ACCEPT/REVIEW rather than ACCEPT/ABSTAIN (T027) - hard abstention here would discard far more right answers than wrong ones, failing this eval case's own target honestly rather than picking a threshold that makes the number look better."
-  },
-  {
-    "case_id": "080",
-    "doc_id": "",
-    "hypothesis_id": "",
-    "gold_label": "NotMentioned",
-    "category": "confidence_abstention",
-    "description": "Threshold sweep - expects a clear tradeoff curve: higher threshold -> higher selective accuracy, lower coverage. Signal used: rule_agrees (self-confidence excluded - already shown unusable). Sweep is monotonically non-decreasing in selective accuracy as threshold rises: [0.88, 0.94, 0.94, 0.94, 0.94, 0.94, 0.94, 0.94, 0.94, 0.94]. Full curve in notebooks/06_confidence_abstention.ipynb's F06 plot."
   }
 ]
