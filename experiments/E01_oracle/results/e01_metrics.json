@@ -1,0 +1,330 @@
+{
+  "llama3.2:3b": {
+    "provider": "local",
+    "n_cases": 300,
+    "parse_valid_count": 284,
+    "parse_valid_rate": 0.9467,
+    "infra_error_count": 0,
+    "macro_f1": 0.6008,
+    "balanced_oracle_diagnostic_accuracy": 0.6033,
+    "per_class_recall": {
+      "Entailment": {
+        "recall": 0.6869,
+        "n": 99,
+        "correct": 68
+      },
+      "Contradiction": {
+        "recall": 0.25,
+        "n": 96,
+        "correct": 24,
+        "ci_low": 0.1741,
+        "ci_high": 0.3451
+      },
+      "NotMentioned": {
+        "recall": 1.0,
+        "n": 89,
+        "correct": 89
+      }
+    },
+    "per_class_precision_f1": {
+      "Entailment": {
+        "precision": 0.6239,
+        "f1": 0.6538
+      },
+      "Contradiction": {
+        "precision": 0.5854,
+        "f1": 0.3504
+      },
+      "NotMentioned": {
+        "precision": 0.6642,
+        "f1": 0.7982
+      }
+    },
+    "confusion_matrix": {
+      "Entailment": {
+        "Entailment": 68,
+        "Contradiction": 17,
+        "NotMentioned": 14,
+        "parse_error/other": 1
+      },
+      "Contradiction": {
+        "Entailment": 41,
+        "Contradiction": 24,
+        "NotMentioned": 31,
+        "parse_error/other": 4
+      },
+      "NotMentioned": {
+        "Entailment": 0,
+        "Contradiction": 0,
+        "NotMentioned": 89,
+        "parse_error/other": 11
+      }
+    },
+    "latency": {
+      "mean_ms": 414.9,
+      "median_ms": 404.4,
+      "p90_ms": 599.9,
+      "n": 300
+    },
+    "input_tokens": {
+      "total": 81090,
+      "mean": 270.3,
+      "n_available": 300,
+      "n_missing": 0
+    },
+    "output_tokens": {
+      "total": 3395,
+      "mean": 11.3,
+      "n_available": 300,
+      "n_missing": 0
+    },
+    "hosted_cost_usd": 0.0,
+    "cost_source": "local compute, $0 by construction"
+  },
+  "qwen2.5:7b-instruct": {
+    "provider": "local",
+    "n_cases": 300,
+    "parse_valid_count": 300,
+    "parse_valid_rate": 1.0,
+    "infra_error_count": 0,
+    "macro_f1": 0.6381,
+    "balanced_oracle_diagnostic_accuracy": 0.66,
+    "per_class_recall": {
+      "Entailment": {
+        "recall": 0.68,
+        "n": 100,
+        "correct": 68
+      },
+      "Contradiction": {
+        "recall": 0.3,
+        "n": 100,
+        "correct": 30,
+        "ci_low": 0.2189,
+        "ci_high": 0.3959
+      },
+      "NotMentioned": {
+        "recall": 1.0,
+        "n": 100,
+        "correct": 100
+      }
+    },
+    "per_class_precision_f1": {
+      "Entailment": {
+        "precision": 0.9189,
+        "f1": 0.7816
+      },
+      "Contradiction": {
+        "precision": 0.8824,
+        "f1": 0.4478
+      },
+      "NotMentioned": {
+        "precision": 0.5208,
+        "f1": 0.6849
+      }
+    },
+    "confusion_matrix": {
+      "Entailment": {
+        "Entailment": 68,
+        "Contradiction": 4,
+        "NotMentioned": 28,
+        "parse_error/other": 0
+      },
+      "Contradiction": {
+        "Entailment": 6,
+        "Contradiction": 30,
+        "NotMentioned": 64,
+        "parse_error/other": 0
+      },
+      "NotMentioned": {
+        "Entailment": 0,
+        "Contradiction": 0,
+        "NotMentioned": 100,
+        "parse_error/other": 0
+      }
+    },
+    "latency": {
+      "mean_ms": 960.3,
+      "median_ms": 869.3,
+      "p90_ms": 1386.3,
+      "n": 300
+    },
+    "input_tokens": {
+      "total": 78075,
+      "mean": 260.2,
+      "n_available": 300,
+      "n_missing": 0
+    },
+    "output_tokens": {
+      "total": 3792,
+      "mean": 12.6,
+      "n_available": 300,
+      "n_missing": 0
+    },
+    "hosted_cost_usd": 0.0,
+    "cost_source": "local compute, $0 by construction"
+  },
+  "google/gemini-2.5-flash-lite": {
+    "provider": "openrouter",
+    "n_cases": 300,
+    "parse_valid_count": 300,
+    "parse_valid_rate": 1.0,
+    "infra_error_count": 0,
+    "macro_f1": 0.8667,
+    "balanced_oracle_diagnostic_accuracy": 0.8667,
+    "per_class_recall": {
+      "Entailment": {
+        "recall": 0.89,
+        "n": 100,
+        "correct": 89
+      },
+      "Contradiction": {
+        "recall": 0.71,
+        "n": 100,
+        "correct": 71,
+        "ci_low": 0.6146,
+        "ci_high": 0.7899
+      },
+      "NotMentioned": {
+        "recall": 1.0,
+        "n": 100,
+        "correct": 100
+      }
+    },
+    "per_class_precision_f1": {
+      "Entailment": {
+        "precision": 0.978,
+        "f1": 0.9319
+      },
+      "Contradiction": {
+        "precision": 0.9726,
+        "f1": 0.8208
+      },
+      "NotMentioned": {
+        "precision": 0.7353,
+        "f1": 0.8475
+      }
+    },
+    "confusion_matrix": {
+      "Entailment": {
+        "Entailment": 89,
+        "Contradiction": 2,
+        "NotMentioned": 9,
+        "parse_error/other": 0
+      },
+      "Contradiction": {
+        "Entailment": 2,
+        "Contradiction": 71,
+        "NotMentioned": 27,
+        "parse_error/other": 0
+      },
+      "NotMentioned": {
+        "Entailment": 0,
+        "Contradiction": 0,
+        "NotMentioned": 100,
+        "parse_error/other": 0
+      }
+    },
+    "latency": {
+      "mean_ms": 696.0,
+      "median_ms": 666.7,
+      "p90_ms": 749.5,
+      "n": 300
+    },
+    "input_tokens": {
+      "total": 76137,
+      "mean": 253.8,
+      "n_available": 300,
+      "n_missing": 0
+    },
+    "output_tokens": {
+      "total": 3610,
+      "mean": 12.0,
+      "n_available": 300,
+      "n_missing": 0
+    },
+    "hosted_cost_usd": 0.009058,
+    "cost_source": "provider-reported (via OpenRouter usage field, pipeline/model_gateway.py)"
+  },
+  "openai/gpt-5-mini": {
+    "provider": "openrouter",
+    "n_cases": 300,
+    "parse_valid_count": 300,
+    "parse_valid_rate": 1.0,
+    "infra_error_count": 0,
+    "macro_f1": 0.9057,
+    "balanced_oracle_diagnostic_accuracy": 0.9067,
+    "per_class_recall": {
+      "Entailment": {
+        "recall": 0.9,
+        "n": 100,
+        "correct": 90
+      },
+      "Contradiction": {
+        "recall": 0.82,
+        "n": 100,
+        "correct": 82,
+        "ci_low": 0.7333,
+        "ci_high": 0.883
+      },
+      "NotMentioned": {
+        "recall": 1.0,
+        "n": 100,
+        "correct": 100
+      }
+    },
+    "per_class_precision_f1": {
+      "Entailment": {
+        "precision": 0.8738,
+        "f1": 0.8867
+      },
+      "Contradiction": {
+        "precision": 0.9762,
+        "f1": 0.8913
+      },
+      "NotMentioned": {
+        "precision": 0.885,
+        "f1": 0.939
+      }
+    },
+    "confusion_matrix": {
+      "Entailment": {
+        "Entailment": 90,
+        "Contradiction": 2,
+        "NotMentioned": 8,
+        "parse_error/other": 0
+      },
+      "Contradiction": {
+        "Entailment": 13,
+        "Contradiction": 82,
+        "NotMentioned": 5,
+        "parse_error/other": 0
+      },
+      "NotMentioned": {
+        "Entailment": 0,
+        "Contradiction": 0,
+        "NotMentioned": 100,
+        "parse_error/other": 0
+      }
+    },
+    "latency": {
+      "mean_ms": 3077.9,
+      "median_ms": 2710.4,
+      "p90_ms": 4531.7,
+      "n": 300
+    },
+    "input_tokens": {
+      "total": 75129,
+      "mean": 250.4,
+      "n_available": 300,
+      "n_missing": 0
+    },
+    "output_tokens": {
+      "total": 44960,
+      "mean": 149.9,
+      "n_available": 300,
+      "n_missing": 0
+    },
+    "hosted_cost_usd": 0.108702,
+    "cost_source": "provider-reported (via OpenRouter usage field, pipeline/model_gateway.py)"
+  }
+}

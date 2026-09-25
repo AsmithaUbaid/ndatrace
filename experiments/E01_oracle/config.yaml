@@ -1,0 +1,54 @@
+experiment_id: E01_oracle
+dataset_manifest: TRAIN_ORACLE_v1
+split_role: development   # Role A, TRAIN only (docs/evaluation_protocol.md Part 1 section 3)
+purpose: oracle_reasoning_ceiling
+
+manifest:
+  path: TRAIN_ORACLE_v1.json
+  seed: 300
+  target_per_class: 100
+  max_cases_per_doc_per_class: 2
+  total_cases: 300
+
+prompt:
+  path: ../../prompts/oracle_v1.txt
+  version: oracle_v1
+  temperature: 0.0
+  output_schema: '{"label": "Entailment" | "Contradiction" | "NotMentioned"}'
+
+models:
+  local_1:
+    provider: local
+    model: llama3.2:3b
+    role: smaller/local reasoning baseline
+    status: already installed
+  local_2:
+    provider: local
+    model: qwen2.5:7b-instruct
+    role: stronger/local reasoning point
+    status: NOT installed -- requires `ollama pull qwen2.5:7b-instruct` in Stage B, not done in Stage A
+  hosted_1:
+    provider: openrouter
+    model: google/gemini-2.5-flash-lite
+    role: economical hosted reasoning
+    status: pricing verified (E00B), API key configured
+  hosted_2:
+    provider: openrouter
+    model: openai/gpt-5-mini
+    role: stronger/pricier hosted reasoning
+    status: pricing verified (E00B), API key configured
+
+budget:
+  planning_budget_usd: 5.00
+  protected_reserve_fraction: 0.25
+  projected_hosted_spend_usd: 0.3348
+  gate_result: ALLOWED
+
+model_calls: NONE -- Stage A only, no inference performed
+api_calls: NONE
+local_model_inference: NONE
+
+outputs:
+  - TRAIN_ORACLE_v1.json
+  - results/ (empty until Stage B)
+  - E01_oracle_analysis.ipynb (created in Stage B, after results exist)
