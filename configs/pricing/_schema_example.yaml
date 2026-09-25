@@ -1,0 +1,9 @@
+# Placeholder / schema example only — NOT a real price. Do not use for cost calculations.
+provider: "<example-provider>"
+model: "<example-model-id>"
+input_price_per_million: 0.0
+output_price_per_million: 0.0
+cached_input_price_if_known: null
+reasoning_token_notes_if_applicable: null
+date_checked: "<YYYY-MM-DD>"
+source_note: "<where this was verified, e.g. provider pricing page URL>"
