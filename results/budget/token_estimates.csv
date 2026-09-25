@@ -1,0 +1,10 @@
+quantity,value,unit
+system_prompt_tokens,571,tokens (cl100k_base approx)
+hypothesis_tokens_mean,15.6,tokens
+gold_evidence_tokens_mean,90.7,"tokens (TRAIN, E/C cases)"
+gold_evidence_tokens_p90,170,tokens
+gold_evidence_tokens_max,603,tokens
+oracle_input_tokens_mean,677.2,tokens (estimate)
+oracle_input_tokens_p90,769,tokens (estimate)
+output_tokens_compact,17,tokens
+output_tokens_verbose,75,tokens

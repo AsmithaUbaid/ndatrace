@@ -9,7 +9,7 @@ starts `PLANNED` and is not authorized to run by virtue of being listed — see
 | ID | Name | Status |
 |---|---|---|
 | E00 | Dataset and split validation | **COMPLETE** — local-only, no model calls; see `experiments/E00_dataset_validation/summary.md` |
-| E00B | Budget, token and runtime forecast | PLANNED |
+| E00B | Budget, token and runtime forecast | **COMPLETE** — live pricing verified, historical ledger + token estimates + hosted forecast + runtime forecast + budget plan all produced, zero model calls; see `experiments/E00B_budget_forecast/summary.md` |
 | E01 | Oracle reasoning ceiling | PLANNED |
 | E02 | Model screening | PLANNED |
 | E03 | Prompt selection | PLANNED |

@@ -1,0 +1,15 @@
+provider: "openrouter"
+model: "openai/gpt-5-mini"
+published_input_price_per_million: 0.25
+published_output_price_per_million: 2.00
+published_cached_input_price_per_million: 0.025
+account_tier: "pay-as-you-go"
+effective_cost_assumption_input_per_million: 0.25
+effective_cost_assumption_output_per_million: 2.00
+effective_cost_assumption_note: "No free tier for this model on OpenRouter -- effective assumption equals the published rate."
+reasoning_token_notes_if_applicable: "GPT-5 mini bills hidden reasoning tokens as output tokens (found independently during T009, per docs/decisions.md) -- historically the reason output-token cost dominated for this model relative to Gemini."
+date_checked: "2026-09-26"
+source_note: "Input/output ($0.25/M, $2.00/M) verified against OpenRouter's model listing 2026-09-26 and match pipeline/model_gateway.py's historical PRICING_PER_MILLION entry. Cached-input corrected 2026-09-26 to $0.025/M per official OpenAI direct-API pricing (this review's instruction) -- the earlier $0.03/M figure recorded here came from an initial web-search snippet attributed to OpenRouter's own cache-read listing and was not independently cross-checked against OpenAI's own pricing page at the time; not re-verified this pass whether OpenRouter's own cached-input pass-through rate differs from OpenAI's direct $0.025/M -- flagged, not asserted as identical."
+lifecycle:
+  status: "no announced retirement found"
+  detail: null

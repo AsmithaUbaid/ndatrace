@@ -1,0 +1,33 @@
+experiment_id: E00B
+dataset_manifest: n/a   # forecasting only -- no manifest created, no cases run
+split_role: n/a
+purpose: budget_token_and_runtime_forecast
+
+planning_budget_usd: 5.00
+planning_budget_source: "user-reported current balance"
+date_recorded: "2026-09-26"
+protected_reserve_fraction: 0.25
+
+oracle:
+  hosted_model_count: 2
+  local_model_count: 2
+  sample_size: null   # determined by forecast (150-300 recommended), not performance -- not frozen here
+  output_mode: compact
+
+hosted_comparison:
+  hosted_model_count: 1
+  sample_size: null   # 300-500 recommended by forecast, not frozen here
+
+model_calls: none
+api_calls: none
+local_model_inference: none
+
+outputs:
+  - ../../results/budget/historical_spend.csv
+  - ../../results/budget/current_pricing.csv
+  - ../../results/budget/token_estimates.csv
+  - ../../results/budget/experiment_forecast.csv
+  - ../../results/budget/runtime_forecast.csv
+  - ../../results/budget/budget_plan.json
+  - results/  (copies of the above, for this experiment's own record)
+  - E00B_budget_forecast.ipynb
