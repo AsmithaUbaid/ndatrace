@@ -16,14 +16,6 @@
     "description": "Evidence is complete - not cut mid-sentence. Checked all 196 gold spans across the 150-case sample against sentence-level chunk boundaries: 180/196 (91.8%) are fully contained in a single chunk, 16 span more than one. Sentence-level chunking (the winning method, T023 round 2) never splits mid-sentence by construction - most gold spans (annotator-drawn, not aligned to our chunk boundaries) still land inside one chunk, though a real minority don't."
   },
   {
-    "case_id": "083",
-    "doc_id": "",
-    "hypothesis_id": "",
-    "gold_label": "NotMentioned",
-    "category": "evidence_quality",
-    "description": "No false evidence for Not Mentioned - code-level guarantee via pipeline/evidence_validator.py, not a mined live case: empty evidence + NotMentioned is_valid=True (expected True); non-empty evidence + NotMentioned is_valid=False (expected False, correctly flagged as inconsistent). Also enforced by the classify() prompt's own rule (prompts/classify_v2.txt: 'If the label is NotMentioned, evidence must be an empty list')."
-  },
-  {
     "case_id": "084",
     "doc_id": "610",
     "hypothesis_id": "nda-13",

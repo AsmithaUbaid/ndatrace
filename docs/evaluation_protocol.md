@@ -89,9 +89,11 @@ exists and why it must never be used to make further tuning decisions.
 
 ## Case-category taxonomy
 
-See `docs/evaluation_case_design.md` for the full breakdown of the 100-case catalogue into
-benchmark, regression, robustness, agent-behaviour, and system/API categories — these are not one
-homogeneous benchmark and should not be reported as a single pass rate.
+See `docs/evaluation_case_design.md` for the full breakdown of the 76-case catalogue (Categories
+1–7, after a 2026-09-25 correction removed 10 non-single-case aggregate/structural entries) plus the
+code-level Categories 8–10, into benchmark, regression, robustness, agent-behaviour, and system/API
+categories — these are not one homogeneous benchmark and should not be reported as a single pass
+rate.
 
 ## Current evaluation status (as of 2026-09-25)
 
