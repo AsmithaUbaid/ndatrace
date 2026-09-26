@@ -1,0 +1,14 @@
+experiment_id: E14_runtime_evidence_validator
+status: COMPLETE_APPROVED
+question: "Can the inference-time evidence validator be aligned with frozen evidence_evaluator_v2 formatting rules without semantic false positives or unrelated behavior change?"
+nature: "Deterministic production-pipeline alignment. Not prompt/architecture/model/retrieval/evaluator tuning."
+versions:
+  runtime_evidence_validator_v1: "exact substring only (historical; selectable via validate_evidence(..., version=RUNTIME_EVIDENCE_VALIDATOR_V1))"
+  runtime_evidence_validator_v2: "exact first, then frozen v2 formatting fallback (NFC, delete U+200B/200C/200D/2060/FEFF, collapse isspace runs to one space, trim); first-occurrence original span recovered. CURRENT."
+shared_module: pipeline/evidence_text.py   # evaluation.evidence_matching imports it; pipeline never imports evaluation
+not_done: [lowercasing, punctuation/curly-quote normalization, ellipsis segmentation, fuzzy/semantic/LLM matching]
+runtime_knows_nothing_about: [gold labels, gold spans, tau, joint success]
+model_calls: NONE
+test_access: NONE
+replay_sources: [E05, E07, E08B, E11(A2,A3), E12A, E12B(P0-P3), E12C(P0,P3), E13(FULL,RAG)]
+outcomes: {A: "APPROVE RUNTIME VALIDATOR V2", B: "PARTIAL", C: "KEEP V1"}

@@ -1,0 +1,153 @@
+{
+ "per_arm": [
+  {
+   "exp": "E05",
+   "arm": "qwen_full",
+   "cases": 150,
+   "quotes": 92,
+   "inv2val": 4,
+   "val2inv": 0,
+   "v2_ne_evaluator": 0,
+   "label_or_consistency_changed": 0
+  },
+  {
+   "exp": "E07",
+   "arm": "qwen_rag",
+   "cases": 150,
+   "quotes": 100,
+   "inv2val": 5,
+   "val2inv": 0,
+   "v2_ne_evaluator": 0,
+   "label_or_consistency_changed": 0
+  },
+  {
+   "exp": "E08B",
+   "arm": "gpt_rag",
+   "cases": 150,
+   "quotes": 193,
+   "inv2val": 3,
+   "val2inv": 0,
+   "v2_ne_evaluator": 0,
+   "label_or_consistency_changed": 0
+  },
+  {
+   "exp": "E11",
+   "arm": "A2",
+   "cases": 150,
+   "quotes": 193,
+   "inv2val": 3,
+   "val2inv": 0,
+   "v2_ne_evaluator": 0,
+   "label_or_consistency_changed": 0
+  },
+  {
+   "exp": "E11",
+   "arm": "A3",
+   "cases": 150,
+   "quotes": 192,
+   "inv2val": 4,
+   "val2inv": 0,
+   "v2_ne_evaluator": 0,
+   "label_or_consistency_changed": 0
+  },
+  {
+   "exp": "E12A",
+   "arm": "top11",
+   "cases": 150,
+   "quotes": 199,
+   "inv2val": 4,
+   "val2inv": 0,
+   "v2_ne_evaluator": 0,
+   "label_or_consistency_changed": 0
+  },
+  {
+   "exp": "E12B",
+   "arm": "gpt_p0",
+   "cases": 150,
+   "quotes": 186,
+   "inv2val": 2,
+   "val2inv": 0,
+   "v2_ne_evaluator": 0,
+   "label_or_consistency_changed": 0
+  },
+  {
+   "exp": "E12B",
+   "arm": "gpt_p1_resume",
+   "cases": 150,
+   "quotes": 209,
+   "inv2val": 1,
+   "val2inv": 0,
+   "v2_ne_evaluator": 0,
+   "label_or_consistency_changed": 0
+  },
+  {
+   "exp": "E12B",
+   "arm": "gpt_p2",
+   "cases": 150,
+   "quotes": 236,
+   "inv2val": 1,
+   "val2inv": 0,
+   "v2_ne_evaluator": 0,
+   "label_or_consistency_changed": 0
+  },
+  {
+   "exp": "E12B",
+   "arm": "gpt_p3",
+   "cases": 150,
+   "quotes": 209,
+   "inv2val": 0,
+   "val2inv": 0,
+   "v2_ne_evaluator": 0,
+   "label_or_consistency_changed": 0
+  },
+  {
+   "exp": "E12C",
+   "arm": "gpt_p0",
+   "cases": 150,
+   "quotes": 175,
+   "inv2val": 3,
+   "val2inv": 0,
+   "v2_ne_evaluator": 0,
+   "label_or_consistency_changed": 0
+  },
+  {
+   "exp": "E12C",
+   "arm": "gpt_p3",
+   "cases": 150,
+   "quotes": 183,
+   "inv2val": 3,
+   "val2inv": 0,
+   "v2_ne_evaluator": 0,
+   "label_or_consistency_changed": 0
+  },
+  {
+   "exp": "E13",
+   "arm": "full",
+   "cases": 150,
+   "quotes": 195,
+   "inv2val": 5,
+   "val2inv": 0,
+   "v2_ne_evaluator": 0,
+   "label_or_consistency_changed": 0
+  },
+  {
+   "exp": "E13",
+   "arm": "rag",
+   "cases": 150,
+   "quotes": 198,
+   "inv2val": 3,
+   "val2inv": 0,
+   "v2_ne_evaluator": 0,
+   "label_or_consistency_changed": 0
+  }
+ ],
+ "total": {
+  "cases": 2100,
+  "quotes": 2560,
+  "inv2val": 41,
+  "val2inv": 0,
+  "v2_ne_evaluator": 0,
+  "label_or_consistency_changed": 0
+ },
+ "valid_to_invalid": []
+}
