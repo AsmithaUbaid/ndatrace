@@ -1,0 +1,45 @@
+experiment_id: E03_prompt_selection
+status: PENDING  # SUPERSEDED/INVALIDATED partial P0 attempt (88/150 cases) -- see summary.md.
+                 # Resequenced: E06 (retrieval) now runs before E03 resumes with frozen
+                 # retrieved context instead of full-context NDA text.
+dataset_manifest: TRAIN_PROMPT_v1
+split_role: development   # Role A, TRAIN only
+purpose: controlled_prompt_selection
+
+manifest:
+  path: TRAIN_PROMPT_v1.json
+  seed: 500
+  target_per_class: 50
+  max_cases_per_doc_per_class: 2
+  total_cases: 150
+  context_condition: full_context_nda_text
+
+model:
+  provider: local
+  model: qwen2.5:7b-instruct
+  temperature: 0.0
+  note: FIXED -- the frozen primary local model from E01/E02. No other model runs in E03.
+
+prompts:
+  p00:
+    path: ../../configs/prompts/classification/classification_p00.yaml
+    role: minimal direct baseline
+  p01:
+    path: ../../configs/prompts/classification/classification_p01.yaml
+    role: explicit label definitions
+  p02:
+    path: ../../configs/prompts/classification/classification_p02.yaml
+    role: structured decision procedure
+  p03:
+    status: NOT RUN / NOT JUSTIFIED -- see summary.md section 10
+
+output_schema: '{"label": "Entailment" | "Contradiction" | "NotMentioned"}'
+
+model_calls: NONE -- Stage A only, no inference performed
+api_calls: NONE
+hosted_calls: NONE -- E03 is local-only by design
+
+outputs:
+  - TRAIN_PROMPT_v1.json
+  - results/ (empty until Stage B)
+  - E03_prompt_selection.ipynb (created in Stage B, after results exist)

@@ -1,0 +1,32 @@
+version: p02
+purpose: "E03 -- P1 plus a concise structured decision procedure (not chain-of-thought/explanation), testing whether explicit decision steps improve reliability"
+system_prompt: |
+  You are given an NDA requirement and the full text of the NDA.
+
+  Classify the requirement against the NDA text as exactly one of:
+  - "Entailment": the NDA text states or clearly implies that the requirement is met.
+  - "Contradiction": the NDA text states or clearly implies terms incompatible with the requirement.
+  - "NotMentioned": the NDA text does not address this requirement at all.
+
+  Follow this procedure:
+  1. Determine whether the NDA text addresses the requirement.
+  2. If it clearly supports the requirement, output Entailment.
+  3. If it clearly establishes incompatible terms, output Contradiction.
+  4. If neither is established, output NotMentioned.
+  5. Do not infer facts that are not stated in the NDA text.
+
+  Respond with ONLY a JSON object with this exact field:
+  {
+    "label": "Entailment" | "Contradiction" | "NotMentioned"
+  }
+user_template: |
+  Requirement: {hypothesis_text}
+
+  NDA text: {context_text}
+output_schema: '{"label": "Entailment" | "Contradiction" | "NotMentioned"}'
+model: qwen2.5:7b-instruct
+temperature: 0.0
+date: "2026-09-26"
+experiment_id: E03_prompt_selection
+change_from_previous: "Added a concise 5-step explicit decision procedure on top of p01's label definitions. No chain-of-thought/hidden reasoning or verbose explanation requested -- output schema unchanged from p00/p01."
+system_prompt_tokens_cl100k_approx: 197
