@@ -1,0 +1,19 @@
+{
+  "current_150case": {
+    "accuracy": 0.7866666666666666,
+    "joint_success": 0.74
+  },
+  "STATIC_PIPELINE_OPPORTUNITY_CEILING": {
+    "label": "Assumes all 6 RETRIEVAL_FILTERING_LIMITED cases are fixed by a deterministic top-k increase (expand_final_k) -- NOT an agent action.",
+    "joint_success_ceiling": 0.78,
+    "joint_success_uplift_pp": 4.0,
+    "accuracy_ceiling": 0.82
+  },
+  "ORACLE_AGENT_OPPORTUNITY_CEILING": {
+    "label": "Upper bound only, NOT an expected result. Assumes the single genuinely DYNAMIC_INFORMATION_ACQUISITION case is magically resolved by an agent and no currently-correct case regresses.",
+    "n_dynamic_cases": 1,
+    "joint_success_ceiling": 0.7466666666666667,
+    "joint_success_uplift_pp": 0.6666666666666667,
+    "accuracy_ceiling": 0.7933333333333333
+  }
+}
