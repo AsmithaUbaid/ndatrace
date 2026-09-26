@@ -1,0 +1,564 @@
+{
+ "units": [
+  {
+   "exp": "E05",
+   "arm": "qwen_full_context",
+   "n": 150,
+   "reported_joint_from_stored_summary": 0.28,
+   "joint_v1": 42,
+   "joint_v2": 43,
+   "evidence_recall_v1": 0.25,
+   "evidence_recall_v2": 0.26,
+   "evidence_precision_v1": 0.28735632183908044,
+   "evidence_precision_v2": 0.2988505747126437,
+   "source_valid_records_v1": 53,
+   "source_valid_records_v2": 57,
+   "mappings_changed": [
+    "train::194::nda-10",
+    "train::352::nda-12",
+    "train::94::nda-16",
+    "train::350::nda-10"
+   ],
+   "rescued_quote_cases": [
+    "train::194::nda-10",
+    "train::352::nda-12",
+    "train::94::nda-16",
+    "train::350::nda-10"
+   ],
+   "joint_fail_to_success": [
+    "train::352::nda-12"
+   ],
+   "joint_success_to_fail": [],
+   "regress_span_not_superset": [],
+   "regress_source_valid_true_to_false": [],
+   "v1_exact_stored_verbatim_mismatch": [],
+   "n_rescued_quotes": 4,
+   "n_rescued_quotes_multi_occurrence": 0,
+   "residual_unmatched_quotes_v2": 30,
+   "residual_by_cause": {
+    "ellipsis": 1,
+    "typographic_quotes_only": 0,
+    "other_nonverbatim": 29
+   },
+   "v1_matches_reported": true
+  },
+  {
+   "exp": "E07",
+   "arm": "qwen_rag_top5",
+   "n": 150,
+   "reported_joint_from_stored_summary": 0.3333333333333333,
+   "joint_v1": 50,
+   "joint_v2": 51,
+   "evidence_recall_v1": 0.29,
+   "evidence_recall_v2": 0.31,
+   "evidence_precision_v1": 0.35802469135802467,
+   "evidence_precision_v2": 0.38271604938271603,
+   "source_valid_records_v1": 49,
+   "source_valid_records_v2": 54,
+   "mappings_changed": [
+    "train::161::nda-7",
+    "train::317::nda-13",
+    "train::619::nda-10",
+    "train::94::nda-16",
+    "train::350::nda-10"
+   ],
+   "rescued_quote_cases": [
+    "train::161::nda-7",
+    "train::317::nda-13",
+    "train::619::nda-10",
+    "train::94::nda-16",
+    "train::350::nda-10"
+   ],
+   "joint_fail_to_success": [
+    "train::161::nda-7"
+   ],
+   "joint_success_to_fail": [],
+   "regress_span_not_superset": [],
+   "regress_source_valid_true_to_false": [],
+   "v1_exact_stored_verbatim_mismatch": [],
+   "n_rescued_quotes": 5,
+   "n_rescued_quotes_multi_occurrence": 0,
+   "residual_unmatched_quotes_v2": 29,
+   "residual_by_cause": {
+    "ellipsis": 0,
+    "typographic_quotes_only": 2,
+    "other_nonverbatim": 27
+   },
+   "v1_matches_reported": true
+  },
+  {
+   "exp": "E08B",
+   "arm": "gpt5mini_rag_top5",
+   "n": 150,
+   "reported_joint_from_stored_summary": 0.74,
+   "joint_v1": 111,
+   "joint_v2": 113,
+   "evidence_recall_v1": 0.86,
+   "evidence_recall_v2": 0.88,
+   "evidence_precision_v1": 0.8349514563106796,
+   "evidence_precision_v2": 0.8543689320388349,
+   "source_valid_records_v1": 97,
+   "source_valid_records_v2": 100,
+   "mappings_changed": [
+    "train::352::nda-12",
+    "train::466::nda-15",
+    "train::500::nda-13"
+   ],
+   "rescued_quote_cases": [
+    "train::352::nda-12",
+    "train::466::nda-15",
+    "train::500::nda-13"
+   ],
+   "joint_fail_to_success": [
+    "train::352::nda-12",
+    "train::500::nda-13"
+   ],
+   "joint_success_to_fail": [],
+   "regress_span_not_superset": [],
+   "regress_source_valid_true_to_false": [],
+   "v1_exact_stored_verbatim_mismatch": [],
+   "n_rescued_quotes": 3,
+   "n_rescued_quotes_multi_occurrence": 0,
+   "residual_unmatched_quotes_v2": 3,
+   "residual_by_cause": {
+    "ellipsis": 0,
+    "typographic_quotes_only": 1,
+    "other_nonverbatim": 2
+   },
+   "v1_matches_reported": true
+  },
+  {
+   "exp": "E11",
+   "arm": "A2_control",
+   "n": 150,
+   "reported_joint_from_stored_summary": null,
+   "joint_v1": 111,
+   "joint_v2": 113,
+   "evidence_recall_v1": 0.86,
+   "evidence_recall_v2": 0.88,
+   "evidence_precision_v1": 0.8349514563106796,
+   "evidence_precision_v2": 0.8543689320388349,
+   "source_valid_records_v1": 97,
+   "source_valid_records_v2": 100,
+   "mappings_changed": [
+    "train::352::nda-12",
+    "train::466::nda-15",
+    "train::500::nda-13"
+   ],
+   "rescued_quote_cases": [
+    "train::352::nda-12",
+    "train::466::nda-15",
+    "train::500::nda-13"
+   ],
+   "joint_fail_to_success": [
+    "train::352::nda-12",
+    "train::500::nda-13"
+   ],
+   "joint_success_to_fail": [],
+   "regress_span_not_superset": [],
+   "regress_source_valid_true_to_false": [],
+   "v1_exact_stored_verbatim_mismatch": [],
+   "n_rescued_quotes": 3,
+   "n_rescued_quotes_multi_occurrence": 0,
+   "residual_unmatched_quotes_v2": 3,
+   "residual_by_cause": {
+    "ellipsis": 0,
+    "typographic_quotes_only": 1,
+    "other_nonverbatim": 2
+   },
+   "v1_matches_reported": true
+  },
+  {
+   "exp": "E11",
+   "arm": "A3_selective_agent",
+   "n": 150,
+   "reported_joint_from_stored_summary": 0.74,
+   "joint_v1": 111,
+   "joint_v2": 113,
+   "evidence_recall_v1": 0.84,
+   "evidence_recall_v2": 0.86,
+   "evidence_precision_v1": 0.8235294117647058,
+   "evidence_precision_v2": 0.8431372549019608,
+   "source_valid_records_v1": 93,
+   "source_valid_records_v2": 97,
+   "mappings_changed": [
+    "train::92::nda-20",
+    "train::352::nda-12",
+    "train::466::nda-15",
+    "train::500::nda-13"
+   ],
+   "rescued_quote_cases": [
+    "train::92::nda-20",
+    "train::352::nda-12",
+    "train::466::nda-15",
+    "train::500::nda-13"
+   ],
+   "joint_fail_to_success": [
+    "train::352::nda-12",
+    "train::500::nda-13"
+   ],
+   "joint_success_to_fail": [],
+   "regress_span_not_superset": [],
+   "regress_source_valid_true_to_false": [],
+   "v1_exact_stored_verbatim_mismatch": [],
+   "n_rescued_quotes": 4,
+   "n_rescued_quotes_multi_occurrence": 0,
+   "residual_unmatched_quotes_v2": 6,
+   "residual_by_cause": {
+    "ellipsis": 0,
+    "typographic_quotes_only": 1,
+    "other_nonverbatim": 5
+   },
+   "v1_matches_reported": true
+  },
+  {
+   "exp": "E12A",
+   "arm": "gpt5mini_top11",
+   "n": 150,
+   "reported_joint_from_stored_summary": 0.78,
+   "joint_v1": 117,
+   "joint_v2": 119,
+   "evidence_recall_v1": 0.91,
+   "evidence_recall_v2": 0.93,
+   "evidence_precision_v1": 0.8425925925925926,
+   "evidence_precision_v2": 0.8611111111111112,
+   "source_valid_records_v1": 102,
+   "source_valid_records_v2": 106,
+   "mappings_changed": [
+    "train::226::nda-12",
+    "train::466::nda-15",
+    "train::500::nda-13",
+    "train::350::nda-10"
+   ],
+   "rescued_quote_cases": [
+    "train::226::nda-12",
+    "train::466::nda-15",
+    "train::500::nda-13",
+    "train::350::nda-10"
+   ],
+   "joint_fail_to_success": [
+    "train::226::nda-12",
+    "train::500::nda-13"
+   ],
+   "joint_success_to_fail": [],
+   "regress_span_not_superset": [],
+   "regress_source_valid_true_to_false": [],
+   "v1_exact_stored_verbatim_mismatch": [],
+   "n_rescued_quotes": 4,
+   "n_rescued_quotes_multi_occurrence": 0,
+   "residual_unmatched_quotes_v2": 2,
+   "residual_by_cause": {
+    "ellipsis": 0,
+    "typographic_quotes_only": 1,
+    "other_nonverbatim": 1
+   },
+   "v1_matches_reported": true
+  },
+  {
+   "exp": "E12B",
+   "arm": "gpt_p0",
+   "n": 150,
+   "reported_joint_from_stored_summary": 0.76,
+   "joint_v1": 114,
+   "joint_v2": 116,
+   "evidence_recall_v1": 0.85,
+   "evidence_recall_v2": 0.87,
+   "evidence_precision_v1": 0.8252427184466019,
+   "evidence_precision_v2": 0.8446601941747572,
+   "source_valid_records_v1": 100,
+   "source_valid_records_v2": 102,
+   "mappings_changed": [
+    "train::246::nda-2",
+    "train::183::nda-12"
+   ],
+   "rescued_quote_cases": [
+    "train::246::nda-2",
+    "train::183::nda-12"
+   ],
+   "joint_fail_to_success": [
+    "train::246::nda-2",
+    "train::183::nda-12"
+   ],
+   "joint_success_to_fail": [],
+   "regress_span_not_superset": [],
+   "regress_source_valid_true_to_false": [],
+   "v1_exact_stored_verbatim_mismatch": [],
+   "n_rescued_quotes": 2,
+   "n_rescued_quotes_multi_occurrence": 0,
+   "residual_unmatched_quotes_v2": 1,
+   "residual_by_cause": {
+    "ellipsis": 0,
+    "typographic_quotes_only": 0,
+    "other_nonverbatim": 1
+   },
+   "v1_matches_reported": true
+  },
+  {
+   "exp": "E12B",
+   "arm": "gpt_p1",
+   "n": 150,
+   "reported_joint_from_stored_summary": 0.7466666666666667,
+   "joint_v1": 112,
+   "joint_v2": 113,
+   "evidence_recall_v1": 0.85,
+   "evidence_recall_v2": 0.86,
+   "evidence_precision_v1": 0.8018867924528302,
+   "evidence_precision_v2": 0.8113207547169812,
+   "source_valid_records_v1": 103,
+   "source_valid_records_v2": 104,
+   "mappings_changed": [
+    "train::246::nda-2"
+   ],
+   "rescued_quote_cases": [
+    "train::246::nda-2"
+   ],
+   "joint_fail_to_success": [
+    "train::246::nda-2"
+   ],
+   "joint_success_to_fail": [],
+   "regress_span_not_superset": [],
+   "regress_source_valid_true_to_false": [],
+   "v1_exact_stored_verbatim_mismatch": [],
+   "n_rescued_quotes": 1,
+   "n_rescued_quotes_multi_occurrence": 0,
+   "residual_unmatched_quotes_v2": 2,
+   "residual_by_cause": {
+    "ellipsis": 0,
+    "typographic_quotes_only": 0,
+    "other_nonverbatim": 2
+   },
+   "v1_matches_reported": true
+  },
+  {
+   "exp": "E12B",
+   "arm": "gpt_p2",
+   "n": 150,
+   "reported_joint_from_stored_summary": 0.7066666666666667,
+   "joint_v1": 106,
+   "joint_v2": 107,
+   "evidence_recall_v1": 0.85,
+   "evidence_recall_v2": 0.86,
+   "evidence_precision_v1": 0.7870370370370371,
+   "evidence_precision_v2": 0.7962962962962963,
+   "source_valid_records_v1": 104,
+   "source_valid_records_v2": 105,
+   "mappings_changed": [
+    "train::183::nda-12"
+   ],
+   "rescued_quote_cases": [
+    "train::183::nda-12"
+   ],
+   "joint_fail_to_success": [
+    "train::183::nda-12"
+   ],
+   "joint_success_to_fail": [],
+   "regress_span_not_superset": [],
+   "regress_source_valid_true_to_false": [],
+   "v1_exact_stored_verbatim_mismatch": [],
+   "n_rescued_quotes": 1,
+   "n_rescued_quotes_multi_occurrence": 0,
+   "residual_unmatched_quotes_v2": 3,
+   "residual_by_cause": {
+    "ellipsis": 0,
+    "typographic_quotes_only": 0,
+    "other_nonverbatim": 3
+   },
+   "v1_matches_reported": true
+  },
+  {
+   "exp": "E12B",
+   "arm": "gpt_p3",
+   "n": 150,
+   "reported_joint_from_stored_summary": 0.8133333333333334,
+   "joint_v1": 122,
+   "joint_v2": 122,
+   "evidence_recall_v1": 0.92,
+   "evidence_recall_v2": 0.92,
+   "evidence_precision_v1": 0.8846153846153846,
+   "evidence_precision_v2": 0.8846153846153846,
+   "source_valid_records_v1": 103,
+   "source_valid_records_v2": 103,
+   "mappings_changed": [],
+   "rescued_quote_cases": [],
+   "joint_fail_to_success": [],
+   "joint_success_to_fail": [],
+   "regress_span_not_superset": [],
+   "regress_source_valid_true_to_false": [],
+   "v1_exact_stored_verbatim_mismatch": [],
+   "n_rescued_quotes": 0,
+   "n_rescued_quotes_multi_occurrence": 0,
+   "residual_unmatched_quotes_v2": 1,
+   "residual_by_cause": {
+    "ellipsis": 0,
+    "typographic_quotes_only": 0,
+    "other_nonverbatim": 1
+   },
+   "v1_matches_reported": true
+  },
+  {
+   "exp": "E12C",
+   "arm": "gpt_p0",
+   "n": 150,
+   "reported_joint_from_stored_summary": 0.8533333333333334,
+   "joint_v1": 128,
+   "joint_v2": 128,
+   "evidence_recall_v1": 0.92,
+   "evidence_recall_v2": 0.92,
+   "evidence_precision_v1": 0.9292929292929293,
+   "evidence_precision_v2": 0.9292929292929293,
+   "source_valid_records_v1": 94,
+   "source_valid_records_v2": 97,
+   "mappings_changed": [
+    "train::243::nda-12",
+    "train::416::nda-10",
+    "train::620::nda-10"
+   ],
+   "rescued_quote_cases": [
+    "train::243::nda-12",
+    "train::416::nda-10",
+    "train::620::nda-10"
+   ],
+   "joint_fail_to_success": [],
+   "joint_success_to_fail": [],
+   "regress_span_not_superset": [],
+   "regress_source_valid_true_to_false": [],
+   "v1_exact_stored_verbatim_mismatch": [],
+   "n_rescued_quotes": 3,
+   "n_rescued_quotes_multi_occurrence": 0,
+   "residual_unmatched_quotes_v2": 2,
+   "residual_by_cause": {
+    "ellipsis": 1,
+    "typographic_quotes_only": 1,
+    "other_nonverbatim": 0
+   },
+   "v1_matches_reported": true
+  },
+  {
+   "exp": "E12C",
+   "arm": "gpt_p3",
+   "n": 150,
+   "reported_joint_from_stored_summary": 0.8333333333333334,
+   "joint_v1": 125,
+   "joint_v2": 126,
+   "evidence_recall_v1": 0.9,
+   "evidence_recall_v2": 0.91,
+   "evidence_precision_v1": 0.8910891089108911,
+   "evidence_precision_v2": 0.900990099009901,
+   "source_valid_records_v1": 96,
+   "source_valid_records_v2": 99,
+   "mappings_changed": [
+    "train::424::nda-2",
+    "train::243::nda-12",
+    "train::583::nda-1"
+   ],
+   "rescued_quote_cases": [
+    "train::424::nda-2",
+    "train::243::nda-12",
+    "train::583::nda-1"
+   ],
+   "joint_fail_to_success": [
+    "train::424::nda-2"
+   ],
+   "joint_success_to_fail": [],
+   "regress_span_not_superset": [],
+   "regress_source_valid_true_to_false": [],
+   "v1_exact_stored_verbatim_mismatch": [],
+   "n_rescued_quotes": 3,
+   "n_rescued_quotes_multi_occurrence": 0,
+   "residual_unmatched_quotes_v2": 2,
+   "residual_by_cause": {
+    "ellipsis": 0,
+    "typographic_quotes_only": 0,
+    "other_nonverbatim": 2
+   },
+   "v1_matches_reported": true
+  },
+  {
+   "exp": "E13",
+   "arm": "full_context",
+   "n": 150,
+   "reported_joint_from_stored_summary": 0.7733333333333333,
+   "joint_v1": 116,
+   "joint_v2": 120,
+   "evidence_recall_v1": 0.9,
+   "evidence_recall_v2": 0.93,
+   "evidence_precision_v1": 0.8571428571428571,
+   "evidence_precision_v2": 0.8857142857142857,
+   "source_valid_records_v1": 96,
+   "source_valid_records_v2": 101,
+   "mappings_changed": [
+    "dev::69::nda-2",
+    "dev::435::nda-2",
+    "dev::563::nda-2",
+    "dev::13::nda-12",
+    "dev::610::nda-12"
+   ],
+   "rescued_quote_cases": [
+    "dev::69::nda-2",
+    "dev::435::nda-2",
+    "dev::563::nda-2",
+    "dev::13::nda-12",
+    "dev::610::nda-12"
+   ],
+   "joint_fail_to_success": [
+    "dev::69::nda-2",
+    "dev::563::nda-2",
+    "dev::13::nda-12",
+    "dev::610::nda-12"
+   ],
+   "joint_success_to_fail": [],
+   "regress_span_not_superset": [],
+   "regress_source_valid_true_to_false": [],
+   "v1_exact_stored_verbatim_mismatch": [],
+   "n_rescued_quotes": 5,
+   "n_rescued_quotes_multi_occurrence": 0,
+   "residual_unmatched_quotes_v2": 4,
+   "residual_by_cause": {
+    "ellipsis": 1,
+    "typographic_quotes_only": 3,
+    "other_nonverbatim": 0
+   },
+   "v1_matches_reported": true
+  },
+  {
+   "exp": "E13",
+   "arm": "rag_top5",
+   "n": 150,
+   "reported_joint_from_stored_summary": 0.7533333333333333,
+   "joint_v1": 113,
+   "joint_v2": 114,
+   "evidence_recall_v1": 0.84,
+   "evidence_recall_v2": 0.84,
+   "evidence_precision_v1": 0.8155339805825242,
+   "evidence_precision_v2": 0.8155339805825242,
+   "source_valid_records_v1": 97,
+   "source_valid_records_v2": 100,
+   "mappings_changed": [
+    "dev::435::nda-2",
+    "dev::590::nda-2",
+    "dev::610::nda-12"
+   ],
+   "rescued_quote_cases": [
+    "dev::435::nda-2",
+    "dev::590::nda-2",
+    "dev::610::nda-12"
+   ],
+   "joint_fail_to_success": [
+    "dev::435::nda-2"
+   ],
+   "joint_success_to_fail": [],
+   "regress_span_not_superset": [],
+   "regress_source_valid_true_to_false": [],
+   "v1_exact_stored_verbatim_mismatch": [],
+   "n_rescued_quotes": 3,
+   "n_rescued_quotes_multi_occurrence": 0,
+   "residual_unmatched_quotes_v2": 3,
+   "residual_by_cause": {
+    "ellipsis": 0,
+    "typographic_quotes_only": 0,
+    "other_nonverbatim": 3
+   },
+   "v1_matches_reported": true
+  }
+ ]
+}

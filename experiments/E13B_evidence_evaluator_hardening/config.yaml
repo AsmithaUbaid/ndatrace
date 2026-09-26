@@ -1,0 +1,58 @@
+experiment_id: E13B_evidence_evaluator_hardening
+status: COMPLETE_AND_FROZEN  # evidence_evaluator_v2 approved+frozen as canonical/default (incl. TEST); zero model calls; no TEST access
+question: "Can the evidence evaluator be made robust to harmless formatting differences without changing the semantic standard for what counts as supporting evidence?"
+nature: "EVALUATOR CORRECTION. Not model/architecture/prompt/retrieval tuning and not a benchmark re-run. Operates only on unit-test fixtures and stored TRAIN/DEV outputs."
+prompted_by: "E13 post-hoc scoring artefact: exact-substring evidence->span mapping failed on correct quotes whose formatting differed (5 FULL, 1 RAG cases)."
+
+versions:
+  evidence_evaluator_v1: "exact-substring evidence->span mapping (historical; unchanged, kept for reproducibility as evaluation.evidence_matching.evidence_to_span_indices_v1)"
+  evidence_evaluator_v2: "exact-first, then formatting-normalized fallback with original-offset recovery (evaluation/evidence_matching.py)"
+
+v2_specification:  # FROZEN before any historical re-scoring; NOT to be extended after inspecting which arm benefits (anti-bias rule)
+  matching_policy:
+    1: "For each quote, first try the v1 exact verbatim substring match against every context text (chunk / document)."
+    2: "Only if the quote matches NOWHERE exactly, try the normalized substring match against every context text."
+    3: "Recover the match to ORIGINAL character coordinates via a normalized->original offset map; apply the UNCHANGED v1 gold-overlap/span-overlap semantics to the recovered original span."
+    4: "Because normalization is only a fallback, every v1-valid mapping is reproduced bit-for-bit; v2 can only ADD mappings (no v1-valid -> v2-invalid by construction, still verified empirically)."
+  normalization:  # applied identically to the quote and to each context text
+    A_unicode: "NFC (canonical composition) per base+combining-mark cluster. NFKC deliberately NOT used: compatibility mappings (ligatures, superscripts '2'->'2', fractions, ellipsis char) can change semantics/numbers."
+    B_zero_width_removed: "U+200B ZERO WIDTH SPACE, U+200C ZWNJ, U+200D ZWJ, U+2060 WORD JOINER, U+FEFF BOM/ZWNBSP are deleted."
+    C_whitespace: "every character with str.isspace() (space, tab, CR, LF, VT, FF, NBSP U+00A0, U+2000-200A, U+2028/2029, U+202F, U+205F, U+3000, U+0085, ...) collapses, in runs, to ONE ordinary space (zero-width chars are removed first so a run like ' \\u200b ' is one run)."
+    D_trim: "leading and trailing whitespace removed."
+    not_done: "no lowercasing; no punctuation removal or substitution (curly vs straight quotes NOT unified); no word removal; no negation handling; no ellipsis segmentation; no soft-hyphen removal; no fuzzy/edit-distance, embedding, synonym, paraphrase or LLM matching; no gold-aware repair; no case-specific exceptions."
+  offset_mapping: "each normalized character stores (orig_start, orig_end) of the original cluster/whitespace-run it came from; a normalized match [i, j) maps to original [start(i), end(j-1))."
+  multiple_matches: >
+    Existing v1 policy PRESERVED: per context text, only the FIRST (leftmost) occurrence is used; every text containing the quote contributes. This is gold-blind and deterministic.
+    For v2 the same rule applies to the normalized fallback. source-valid = at least one genuine occurrence (exact, else normalized). The number of quotes with >1 occurrence is reported as an ambiguity diagnostic.
+  joint_semantics_unchanged: "E/C: correct label AND |gold spans ∩ predicted spans| / |gold spans| >= tau; empty gold -> label match suffices. NotMentioned: correct label AND no predicted spans. Evaluator v2 changes ONLY text->span mapping."
+  tau_evidence: 0.5  # existing frozen value (evaluation.metrics.joint_label_evidence_correctness; duplicated as TAU_EVIDENCE in 5 analysis scripts); NOT tuned
+  retrieval_metrics: "Recall@K/MRR use character-offset overlap of chunks vs gold spans (evaluation.scorer.map_chunks_to_gold_span_indices), not text matching -> unaffected; left unchanged."
+
+canonical_implementation: evaluation/evidence_matching.py  # historical experiment scripts are NOT rewritten and raw outputs are NOT modified; future evaluation paths import this module
+production_note: "pipeline/evidence_validator.py (v1 exact check used at inference time) is deliberately NOT modified here (architecture untouched); a v2-compatible validator function is provided in the evaluation module for scoring."
+
+rescoring_scope:  # stored outputs only, TRAIN and DEV; zero model calls; no TEST
+  - {id: E05_A1_qwen_full_context, source: experiments/E05_full_context/results/run_E05_A1_train_cases.jsonl}
+  - {id: E07_A2_qwen_rag, source: experiments/E07_standard_rag/results/run_E07_A2_train_cases.jsonl}
+  - {id: E08B_A2_gpt_rag, source: experiments/E08B_stronger_model_diagnostic/results/run_E08B_A2_gpt5mini_train_cases.jsonl}
+  - {id: E11_A2_and_A3, source: experiments/E11_selective_agent_evaluation/results/a3_scored_cases.jsonl}
+  - {id: E12A_top11, source: experiments/E12A_static_context_expansion/results/run_E12A_top11_gpt5mini_train_cases.jsonl}
+  - {id: E12B_P0_P1_P2_P3, source: experiments/E12B_gpt_prompt_optimization/results/}
+  - {id: E12C_P0_P3, source: experiments/E12C_gpt_prompt_confirmation/results/}
+  - {id: E13_FULL_RAG, source: experiments/E13_gpt_context_architecture/results/}
+not_rescored: "E01/E03 (label-only outputs, no evidence), E04 (rule baseline, no model evidence), any TEST artifact"
+
+stability_checks:  # offline re-application of already-FROZEN decision rules; NOT new benchmarks
+  E13: "re-apply frozen E13 rule (net_joint, 4 RAG guards) with v2 numbers; if the outcome changes -> STOP and report before freezing v2"
+  E12B_E12C: "re-apply frozen prompt rules; if KEEP P0 would change -> STOP and report"
+  E11: "A2 vs A3 joint transitions / net joint / no-go conclusion"
+acceptance_criteria:  # architecture-neutral
+  1: "all intended formatting-variant unit tests pass"
+  2: "all adversarial semantic-change negative controls remain non-matches"
+  3: "no unexplained v1-valid evidence becomes invalid"
+  4: "manual review of EVERY changed historical case confirms formatting-only behaviour"
+  5: "no material false-positive matching found"
+  6: "E13/E12/E11 sensitivity effects fully documented"
+outcomes: {A: "EVIDENCE_EVALUATOR_V2 APPROVED", B: "PARTIAL FIX - MORE WORK REQUIRED", C: "KEEP V1"}
+model_calls: NONE
+test_access: NONE
