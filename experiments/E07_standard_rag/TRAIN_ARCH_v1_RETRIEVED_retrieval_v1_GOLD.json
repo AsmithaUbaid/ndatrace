@@ -1,0 +1,1045 @@
+{
+  "manifest_id": "TRAIN_ARCH_v1_RETRIEVED_retrieval_v1_GOLD",
+  "note": "Scorer-side only. Never pass this file's contents to a classifier.",
+  "cases": [
+    {
+      "case_id": "train::88::nda-1",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        7
+      ]
+    },
+    {
+      "case_id": "train::88::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        8
+      ]
+    },
+    {
+      "case_id": "train::92::nda-17",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        19
+      ]
+    },
+    {
+      "case_id": "train::92::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        54,
+        56
+      ]
+    },
+    {
+      "case_id": "train::102::nda-1",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        16
+      ]
+    },
+    {
+      "case_id": "train::102::nda-19",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        44
+      ]
+    },
+    {
+      "case_id": "train::105::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        8
+      ]
+    },
+    {
+      "case_id": "train::106::nda-1",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        18,
+        28
+      ]
+    },
+    {
+      "case_id": "train::106::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        15,
+        17
+      ]
+    },
+    {
+      "case_id": "train::137::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        31
+      ]
+    },
+    {
+      "case_id": "train::141::nda-7",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "case_id": "train::161::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        10
+      ]
+    },
+    {
+      "case_id": "train::161::nda-7",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        13,
+        17,
+        18
+      ]
+    },
+    {
+      "case_id": "train::168::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        5
+      ]
+    },
+    {
+      "case_id": "train::178::nda-17",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        23
+      ]
+    },
+    {
+      "case_id": "train::178::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        23,
+        24
+      ]
+    },
+    {
+      "case_id": "train::239::nda-17",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        11,
+        12
+      ]
+    },
+    {
+      "case_id": "train::239::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        11,
+        12,
+        14,
+        15
+      ]
+    },
+    {
+      "case_id": "train::276::nda-17",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        28
+      ]
+    },
+    {
+      "case_id": "train::276::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        29
+      ]
+    },
+    {
+      "case_id": "train::283::nda-1",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        13
+      ]
+    },
+    {
+      "case_id": "train::283::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        14,
+        15
+      ]
+    },
+    {
+      "case_id": "train::300::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        6
+      ]
+    },
+    {
+      "case_id": "train::300::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        21
+      ]
+    },
+    {
+      "case_id": "train::316::nda-17",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        26
+      ]
+    },
+    {
+      "case_id": "train::316::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        14
+      ]
+    },
+    {
+      "case_id": "train::318::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        10,
+        13,
+        14
+      ]
+    },
+    {
+      "case_id": "train::338::nda-17",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        27,
+        28
+      ]
+    },
+    {
+      "case_id": "train::338::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        12
+      ]
+    },
+    {
+      "case_id": "train::366::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "case_id": "train::366::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        17
+      ]
+    },
+    {
+      "case_id": "train::373::nda-11",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        26,
+        28
+      ]
+    },
+    {
+      "case_id": "train::373::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        8,
+        9,
+        11,
+        12
+      ]
+    },
+    {
+      "case_id": "train::438::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        11
+      ]
+    },
+    {
+      "case_id": "train::438::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        64
+      ]
+    },
+    {
+      "case_id": "train::473::nda-17",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        13
+      ]
+    },
+    {
+      "case_id": "train::473::nda-7",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        11
+      ]
+    },
+    {
+      "case_id": "train::487::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "case_id": "train::487::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        30
+      ]
+    },
+    {
+      "case_id": "train::501::nda-1",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        8
+      ]
+    },
+    {
+      "case_id": "train::501::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        7
+      ]
+    },
+    {
+      "case_id": "train::515::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        11,
+        26
+      ]
+    },
+    {
+      "case_id": "train::515::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        48,
+        125
+      ]
+    },
+    {
+      "case_id": "train::551::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        17
+      ]
+    },
+    {
+      "case_id": "train::551::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        47
+      ]
+    },
+    {
+      "case_id": "train::553::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        35,
+        36,
+        37
+      ]
+    },
+    {
+      "case_id": "train::553::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        41
+      ]
+    },
+    {
+      "case_id": "train::560::nda-1",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "case_id": "train::560::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        12
+      ]
+    },
+    {
+      "case_id": "train::618::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        6
+      ]
+    },
+    {
+      "case_id": "train::145::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        34,
+        37
+      ]
+    },
+    {
+      "case_id": "train::145::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        34,
+        36
+      ]
+    },
+    {
+      "case_id": "train::146::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        15,
+        17
+      ]
+    },
+    {
+      "case_id": "train::146::nda-17",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        10
+      ]
+    },
+    {
+      "case_id": "train::160::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "case_id": "train::160::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        14,
+        15,
+        20,
+        30
+      ]
+    },
+    {
+      "case_id": "train::194::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        49
+      ]
+    },
+    {
+      "case_id": "train::194::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        30,
+        34
+      ]
+    },
+    {
+      "case_id": "train::220::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        55,
+        58
+      ]
+    },
+    {
+      "case_id": "train::220::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        55,
+        61
+      ]
+    },
+    {
+      "case_id": "train::226::nda-1",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        4,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "case_id": "train::226::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "case_id": "train::247::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        31,
+        44
+      ]
+    },
+    {
+      "case_id": "train::247::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        51,
+        52
+      ]
+    },
+    {
+      "case_id": "train::248::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        28
+      ]
+    },
+    {
+      "case_id": "train::248::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        21,
+        25
+      ]
+    },
+    {
+      "case_id": "train::265::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        16
+      ]
+    },
+    {
+      "case_id": "train::265::nda-15",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        21
+      ]
+    },
+    {
+      "case_id": "train::271::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        20
+      ]
+    },
+    {
+      "case_id": "train::271::nda-15",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        15
+      ]
+    },
+    {
+      "case_id": "train::273::nda-1",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        32,
+        33,
+        34
+      ]
+    },
+    {
+      "case_id": "train::273::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        13,
+        14,
+        16,
+        65
+      ]
+    },
+    {
+      "case_id": "train::317::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        42,
+        46,
+        54
+      ]
+    },
+    {
+      "case_id": "train::317::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        42,
+        45
+      ]
+    },
+    {
+      "case_id": "train::352::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        28,
+        32
+      ]
+    },
+    {
+      "case_id": "train::352::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        21,
+        28,
+        30
+      ]
+    },
+    {
+      "case_id": "train::353::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        25,
+        29
+      ]
+    },
+    {
+      "case_id": "train::353::nda-19",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        41
+      ]
+    },
+    {
+      "case_id": "train::375::nda-11",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        16
+      ]
+    },
+    {
+      "case_id": "train::375::nda-15",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        30,
+        32
+      ]
+    },
+    {
+      "case_id": "train::379::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        13,
+        17,
+        18
+      ]
+    },
+    {
+      "case_id": "train::379::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        25,
+        29
+      ]
+    },
+    {
+      "case_id": "train::449::nda-18",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        7
+      ]
+    },
+    {
+      "case_id": "train::457::nda-4",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        9
+      ]
+    },
+    {
+      "case_id": "train::466::nda-11",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        15
+      ]
+    },
+    {
+      "case_id": "train::466::nda-15",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        12
+      ]
+    },
+    {
+      "case_id": "train::484::nda-18",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        13,
+        18
+      ]
+    },
+    {
+      "case_id": "train::484::nda-8",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        13,
+        14
+      ]
+    },
+    {
+      "case_id": "train::500::nda-11",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        24
+      ]
+    },
+    {
+      "case_id": "train::500::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        28,
+        29,
+        32
+      ]
+    },
+    {
+      "case_id": "train::505::nda-3",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        30
+      ]
+    },
+    {
+      "case_id": "train::505::nda-4",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        57
+      ]
+    },
+    {
+      "case_id": "train::518::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        17,
+        21
+      ]
+    },
+    {
+      "case_id": "train::518::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        29,
+        30,
+        39,
+        40
+      ]
+    },
+    {
+      "case_id": "train::538::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        16,
+        20
+      ]
+    },
+    {
+      "case_id": "train::538::nda-18",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        28,
+        29,
+        30,
+        31,
+        32,
+        42,
+        44
+      ]
+    },
+    {
+      "case_id": "train::603::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        27
+      ]
+    },
+    {
+      "case_id": "train::603::nda-15",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        29
+      ]
+    },
+    {
+      "case_id": "train::619::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        14,
+        17,
+        18,
+        58
+      ]
+    },
+    {
+      "case_id": "train::619::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        31,
+        33
+      ]
+    },
+    {
+      "case_id": "train::86::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::86::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::94::nda-13",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::94::nda-16",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::121::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::121::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::125::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::125::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::126::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::126::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::159::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::159::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::164::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::164::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::187::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::187::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::200::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::200::nda-12",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::222::nda-18",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::222::nda-3",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::232::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::232::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::251::nda-17",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::251::nda-18",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::264::nda-12",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::278::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::278::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::279::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::279::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::280::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::280::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::297::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::320::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::320::nda-12",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::328::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::328::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::341::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::341::nda-12",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::350::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::350::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::366::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::366::nda-16",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::371::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::371::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::379::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::379::nda-17",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::439::nda-18",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::439::nda-2",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::516::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    },
+    {
+      "case_id": "train::516::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": []
+    }
+  ]
+}
