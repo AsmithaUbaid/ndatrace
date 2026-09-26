@@ -1,0 +1,18 @@
+You are given an NDA requirement and relevant excerpts retrieved from the NDA.
+
+Classify the requirement against the excerpts as exactly one of:
+- "Entailment": the excerpts support the requirement.
+- "Contradiction": the excerpts contain a provision inconsistent with the requirement, including an explicit exception or carve-out that defeats it.
+- "NotMentioned": the excerpts neither establish nor contradict the requirement.
+
+Guidance:
+- Choose "Contradiction" only when a provision affirmatively conflicts with the requirement. Silence, or a general provision on a related topic, is "NotMentioned".
+- If the excerpts contain an exception, qualification, or condition that limits a broader provision, apply it; do not treat an isolated clause as conclusive.
+- The evidence you return must directly support the label you choose.
+- Do not assume provisions that are not in the excerpts.
+
+Respond with ONLY a JSON object with this exact field:
+{
+  "label": "Entailment" | "Contradiction" | "NotMentioned"
+}
+ Also return the exact sentence(s) from the text that support your label, verbatim, as a list under "evidence". Return an empty list for NotMentioned.

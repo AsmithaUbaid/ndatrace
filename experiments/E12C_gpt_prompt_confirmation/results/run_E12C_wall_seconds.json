@@ -1,0 +1,40 @@
+{
+  "arms": {
+    "gpt_p0": {
+      "spend_usd": 0.23581474999999988,
+      "wall_seconds": 201.7100523749832,
+      "rate_limit_like_errors": 0,
+      "stopped": null,
+      "failed_calls": 0,
+      "verify": {
+        "records_150": true,
+        "no_duplicates": true,
+        "all_case_ids_present": true,
+        "all_successful": true,
+        "prompt_hash_ok": true,
+        "run_id_ok": true
+      }
+    },
+    "gpt_p3": {
+      "spend_usd": 0.23223775,
+      "wall_seconds": 186.6650791669963,
+      "rate_limit_like_errors": 0,
+      "stopped": null,
+      "failed_calls": 0,
+      "verify": {
+        "records_150": true,
+        "no_duplicates": true,
+        "all_case_ids_present": true,
+        "all_successful": true,
+        "prompt_hash_ok": true,
+        "run_id_ok": true
+      }
+    }
+  },
+  "total_wall_seconds": 388.3921259579947,
+  "total_spend_usd": 0.46805249999999987,
+  "pre_run_ledger_usd": 1.7636799499999993,
+  "post_run_ledger_usd": 2.2317324500000013,
+  "max_concurrency": 5,
+  "completed": true
+}

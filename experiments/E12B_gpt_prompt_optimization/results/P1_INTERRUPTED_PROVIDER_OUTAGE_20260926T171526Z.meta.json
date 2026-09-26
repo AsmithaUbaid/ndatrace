@@ -1,0 +1,6 @@
+{"artifact": "P1_INTERRUPTED_PROVIDER_OUTAGE_20260926T171526Z.jsonl",
+ "note": "Run interrupted by provider/network connectivity failure before any successful P1 benchmark response. Preserved for audit; excluded from E12B quality metrics.",
+ "attempted_cases": 5, "failed_cases": 5, "successful_cases": 0, "error_type": "MODEL_ERROR (APIConnectionError after 4 attempts each)",
+ "cost_usd": 0.0, "first_failure_utc": "2026-09-26T17:13:26Z", "circuit_breaker": "5 consecutive errors (sequential runner)",
+ "connectivity_recheck_utc": "2026-09-26T17:22:04Z", "recheck_result": "OpenRouter /models HTTP 200 (0.15s); authenticated /key HTTP 200 (0.69s)",
+ "counted_in_metrics": false, "sequential_log": "run_first_attempt_sequential.log"}

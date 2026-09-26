@@ -1,0 +1,101 @@
+experiment_id: E12B_gpt_prompt_optimization
+status: STAGE_B_COMPLETE  # outcome B (near-tie, P3 +8 net joint); keep P0; not committed
+question: >
+  Can a compact GPT-specific classification prompt materially improve evidence-grounded NDA
+  classification over the current Qwen-selected P0 without changing model, retrieval, context
+  size, output schema, or evaluator? (Prompt experiment only. One experiment = one question.)
+
+frozen:
+  retrieval: retrieval_v1  # BM25 -> clause_256 -> top-20 -> ms-marco-MiniLM-L-12-v2 rerank -> final top-5
+  final_k: 5
+  model: openai/gpt-5-mini
+  provider: openrouter
+  temperature: 0.0  # E08B/E12A setting (scripts/run_e08b_*.py, run_e12a_*.py); response_format not used
+  request_timeout_seconds: 60  # ONE uniform value for ALL four arms; operational setting, not a variable (E12A used 60; its slowest call was 25.3s)
+  output_schema: '{"label": "Entailment|Contradiction|NotMentioned", "evidence": [...]}'
+  user_template: "Requirement: {hypothesis_text}\n\nRetrieved NDA excerpts: {context_text}"  # wrapper identical to E08B
+  context_join: "\n\n---\n\n"
+  parser: evaluation.structured_output.parse_structured_output  # unchanged
+  evidence_validator: pipeline.evidence_validator.validate_evidence  # unchanged
+  scorer: scripts/analyze_e08b_stronger_model.py helpers (evidence->span overlap, joint tau=0.5)  # unchanged
+  only_variable: system prompt text
+  schema_quirk: >
+    P0's schema block asks for a label-only JSON object while a trailing sentence also asks for an evidence list. This is
+    PRESERVED VERBATIM in all four arms because P0 is the frozen E08B control; cleaning the wording now would confound
+    prompt-semantic changes with output-contract cleanup. Documented limitation; a schema cleanup can be a separate later controlled change.
+
+manifest:
+  id: TRAIN_GPT_PROMPT_v1
+  path: experiments/E12B_gpt_prompt_optimization/TRAIN_GPT_PROMPT_v1.json
+  seed: 1200  # unused by any prior manifest (42, 99, 123, 300, 500, 700), bootstrap (900), or the superseded first E12B draft (1100, never used for a model call)
+  n: 150
+  per_class: {Entailment: 50, Contradiction: 50, NotMentioned: 50}
+  unique_documents: 74
+  document_disjoint_from: [TRAIN_PROMPT_v1, TRAIN_ARCH_v1, TRAIN_ORACLE_v1]  # corrected: all three; union of prior docs = 227, untouched = 196  # verified by assertion at build time
+  selection: performance-agnostic; no model output/difficulty/evidence property read; no hard-case enrichment
+  inspection: results/manifest_inspection.json
+  context_artifact: experiments/E12B_gpt_prompt_optimization/TRAIN_GPT_PROMPT_v1_RETRIEVED_retrieval_v1.json  # ONE artifact shared by every arm
+  gold_side_file: TRAIN_GPT_PROMPT_v1_RETRIEVED_retrieval_v1_GOLD.json  # scorer only, never model-facing
+
+prompts:  # files hold the FULL effective system prompt (evidence line included); no runtime concatenation
+  gpt_p0: {file: prompts/reconstruction_v2/gpt_p0.txt, role: control, note: "byte-identical to E08B's effective system prompt (sha1 config hash dec7527f24c9 verified)"}
+  gpt_p1: {file: prompts/reconstruction_v2/gpt_p1.txt, change: "compact label definitions only"}
+  gpt_p2: {file: prompts/reconstruction_v2/gpt_p2.txt, change: "P1 definitions + 6-step decision order (no chain-of-thought requested)"}
+  gpt_p3: {file: prompts/reconstruction_v2/gpt_p3.txt, change: "P1 definitions + 4 guidance rules from established failure themes (Contradiction-vs-NotMentioned precision, governing exceptions, evidence directness, no invented provisions); written before any E12B result; no case IDs/gold/examples"}
+  no_few_shot: true
+  no_chain_of_thought: true
+  max_prompts_including_control: 4
+  no_new_prompts_after_seeing_results: true
+  arms_rerun_p0_on_new_manifest: true  # P0 is re-run on TRAIN_GPT_PROMPT_v1; E08B results are on a different manifest and are NOT reused
+
+metrics:
+  primary: [joint_label_evidence_success, contradiction_recall, macro_f1]
+  secondary: [accuracy, entailment_recall, notmentioned_recall, evidence_recall, evidence_precision,
+    source_valid_evidence_rate, strict_parse_rate, input_tokens, output_tokens, latency, cost]
+  also_report: [confusion_matrix_per_prompt, contradiction_confusion_pattern_per_prompt]
+  never_select_on: accuracy_alone
+
+selection_policy:  # FROZEN (simplified, protocol correction 2 before any call); no weighted score
+  primary_objective: joint_label_evidence_success
+  headline_safety_guard: contradiction_recall
+  secondary: [macro_f1, evidence_quality, simplicity]
+  noise_context: >
+    E12A showed hosted-model outcomes flip on identical context (2/17 cases in the <=5-chunk
+    group; a joint regression with zero added chunks). A 1-case edge is not evidence.
+  contradiction_guard: "a candidate is DISQUALIFIED if its Contradiction Recall is >=3 cases of 50 (>=6pp) below P0's"
+  adoption:  # a non-P0 prompt may earn adoption ONLY if all three hold
+    1: "passes the Contradiction guard"
+    2: "net joint-success gain >= +9 cases over P0 on the 150-case manifest (the predeclared substantive-effect threshold)"
+    3: "Macro-F1 is not materially worse than P0"
+    mcnemar_is_not_a_gate: true  # McNemar and bootstrap are supporting evidence only
+  near_tie: >
+    Best non-P0 candidate passes the Contradiction guard and has +1 to +8 net joint cases over P0 =>
+    inconclusive / near-tied. Do NOT continue tuning on this manifest. Then either (A) keep the simpler P0, or
+    (B) if the gain is practically interesting enough to justify more spend, use ONE fresh TRAIN-only
+    confirmation manifest. Which of A/B is decided only AFTER Stage B results.
+  no_benefit_or_harm: "0 or negative net joint gain => no adoption from E12B; if all alternatives behave this way, keep P0"
+  simplicity_tie_break: "if candidates are effectively tied, prefer the shorter/simpler prompt"
+  outcomes:
+    A: "GPT-SPECIFIC PROMPT EARNS ADOPTION -- adoption criteria above met"
+    B: "PROMPTS EFFECTIVELY TIED (near-tie or no benefit) -- KEEP P0"
+    C: "GPT-SPECIFIC PROMPT HURTS -- alternatives worsen important metrics (Contradiction guard failure or negative joint) -- KEEP P0"
+  if_a_wins: "becomes classification_prompt_gpt_v1 -- NOT the final architecture; pending confirmation if needed, GPT full-context vs GPT-RAG, later validation"
+  never_invent_prompts_after_results: true
+
+paired_analysis:  # each candidate vs P0, same 150 cases/contexts
+  transitions: [classification_wrong_to_right, classification_right_to_wrong, joint_fail_to_success, joint_success_to_fail]
+  mcnemar_exact: [classification, joint]
+  bootstrap: {resamples: 10000, seed: 900, metrics: [accuracy_delta, macro_f1_delta, contradiction_recall_delta, joint_delta]}
+  emphasis: effect sizes and transitions first, statistics second; p-values are NOT a model-selection requirement
+stage_b_only_analyses:
+  prompt_sensitivity: [all_prompts_correct, all_prompts_wrong, prompt_sensitive_cases, label_transition_patterns, "Contradiction->NotMentioned", "NotMentioned->Contradiction"]
+  evidence_selection_in_sensitive_cases: [correct_label_good_evidence, correct_label_bad_evidence, wrong_label_source_valid_evidence, wrong_label_gold_overlapping_evidence]
+
+budget:
+  ledger_read_from_file: true
+  planning_usd: 5.00
+  reserve_usd: 1.25
+  gate: "ledger + conservative E12B spend + reserve <= planning"
+  forecast: results/pre_run_forecast.json
+  result: PASS  # see summary.md
+model_calls_stage_a: NONE

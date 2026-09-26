@@ -1,0 +1,77 @@
+{
+ "n": 150,
+ "accuracy": 0.76,
+ "macro_f1": 0.7607925117422796,
+ "recall": {
+  "Entailment": 0.76,
+  "Contradiction": 0.8,
+  "NotMentioned": 0.72
+ },
+ "contradiction_correct": 40,
+ "contradiction_n": 50,
+ "contradiction_ci95": [
+  0.6696262789551477,
+  0.8875637005402611
+ ],
+ "confusion_matrix": [
+  [
+   38,
+   8,
+   4
+  ],
+  [
+   8,
+   40,
+   2
+  ],
+  [
+   7,
+   7,
+   36
+  ]
+ ],
+ "parse": {
+  "strict": 150,
+  "recovered": 0,
+  "invalid": 0
+ },
+ "errors": 0,
+ "retries": 0,
+ "source_valid_evidence_rate": 0.9629629629629629,
+ "evidence_recall": 0.85,
+ "gold_overlap_rate_of_evidence_bearing": 0.85,
+ "evidence_precision": 0.7870370370370371,
+ "joint": 0.7066666666666667,
+ "joint_n": 106,
+ "joint_by_class": {
+  "Entailment": 0.62,
+  "Contradiction": 0.78,
+  "NotMentioned": 0.72
+ },
+ "input_tokens": {
+  "mean": 1263.9866666666667,
+  "median": 1285.5,
+  "p90": 1420,
+  "max": 1606
+ },
+ "output_tokens": {
+  "mean": 802.0666666666667,
+  "median": 726.0,
+  "p90": 1310,
+  "max": 2493
+ },
+ "total_tokens_mean": 2066.0533333333333,
+ "latency_ms": {
+  "mean": 7814.567005293599,
+  "median": 7300.839854578953,
+  "p90": 13021.68012491893,
+  "max": 21468.843500013463
+ },
+ "cost": {
+  "total": 0.2880195,
+  "mean": 0.00192013,
+  "median": 0.001757375,
+  "p90": 0.002979,
+  "max": 0.0053415
+ }
+}

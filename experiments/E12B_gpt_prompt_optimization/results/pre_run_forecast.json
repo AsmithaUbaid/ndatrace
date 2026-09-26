@@ -1,0 +1,116 @@
+{
+ "integrity": {
+  "gpt_p0_byte_identical_to_E08B_effective_system_prompt": true,
+  "gpt_p0_sha1_matches_E08B_prompt_config_hash_dec7527f24c9": true
+ },
+ "prompt_stats": {
+  "gpt_p0": {
+   "chars": 464,
+   "tokens_cl100k": 118,
+   "added_instructions_vs_P0": 0,
+   "diff_added_lines": 0,
+   "diff_removed_lines": 0
+  },
+  "gpt_p1": {
+   "chars": 698,
+   "tokens_cl100k": 154,
+   "added_instructions_vs_P0": 3,
+   "diff_added_lines": 3,
+   "diff_removed_lines": 3
+  },
+  "gpt_p2": {
+   "chars": 1121,
+   "tokens_cl100k": 242,
+   "added_instructions_vs_P0": 9,
+   "diff_added_lines": 11,
+   "diff_removed_lines": 3
+  },
+  "gpt_p3": {
+   "chars": 1158,
+   "tokens_cl100k": 248,
+   "added_instructions_vs_P0": 7,
+   "diff_added_lines": 9,
+   "diff_removed_lines": 3
+  }
+ },
+ "context_checks": {
+  "150_cases": true,
+  "same_ids_order_as_manifest": true,
+  "top5_only": true,
+  "retrieval_config_equals_E07": true,
+  "no_gold_leakage": true,
+  "rerank_order_non_increasing": true
+ },
+ "calibration_ratio": 0.9904474523665834,
+ "retrieved_text_tokens_cl100k": {
+  "mean": 1011.1466666666666,
+  "median": 1038.5,
+  "p90": 1164,
+  "max": 1374
+ },
+ "input_tokens_per_prompt_calibrated": {
+  "gpt_p0": {
+   "mean": 1140.70493387361,
+   "median": 1166.7470988878351,
+   "p90": 1291.5434778860247,
+   "max": 1498.5469954306407
+  },
+  "gpt_p1": {
+   "mean": 1176.3610421588069,
+   "median": 1202.4032071730321,
+   "p90": 1327.1995861712217,
+   "max": 1534.2031037158376
+  },
+  "gpt_p2": {
+   "mean": 1263.5204179670661,
+   "median": 1289.5625829812916,
+   "p90": 1414.3589619794811,
+   "max": 1621.362479524097
+  },
+  "gpt_p3": {
+   "mean": 1269.4631026812658,
+   "median": 1295.505267695491,
+   "p90": 1420.3016466936806,
+   "max": 1627.3051642382966
+  }
+ },
+ "output_token_assumption": {
+  "mean_used": 734.6166666666667,
+  "p90_used": 1245,
+  "sources": "E08B and E12A real GPT-5-mini distributions"
+ },
+ "cost_usd": {
+  "expected_per_prompt": {
+   "gpt_p0": 0.26316143502026035,
+   "gpt_p1": 0.2644985390809553,
+   "gpt_p2": 0.267767015673765,
+   "gpt_p3": 0.26798986635054745
+  },
+  "expected_total": 1.063416856125528,
+  "conservative_per_prompt": {
+   "gpt_p0": 0.41627643502026035,
+   "gpt_p1": 0.4176135390809553,
+   "gpt_p2": 0.420882015673765,
+   "gpt_p3": 0.42110486635054745
+  },
+  "conservative_total": 1.675876856125528
+ },
+ "ledger_now": 0.7077744499999996,
+ "ledger_after": {
+  "expected": 1.7711913061255276,
+  "conservative": 2.3836513061255276
+ },
+ "budget_gate": {
+  "rule": "ledger + conservative + $1.25 reserve <= $5.00",
+  "allowed": true,
+  "reason": "OK: projected total $2.3837 <= allowed $3.7500 (planning budget $5.00 - reserve $1.25)",
+  "arithmetic": 3.6336513061255276
+ },
+ "runtime": {
+  "calls_per_prompt": 150,
+  "total_calls": 600,
+  "mean_latency_s_assumed": 7.806919121108561,
+  "minutes_per_prompt": 19.517297802771402,
+  "total_minutes_sequential": 78.06919121108561
+ }
+}
