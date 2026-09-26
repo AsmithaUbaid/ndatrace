@@ -1,0 +1,205 @@
+experiment_id: E09_agent_justification
+status: STAGE_A  # audit + design proposal only -- no model call, no agent build, no commit
+dataset_manifest: TRAIN_ARCH_v1  # identical to E05/E07/E08/E08B -- no new manifest
+split_role: development   # Role A, TRAIN only
+purpose: agent_justification_decision_after_stronger_model
+
+input_source:
+  architecture: A2-GPT5mini  # E08B's frozen result, NOT rerun
+  cases_path: experiments/E08B_stronger_model_diagnostic/results/run_E08B_A2_gpt5mini_train_cases.jsonl
+  failure_csv_path: experiments/E08B_stronger_model_diagnostic/results/gpt5mini_failure_analysis.csv
+  retrieved_context_path: experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1.json
+  total_cases: 150
+  not_rerun: true
+
+verified_residual_counts:  # recomputed directly from gpt5mini_failure_analysis.csv this pass
+  classification_wrong: 32
+  joint_fail: 39
+  correct_label_but_joint_fail: 7   # 39 - 32
+  contradiction_classification_wrong: 12
+  contradiction_joint_fail: 15
+  verification_method: "direct count over gold_label/predicted_label/joint_success columns, not
+    inferred from aggregate percentages"
+
+historical_agent_audit:  # T-series prior art, hypothesis-generation only -- NOT reused as-is
+  agent_loop:
+    file: pipeline/agent.py
+    behavior: "bounded ReAct loop; step limit 5, time limit 30s, token limit 3000, duplicate-call
+      detection (same action+query -> stop), falls back to plain classify() if it exhausts steps
+      without concluding"
+    read_only: true
+    reusable: pattern_only  # control-loop design is transferable; code is tightly coupled to this
+      # project's Retriever/ModelGateway/Chunk types
+    risks: "duplicate-loop rate ~21% of dev cases, never root-caused (ADR-007)"
+  tools:
+    file: pipeline/agent_tools.py
+    list: [search_clauses, find_defined_term, search_exceptions, retrieve_more_evidence,
+           inspect_neighbouring_clauses]
+    read_only: true  # confirmed -- no write/mutation capability anywhere
+    reusable: pattern_only  # 5-tool taxonomy is a good generic checklist, not directly portable
+    risks: "search_exceptions exists specifically for carve-out patterns but has a documented
+      100% (4/4) failure rate on golden-battery cases requiring exactly that -- a tool existing is
+      not evidence it works"
+  confidence_routing:
+    file: pipeline/confidence.py
+    behavior: "route(self_confidence, rule_agrees) -> ACCEPT|REVIEW, binary on rule_agrees only;
+      self-confidence recorded but never gates (AUROC 0.554, near chance)"
+    read_only: true
+    reusable: pattern_only  # "validate the signal isn't circular with what it's gating" is the
+      # lesson, not the specific rule-agreement signal
+    risks: "(1) originally circular (C-1) -- rule's own match was fused into the RAG context via
+      RRF, so 'agreement' partly measured whether the LLM noticed what was handed to it, not
+      independent corroboration; fixed at 2x LLM-call cost, changed the AUROC by <0.01. (2) no
+      confidence signal ever cleared 0.7 AUROC; abstention effectiveness also failed (19.4% vs 70%
+      target) -- confidence gating remains an open research problem, not solved prior art."
+  agent_experiment_result_schema:
+    files: [data/agent_experiment.json, results/runs/run_T041_final_test_rag_agent_*.jsonl]
+    reusable: schema_directly_reusable  # for any new E09/A3 result logging, not the numbers themselves
+  most_important_finding: >
+    ADR-007's dev-sample (67 cases) and 500-case T041-subsample results showed agent recovery
+    beating regression ~2:1 (McNemar p=0.51, then p=0.058 -- neither significant), the stated
+    basis for including the T-series agent. But recomputed against the FULL 2,091-case test set,
+    the result REVERSES: regression (87) now exceeds recovery (65), RAG+agent's overall accuracy
+    (77.7%) falls BELOW plain RAG's (78.7%). McNemar p=0.088, still not significant, but the POINT
+    ESTIMATE flipped, not just weakened. Disclosed honestly in that project's own ADR-007, not
+    retroactively reversed per its "no re-tuning on test-set results" rule. Direct implication for
+    E09: any new agent-justification decision must budget for a full-scale check before
+    committing, not rest solely on a 150-case dev sample -- flagged as an E10 requirement if A3
+    proceeds, not resolvable in E09 itself (TRAIN_ARCH_v1 is only 150 cases).
+  conclusion: >
+    Prior art is READ-ONLY confirmed safe as a reference pattern (control-loop design, tool
+    taxonomy), but its OWN outcome evidence is a cautionary tale, not a success story to imitate
+    -- the previous agent's inclusion decision did not survive full-scale re-measurement. E09's
+    design must NOT silently inherit the old architecture, confidence signal, or tool set.
+
+proposed_failure_taxonomy:  # applied to the 39 GPT joint failures in Stage B
+  categories:
+    - STATIC_PIPELINE_FIXABLE       # deterministic non-agent change plausibly solves it
+    - DYNAMIC_INFORMATION_ACQUISITION  # case-dependent next action needed -- main A3 candidate
+    - MODEL_REASONING_LIMITED       # sufficient info present, GPT still wrong
+    - EVIDENCE_SELECTION_LIMITED    # label correct/derivable, evidence wrong/incomplete despite
+                                     # sufficient evidence present -- resolved into static/dynamic/
+                                     # reasoning per case, same E08 discipline
+    - RETRIEVAL_FILTERING_LIMITED   # gold evidence in BM25 top-20 pool but filtered before top-5
+    - OUTPUT_PROTOCOL               # parse/schema/evidence-format issue (expect 0 -- E08B had
+                                     # 150/150 strict parse)
+    - AMBIGUOUS_IRREDUCIBLE         # no forced agentic label
+  agentic_justification_test:  # ALL 6 must hold for DYNAMIC_INFORMATION_ACQUISITION
+    - "current top-5 context is insufficient or genuinely ambiguous"
+    - "additional information exists that could plausibly change the decision"
+    - "the correct next action depends on the particular case"
+    - "the action cannot be replaced by one fixed deterministic pipeline rule"
+    - "an inference-time observable signal exists indicating the action may be needed"
+    - "the action changes the information available to the model"
+  explicit_exclusion: '"think again" / "reason more carefully" / "double-check" does NOT qualify
+    as agentic justification regardless of outcome'
+
+proposed_manual_review_population:
+  primary: {name: all_gpt_joint_failures, rule: ALL (no sampling), n: 39}
+  composition: {classification_wrong: 32, correct_label_joint_fail: 7}
+  contradiction_subset: {name: contradiction_joint_failures, rule: ALL, n: 15}
+  note: "39 is small enough to review exhaustively, matching E08's own precedent of reviewing ALL
+    54 wrong-evidence cases and ALL 29 Contradiction failures rather than sampling."
+
+proposed_oracle_action_fields:  # evaluator-side only, per case, mirrors E08's schema
+  fields: [oracle_action_needed, oracle_action_target, oracle_action_available,
+           static_fix_possible, dynamic_action_required, recoverable_in_principle]
+  oracle_action_needed_values: [none, expand_final_k, retrieve_definition, follow_cross_reference,
+    retrieve_adjacent_clause, search_exception, search_specific_term,
+    compare_conflicting_clauses, retrieve_additional_candidate, other]
+  explicit_exclusion: "gold label, gold span, 'GPT was wrong', and evaluator-known missing
+    evidence must never be used as an oracle_action trigger -- oracle fields are evaluator-only
+    diagnosis, never conflated with a runtime-observable trigger"
+
+candidate_runtime_observable_signals:  # to be evaluated across ALL 150 cases, not just failures
+  - explicit_section_cross_reference_cue
+  - defined_term_referenced_but_definition_absent_from_context
+  - exception_carveout_cue  # RE-EVALUATE -- E08 found 62/63 Qwen errors had this cue (useless
+    # alone); this pass's zero-cost pre-check across all 150 GPT cases found it in 110/111
+    # successes (99.1%) AND 39/39 failures (100.0%) -- CONFIRMED still useless as a standalone
+    # trigger, consistent with E08's finding, now verified against GPT rather than assumed to
+    # carry over
+  - conflicting_retrieved_clauses_cue
+  - incomplete_conditional_clause_cue
+  - evidence_validator_failure  # source_valid_evidence == False
+  - weak_flat_reranker_score_margin  # top1-top2 rerank score gap -- zero-cost pre-check this pass
+    # found success-case mean margin 1.584 vs failure-case mean margin 1.705 (medians 1.002 vs
+    # 1.288) -- NOT clearly discriminating on its own, consistent with E08's own finding that
+    # score_margin alone was a weak signal; still worth testing as ONE component of a combined
+    # signal in Stage B, not ruled out entirely from a single aggregate comparison
+  - evidence_does_not_directly_address_requirement
+  - multiple_candidate_clauses_contradictory_implications
+  excluded_as_triggers: [gold_label, gold_span, "GPT was wrong", evaluator_known_missing_evidence]
+
+signal_evaluation_methodology:
+  population: all 150 cases (111 successes + 39 failures), never failures alone
+  per_signal_report: [true_positives, false_positives, false_negatives, true_negatives,
+    precision, recall, escalation_rate]
+  true_positive_definition: "signal present AND case is in DYNAMIC_INFORMATION_ACQUISITION per the
+    manual-review taxonomy (post-hoc, not circular -- taxonomy assigned independently of the
+    signal check)"
+  no_threshold_tuning: "diagnostic only -- report descriptive precision/recall per candidate
+    signal and per small hand-picked combination, do not grid-search dozens of combinations"
+
+oracle_agent_opportunity_ceiling_plan:
+  method: "if every case manually assigned DYNAMIC_INFORMATION_ACQUISITION were counterfactually
+    fixed (evaluator assumes the correct action would have been taken and would have produced the
+    correct label+evidence), recompute accuracy / Contradiction recall / joint success as an
+    UPPER BOUND -- explicitly labeled ORACLE AGENT OPPORTUNITY CEILING, not an expected result"
+  caveat: "this is a ceiling on what perfect agentic execution could achieve, not a forecast --
+    real agent recovery rates in prior art (T-series) were well below their own ceiling and even
+    reversed at full scale (see historical_agent_audit.most_important_finding)"
+
+cost_complexity_decision_framework:
+  factors: [fraction_of_all_150_requiring_escalation, potential_joint_success_uplift,
+    contradiction_risk_uplift, extra_model_calls_per_escalated_case, extra_retrieval_tool_calls,
+    latency_impact, hosted_cost_impact, implementation_complexity, new_failure_surface_risk]
+  no_fixed_numeric_threshold: "Stage A proposes the framework's factors, not a magic cutoff --
+    matches the explicit instruction not to invent a threshold prematurely"
+  reporting_convention: "report escalation volume as % of ALL 150 cases (e.g. 'X% of all cases
+    plausibly require dynamic investigation'), not only as % of the 39 failures -- the whole-
+    population framing is what determines real operational cost"
+
+model_calls: NONE in Stage A. Stage B (if approved) would also make ZERO new hosted/local model
+  calls -- the 39-case manual review and 150-case signal-prevalence check are both evaluator-side
+  analyses over already-frozen E08B outputs, plus local/free BM25 and cross-encoder re-queries
+  (same zero-cost precedent as E08's reranker-limited pilot diagnostic).
+api_calls: NONE this pass
+hosted_calls: NONE this pass
+
+files_to_create_stageA: [experiments/E09_agent_justification/{README.md, config.yaml, summary.md,
+  results/}]
+files_to_create_stageB:
+  - scripts/manual_review_e09_gpt_residuals.py (loads the 39 cases + full 150-case context for
+    signal-prevalence checks; NO model calls -- local BM25/reranker re-query only where needed)
+  - experiments/E09_agent_justification/results/gpt_residual_failure_analysis.csv (39 rows, full
+    taxonomy + oracle-action fields, mirrors E08's rag_failure_analysis.csv schema)
+  - experiments/E09_agent_justification/results/signal_prevalence_150case.json (per-candidate-
+    signal TP/FP/FN/TN/precision/recall/escalation-rate across all 150 cases)
+  - experiments/E09_agent_justification/results/oracle_agent_opportunity_ceiling.json
+  - experiments/E09_agent_justification/results/e09_decision.json (final A/B/C decision + full
+    quantification)
+  - experiments/E09_agent_justification/E09_agent_justification.ipynb
+
+expected_effort_stageB: "manual review of 39 cases (case-by-case: requirement, top-5 context, GPT
+  prediction/evidence, gold label, gold evidence evaluator-side, BM25 top-20 pool, rerank ranks --
+  same per-case depth as E08's 73-case review) is the dominant time cost; all computation is
+  local/free."
+
+unresolved_issues:
+  - "TRAIN_ARCH_v1 is only 150 cases -- any E09 conclusion, especially an Oracle Agent Opportunity
+    Ceiling or signal precision/recall, is a dev-sample estimate; the T-series prior art's own
+    full-2091-case reversal (historical_agent_audit) is a direct warning that dev-sample agent
+    conclusions have NOT held up at scale in this same codebase before. E10 (if A3 proceeds) must
+    budget for a larger-scale validation, not treat E09's numbers as final."
+  - "exception_carveout_cue and weak_flat_reranker_score_margin were both zero-cost pre-checked
+    this pass and found weak/uninformative as standalone signals -- Stage B should not spend time
+    re-deriving this, but SHOULD still test them as components of a combined signal before fully
+    discarding either."
+  - "the T-series confidence-routing signal (rule-agreement) is dataset/task-specific to that
+    project's rule-baseline and does not carry over to reconstruction-v2's own architecture --
+    E09 must derive its own candidate signals from GPT-5-mini's actual residual failures, not
+    reuse the old AUROC numbers as if they applied here."
+  - "whether GPT-5-mini's prompt (still Qwen-selected P0) is itself suboptimal for GPT is an
+    explicitly separate, unresolved downstream question -- not mixed into E09's agent-
+    justification analysis per the brief's explicit instruction."

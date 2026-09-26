@@ -1,0 +1,25 @@
+{
+  "exception_carveout_cue": {
+    "prevalence_in_successes": 0.990990990990991,
+    "prevalence_in_failures": 1.0,
+    "prevalence_overall": 0.9933333333333333,
+    "conclusion": "USELESS AS STANDALONE TRIGGER -- present in nearly all cases regardless of outcome, re-confirming E08's finding on Qwen now independently on GPT."
+  },
+  "reranker_score_margin": {
+    "mean_success": 1.5840339060570743,
+    "mean_failure": 1.7045329549373724,
+    "median_success": 1.0016926229000092,
+    "median_failure": 1.2881832122802734,
+    "conclusion": "NOT DISCRIMINATING -- success and failure distributions largely overlap."
+  },
+  "cross_reference_to_named_provision_cue": {
+    "signal": "cross_reference_to_named_provision_cue",
+    "tp": 1,
+    "fp": 14,
+    "fn": 0,
+    "tn": 135,
+    "precision": 0.06666666666666667,
+    "recall": 1.0,
+    "escalation_rate": 0.1
+  }
+}
