@@ -1,0 +1,68 @@
+experiment_id: E11_selective_agent_evaluation
+status: NOT_STARTED  # frozen configuration only, prepared alongside E10 -- no run has occurred
+dataset_manifest: TRAIN_ARCH_v1  # identical 150 cases as E05/E07/E08/E08B/E09/E10
+purpose: empirical_bounded_agent_evaluation_vs_frozen_A2
+
+frozen_from_e10:  # E11 must not modify any of these based on its own outcomes
+  routing_trigger: cross_reference_to_named_provision_cue
+  expected_escalation_rate: 0.10  # verified offline against the real implementation: 15/150
+  tool_set: [follow_cross_reference, get_more_candidates]
+  hard_limits: {max_agent_steps: 3, max_tool_calls: 2, max_identical_call_repeats: 1,
+    max_cumulative_added_context_chars: 8000, max_total_model_calls_per_case: 4,
+    max_wall_clock_seconds: 60, max_estimated_agent_cost_usd_per_escalated_case: 0.01}
+  agent_action_schema: "{action: FINAL|FOLLOW_CROSS_REFERENCE|GET_MORE_CANDIDATES, arguments: {},
+    label?, evidence?}"
+  fallback_policy: "any forced termination (max_steps/max_tool_calls/duplicate_tool_call/
+    invalid_action/context_budget/cost_budget) returns the original frozen A2 label/evidence
+    unchanged, fallback_to_a2=true -- never fabricates"
+  model: openai/gpt-5-mini
+  implementation: [pipeline/agent_v2.py, pipeline/agent_tools_v2.py, prompts/agent_v2_control.txt]
+
+baseline_reuse: >
+  A2's frozen first-pass results (experiments/E08B_stronger_model_diagnostic/results/
+  run_E08B_A2_gpt5mini_train_cases.jsonl) are used DIRECTLY for every case -- E11 does not re-run
+  A2. Only the ~15 triggered cases (per E10's offline verification) incur new hosted GPT-5-mini
+  calls via the agent loop.
+
+known_limitation_carried_from_e10: >
+  Only 1/6 of E09's RETRIEVAL_FILTERING_LIMITED cases (train::518::nda-10) is actually triggered
+  by the frozen routing policy. E11 must not claim to test recovery of the full 6-case static-
+  retrieval bucket -- only the triggered subset is reachable by this agent, and this was not fixed
+  by broadening routing (explicit instruction, preserved).
+
+metrics_plan:
+  quality: [accuracy, macro_f1, entailment_recall, contradiction_recall, notmentioned_recall,
+    evidence_recall, evidence_precision, joint_success]
+  transitions:
+    classification: [a2_wrong_a3_correct, a2_correct_a3_wrong, both_correct, both_wrong]
+    joint: [a2_joint_fail_a3_joint_success, a2_joint_success_a3_joint_fail, both_success, both_fail]
+  agent_behavior: [escalation_rate, steps_per_escalated_case, tool_calls_per_escalated_case,
+    tool_distribution, duplicate_loop_rate, fallback_rate, stop_reason_distribution]
+  operational: [incremental_input_tokens, incremental_output_tokens, incremental_cost_usd,
+    incremental_latency_ms, blended_total_cost_per_case_usd]
+  safety: [invalid_tool_call_count, tool_error_count, step_cap_hit_count, tool_cap_hit_count,
+    duplicate_cap_hit_count]
+  statistical_plan: "same methodology as E08B: exact McNemar (overall + Contradiction-restricted)
+    + 10,000-resample paired bootstrap for accuracy/macro_f1/contradiction_recall/joint_success
+    deltas -- effect size and CI always reported alongside any p-value"
+
+predeclared_a3_rejection_criteria: SEE experiments/E10_agent_design/config.yaml -- frozen there
+  BEFORE this experiment runs, not restated/re-tunable here.
+
+possible_outcomes:
+  A: "A3 EMPIRICALLY EARNS RECONSIDERATION"
+  B: "A3 SHOWS LIMITED BENEFIT BUT DOES NOT EARN FINAL ARCHITECTURE"
+  C: "A3 CONFIRMS E09 NO-GO"
+
+model_calls: NONE YET -- this file is a frozen configuration prepared alongside E10's design, not
+  an authorization to run. A separate, explicit authorization is required before any hosted call
+  is made under this experiment ID.
+api_calls: NONE this pass
+hosted_calls: NONE this pass
+
+outputs_not_yet_produced:
+  - scripts/run_e11_selective_agent.py
+  - experiments/E11_selective_agent_evaluation/results/run_E11_A3_train_cases.jsonl
+  - experiments/E11_selective_agent_evaluation/results/e08b_vs_e11_paired_comparison.json
+  - experiments/E11_selective_agent_evaluation/summary.md
+  - experiments/E11_selective_agent_evaluation/E11_selective_agent_evaluation.ipynb
