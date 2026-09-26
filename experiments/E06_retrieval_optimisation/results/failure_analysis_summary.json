@@ -1,0 +1,10 @@
+{
+  "total_misses_analyzed": 349,
+  "ranking_failure_gold_beyond_top_k": 349,
+  "retrieval_absence_semantic_or_lexical_mismatch": 0,
+  "multiple_evidence_spans_not_jointly_retrieved": 0,
+  "misses_by_label": {
+    "Entailment": 273,
+    "Contradiction": 76
+  }
+}
