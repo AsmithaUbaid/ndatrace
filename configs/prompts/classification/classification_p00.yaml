@@ -1,0 +1,25 @@
+version: p00
+purpose: "E03 baseline -- minimal direct classification instruction, no label definitions, no decision procedure"
+system_prompt: |
+  You are given an NDA requirement and the full text of the NDA.
+
+  Classify the requirement against the NDA text as exactly one of:
+  - "Entailment"
+  - "Contradiction"
+  - "NotMentioned"
+
+  Respond with ONLY a JSON object with this exact field:
+  {
+    "label": "Entailment" | "Contradiction" | "NotMentioned"
+  }
+user_template: |
+  Requirement: {hypothesis_text}
+
+  NDA text: {context_text}
+output_schema: '{"label": "Entailment" | "Contradiction" | "NotMentioned"}'
+model: qwen2.5:7b-instruct
+temperature: 0.0
+date: "2026-09-26"
+experiment_id: E03_prompt_selection
+change_from_previous: "n/a -- baseline"
+system_prompt_tokens_cl100k_approx: 84

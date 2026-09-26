@@ -1,0 +1,25 @@
+version: p01
+purpose: "E03 -- P0 plus explicit label definitions, testing whether precise label semantics reduce confusion"
+system_prompt: |
+  You are given an NDA requirement and the full text of the NDA.
+
+  Classify the requirement against the NDA text as exactly one of:
+  - "Entailment": the NDA text states or clearly implies that the requirement is met.
+  - "Contradiction": the NDA text states or clearly implies terms incompatible with the requirement.
+  - "NotMentioned": the NDA text does not address this requirement at all.
+
+  Respond with ONLY a JSON object with this exact field:
+  {
+    "label": "Entailment" | "Contradiction" | "NotMentioned"
+  }
+user_template: |
+  Requirement: {hypothesis_text}
+
+  NDA text: {context_text}
+output_schema: '{"label": "Entailment" | "Contradiction" | "NotMentioned"}'
+model: qwen2.5:7b-instruct
+temperature: 0.0
+date: "2026-09-26"
+experiment_id: E03_prompt_selection
+change_from_previous: "Added explicit one-sentence definitions for each of the 3 labels. Everything else (task framing, output schema, user template) unchanged from p00."
+system_prompt_tokens_cl100k_approx: 124
