@@ -1,0 +1,359 @@
+experiment_id: E10_agent_design
+status: STAGE_A  # design/freeze only -- no model call, no agent_v2 implementation, no commit
+dataset_manifest: TRAIN_ARCH_v1  # same 150 cases E11 will use, identical to E05/E07/E08/E08B/E09
+purpose: bounded_selective_agent_design_freeze
+
+explicit_framing: >
+  E09 concluded A3 is NOT justified as the likely final production architecture (decision A,
+  0.67% of all 150 cases genuinely dynamic). E10/E11 proceed anyway, for course completeness and
+  to empirically validate (or contradict) that no-go conclusion with a real bounded prototype --
+  NOT because E09 approved A3. This framing must not be rewritten by any downstream experiment.
+
+baseline_architecture:  # NOT modified by E10
+  flow: "requirement -> retrieval_v1 (unmodified) -> top-5 context -> classification_prompt_v1
+    (unmodified) -> openai/gpt-5-mini -> label+evidence -> parser -> evidence validator"
+  frozen_result: experiments/E08B_stronger_model_diagnostic/results/run_E08B_A2_gpt5mini_train_cases.jsonl
+
+historical_agent_audit:  # inventory, from E09's own read-only audit -- not re-derived from scratch
+  agent_loop_pipeline_agent_py:
+    historical_behavior: "bounded ReAct loop; step limit 5, time limit 30s, token limit 3000,
+      duplicate-call detection (exact action+query match -> stop), falls back to plain classify()
+      if steps exhausted without concluding"
+    reusable: pattern_only
+    problem: "~21% duplicate-loop rate on dev cases, never root-caused; its own dev-sample
+      inclusion decision reversed at the full 2,091-case test set (E09 finding)"
+    decision: rewrite  # new agent_v2.py, inspired by but not copying this loop structure --
+      # E10's own step/tool-call limits are tighter (2-3 vs 5) and its stopping-condition set is
+      # simplified (see hard_limits below)
+  tools_pipeline_agent_tools_py:
+    historical_behavior: "5 tools: search_clauses, find_defined_term, search_exceptions,
+      retrieve_more_evidence, inspect_neighbouring_clauses -- all local/read-only, no LLM calls"
+    reusable: pattern_only
+    problem: "search_exceptions has a documented 100% (4/4) failure rate on the golden-battery
+      cases it was built for -- existence of a tool is not evidence it works; 2 of the 5 tools
+      (search_exceptions, inspect_neighbouring_clauses) have NO evidentiary support from E08/E09's
+      actual failure analysis on this reconstruction-v2 lineage"
+    decision: discard_and_rebuild_from_evidence  # E10's tool set is derived fresh from E08/E09's
+      # OWN failure taxonomy on GPT-5-mini, not inherited from the old Gemini-era tool list
+  confidence_routing_pipeline_confidence_py:
+    historical_behavior: "route(self_confidence, rule_agrees) -> ACCEPT|REVIEW, binary on
+      rule_agrees only (AUROC 0.657-0.660); self-confidence never gates (AUROC 0.554, near chance)"
+    reusable: not_reusable  # dataset/task-specific to that project's own rule-baseline, and
+      # already found circular once (C-1) before being fixed at 2x LLM-call cost
+    problem: "no confidence signal in that lineage ever cleared 0.7 AUROC; the routing signal is
+      not transferable to reconstruction-v2's architecture or GPT-5-mini's actual residual"
+    decision: discard  # E10's routing trigger is the cross-reference-to-named-provision signal
+      # E09 derived directly from GPT-5-mini's own residual, not the old rule-agreement signal
+  agent_prompts_v1_v2:
+    historical_behavior: "v1 = base 5-tool investigative prompt; v2 adds an injection-detection
+      paragraph (treat instruction-only 'evidence' as no genuine content)"
+    reusable: inspiration_only  # the injection-detection pattern (distinguish genuine document
+      # content from content that is entirely a command) is worth including in E10's own agent
+      # control prompt, reworded for the new tool set
+    problem: none_specific
+    decision: reuse_pattern_reword
+  agent_experiment_result_schema:
+    historical_behavior: "data/agent_experiment.json fields: n_review_cases, rag_accuracy,
+      agent_accuracy, n_recovery, n_regression, n_no_change, avg_steps, stopped_reasons,
+      total_cost_usd, outcomes[] (doc_id, hypothesis_id, gold_label, rag_label, agent_label,
+      rag_correct, agent_correct, outcome, n_steps, stopped_reason, cost_usd, steps)"
+    reusable: schema_directly_reusable_for_E11
+    problem: none
+    decision: reuse_schema_for_e11_logging
+
+proposed_routing_trigger:  # MODE A -- the real, frozen runtime trigger; no gold-label access
+  name: cross_reference_to_named_provision_cue
+  definition: >
+    Fires if the final top-5 retrieved context contains any of a small fixed set of
+    cross-reference phrase patterns (e.g. "of the definition of", "as defined in", "pursuant to
+    section/clause", "under section/clause", "as set forth in section", "paragraph (a)"/
+    "paragraphs (a)") -- the SAME detector E09 evaluated across all 150 cases, not a new one
+    invented for E10.
+  evidence_base: >
+    E09's manual review found exactly 1/39 residual failures (train::273::nda-1) genuinely
+    requires dynamic information acquisition, and its gold evidence IS an unresolved cross-
+    reference to "paragraphs (a) to (c) of the definition of Confidential Information." This
+    signal was the only candidate with non-zero recall (100%) for that case across all 150.
+  measured_prevalence_TRAIN_ARCH_v1:
+    tp: 1
+    fp: 14
+    fn: 0
+    tn: 135
+    precision: 0.0667
+    recall: 1.0
+    expected_escalation_rate: 0.10  # 15/150
+  explicit_exclusions:  # per direct instruction -- both shown weak/useless by E09
+    - exception_carveout_cue  # 99.1% success prevalence, 100% failure prevalence -- non-selective
+    - reranker_score_margin  # success mean 1.584 vs failure mean 1.705 -- not discriminating
+    - gold_label_or_gold_evidence  # never a runtime trigger, evaluator-only
+    - known_wrong_prediction  # never observable at inference time
+  mode_b_oracle_eligibility:  # evaluator-side ceiling estimate ONLY, never used for real routing
+    definition: "the DYNAMIC_INFORMATION_ACQUISITION manual-review label itself (n=1) -- an
+      oracle upper bound on what perfect routing could ever catch, used only to interpret E11's
+      results, never wired into the actual A3 pipeline"
+  disclosed_limitation: >
+    6.7% precision means an agent gated on this trigger investigates 14 unnecessary cases for
+    every 1 it correctly helps, at this sample size (n=150, TRAIN split -- may not generalize).
+    This is disclosed explicitly, not smoothed over, per E09's own finding.
+
+proposed_tool_surface:  # REVISED to 2 tools before implementation (see revision_note below) --
+  # NOT the historical 5-tool set inherited unchanged
+  revision_note: >
+    Original Stage A draft proposed 3 tools (follow_cross_reference, get_definition,
+    get_more_candidates). Revised to 2 BEFORE implementation: get_definition is dropped as a
+    standalone top-level agent action -- E09 found no direct residual case proving it is needed
+    beyond what follow_cross_reference already covers via its own "definition of X" cross-
+    reference pattern (a defined-term lookup IS a cross-reference in this schema). get_definition
+    is retained purely as an INTERNAL helper follow_cross_reference delegates to
+    (pipeline/agent_tools_v2.py), not exposed as its own agent action -- this keeps the tool
+    surface at 2, cleaner to explain ("the agent retrieves missing evidence via exactly two
+    channels: a referenced provision, or more of retrieval_v1's own already-ranked candidates")
+    without losing the underlying search capability.
+  tools:
+    - name: follow_cross_reference
+      justification: "direct evidentiary support -- the ONE genuine dynamic case (train::273::nda-1)
+        needs exactly this: resolve an unresolved cross-reference to a named provision/definition
+        within the SAME document. Internally also resolves 'definition of X'-style references via
+        the same deterministic pattern get_definition used to expose standalone (see revision_note)."
+      input_schema: {reference: "string -- the cross-reference phrase as it appears in
+        context, e.g. 'Section 4(b)', 'paragraph (c)', or 'the definition of Confidential
+        Information'"}
+      output_schema: {found: bool, matched_clause_text: "string, truncated to 500 chars",
+        clause_location_hint: "string, e.g. clause/section number if identifiable"}
+      max_returned_text_chars: 500
+      failure_behavior: "found=false, matched_clause_text=''  -- never raises, never hallucinates"
+      duplicate_call_behavior: "exact (reference, document_id) match, normalized for whitespace/
+        case -> immediately forces FINAL (does not re-search); counts toward the duplicate-call
+        limit (see hard_limits)"
+      cached: false  # E10 Stage B implementation note: duplicate detection is enforced at the
+        # agent-loop level (exact-signature match forces FINAL), not via a separate tool-level
+        # cache -- simpler, and the loop already never issues a second identical call
+    - name: get_more_candidates
+      justification: "direct evidentiary support -- all 6 RETRIEVAL_FILTERING_LIMITED cases had
+        gold evidence in the BM25 top-20 pool but cut before the final top-5 by the reranker.
+        NOTE (explicit, not glossed over): E09 classified this bucket as STATIC_PIPELINE_FIXABLE
+        (a deterministic top-k increase is the PREFERRED production fix, cheaper than an agent) --
+        this tool exists here so E11 can empirically test whether a runtime-triggered expansion
+        recovers the same cases a static fix would, as a controlled comparison point, not because
+        an agent is the recommended way to solve this bucket."
+      input_schema: {}  # E10 Stage B implementation refinement: takes NO model-supplied argument
+        # (revised from the Stage A draft's expand_to_k) -- the window (ranks 6-10, then 11-15,
+        # then 16-20) is tracked entirely by the agent loop's own state
+        # (already_revealed_candidates), never by a value the model provides. This removes any
+        # ability for the model to request an arbitrary or duplicate rank window, per the frozen
+        # design's "monotonic, at most once per window" rule -- enforced structurally rather than
+        # by validating a model-supplied k.
+      output_schema: {additional_chunk_texts: "list[string], truncated to 5 chunks x 300 chars
+        each", additional_chunk_ids: "list[int]"}
+      max_returned_text_chars: 1500  # 5 x 300
+      failure_behavior: "POOL_EXHAUSTED (empty results) once all 20 candidate-pool ranks have been
+        revealed"
+      duplicate_call_behavior: "the agent loop's exact-signature duplicate check still applies
+        (a repeated GET_MORE_CANDIDATES action is itself flagged and forces FINAL) -- combined
+        with the stateless auto-incrementing window, this makes requesting the same window twice
+        structurally impossible rather than merely rejected"
+      cached: false  # stateless progression driven by the caller, not a per-argument cache
+  excluded_tools:
+    search_clauses_generic: "redundant with get_more_candidates for this document-scoped use case
+      -- no evidence any of the 39 residuals needed a differently-WORDED re-query, only a WIDER
+      window of the same query's results"
+    search_exceptions: "historical tool with a documented 100% failure rate on exactly the cases
+      it targets (T-series golden battery) -- not carried forward without new evidence it would
+      work differently here"
+    inspect_neighbouring_clauses: "no case among the 39 reviewed required adjacent-clause context
+      specifically, distinct from cross-reference/definition resolution or top-k expansion"
+    compare_clauses: "no case required comparing multiple conflicting clauses as the primary
+      blocker -- MODEL_REASONING_LIMITED failures were reasoning failures over a SINGLE already-
+      available clause, not a multi-clause comparison need"
+
+agent_action_schema:
+  format: >
+    {"action": "FINAL" | "FOLLOW_CROSS_REFERENCE" | "GET_MORE_CANDIDATES",
+     "arguments": {...tool-specific, per proposed_tool_surface above, empty {} for FINAL},
+     "label": "Entailment|Contradiction|NotMentioned (required only when action=FINAL)",
+     "evidence": ["...] (required only when action=FINAL, same schema as A2)"}
+  validation: "deterministic JSON schema validation (reuses evaluation.structured_output's
+    strict/recovery parser) -- an action outside the 3 allowed values, or a tool call with a
+    missing/malformed argument, is treated as a MALFORMED_ACTION and immediately forces FINAL
+    using whatever evidence/label has been gathered so far (graceful degradation, never a crash,
+    never an unrestricted retry loop)."
+  no_chain_of_thought: "the schema has no 'reasoning'/'thought' field -- the prompt explicitly
+    asks for the structured action only, per instruction not to request hidden chain-of-thought"
+
+final_output_schema:
+  format: '{"label": "Entailment|Contradiction|NotMentioned", "evidence": ["...", ...]}'
+  note: "IDENTICAL to A2's schema -- required for a fair, apples-to-apples E11 comparison. No
+    additional fields, no explanations."
+
+agent_loop_design:
+  shape: >
+    A2 first pass (unmodified, already computed/frozen) -> routing_trigger(context) ->
+    if not triggered: return A2 result as-is (agent never invoked, zero extra cost) ->
+    if triggered: enter bounded loop -> at each step, ONE gpt-5-mini call receives {original
+    requirement, current context (initial top-5 + any tool results appended so far), the
+    agent-control prompt} and returns one action per agent_action_schema -> if action=FINAL,
+    stop and use its label+evidence -> if action is a tool call, execute the ONE named read-only
+    tool (deterministic dispatch, no free-form execution), append its structured (compact) result
+    to context, increment step count, loop -> if any hard limit is hit, force FINAL using the
+    best available label+evidence (prefer the agent's own last proposed label if any, else fall
+    back to the frozen A2 first-pass label -- never return no answer).
+  not_an_unrestricted_while_loop: "the loop body is a fixed enumerate-with-break, hard-capped
+    below (never model-controlled)."
+
+hard_limits:  # enforced OUTSIDE the model, in code -- never left to the model to decide
+  max_agent_steps: 3  # 1 initial decision + up to 2 tool-informed follow-ups, matching "2-3
+    # investigation steps maximum" from the brief
+  max_tool_calls: 2  # at most 2 of the 3 steps may be tool calls; the 3rd is forced toward FINAL
+  max_repeated_identical_calls: 1  # exact duplicate (action, normalized arguments) -> immediate
+    # forced FINAL, logged as a duplicate-loop event (see duplicate_loop_protection)
+  max_cumulative_retrieved_tokens: 2000  # across all tool results combined, on top of the
+    # original top-5 context -- prevents the agent from silently reconstructing full-context
+  max_total_model_calls_per_case: 4  # 1 baseline A2 first pass + up to 3 agent-loop steps
+  max_wall_clock_seconds_per_case: 60  # baseline ~7.4s mean + up to 3 x ~12s (p90) steps + margin
+  max_estimated_hosted_cost_per_escalated_case_usd: 0.01  # ~6x the observed baseline mean
+    # ($0.0017) -- a circuit breaker, not an expected value; if projected mid-run cost for a case
+    # would exceed this, force FINAL immediately
+
+duplicate_loop_protection:
+  normalized_signature: "(action, sorted(arguments.items())) after lowercasing/whitespace-
+    normalizing string arguments -- matches the historical agent's exact-match approach, tightened
+    to also normalize whitespace/case (the old agent only did an exact string match)"
+  detection: "exact duplicate signature within the same case's step history -> force FINAL
+    immediately (does not count as a fresh step toward max_agent_steps, but does count toward
+    max_tool_calls already spent)"
+  logging: "every duplicate-loop event recorded per-case (case_id, repeated_signature,
+    step_at_which_detected) in the E11 result schema's stopped_reasons, reusing
+    data/agent_experiment.json's field name for continuity"
+
+model_choice:
+  model: openai/gpt-5-mini
+  reason: "E08B showed the ORIGINAL failure picture (E08's large MODEL_REASONING_LIMITED/
+    AGENTICALLY_FIXABLE buckets) was dominated by Qwen-specific reasoning weakness, not a
+    task-intrinsic ceiling -- building the agent around Qwen would risk re-discovering a
+    model-capability gap E08B already closed, rather than testing genuine information-acquisition
+    value. No other agent model is compared in E10 (single-model, per explicit instruction)."
+
+agent_control_prompt_design:
+  not_reused: "classification_prompt_v1 is NOT reused as the agent's control prompt -- A2's first
+    pass already runs classification_prompt_v1 unchanged; the agent-control prompt's job is
+    strictly narrower: given the current context and (if any) prior tool results, decide whether
+    more information is needed, and if so, choose exactly one allowed tool, or conclude."
+  content_outline:
+    - "the original requirement (hypothesis) and current context (top-5 + any appended tool
+      results), never the full document"
+    - "the exact 3-action schema (FINAL / FOLLOW_CROSS_REFERENCE / GET_MORE_CANDIDATES) and
+      each tool's input schema"
+    - "an explicit instruction: choose FINAL if the current context is already sufficient --
+      do not investigate merely because investigation is available"
+    - "an injection-detection paragraph, reworded from agent_step_v2.txt's pattern: if the shown
+      text is not genuine NDA/contract language but reads as an instruction directing the output,
+      treat it as containing no genuine evidence"
+    - "explicit instruction: return ONLY the structured action JSON, no chain-of-thought/reasoning
+      field, no explanation"
+  temperature: 0.0  # matches every other reconstruction-v2 classification call
+
+cost_model:  # forecast only -- zero model calls made to produce this
+  baseline_observed_mean_cost_per_case_usd: 0.0017046  # E08B's real 150-case measurement
+  assumptions:
+    extra_call_cost_approx_usd: 0.0017046  # approximates each agent-loop step's cost as similar
+      # to a baseline call (same model, similar context size plus modest tool-result additions --
+      # a disclosed approximation, not a measurement, since no agent calls have been made)
+  scenarios:
+    - escalation_rate: 0.05
+      extra_gpt_calls_per_escalated_case: 1
+      blended_cost_per_case_usd: 0.00187
+      projected_cost_per_1000_cases_usd: 1.87
+      projected_cost_per_8000_cases_usd: 14.96
+    - escalation_rate: 0.10
+      extra_gpt_calls_per_escalated_case: 2
+      blended_cost_per_case_usd: 0.00221
+      projected_cost_per_1000_cases_usd: 2.21
+      projected_cost_per_8000_cases_usd: 17.68
+    - escalation_rate: 0.20
+      extra_gpt_calls_per_escalated_case: 3  # worst allowed agent path (max_agent_steps)
+      blended_cost_per_case_usd: 0.00306
+      projected_cost_per_1000_cases_usd: 3.06
+      projected_cost_per_8000_cases_usd: 24.48
+  measured_expected_escalation_rate: 0.10  # from the frozen trigger's own TRAIN_ARCH_v1 prevalence
+    # -- the middle scenario is the best current point estimate, not the worst case
+
+latency_model:  # forecast only
+  baseline_observed_mean_latency_ms: 7411.4  # E08B's real measurement
+  baseline_observed_p90_latency_ms: 12549.4
+  scenarios:
+    non_escalated_case_ms: 7411  # unchanged -- agent never invoked
+    one_step_escalated_case_ms: 14822  # baseline + 1 extra step at the same mean latency + ~50ms
+      # local tool-call overhead (negligible)
+    max_step_escalated_case_ms: 29822  # baseline + 3 extra steps at p90 latency (conservative) +
+      # tool overhead -- within the 60s max_wall_clock_seconds_per_case hard limit
+
+e11_comparison_plan:  # designed now, NOT executed
+  population: TRAIN_ARCH_v1, same 150 cases, same ordering, same frozen A2 first-pass results
+    reused directly (E08B's own output) -- A3 is NOT re-run from scratch for non-escalated cases
+  quality_metrics: [accuracy, macro_f1, contradiction_recall, joint_success]
+  agent_behavior_metrics: [escalation_rate, tool_calls_per_case, steps_per_case,
+    duplicate_call_rate, stop_reasons, recovery_count, regression_count]
+  recovery_regression_definition: "classification AND joint, reported separately -- A2 wrong/A3
+    correct, A2 correct/A3 wrong, joint fail->success, joint success->fail. Explicit historical
+    caution preserved: the T-series agent looked favorable on recoveries at dev-sample scale but
+    regressions dominated at full-test-set scale -- E11 must not report only average accuracy."
+  operational_metrics: [mean_latency_ms, p90_latency_ms, mean_cost_usd, total_cost_usd,
+    mean_tokens_per_case]
+  safety_metrics: [invalid_tool_call_count, step_cap_hit_count, loop_cap_hit_count,
+    malformed_action_count]
+  statistical_plan: "same methodology as E08B: exact McNemar (overall + Contradiction-restricted)
+    + 10,000-resample paired bootstrap for accuracy/macro_f1/contradiction_recall/joint_success
+    deltas -- effect size and CI always reported alongside any p-value."
+
+predeclared_a3_rejection_criteria:  # frozen BEFORE E11 runs, per explicit instruction
+  - "negligible net joint-success gain (point estimate uplift materially smaller than the
+    Oracle Agent Opportunity Ceiling's own +0.67pp, e.g. if real recovery undershoots even that
+    already-small ceiling once regressions are netted out)"
+  - "recoveries offset or exceeded by regressions (matches the historical T-series full-scale
+    reversal pattern -- the single most important prior-art warning this design carries forward)"
+  - "trigger precision materially confirms the already-known 6.7% estimate or worse (i.e. no
+    surprise improvement from the tool-augmented context changing what the trigger would have
+    caught) combined with no compensating quality gain"
+  - "escalation rate on E11's population exceeds the 10-20% cost-model scenarios by a wide margin
+    without a proportional quality gain"
+  - "high duplicate-loop rate (directionally compared to the historical ~21% figure -- no new
+    numeric threshold invented, since E10 has no real agent-run data yet)"
+  - "material latency increase relative to the non-escalated baseline without a compensating
+    quality gain on the SAME escalated cases"
+  - "material extra cost (per the cost_model scenarios above) without a joint-success gain that
+    exceeds the Static Pipeline Opportunity Ceiling already available for free (+4.0pp)"
+  - "no measurable Contradiction-specific benefit, given Contradiction is the project's headline
+    risk metric"
+  - "unstable tool usage (e.g. get_more_candidates or follow_cross_reference frequently returning
+    found=false, indicating the trigger fires on cases where no resolvable information actually
+    exists to acquire)"
+  no_numeric_threshold_invented_beyond_what_evidence_supports: true
+
+files_to_create_stageA: [experiments/E10_agent_design/{README.md, config.yaml, summary.md}]
+files_to_create_future_E11_only:
+  - pipeline/agent_v2.py (NOT implemented in E10 -- new, does not modify pipeline/agent.py)
+  - pipeline/agent_tools_v2.py (NOT implemented in E10 -- new, does not modify pipeline/agent_tools.py)
+  - prompts/agent_v2_control.txt (NOT written in E10)
+  - scripts/run_e11_selective_agent.py (NOT written in E10)
+  - experiments/E11_selective_agent_evaluation/ (does not exist yet)
+
+model_calls: NONE in Stage A. E10 makes zero model calls; implementation and model calls are
+  explicitly deferred to a separately-authorized E11.
+api_calls: NONE this pass
+hosted_calls: NONE this pass
+
+unresolved_issues:
+  - "the 6.7% trigger precision is a 150-case TRAIN-split estimate -- E11 running on the SAME
+    150 cases cannot independently validate whether this generalizes; a true out-of-sample check
+    would require DEV/TEST, explicitly not authorized here or in E11 without separate approval."
+  - "get_definition was dropped as a standalone action before implementation (kept only as an
+    internal helper follow_cross_reference delegates to) -- no direct evidentiary case in the 39
+    reviewed failures required a separate definition-lookup action distinct from cross-reference
+    resolution."
+  - "cost/latency scenarios approximate each agent-loop step's cost/latency as similar to a
+    baseline classify() call -- real agent-step costs may differ (shorter/longer context per
+    step, different token distribution) and will only be known once E11 actually runs."
+  - "get_more_candidates deliberately tests a bucket (RETRIEVAL_FILTERING_LIMITED) that E09
+    already classified as better solved statically -- E11's result on this specific tool will be
+    informative for the course-comparison goal but should not be read as recommending an agent
+    over the cheaper static fix even if it succeeds."
