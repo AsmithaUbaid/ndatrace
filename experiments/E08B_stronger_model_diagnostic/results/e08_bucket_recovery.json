@@ -1,0 +1,121 @@
+{
+  "e08_bucket_recovery": {
+    "model_reasoning_limited": {
+      "n": 31,
+      "gpt_classification_correct_count": 30,
+      "gpt_classification_correct_pct": 96.7741935483871,
+      "gpt_joint_success_count": 28,
+      "gpt_joint_success_pct": 90.32258064516128,
+      "qwen_to_gpt_fixes": 30,
+      "qwen_to_gpt_regressions": 0,
+      "note": "All cases in this bucket are, by E08's own construction, Qwen ERRORS -- 'fixes' and 'gpt_classification_correct_count' are therefore the same number; regressions are structurally impossible within this bucket definition."
+    },
+    "agentically_fixable": {
+      "n": 26,
+      "gpt_classification_correct_count": 19,
+      "gpt_classification_correct_pct": 73.07692307692307,
+      "gpt_joint_success_count": 18,
+      "gpt_joint_success_pct": 69.23076923076923,
+      "qwen_to_gpt_fixes": 19,
+      "qwen_to_gpt_regressions": 0,
+      "note": "All cases in this bucket are, by E08's own construction, Qwen ERRORS -- 'fixes' and 'gpt_classification_correct_count' are therefore the same number; regressions are structurally impossible within this bucket definition."
+    },
+    "static_pipeline_fixable": {
+      "n": 6,
+      "gpt_classification_correct_count": 1,
+      "gpt_classification_correct_pct": 16.666666666666664,
+      "gpt_joint_success_count": 0,
+      "gpt_joint_success_pct": 0.0,
+      "qwen_to_gpt_fixes": 1,
+      "qwen_to_gpt_regressions": 0,
+      "note": "All cases in this bucket are, by E08's own construction, Qwen ERRORS -- 'fixes' and 'gpt_classification_correct_count' are therefore the same number; regressions are structurally impossible within this bucket definition."
+    },
+    "contradiction_reviewed_failures": {
+      "n": 33,
+      "gpt_classification_correct_count": 27,
+      "gpt_classification_correct_pct": 81.81818181818183
+    }
+  },
+  "wrong_evidence_subgroup_54cases": {
+    "group_a_gold_overlap_4cases": {
+      "n": 4,
+      "gpt_classification_correct_count": 3,
+      "gpt_classification_correct_pct": 75.0,
+      "gpt_joint_success_count": 3,
+      "gpt_source_valid_evidence_count": 4,
+      "gpt_gold_overlap_evidence_count": 4,
+      "gpt_still_wrong_and_source_valid_count": 1,
+      "gpt_still_wrong_and_non_gold_evidence_count": 0
+    },
+    "group_b_no_gold_overlap_50cases": {
+      "n": 50,
+      "gpt_classification_correct_count": 39,
+      "gpt_classification_correct_pct": 78.0,
+      "gpt_joint_success_count": 35,
+      "gpt_source_valid_evidence_count": 48,
+      "gpt_gold_overlap_evidence_count": 41,
+      "gpt_still_wrong_and_source_valid_count": 11,
+      "gpt_still_wrong_and_non_gold_evidence_count": 7
+    },
+    "combined_54cases": {
+      "n": 54,
+      "gpt_classification_correct_count": 42,
+      "gpt_classification_correct_pct": 77.77777777777779,
+      "gpt_joint_success_count": 38,
+      "gpt_source_valid_evidence_count": 52,
+      "gpt_gold_overlap_evidence_count": 45,
+      "gpt_still_wrong_and_source_valid_count": 12,
+      "gpt_still_wrong_and_non_gold_evidence_count": 7
+    }
+  },
+  "static_six_reranker_limited": {
+    "case_ids": [
+      "train::160::nda-10",
+      "train::247::nda-10",
+      "train::353::nda-10",
+      "train::379::nda-10",
+      "train::438::nda-2",
+      "train::518::nda-10"
+    ],
+    "gpt_outcomes": [
+      {
+        "case_id": "train::160::nda-10",
+        "gold_label": "Entailment",
+        "gpt_predicted_label": "NotMentioned",
+        "gpt_correct": false
+      },
+      {
+        "case_id": "train::247::nda-10",
+        "gold_label": "Entailment",
+        "gpt_predicted_label": "NotMentioned",
+        "gpt_correct": false
+      },
+      {
+        "case_id": "train::353::nda-10",
+        "gold_label": "Entailment",
+        "gpt_predicted_label": "NotMentioned",
+        "gpt_correct": false
+      },
+      {
+        "case_id": "train::379::nda-10",
+        "gold_label": "Entailment",
+        "gpt_predicted_label": "NotMentioned",
+        "gpt_correct": false
+      },
+      {
+        "case_id": "train::438::nda-2",
+        "gold_label": "Contradiction",
+        "gpt_predicted_label": "Contradiction",
+        "gpt_correct": true
+      },
+      {
+        "case_id": "train::518::nda-10",
+        "gold_label": "Entailment",
+        "gpt_predicted_label": "NotMentioned",
+        "gpt_correct": false
+      }
+    ],
+    "gpt_correct_count": 1,
+    "interpretation_note": "Gold evidence was excluded from the final top-5 context by the frozen retrieval pipeline for ALL 6 of these cases (E08's own reranker-limited diagnostic, verified via BM25 top-50 re-query). A GPT failure here is NOT evidence of poor reasoning -- the information genuinely was not in the context shown to either model. A GPT success may indicate the remaining (gold-absent) context was sufficient for a stronger model to still reach the right label despite the omission, not that the omission didn't matter."
+  }
+}

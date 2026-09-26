@@ -1,0 +1,136 @@
+experiment_id: E08B_stronger_model_diagnostic
+status: STAGE_A  # design/audit + budget gate only -- no GPT-5 mini call, no commit
+dataset_manifest: TRAIN_ARCH_v1  # identical to E05/E07 -- no new manifest
+split_role: development   # Role A, TRAIN only
+purpose: model_capability_isolation_diagnostic
+
+architecture_under_test:
+  name: A2-GPT5mini  # same A2 shape as E07, model substituted only
+  input: requirement/hypothesis -> retrieval_v1's FROZEN top-5 context (read from the existing
+    artifact, retrieval NOT re-run) -> classification_prompt_v1 (unchanged) -> openai/gpt-5-mini
+    -> compact label/evidence schema -> same deterministic parser -> same evidence validator
+  prompt: classification_prompt_v1  # = P0, byte-for-byte unchanged, NO GPT-specific prompt (explicit instruction)
+  model: openai/gpt-5-mini
+  provider: openrouter
+  agent: NONE
+
+frozen_input_artifact:
+  path: experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1.json
+  verified_this_pass: true
+  total_cases: 150
+  ordering_matches_TRAIN_ARCH_v1: true
+  gold_leakage: 0
+  retrieval_config_confirmed: {method: bm25, chunk_method: clause, chunk_size: 256, top_k: 5, reranker_model: cross-encoder/ms-marco-MiniLM-L-12-v2}
+  not_rerun: true  # per explicit instruction -- integrity check only, not a fresh retrieval
+
+gpt_config_audit:
+  provider: openrouter  # pipeline/config.py's default -- ModelGateway(model=...) with no local()/groq() wrapper
+  base_url: https://openrouter.ai/api/v1
+  model_string: openai/gpt-5-mini  # unchanged from E01/E00B -- no silent substitution
+  pricing_source: configs/pricing/openrouter_openai_gpt-5-mini.yaml
+  published_input_price_per_million: 0.25
+  published_output_price_per_million: 2.00
+  no_free_tier: true  # confirmed in the pricing file -- effective assumption equals published rate
+  reasoning_token_note: >
+    CRITICAL, historically confirmed (T009, docs/decisions.md, and this pricing file's own
+    note): GPT-5 mini bills HIDDEN reasoning tokens as output tokens. Real E01 Oracle data (300
+    calls, this reconstruction-v2 lineage, not historical T-series) shows output tokens ranging
+    43-1118 with mean 149.9/median 124.0 -- a long right tail consistent with occasional heavy
+    reasoning-token usage. A2's task (3-way classification from ~5 retrieved chunks, harder than
+    Oracle's single-evidence-sentence decision) could plausibly use similar or more reasoning
+    tokens. This materially affects the cost forecast's precision (not its pass/fail outcome --
+    see budget_gate below) and is why a small calibration run is proposed as optional, not run
+    in Stage A (see calibration_proposal).
+  timeout_seconds: 30  # pipeline/config.py's default, UNCHANGED -- not verified against real
+    GPT-5-mini latency for this specific task shape; flagged as an unresolved issue, not altered
+    here (only Ollama-path timeouts were previously found to need raising, E05's finding, which
+    does not automatically apply to a hosted OpenRouter call)
+  max_retries: 3  # pipeline/config.py's default, UNCHANGED
+  response_format: NOT USED  # explicit decision -- see structured_output_decision below
+  reasoning_effort_param: NOT SET  # no such parameter exists anywhere in pipeline/model_gateway.py;
+    not introduced here -- controlled substitution only, no GPT-specific tuning
+
+structured_output_decision: >
+  Provider-side JSON schema enforcement (OpenAI/OpenRouter's response_format=json_schema) is
+  available via ModelGateway.complete()'s optional response_format parameter but will NOT be
+  used here. E07's Qwen run did not use response_format (confirmed by reading
+  scripts/run_e07_standard_rag.py -- gateway.complete() called with no response_format
+  argument), relying entirely on the prompt instruction + the deterministic
+  strict/recovery parser. Using provider-side enforcement for GPT but not Qwen would materially
+  advantage GPT on parse validity for a reason unrelated to underlying model capability --
+  exactly the confound section 7 warns against. Both models are evaluated under the identical
+  "prompt asks nicely, parser recovers if needed" regime.
+
+budget_gate:
+  planning_budget_usd: 5.00  # same constant used in scripts/run_e01_oracle.py, reconstruction-v2's own precedent
+  protected_reserve_fraction: 0.25
+  protected_reserve_usd: 1.25
+  allowed_budget_usd: 3.75
+  reconstruction_spend_so_far_usd: 0.1178  # from evaluation.budget.reconstruction_spend_so_far(), read this pass -- entirely E01 Oracle gpt-5-mini calls
+  available_headroom_usd: 3.6322
+  projected_150_case_cost:
+    input_tokens_per_case_mean: 1159.9  # cl100k_base approximation of the REAL frozen A2 context (system prompt + evidence instruction + template + retrieved chunks), computed this pass from the actual frozen artifact -- not Oracle's token shape
+    input_cost_usd: 0.0435  # 150 * 1159.9 / 1e6 * 0.25
+    output_tokens_per_case_central_estimate: 150  # calibrated from E01 Oracle's real historical mean (149.9) -- A2's task is harder (full 5-chunk classification vs. single-sentence Oracle decision) so this is a starting point, not a confirmed A2-specific number
+    output_cost_central_usd: 0.045  # 150 cases * 150 tokens * 2 / 1e6
+    total_central_estimate_usd: 0.089
+    output_tokens_worst_plausible: 1118  # E01 Oracle's observed historical MAX (not mean) -- illustrative upper bound, not expected to apply to all 150 cases
+    total_worst_plausible_estimate_usd: 0.379  # 150 * 1159.9 tokens input + 150 * 1118 tokens output, at published rates
+  gate_result: PASS  # both the central estimate ($0.089) and the worst-plausible upper bound
+    ($0.379) are comfortably within the $3.6322 available headroom -- the gate outcome is not
+    sensitive to the output-token uncertainty at this budget scale
+
+calibration_proposal:
+  proposed: true
+  size: 8-10 cases
+  purpose: >
+    NOT needed to clear the budget gate (which passes under both the central and worst-plausible
+    estimates already). Proposed only to sharpen the cost-effectiveness precision required in
+    the brief's section 14 (cost per additional correct/joint-success case) with A2-task-
+    specific output-token data rather than extrapolating from Oracle's structurally different
+    task. NOT executed in Stage A per the explicit instruction to run it only if needed and
+    explicitly justified -- deferred to Stage B, pending approval, and not scored/used to tune
+    anything if run.
+
+matched_metrics_plan: [accuracy, macro_f1, entailment_recall, contradiction_recall,
+  contradiction_recall_ci95, notmentioned_recall, joint_overall, joint_by_class,
+  strict_parse_validity, usable_parse_validity, evidence_valid_rate, evidence_recall,
+  evidence_precision, mean_input_tokens, mean_output_tokens, mean_latency_ms, total_cost_usd]
+
+e08_bucket_recovery_plan:  # maps GPT outcomes back onto E08's 73 manually-reviewed cases
+  reviewed_case_source: experiments/E08_rag_failure_analysis/results/rag_failure_analysis.csv
+  categories_to_test: [MODEL_REASONING_LIMITED (n=31), AGENTICALLY_FIXABLE (n=26),
+    STATIC_PIPELINE_FIXABLE (n=6)]
+  method: for each of these 73 cases, look up GPT's prediction/evidence on the SAME case_id from
+    the new A2-GPT run and report how many of each bucket GPT gets correct -- directly tests
+    whether E08's labels reflect a Qwen-specific limitation or a harder, genuinely
+    information/architecture-bound problem.
+
+wrong_evidence_subgroup_plan:  # the 54 Qwen wrong-label+source-valid-evidence cases from E08
+  method: for the same 54 case_ids, report GPT's correct-label count, gold-overlapping-evidence
+    count, source-valid-but-non-gold-evidence count, and joint-success count -- tests whether
+    stronger reasoning also improves evidence selection, not just final-label accuracy.
+
+reranker_limited_plan:  # the 6 STATIC_PIPELINE_FIXABLE cases
+  method: report whether GPT nevertheless solves any of these 6 from the same (gold-absent)
+    top-5 context. Explicit instruction: do NOT interpret a GPT failure on these 6 as a
+    reasoning failure -- the information genuinely was not in the context for either model.
+
+statistical_plan:
+  mcnemar: exact two-sided binomial (scipy.stats.binomtest), same methodology as
+    scripts/compare_e05_e07.py, computed overall and restricted to Contradiction
+  paired_bootstrap: 10,000 resamples, 95% CI for accuracy/macro_f1/contradiction_recall/joint_overall deltas (GPT minus Qwen)
+  caveat: effect size and CI reported alongside any p-value, never p-value alone; no
+    significance manufactured if underpowered at n=150 (n=50 Contradiction)
+
+model_calls: NONE in Stage A. Stage B (if approved) would make 150 real openai/gpt-5-mini calls
+  via OpenRouter, tracked in the reconstruction-v2 spend ledger via evaluation.budget.record_spend
+api_calls: NONE this pass
+hosted_calls: NONE this pass -- Stage B would be reconstruction-v2's first hosted call since E01
+
+outputs_proposed:
+  - results/run_E08B_A2_gpt5mini_train.json (aggregate metrics, Stage B)
+  - results/run_E08B_A2_gpt5mini_train_cases.jsonl (per-case predictions + evidence, Stage B)
+  - results/qwen_vs_gpt_paired_comparison.json (Stage B)
+  - results/e08_bucket_recovery.json (Stage B)
+  - E08B_stronger_model_diagnostic.ipynb (Stage B, after results exist)
