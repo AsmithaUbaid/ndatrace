@@ -1,0 +1,85 @@
+{
+ "checks": [
+  {
+   "id": "A1",
+   "attack": "fabricated/paraphrased evidence quotes",
+   "expected_guard": "runtime validator v2 rejects non-source quote",
+   "actual": "7/7 rejected; accepted=[]",
+   "pass": true
+  },
+  {
+   "id": "A2a",
+   "attack": "benign formatting: zero-width (200B/C/D, 2060, FEFF), NBSP, double space, NFD",
+   "expected_guard": "accepted (frozen v2 normalization)",
+   "actual": "benign forms accepted except []; NFD/NFC ok=True",
+   "pass": true
+  },
+  {
+   "id": "A2b",
+   "attack": "hostile Unicode: homoglyph, fullwidth, case, soft hyphen, ellipsis join, curly quote",
+   "expected_guard": "rejected (documented non-coverage; no fuzzy match)",
+   "actual": "hostile forms accepted=[]; curly-vs-straight accepted=False",
+   "pass": true
+  },
+  {
+   "id": "A3",
+   "attack": "negation / number / modal / party / term edits of real quotes",
+   "expected_guard": "originals accepted, every meaning-changing edit rejected",
+   "actual": "originals accepted ok (rejected originals=0); edits accepted=[]",
+   "pass": true
+  },
+  {
+   "id": "A4",
+   "attack": "corrupted model output schema (13 corruption types incl. 1MB garbage)",
+   "expected_guard": "parse_status invalid/recovered with error_type; invalid never yields a label; bounded time",
+   "actual": "13/13 as expected; mismatches=[]; 0.04s total (incl. 1MB garbage)",
+   "pass": true
+  },
+  {
+   "id": "A5",
+   "attack": "label/evidence inconsistency: NotMentioned+evidence, E/C+no evidence, non-source quote, unusable parse",
+   "expected_guard": "validator flag + frozen R1 routes REVIEW; clean case not routed",
+   "actual": "{\"NM_with_evidence_flagged\": true, \"EC_no_evidence_flagged\": true, \"hallucinated_flagged\": true, \"unusable_flagged\": true, \"clean_not_flagged\": true}",
+   "pass": true
+  },
+  {
+   "id": "A6",
+   "attack": "same clause repeated 50x",
+   "expected_guard": "validator valid + deterministic first occurrence; evaluator maps to first span only",
+   "actual": "source-valid=True; first-occurrence span=True; evaluator span idx=[0] (deterministic first occurrence)",
+   "pass": true
+  },
+  {
+   "id": "A7",
+   "attack": "1MB document; empty/random/truncated/non-PDF uploads",
+   "expected_guard": "bounded validator time (<5s); malformed files -> clean PdfExtractionError; (10MB upload cap -> 413 covered by tests/test_backend.py::test_oversized_pdf_returns_413)",
+   "actual": "1MB doc: miss+formatting-fallback in 0.38s (miss rejected=True, fmt accepted=True); malformed-PDF handling problems=[]",
+   "pass": true
+  },
+  {
+   "id": "A8",
+   "attack": "secret/NDA-text exposure in structured logs and run logs (incl. E15 hosted run)",
+   "expected_guard": "no API key or NDA text in any log (logging rules; gateway logs metadata only)",
+   "actual": "3 log files scanned; API-key occurrences=0; NDA-text snippet occurrences (40 snippets)=0",
+   "pass": true
+  },
+  {
+   "id": "A9",
+   "attack": "template/role escape payloads inside NDA text (fake Requirement/NDA context/system/chat-template tokens, format-string braces)",
+   "expected_guard": "attacker text stays inside the context field; system prompt byte-identical and in system role",
+   "actual": "system prompt sha1=3fcc7c95 (== 3fcc7c95: True); 5/5 attack payloads stay inside the context field verbatim (no format-string re-expansion); role separation: system prompt passed as separate argument",
+   "pass": true
+  },
+  {
+   "id": "A10",
+   "attack": "attack corpus through runtime validator v2 vs evidence_evaluator_v2",
+   "expected_guard": "source-validity agreement 100%",
+   "actual": "11/11 agree; disagreements=[]",
+   "pass": true
+  }
+ ],
+ "n": 11,
+ "passed": 11,
+ "model_calls": 0,
+ "test_access": false
+}

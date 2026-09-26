@@ -1,0 +1,15 @@
+{
+  "spend_usd": 0.07945025,
+  "wall_seconds": 71.73651012510527,
+  "stopped": null,
+  "api_calls_completed": 40,
+  "parse_failures": 0,
+  "verify": {
+    "records_40": true,
+    "no_duplicates": true,
+    "all_ids": true,
+    "no_provider_errors": true
+  },
+  "pre_run_ledger_usd": 3.112115699999999,
+  "post_run_ledger_usd": 3.1915659499999993
+}

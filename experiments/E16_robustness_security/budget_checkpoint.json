@@ -1,0 +1,87 @@
+{
+ "ledger": 3.1121157,
+ "plan": 5.0,
+ "reserve": 1.25,
+ "remaining_total": 1.8878843,
+ "remaining_before_reserve": 0.6378843000000001,
+ "dists": {
+  "E13_full": {
+   "n": 150,
+   "mean": 0.002079765,
+   "median": 0.0019563749999999998,
+   "p90": 0.0033204999999999997,
+   "p95": 0.003889,
+   "max": 0.005867249999999999
+  },
+  "E15_full": {
+   "n": 138,
+   "mean": 0.0022298315217391305,
+   "median": 0.00213375,
+   "p90": 0.00342475,
+   "p95": 0.0038752500000000002,
+   "max": 0.0057817499999999996
+  },
+  "pooled_full_288": {
+   "n": 288,
+   "mean": 0.002151671875,
+   "median": 0.00203175,
+   "p90": 0.0033527500000000003,
+   "p95": 0.0038752500000000002,
+   "max": 0.005867249999999999
+  },
+  "E13_rag": {
+   "n": 150,
+   "mean": 0.0017380116666666668,
+   "median": 0.00159025,
+   "p90": 0.00275825,
+   "p95": 0.0030875,
+   "max": 0.004600249999999999
+  }
+ },
+ "forecast": {
+  "150": {
+   "expected": 0.32275078125,
+   "expected_x1.25_length_sensitivity": 0.4034384765625,
+   "conservative_p90": 0.5029125,
+   "stress_x1.5_p90": 0.75436875,
+   "fits_pre_reserve_expected": true,
+   "fits_pre_reserve_conservative": true,
+   "fits_total_5_conservative": true
+  },
+  "300": {
+   "expected": 0.6455015625,
+   "expected_x1.25_length_sensitivity": 0.806876953125,
+   "conservative_p90": 1.005825,
+   "stress_x1.5_p90": 1.5087375,
+   "fits_pre_reserve_expected": false,
+   "fits_pre_reserve_conservative": false,
+   "fits_total_5_conservative": true
+  },
+  "450": {
+   "expected": 0.96825234375,
+   "expected_x1.25_length_sensitivity": 1.2103154296875,
+   "conservative_p90": 1.5087375,
+   "stress_x1.5_p90": 2.26310625,
+   "fits_pre_reserve_expected": false,
+   "fits_pre_reserve_conservative": false,
+   "fits_total_5_conservative": true
+  },
+  "2091": {
+   "expected": 4.499145890625,
+   "expected_x1.25_length_sensitivity": 5.62393236328125,
+   "conservative_p90": 7.01060025,
+   "stress_x1.5_p90": 10.515900375000001,
+   "fits_pre_reserve_expected": false,
+   "fits_pre_reserve_conservative": false,
+   "fits_total_5_conservative": false
+  }
+ },
+ "max_n_within_pre_reserve": {
+  "expected": 296,
+  "conservative_p90": 190
+ },
+ "rag_forecast_2091": {
+  "expected": 3.6341823950000003,
+  "conservative": 5.76750075
+ }
+}
