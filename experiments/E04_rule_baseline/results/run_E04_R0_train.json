@@ -1,0 +1,125 @@
+{
+  "n_cases": 7191,
+  "verified_class_balance": {
+    "NotMentioned": 2820,
+    "Entailment": 3530,
+    "Contradiction": 841
+  },
+  "accuracy": 0.5682102628285357,
+  "macro_f1": 0.4709232200280213,
+  "per_class_recall": {
+    "Entailment": 0.37988668555240795,
+    "Contradiction": 0.1724137931034483,
+    "NotMentioned": 0.9219858156028369
+  },
+  "contradiction_recall": 0.1724137931034483,
+  "contradiction_recall_ci95": [
+    0.14838796797968018,
+    0.1994187688097961
+  ],
+  "contradiction_n": 841,
+  "confusion_matrix": {
+    "labels": [
+      "Entailment",
+      "Contradiction",
+      "NotMentioned"
+    ],
+    "matrix": [
+      [
+        1341,
+        170,
+        2019
+      ],
+      [
+        78,
+        145,
+        618
+      ],
+      [
+        199,
+        21,
+        2600
+      ]
+    ]
+  },
+  "rule_polarity_counts": {
+    "none_fired": 5237,
+    "positive_fired": 1618,
+    "negative_fired": 336
+  },
+  "rule_polarity_rate": {
+    "none_fired": 0.7282714504241413,
+    "positive_fired": 0.22500347656793213,
+    "negative_fired": 0.046725073007926575
+  },
+  "coverage_by_gold_class": {
+    "Entailment": {
+      "none_fired": 2019,
+      "positive_fired": 1341,
+      "negative_fired": 170
+    },
+    "Contradiction": {
+      "none_fired": 618,
+      "positive_fired": 78,
+      "negative_fired": 145
+    },
+    "NotMentioned": {
+      "none_fired": 2600,
+      "positive_fired": 199,
+      "negative_fired": 21
+    }
+  },
+  "evidence_bearing_n": 4371,
+  "evidence_recall": 0.28986501944635096,
+  "evidence_precision": 0.6484135107471852,
+  "joint_label_evidence_correctness_overall": 0.48226950354609927,
+  "joint_label_evidence_correctness_by_class": {
+    "Entailment": 0.21841359773371105,
+    "Contradiction": 0.11533888228299644,
+    "NotMentioned": 0.9219858156028369
+  },
+  "latency_ms": {
+    "mean": 0.07311072138824141,
+    "median": 0.05179201252758503,
+    "p90": 0.12391700875014067
+  },
+  "total_wall_seconds": 0.67168387491256,
+  "cost_usd": 0.0,
+  "failure_families": {
+    "default NotMentioned overuse (Entailment->NotMentioned, no phrase matched)": 2019,
+    "default NotMentioned overuse (Contradiction->NotMentioned, no phrase matched)": 618,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'independently develop')": 6,
+    "positive case matched a negative phrase (or vice versa) -- possible conflicting/ambiguous phrasing": 170,
+    "negative case matched a positive phrase -- possible conflicting/ambiguous phrasing": 78,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'shall return')": 15,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'negotiat')": 64,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'representatives')": 23,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'shall destroy')": 6,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'required by law')": 15,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'already known to')": 8,
+    "rule fired on distractor/false-positive text (NotMentioned->Contradiction, matched phrase 'business information')": 6,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'clearly marked')": 1,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'return or destroy')": 22,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'terms of this agreement shall not')": 2,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'consultants')": 6,
+    "rule fired on distractor/false-positive text (NotMentioned->Contradiction, matched phrase 'shall not copy')": 1,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'identified in writing')": 1,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'return all confidential')": 6,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'shall notify')": 6,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'court order')": 3,
+    "rule fired on distractor/false-positive text (NotMentioned->Contradiction, matched phrase 'for any purpose')": 2,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'marked confidential')": 1,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'only for the purpose')": 2,
+    "rule fired on distractor/false-positive text (NotMentioned->Contradiction, matched phrase 'must be in writing')": 8,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'marked as confidential')": 1,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'solely for the purpose')": 1,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'designated as confidential')": 2,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'legal process')": 1,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'existence of this agreement')": 1,
+    "rule fired on distractor/false-positive text (NotMentioned->Contradiction, matched phrase 'business, financial')": 4,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'will not solicit')": 1,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'non-solicitation')": 3,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'expressly identif')": 1,
+    "rule fired on distractor/false-positive text (NotMentioned->Entailment, matched phrase 'shall not solicit')": 1
+  }
+}

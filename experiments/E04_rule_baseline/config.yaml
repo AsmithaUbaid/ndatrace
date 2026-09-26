@@ -1,0 +1,115 @@
+experiment_id: E04_rule_baseline
+status: COMPLETE  # R0 run on full TRAIN, A0_rule_baseline_v1 frozen -- see frozen_a0 block below
+dataset_manifest: FULL_TRAIN  # proposed -- all 423 docs x 17 hypotheses, no subsampling needed
+split_role: development   # Role A, TRAIN only -- per docs/evaluation_protocol.md
+purpose: rule_based_classification_floor
+
+manifest:
+  source_split: train
+  n_documents: 423
+  n_cases: 7191   # 423 docs x 17 hypotheses, verified directly (not from a stale doc comment)
+  verified_class_balance: {Entailment: 3530, NotMentioned: 2820, Contradiction: 841}
+  note: >
+    Natural (unbalanced) TRAIN distribution, not a stratified diagnostic sample like
+    TRAIN_PROMPT_v1/TRAIN_ORACLE_v1 -- proposed because the rule baseline costs $0 and runs in
+    seconds, so there is no runtime/cost reason to subsample, and a natural-distribution
+    accuracy/macro-F1 number is more representative of real deployment than a 50/50/50 sample.
+
+input_representation:
+  chosen: full_nda_text  # doc.text, NOT retrieval_v1's retrieved excerpts
+  rationale: >
+    Retrieval (retrieval_v1) exists to fit context into an LLM's effective window/cost budget.
+    A rule-based keyword classifier has no such constraint -- full-text substring search is
+    O(document length) and near-free, and artificially routing it through retrieval_v1 would
+    (a) add unnecessary LLM-era infrastructure dependency to what should be the cheapest,
+    simplest architecture, and (b) cap the rule baseline's own recall at retrieval's ~92%
+    evidence-recall ceiling for zero benefit. This matches historical precedent
+    (pipeline/rule_baseline.py, scripts/run_full_rule_baseline_test.py) -- confirmed by audit,
+    not assumed.
+
+rule_baseline_code:
+  module: pipeline/rule_baseline.py
+  status: HISTORICAL -- T-series pre-reconstruction, unmodified in Stage A
+  mechanism: >
+    Per-hypothesis (17 fixed ContractNLI hypothesis IDs) positive/negative literal keyword-
+    phrase lists. Priority: any negative phrase found -> Contradiction; else any positive
+    phrase found -> Entailment; else -> NotMentioned (default fallback, no evidence).
+    classify_with_span additionally returns the character span of the first matching phrase,
+    used as the rule's single evidence "chunk".
+  historical_dev_test_exposure: >
+    DISCLOSED, not hidden (see summary.md's contamination section for full detail). This exact
+    code has been (1) evaluated on the full official DEV split (1,037 cases, B02, accuracy
+    59.9%/macro-F1 0.493, docs/experiments.md), (2) evaluated on DEV's 614-case Entailment/
+    Contradiction evidence-comparison pool, and (3) evaluated on the full official TEST split
+    (2,091 cases and a 500-case subsample, T041). No historical record (docs/decisions.md) shows
+    the keyword lists being iteratively revised after seeing DEV/TEST accuracy -- it reads as a
+    single hand-authored build referencing ContractNLI's split-invariant 17 hypothesis
+    DEFINITION text, not document-level DEV/TEST content or outcome-driven tuning. This is a
+    real but mild exposure (visibility, not proven outcome-chasing) -- flagged as an unresolved
+    decision for the user in summary.md, not resolved unilaterally.
+
+evidence_output:
+  current_mechanism: classify_with_span's matched-phrase character span, overlap-mapped onto
+    ContractNLI's document-level annotated span list (same mechanism already used in
+    scripts/run_full_rule_baseline_test.py)
+  sufficient_for_joint_metric: true  # see summary.md section 6 -- no code change proposed
+  notmentioned_fabrication_risk: none  # span=None when no rule fires -> empty evidence list
+
+staged_rule_plan:
+  R0:
+    name: reuse_historical_keyword_baseline
+    status: RUN -- COMPLETE
+    description: pipeline/rule_baseline.py's current 17 per-hypothesis rules, unmodified,
+      evaluated fresh on the full TRAIN universe only (never DEV/TEST, in E04 itself).
+  R1_plus:
+    status: NOT JUSTIFIED BY OBSERVED R0 FAILURES -- NOT RUN, NOT PLANNED IN E04
+    finding: >
+      R0's dominant failure mode (2,019+618=2,637 of 3,105 errors, 84.9%) is plain lexical
+      coverage -- the hypothesis's own keyword list never matched anything in the document at
+      all, falling to the NotMentioned default. This is NOT primarily an exception/carve-out or
+      negation-specific problem (only 220/3,105 errors, 7.1%, are false-positive fires; 248/3,105,
+      8.0%, are wrong-direction positive/negative conflicts) -- per the reconstruction brief's own
+      instruction, E04 does not add a rule family in response, since the user's frozen decision
+      was reuse-unchanged, and no rule family was authorized regardless of what the failure data
+      showed.
+
+frozen_a0:
+  name: A0_rule_baseline_v1
+  source_file: pipeline/rule_baseline.py
+  source_commit: 7d33d038f81a1b0da093bce70cb22e267c552f91  # last commit touching this file; confirmed unmodified (empty git diff) at E04 run time
+  input_representation: full_nda_text  # doc.text, never retrieval_v1's retrieved excerpts
+  rule_semantics: per_hypothesis_literal_keyword_phrases_negative_first_priority
+  evidence_semantics: matched_phrase_char_span_overlap_onto_doc_spans
+  train_evaluation_manifest: FULL_TRAIN  # 423 docs x 17 hypotheses, 7191 cases, natural distribution
+  historical_dev_test_exposure_disclosed: true  # see summary.md -- characterization, not "blind"/"unseen"
+  metrics:
+    accuracy: 0.5682
+    macro_f1: 0.4709
+    entailment_recall: 0.3799
+    contradiction_recall: 0.1724
+    contradiction_recall_ci95: [0.1484, 0.1994]
+    notmentioned_recall: 0.9220
+    evidence_recall: 0.2899
+    evidence_precision: 0.6484
+    joint_label_evidence_correctness_overall: 0.4823
+    joint_label_evidence_correctness_by_class:
+      Entailment: 0.2184
+      Contradiction: 0.1153
+      NotMentioned: 0.9220
+    rule_fire_rate: 0.2717  # 1 - none_fired_rate (0.7283)
+    default_fallback_rate: 0.7283
+    mean_latency_ms: 0.0616
+    p90_latency_ms: 0.1183
+    total_wall_seconds_7191_cases: 0.67
+    cost_usd: 0.0
+
+model_calls: NONE -- E04 is rule-only, no LLM at any stage
+api_calls: NONE
+hosted_calls: NONE
+
+outputs:
+  - results/run_E04_R0_train.json (aggregate metrics)
+  - results/run_E04_R0_train_cases.jsonl (7,191 per-case predictions + evidence spans)
+  - results/run_E04_R0_train_wall_seconds.json (total wall time)
+  - results/rule_failure_analysis.csv (case-level failure artifact)
+  - E04_rule_baseline.ipynb (executed, zero errors)
