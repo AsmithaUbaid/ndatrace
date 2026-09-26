@@ -1,0 +1,231 @@
+experiment_id: E07_standard_rag
+status: COMPLETE  # full 150-case A2_standard_rag_v1 benchmark run and frozen -- see
+                   # results/run_E07_A2_train.json and summary.md's "Full Benchmark Results"
+dataset_manifest: TRAIN_ARCH_v1  # IDENTICAL to E05 -- same 150 cases, same ordering
+split_role: development   # Role A, TRAIN only
+purpose: matched_rag_vs_full_context_architecture_comparison
+
+architecture_under_test:
+  name: A2_standard_rag
+  input: requirement/hypothesis -> retrieval_v1 -> final top-5 reranked chunks + hypothesis
+  prompt: classification_prompt_v1  # = P0, byte-for-byte unchanged system_prompt/output_schema
+  model: qwen2.5:7b-instruct-ctx16k  # SAME tag as E05 -- see model_tag_decision below
+  retrieval: retrieval_v1  # BM25/clause_256/top-20/rerank(ms-marco-MiniLM-L-12-v2)/top-5, UNMODIFIED
+  agent: NONE
+  iterative_retrieval: NONE
+  query_rewriting: NONE
+  adaptive_second_pass: NONE
+
+model_tag_decision:
+  chosen: qwen2.5:7b-instruct-ctx16k  # same as E05
+  rationale: >
+    E07's retrieved contexts are far shorter than E05's full documents (max 1,649 vs. 5,806
+    tokens, measured this pass) -- a plain qwen2.5:7b-instruct tag would fit safely too. But the
+    brief's own stated principle applies directly: "the matched-comparison principle is more
+    important than saving small amounts of context memory." num_ctx does not alter model
+    weights or sampling behavior, only the maximum context size accepted -- an unused larger
+    window has no effect on generation for prompts well below the limit, so using the same
+    16k-context tag introduces zero expected behavioral difference for E07's shorter inputs
+    while eliminating a second model-runtime variable from the comparison. Chosen: keep E05's
+    exact tag.
+
+existing_rag_code_audit:
+  found: scripts/run_rag_experiment.py  # T-series T024, historical
+  reusable_unmodified: false
+  reasons: >
+    Different retrieval config entirely (sentence chunking + rule-boosted RRF fusion via
+    Retriever.query_rerank_and_boost -- the OLD T-series retrieval decision, not
+    reconstruction-v2's frozen retrieval_v1). Different classification mechanism
+    (pipeline.classifier.classify() + prompts/classify_v2.txt, a heavier schema with
+    confidence/explanation fields -- not classification_prompt_v1/E03's evaluation.
+    prompt_selection + ModelGateway.complete() mechanism). DEV split, hosted model
+    (ModelGateway(), OpenRouter). The per-document retriever-reuse SHAPE (build once per doc,
+    query once per hypothesis) is a reusable pattern, not reusable code.
+  reusable_pieces_confirmed:
+    - scripts/run_e06_retrieval.py::build_or_load_index  # frozen retrieval_v1 index builder, cached by config
+    - pipeline/reranker.py::rerank  # unmodified cross-encoder reranker
+    - evaluation/retrieval_eval.py::score_retrieval, compute_retrieval_metrics, context_size_stats
+    - scripts/generate_e03_retrieved_context.py's exact pattern -- replicated (not modified) as
+      scripts/generate_e07_retrieved_context.py, retargeted at TRAIN_ARCH_v1
+    - evaluation/structured_output.py::parse_structured_output  # from E05, unchanged
+    - pipeline/evidence_validator.py::validate_evidence  # from E05, unchanged
+
+manifest:
+  path: experiments/E05_full_context/TRAIN_ARCH_v1.json  # SAME FILE as E05 -- not copied/regenerated
+  n_cases: 150
+  verified_class_balance: {Entailment: 50, Contradiction: 50, NotMentioned: 50}
+  seed: 700
+  unique_documents: 78
+
+retrieval_context_artifact:
+  model_facing: experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1.json
+  gold_side: experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1_GOLD.json
+  generated_this_pass: true  # local-only, zero LLM calls, same precedent as E03/E06 Stage A
+  fields_per_case: [case_id, document_id, hypothesis_id, hypothesis_text,
+    retrieval_config_version, ranked_chunk_ids, ranked_chunk_text, ranked_chunk_offsets,
+    ranked_chunk_bm25_candidate_scores, ranked_chunk_rerank_scores]
+  gold_leakage: none  # gold_label/gold_span_indices only in the separate GOLD file
+  scores_captured: >
+    Both the BM25 candidate-pool score AND the final cross-encoder rerank score are preserved
+    per chunk (E03's equivalent artifact discarded these) -- pipeline.reranker.rerank overwrites
+    RetrievalResult.score with the rerank score, so the candidate score is captured before
+    reranking in scripts/generate_e07_retrieved_context.py.
+
+retrieval_v1_coverage_on_train_arch_v1:  # characterization only -- retrieval_v1 NOT altered
+  evidence_bearing_cases: 100  # Entailment 50 + Contradiction 50, NotMentioned excluded (E00 semantics)
+  evidence_recall_at_5_overall: 0.9088
+  evidence_recall_at_5_entailment: 0.8543
+  evidence_recall_at_5_contradiction: 0.9633
+  evidence_precision_overall: 0.0512
+  mrr_overall: 0.3568
+  miss_count: 6  # of 100 evidence-bearing cases
+  note: >
+    Consistent with retrieval_v1's E06 characterization on the full 4,371-case evidence-bearing
+    TRAIN universe (92.2% overall recall, 93.9% Contradiction recall) -- this 100-case subset is
+    a touch lower on Entailment specifically (85.4% vs. E06's aggregate) but well within the
+    range expected from a 100-case sample of the same underlying retriever, not a sign of
+    degraded retrieval on this particular manifest.
+
+retrieved_context_token_distribution:  # all 150 cases, cl100k_base approximation
+  mean: 1017.4
+  median: 1036.0
+  p90: 1177
+  max: 1649
+  mean_chunks_per_case: 4.82
+
+token_reduction_vs_e05:  # E05's real measured full-context distribution vs. E07's real measured retrieved-context distribution
+  e05_mean: 2252.7
+  e07_mean: 1017.4
+  mean_reduction_pct: 54.8
+  e05_median: 2045.5
+  e07_median: 1036.0
+  median_reduction_pct: 49.4
+  e05_p90: 3945
+  e07_p90: 1177
+  p90_reduction_pct: 70.2
+
+output_evidence_setup:  # identical to E05, not reopened
+  output_schema: '{"label": "Entailment"|"Contradiction"|"NotMentioned", "evidence": [...]}'
+  architecture_wrapper: 'user template header "Retrieved NDA excerpts:" (NOT "Full NDA text:")'
+  evidence_instruction: same additive single line as E05, unchanged
+  parser: evaluation.structured_output.parse_structured_output  # unchanged
+  evidence_validator: pipeline.evidence_validator.validate_evidence  # unchanged
+  request_timeout_seconds: 60  # unchanged from E05
+
+retrieval_aware_failure_taxonomy:  # new for E07 -- E05 has no retrieval step so this didn't apply there
+  A_retrieval_limited: gold evidence absent from the final top-5 context (never shown to the model, so not the model's fault)
+  B_reasoning_limited: gold evidence present in context but prediction wrong
+  C_evidence_selection_failure: label correct but returned evidence invalid/wrong/paraphrased
+  D_structured_output_failure: response not deterministically parseable (strict or recovered)
+  E_mixed_ambiguous: multiple factors plausibly contribute
+  note: gold-evidence-presence is evaluator-side only, never passed to the model
+
+proposed_paired_analysis:  # Stage B, after E07 runs
+  matched_table: [accuracy, macro_f1, entailment_recall, contradiction_recall,
+    notmentioned_recall, joint_overall, strict_parse_rate, usable_parse_rate,
+    evidence_valid_rate, mean_input_tokens, mean_latency]
+  case_transitions: [e05_wrong_e07_correct, e05_correct_e07_wrong, both_correct, both_wrong]
+  contradiction_specific_transitions: [e05_wrong_e07_correct, e05_correct_e07_wrong]
+  statistical_tests:
+    mcnemar: >
+      Exact two-sided binomial test (scipy.stats.binomtest, same methodology as
+      evaluation.metrics.mcnemar_test, reimplemented directly on the two aligned per-case
+      correctness lists rather than constructing T-series Prediction/GoldCase objects) on the
+      discordant pairs (E05-only-correct vs. E07-only-correct). Appropriate given n=150 overall,
+      though the Contradiction subgroup (n=50) will likely have a small discordant count --
+      reported honestly as such, not treated as automatically significant.
+    paired_bootstrap: >
+      10,000-resample paired bootstrap over the 150 case-pairs, reporting a 95% CI for each
+      headline metric's E07-minus-E05 difference (accuracy, Macro-F1, Contradiction Recall,
+      joint success). Practical effect size (the raw difference and its CI) reported alongside
+      any p-value -- the architecture decision is not reduced to a p-value alone.
+  caveat: >
+    Do not manufacture significance if the sample size is too small -- report the test result
+    and the CI honestly, including a not-significant or wide-CI outcome, and interpret the
+    matched comparison holistically (metric table + transitions + failure taxonomy + effect
+    size), not from any single number.
+
+expected_runtime:
+  method: >
+    Applied E05's own fitted latency-vs-input-tokens linear relationship
+    (latency_s = 2.145 + 0.004582 * input_tokens, fit on E05's real 8-case calibration and
+    validated against E05's real 150-case run) to E07's real, measured, much shorter total-
+    input-token distribution -- not a fresh guess or a new calibration run.
+  why_no_new_calibration_run: >
+    E07 uses the identical model tag, timeout, and parser already validated for E05, at a
+    STRICTLY SHORTER context length (max 1,649 vs. E05's already-validated max 5,806) -- the two
+    risks a calibration run exists to catch (context truncation, timeout) are inherently less
+    likely to trigger at a shorter length than one already confirmed safe. Retrieval itself
+    (BM25 + local cross-encoder rerank) was already measured as near-instant per case with
+    cached indexes during this pass's context-generation run.
+  projected_mean_s_per_case: ~7.5  # E05's fit applied to E07's ~1,165-token typical total input (context + overhead)
+  projected_total_150_cases_minutes: ~19
+
+model_calls: 150 local qwen2.5:7b-instruct-ctx16k calls via Ollama -- $0, no hosted API
+api_calls: NONE
+hosted_calls: NONE -- E07 is local-only by design
+
+frozen_a2:
+  name: A2_standard_rag_v1
+  note: >
+    "Frozen" means a reproducible architecture configuration for later comparison (E12) -- NOT
+    a claim that A2 is production-ready. No change was made to retrieval_v1, the prompt, the
+    parser, the model, or the timeout in response to these results.
+  retrieval: retrieval_v1  # BM25/clause_256/top-20/rerank(ms-marco-MiniLM-L-12-v2)/top-5, UNMODIFIED
+  model: qwen2.5:7b-instruct-ctx16k  # same tag as E05
+  temperature: 0.0
+  request_timeout_seconds: 60
+  prompt: classification_prompt_v1  # unchanged
+  architecture_wrapper: 'user template header "Retrieved NDA excerpts:"'
+  output_schema: '{"label": "Entailment"|"Contradiction"|"NotMentioned", "evidence": [...]}'
+  parser: evaluation.structured_output.parse_structured_output  # unchanged from E05
+  evidence_validator: pipeline.evidence_validator.validate_evidence  # unchanged, checked against retrieved context
+  manifest: TRAIN_ARCH_v1  # identical to E05, 150 cases
+  metrics:
+    accuracy: 0.4333
+    macro_f1: 0.4309
+    entailment_recall: 0.34
+    contradiction_recall: 0.42
+    contradiction_recall_ci95: [0.2937, 0.5577]
+    notmentioned_recall: 0.54
+    strict_parse_validity_pct: 100.0
+    recovered_parse_count: 0
+    invalid_parse_count: 0
+    usable_parse_validity_pct: 100.0
+    evidence_recall: 0.29
+    evidence_precision: 0.358
+    joint_overall: 0.3333
+    joint_by_class: {Entailment: 0.16, Contradiction: 0.30, NotMentioned: 0.54}
+    retrieval_limited_count: 6
+    reasoning_limited_count: 79
+    evidence_selection_failure_count: 14
+    mean_retrieval_latency_ms: 416.3
+    mean_generation_latency_ms: 7266.1
+    mean_end_to_end_latency_ms: 7682.4
+    mean_input_tokens: 1176.8
+    total_wall_seconds: 1152.5  # 19.2 minutes for 150 cases
+    cost_usd: 0.0
+  vs_e05_matched_comparison:
+    accuracy_delta_pp: 3.3
+    macro_f1_delta: 0.034
+    contradiction_recall_delta_pp: 14.0
+    joint_overall_delta_pp: 5.3
+    mean_token_reduction_pct: 47.7
+    mean_generation_latency_reduction_pct: 43.1
+    mcnemar_overall_p: 0.542
+    mcnemar_contradiction_p: 0.118
+    bootstrap_accuracy_delta_ci95: [-0.0533, 0.12]
+    bootstrap_contradiction_recall_delta_ci95: [0.0, 0.28]
+    interpretation: >
+      Consistent, multi-metric directional advantage for E07 (RAG) over E05 (full-context) that
+      does not reach conventional statistical significance at n=150 (n=50 for Contradiction) --
+      a real efficiency win (token/latency reduction) plus a suggestive-but-unconfirmed quality
+      improvement, strongest on Contradiction Recall. Not "RAG proven better," not "no effect."
+
+outputs:
+  - results/run_E07_A2_train.json (aggregate metrics)
+  - results/run_E07_A2_train_cases.jsonl (150 fully-traceable records)
+  - results/run_E07_A2_train_wall_seconds.json
+  - results/rag_failure_analysis.csv
+  - results/e05_vs_e07_paired_comparison.json
+  - E07_standard_rag.ipynb (executed, zero errors)
