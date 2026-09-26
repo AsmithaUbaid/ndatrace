@@ -1,0 +1,176 @@
+experiment_id: E12A_static_context_expansion
+status: STAGE_B_COMPLETE  # decision B: keep top-5; not committed
+dataset_manifest: TRAIN_ARCH_v1  # identical 150 cases as E05/E07/E08/E08B/E09/E10/E11
+purpose: static_context_expansion_diagnostic
+one_experiment_one_question: >
+  Final retrieved-context size is the ONLY variable. Explicitly not combined with prompt
+  changes (GPT-specific prompt optimisation is a separate, later experiment), retrieval
+  re-optimisation, agent work, or model selection.
+
+context_note: >
+  E10/E11 completed as a controlled agent comparison; A3 was rejected (decision C). This
+  experiment tests the cheaper deterministic alternative E09 identified (static opportunity
+  ceiling +4.0pp joint success vs. agent ceiling +0.67pp).
+
+control:  # NOT modified
+  name: A2_GPT5mini_top5
+  flow: "BM25 -> clause_256 -> top-20 candidate pool -> ms-marco-MiniLM-L-12-v2 rerank -> final
+    top-5 -> classification_prompt_v1 -> openai/gpt-5-mini -> parser -> evidence validator"
+  frozen_result: experiments/E08B_stronger_model_diagnostic/results/run_E08B_A2_gpt5mini_train_cases.jsonl
+  frozen_context_artifact: experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1.json
+
+candidate:
+  name: static_context_candidate_v1
+  change: "final context top-5 -> top-11 (ONLY change). Same BM25 candidate pool (20), same
+    reranker, same order, same model, same classification_prompt_v1, same schema/parser/validator."
+  final_k: 11
+  applied_to: all 150 cases identically -- one fixed policy, never case-selective, never using gold
+    labels or failure buckets as runtime selectors
+  artifact: experiments/E12A_static_context_expansion/TRAIN_ARCH_v1_RETRIEVED_static_context_candidate_v1.json
+  built_by: scripts/build_e12a_static_context_candidate.py  # local, zero model calls; reads the
+    # frozen retrieval_v1 index + reranker, exposes top-11 instead of top-5, nothing re-trained
+  integrity_verified_this_pass:
+    ranks_1_to_5_identical_to_control_top5_all_150_cases: true  # 0 mismatches, direct check
+    no_gold_leakage_keys: true
+    chunk_count_distribution: "2-11 chunks/case (94/150 cases have <11 chunks because the
+      document itself has fewer than 11 clause-chunks -- for those cases K=11 already exposes
+      most or all of the document)"
+  retrieval_v1_status: unmodified -- not renamed, not overwritten
+
+k_selection_evidence:  # the six RETRIEVAL_FILTERING_LIMITED cases from E09, reranked gold rank
+  method: "direct re-verification (local BM25 top-20 + the same cross-encoder), matching E08's
+    own stored post_rerank_rank_of_20 values exactly"
+  cases:
+    - {case_id: "train::160::nda-10", reranked_gold_rank: 11, in_top5: false, covered_by_top10: false, covered_by_top11: true}
+    - {case_id: "train::247::nda-10", reranked_gold_rank: 9,  in_top5: false, covered_by_top10: true,  covered_by_top11: true}
+    - {case_id: "train::353::nda-10", reranked_gold_rank: 9,  in_top5: false, covered_by_top10: true,  covered_by_top11: true}
+    - {case_id: "train::379::nda-10", reranked_gold_rank: 8,  in_top5: false, covered_by_top10: true,  covered_by_top11: true}
+    - {case_id: "train::438::nda-2",  reranked_gold_rank: 8,  in_top5: false, covered_by_top10: true,  covered_by_top11: true}
+    - {case_id: "train::518::nda-10", reranked_gold_rank: 9,  in_top5: false, covered_by_top10: true,  covered_by_top11: true}
+  any_required_rank_gt_11: false
+  top10_covers_all_six: false  # 5/6 -- train::160::nda-10 is at rank 11
+  chosen_final_k: 11  # smallest fixed K covering all six; NO K sweep performed
+  note: "the kickoff proposed top-10 conditional on this verification; the verification found it
+    insufficient, so per the kickoff's own fallback instruction K=11 is frozen as the ONLY
+    candidate. This deviates from the kickoff's suggested top-10 and is disclosed, not hidden."
+
+model_facing_artifact_safety:
+  contains: [case_id, document_id, hypothesis_id, hypothesis_text, retrieval_config_version,
+    ranked_chunk_ids, ranked_chunk_text, ranked_chunk_offsets, ranked_chunk_bm25_candidate_scores,
+    ranked_chunk_rerank_scores]
+  must_not_contain: [gold_label, gold_span_indices, choice, relevance_flag, expected_prediction,
+    failure_bucket, previously_wrong_marker]
+  verified: true  # asserted in the build script; independently re-checked this pass
+  evaluator_truth_location: experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1_GOLD.json  # separate file, never model-facing
+
+context_size_analysis:  # cl100k_base, calibrated against E08B's real OpenRouter-reported input tokens
+  calibration_ratio_real_over_estimate: 0.9904  # measured on the control, near-exact
+  control_top5_real_api_input_tokens: {mean: 1148.8, median: 1163.5, p90: 1307, max: 1784}
+  candidate_top11_calibrated_input_tokens: {mean: 1884.6, median: 2010.6, p90: 2519.7, max: 3273.4}
+  mean_increase_absolute_tokens: 735.8
+  mean_increase_percent: 64.0
+  retrieved_text_only_mean_tokens: {control: 1019.2, candidate: 1762.1}  # distinct from total input
+  system_prompt_tokens: 118  # identical in both arms
+  context_window_safety:
+    max_candidate_input_tokens: 3273
+    note: "GPT-5 mini's exact context-window figure is an UNVERIFIED assumption (no repo source,
+      no provider-metadata call made in Stage A). Safety holds regardless: max input ~3.3K tokens
+      leaves >80% headroom even against a pessimistic 16K window, and 99.2% against the commonly
+      cited 400K figure."
+
+cost_forecast:  # forecast only -- zero model calls
+  pricing: {input_per_million_usd: 0.25, output_per_million_usd: 2.00}
+  output_token_assumption: "E08B's real output-token distribution as the starting empirical
+    assumption (mean 708.7); conservative case uses E08B's p90 (1235) for every case"
+  expected_total_150_case_usd: 0.2833
+  expected_mean_per_case_usd: 0.00189
+  conservative_total_150_case_usd: 0.4650
+  ledger_before_usd: 0.4090  # read from the real ledger file, not assumed
+  ledger_after_projection_usd: {expected: 0.6923, conservative: 0.8740}
+  budget_gate:
+    planning_budget_usd: 5.00
+    protected_reserve_usd: 1.25
+    allowed_usd: 3.75
+    result: PASS
+  expected_runtime_minutes: 21.5  # E08B's own full run took 18.5 min; scaled modestly for input growth (assumption disclosed)
+
+why_full_150_required: >
+  Not only the six known failures: more context may introduce distractors, spurious
+  contradictions, weaker evidence precision, evidence-selection changes, longer output, higher
+  latency, or regressions on already-correct cases. A fair static-policy test must run the
+  identical fixed policy on all 150 matched cases.
+
+frozen_metrics:
+  classification: [accuracy, macro_f1, entailment_recall, contradiction_recall, notmentioned_recall]
+  evidence: [evidence_recall, evidence_precision, source_valid_evidence_rate, gold_overlap_rate,
+    joint_success_overall, joint_success_by_class]
+  operational: [input_tokens, output_tokens, latency, hosted_cost]
+
+paired_transitions:
+  classification: [top5_wrong_top11_correct, top5_correct_top11_wrong, both_correct, both_wrong]
+  joint: [top5_joint_fail_top11_joint_success, top5_joint_success_top11_joint_fail,
+    both_joint_success, both_joint_fail]
+  emphasis: "transitions matter more than aggregate uplift alone"
+
+targeted_subgroup_analysis:
+  A_retrieval_filtering_limited_6: "for each: was gold newly exposed, classification transition,
+    joint transition, evidence change"
+  B_evidence_selection_limited_6: "more context could help or hurt evidence selection -- report
+    both directions"
+  C_model_reasoning_limited_26: "static expansion is not expected to fix these unless useful
+    context was misdiagnosed -- report any changes"
+  D_contradiction_residuals: "report fixes / regressions / unchanged"
+
+distractor_regression_analysis: >
+  If the candidate causes ANY regression, inspect every one: previous top-5 result, candidate
+  result, the added rank 6-11 content, and whether the added context introduced a conflicting
+  clause, irrelevant clause, exception language, misleading definition, evidence-selection drift,
+  or other. Do not assume more context is always better.
+
+statistical_plan:
+  mcnemar_exact: [classification_correctness, joint_success]
+  paired_bootstrap: {resamples: 10000, metrics: [accuracy_delta, macro_f1_delta,
+    contradiction_recall_delta, joint_success_delta]}
+  emphasis: "effect size and transitions over p-values"
+
+adoption_decision_predeclared:  # frozen BEFORE any result exists -- do not invent a winner after
+  A: "STATIC EXPANSION EARNS ADOPTION"
+  B: "STATIC EXPANSION SHOWS LIMITED/NEUTRAL VALUE -- KEEP TOP-5"
+  C: "STATIC EXPANSION HURTS -- KEEP TOP-5"
+  factors: [net_joint_recoveries_vs_regressions, contradiction_impact, evidence_quality,
+    input_token_growth, latency, cost, implementation_simplicity]
+
+no_prompt_engineering: >
+  classification_prompt_v1 was selected for Qwen and is used UNCHANGED here. GPT-specific prompt
+  optimisation is a separate, later experiment -- one experiment = one question.
+
+model_calls: NONE in Stage A. Stage B (if approved) would make ~150 real openai/gpt-5-mini calls.
+api_calls: NONE this pass
+hosted_calls: NONE this pass
+
+files_created_stageA:
+  - experiments/E12A_static_context_expansion/{README.md, config.yaml, summary.md,
+    E12A_static_context_expansion.ipynb (skeleton), results/pre_run_forecast.json}
+  - experiments/E12A_static_context_expansion/TRAIN_ARCH_v1_RETRIEVED_static_context_candidate_v1.json
+  - scripts/build_e12a_static_context_candidate.py
+  - scripts/forecast_e12a_context_cost.py
+  - docs/experiment_registry.md (E12A row added)
+
+files_stageB:  # after approval
+  - scripts/run_e12a_static_context.py, scripts/analyze_e12a_static_context.py,
+    scripts/compare_e08b_vs_e12a.py, results/*, executed notebook
+
+unresolved_issues:
+  - "K=11 deviates from the kickoff's suggested top-10 because top-10 covers only 5/6 -- a
+    disclosed, evidence-driven choice, but it does mean 'top-10' as originally imagined is not
+    what is being tested."
+  - "94/150 cases have <11 chunks because their documents are short -- for those, K=11 already
+    exposes most or all of the document, so the candidate partly behaves like full-context on
+    short NDAs. This is inherent to a fixed-K policy on this dataset, not a bug, but it means the
+    effect is not uniformly 'more distractors' across cases."
+  - "GPT-5 mini's exact context-window size is an unverified assumption (no repo source); safety
+    conclusion holds against a pessimistic 16K window regardless."
+  - "output-token behavior under longer context is unknown -- assumed equal to E08B's real
+    distribution; longer input could change reasoning-token usage in either direction."
+  - "expected runtime scales E08B's latency by an assumed input-share factor (25%), not a
+    measurement."

@@ -1,0 +1,27 @@
+{
+  "checks": {
+    "candidate_150_of_150": true,
+    "same_ids_and_order_as_e08b": true,
+    "ranks_1_5_identical_to_control": true,
+    "no_gold_leakage_keys": true,
+    "k11_uniform_cap": true,
+    "rerank_scores_non_increasing_frozen_order": true,
+    "budget_gate_pass": true
+  },
+  "pre_run_ledger_usd": 0.4090479499999999,
+  "gate_reason": "OK: projected total $0.8740 <= allowed $3.7500 (planning budget $5.00 - reserve $1.25)",
+  "chunk_count_distribution": {
+    "7": 12,
+    "10": 16,
+    "8": 12,
+    "11": 56,
+    "5": 2,
+    "3": 2,
+    "4": 8,
+    "2": 5,
+    "6": 23,
+    "9": 14
+  },
+  "tests_passed_before_run": "338/338 (pytest tests/ -q, run immediately before)",
+  "timestamp": "2026-09-26T16:17:21.775834+00:00"
+}

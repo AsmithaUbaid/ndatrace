@@ -1,0 +1,51 @@
+{
+  "calibration_ratio": 0.9904474523665834,
+  "system_prompt_tokens_cl100k": 118,
+  "control_real_api_input_tokens": {
+    "mean": 1148.82,
+    "median": 1163.5,
+    "p90": 1307,
+    "max": 1784
+  },
+  "control_calibrated_estimate": {
+    "mean": 1148.8200000000002,
+    "median": 1164.766203983102,
+    "p90": 1300.457504957324,
+    "max": 1766.9582550219848
+  },
+  "candidate_calibrated_input_tokens": {
+    "mean": 1884.5970004310718,
+    "median": 2010.6083283041644,
+    "p90": 2519.698318820588,
+    "max": 3273.428830071558
+  },
+  "retrieved_text_tokens_cl100k": {
+    "control_mean": 1019.1866666666666,
+    "candidate_mean": 1762.06
+  },
+  "mean_input_token_increase_abs": 735.7770004310719,
+  "mean_input_token_increase_pct": 64.04632583268675,
+  "cases_with_fewer_than_11_chunks": 94,
+  "context_window_safety": {
+    "max_candidate_input_tokens": 3273.428830071558,
+    "assumed_unverified_gpt5_mini_context_window": 400000,
+    "headroom_pct_vs_assumed_window": 99.18164279248211,
+    "headroom_pct_vs_pessimistic_16k_window": 80.02057598833278,
+    "note": "GPT-5 mini's context window figure is an unverified assumption (no repo source, no provider-metadata call made in Stage A); safety conclusion holds even against a pessimistic 16K window."
+  },
+  "cost_forecast_usd": {
+    "expected_total": 0.2832843875161652,
+    "expected_mean_per_case": 0.0018885625834411013,
+    "conservative_total": 0.46498868695577206
+  },
+  "ledger_usd": 0.4090479499999999,
+  "ledger_after_run_projection_usd": {
+    "expected": 0.6923323375161651,
+    "conservative": 0.8740366369557719
+  },
+  "budget_gate": {
+    "allowed": true,
+    "reason": "OK: projected total $0.8740 <= allowed $3.7500 (planning budget $5.00 - reserve $1.25)"
+  },
+  "expected_runtime_minutes": 21.495298937490148
+}

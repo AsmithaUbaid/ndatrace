@@ -1,0 +1,1650 @@
+{
+ "top5": {
+  "n": 150,
+  "accuracy": 0.7866666666666666,
+  "macro_f1": 0.7868620987914067,
+  "recall": {
+   "Entailment": 0.82,
+   "Contradiction": 0.76,
+   "NotMentioned": 0.78
+  },
+  "contradiction_recall_ci95": [
+   0.6258705062480764,
+   0.8570274759812778
+  ],
+  "confusion_matrix": [
+   [
+    41,
+    3,
+    6
+   ],
+   [
+    10,
+    38,
+    2
+   ],
+   [
+    4,
+    7,
+    39
+   ]
+  ],
+  "parse": {
+   "strict": 150,
+   "recovered": 0,
+   "invalid": 0
+  },
+  "source_valid_evidence_rate": 0.941747572815534,
+  "gold_overlap_rate_of_evidence_bearing": 0.86,
+  "evidence_recall": 0.86,
+  "evidence_precision": 0.8349514563106796,
+  "joint": 0.74,
+  "joint_by_class": {
+   "Entailment": 0.74,
+   "Contradiction": 0.7,
+   "NotMentioned": 0.78
+  },
+  "input_tokens": {
+   "mean": 1148.82,
+   "median": 1163.5,
+   "p90": 1307,
+   "max": 1784
+  },
+  "output_tokens": {
+   "mean": 708.7066666666667,
+   "median": 689.5,
+   "p90": 1235,
+   "max": 1859
+  },
+  "latency_ms": {
+   "mean": 7411.432088869624,
+   "median": 6684.958771045785,
+   "p90": 12549.430458107963,
+   "max": 16792.086415924132
+  },
+  "cost": {
+   "total": 0.25569275,
+   "mean": 0.0017046183333333333,
+   "median": 0.00162725,
+   "p90": 0.002783,
+   "max": 0.0039265
+  }
+ },
+ "top11": {
+  "n": 150,
+  "accuracy": 0.8066666666666666,
+  "macro_f1": 0.8077787636793848,
+  "recall": {
+   "Entailment": 0.88,
+   "Contradiction": 0.76,
+   "NotMentioned": 0.78
+  },
+  "contradiction_recall_ci95": [
+   0.6258705062480764,
+   0.8570274759812778
+  ],
+  "confusion_matrix": [
+   [
+    44,
+    3,
+    3
+   ],
+   [
+    12,
+    38,
+    0
+   ],
+   [
+    4,
+    7,
+    39
+   ]
+  ],
+  "parse": {
+   "strict": 150,
+   "recovered": 0,
+   "invalid": 0
+  },
+  "source_valid_evidence_rate": 0.9444444444444444,
+  "gold_overlap_rate_of_evidence_bearing": 0.91,
+  "evidence_recall": 0.91,
+  "evidence_precision": 0.8425925925925926,
+  "joint": 0.78,
+  "joint_by_class": {
+   "Entailment": 0.84,
+   "Contradiction": 0.72,
+   "NotMentioned": 0.78
+  },
+  "input_tokens": {
+   "mean": 1881.8266666666666,
+   "median": 1985.5,
+   "p90": 2522,
+   "max": 3299
+  },
+  "output_tokens": {
+   "mean": 760.5266666666666,
+   "median": 716.5,
+   "p90": 1245,
+   "max": 2052
+  },
+  "latency_ms": {
+   "mean": 8202.406153347498,
+   "median": 7470.426354499068,
+   "p90": 14080.7896660408,
+   "max": 25266.676540952176
+  },
+  "cost": {
+   "total": 0.2987265,
+   "mean": 0.00199151,
+   "median": 0.0019515000000000001,
+   "p90": 0.0029355,
+   "max": 0.004741
+  }
+ },
+ "cls_transitions": {
+  "wrong_to_right": 8,
+  "right_to_wrong": 5,
+  "both_right": 113,
+  "both_wrong": 24
+ },
+ "joint_transitions": {
+  "wrong_to_right": 13,
+  "right_to_wrong": 7,
+  "both_right": 104,
+  "both_wrong": 26
+ },
+ "cls_recoveries": [
+  {
+   "case_id": "train::178::nda-20",
+   "gold": "Contradiction",
+   "top5": "NotMentioned",
+   "top11": "Contradiction"
+  },
+  {
+   "case_id": "train::160::nda-10",
+   "gold": "Entailment",
+   "top5": "NotMentioned",
+   "top11": "Entailment"
+  },
+  {
+   "case_id": "train::248::nda-10",
+   "gold": "Entailment",
+   "top5": "Contradiction",
+   "top11": "Entailment"
+  },
+  {
+   "case_id": "train::353::nda-10",
+   "gold": "Entailment",
+   "top5": "NotMentioned",
+   "top11": "Entailment"
+  },
+  {
+   "case_id": "train::379::nda-10",
+   "gold": "Entailment",
+   "top5": "NotMentioned",
+   "top11": "Entailment"
+  },
+  {
+   "case_id": "train::518::nda-10",
+   "gold": "Entailment",
+   "top5": "NotMentioned",
+   "top11": "Entailment"
+  },
+  {
+   "case_id": "train::279::nda-1",
+   "gold": "NotMentioned",
+   "top5": "Contradiction",
+   "top11": "NotMentioned"
+  },
+  {
+   "case_id": "train::320::nda-1",
+   "gold": "NotMentioned",
+   "top5": "Contradiction",
+   "top11": "NotMentioned"
+  }
+ ],
+ "cls_regressions": [
+  {
+   "case_id": "train::553::nda-20",
+   "gold": "Contradiction",
+   "top5": "Contradiction",
+   "top11": "Entailment"
+  },
+  {
+   "case_id": "train::273::nda-10",
+   "gold": "Entailment",
+   "top5": "Entailment",
+   "top11": "NotMentioned"
+  },
+  {
+   "case_id": "train::375::nda-15",
+   "gold": "Entailment",
+   "top5": "Entailment",
+   "top11": "Contradiction"
+  },
+  {
+   "case_id": "train::86::nda-1",
+   "gold": "NotMentioned",
+   "top5": "NotMentioned",
+   "top11": "Contradiction"
+  },
+  {
+   "case_id": "train::297::nda-1",
+   "gold": "NotMentioned",
+   "top5": "NotMentioned",
+   "top11": "Contradiction"
+  }
+ ],
+ "joint_recoveries": [
+  {
+   "case_id": "train::178::nda-20",
+   "gold": "Contradiction",
+   "top5": "NotMentioned",
+   "top11": "Contradiction"
+  },
+  {
+   "case_id": "train::318::nda-2",
+   "gold": "Contradiction",
+   "top5": "Contradiction",
+   "top11": "Contradiction"
+  },
+  {
+   "case_id": "train::438::nda-2",
+   "gold": "Contradiction",
+   "top5": "Contradiction",
+   "top11": "Contradiction"
+  },
+  {
+   "case_id": "train::515::nda-2",
+   "gold": "Contradiction",
+   "top5": "Contradiction",
+   "top11": "Contradiction"
+  },
+  {
+   "case_id": "train::160::nda-10",
+   "gold": "Entailment",
+   "top5": "NotMentioned",
+   "top11": "Entailment"
+  },
+  {
+   "case_id": "train::248::nda-10",
+   "gold": "Entailment",
+   "top5": "Contradiction",
+   "top11": "Entailment"
+  },
+  {
+   "case_id": "train::317::nda-13",
+   "gold": "Entailment",
+   "top5": "Entailment",
+   "top11": "Entailment"
+  },
+  {
+   "case_id": "train::352::nda-12",
+   "gold": "Entailment",
+   "top5": "Entailment",
+   "top11": "Entailment"
+  },
+  {
+   "case_id": "train::353::nda-10",
+   "gold": "Entailment",
+   "top5": "NotMentioned",
+   "top11": "Entailment"
+  },
+  {
+   "case_id": "train::379::nda-10",
+   "gold": "Entailment",
+   "top5": "NotMentioned",
+   "top11": "Entailment"
+  },
+  {
+   "case_id": "train::518::nda-10",
+   "gold": "Entailment",
+   "top5": "NotMentioned",
+   "top11": "Entailment"
+  },
+  {
+   "case_id": "train::279::nda-1",
+   "gold": "NotMentioned",
+   "top5": "Contradiction",
+   "top11": "NotMentioned"
+  },
+  {
+   "case_id": "train::320::nda-1",
+   "gold": "NotMentioned",
+   "top5": "Contradiction",
+   "top11": "NotMentioned"
+  }
+ ],
+ "joint_regressions": [
+  {
+   "case_id": "train::88::nda-1",
+   "gold": "Contradiction",
+   "top5": "Contradiction",
+   "top11": "Contradiction"
+  },
+  {
+   "case_id": "train::161::nda-7",
+   "gold": "Contradiction",
+   "top5": "Contradiction",
+   "top11": "Contradiction"
+  },
+  {
+   "case_id": "train::553::nda-20",
+   "gold": "Contradiction",
+   "top5": "Contradiction",
+   "top11": "Entailment"
+  },
+  {
+   "case_id": "train::226::nda-12",
+   "gold": "Entailment",
+   "top5": "Entailment",
+   "top11": "Entailment"
+  },
+  {
+   "case_id": "train::375::nda-15",
+   "gold": "Entailment",
+   "top5": "Entailment",
+   "top11": "Contradiction"
+  },
+  {
+   "case_id": "train::86::nda-1",
+   "gold": "NotMentioned",
+   "top5": "NotMentioned",
+   "top11": "Contradiction"
+  },
+  {
+   "case_id": "train::297::nda-1",
+   "gold": "NotMentioned",
+   "top5": "NotMentioned",
+   "top11": "Contradiction"
+  }
+ ],
+ "buckets": {
+  "RETRIEVAL_FILTERING_LIMITED": {
+   "n": 6,
+   "cls": {
+    "unchanged_correct": 1,
+    "recovered": 4,
+    "unchanged_wrong": 1
+   },
+   "joint": {
+    "recovered": 5,
+    "unchanged_fail": 1
+   },
+   "gold_overlap_top5_to_top11": [
+    [
+     "(False, True)",
+     5
+    ],
+    [
+     "(False, False)",
+     1
+    ]
+   ],
+   "rows": [
+    {
+     "case_id": "train::438::nda-2",
+     "gold": "Contradiction",
+     "top5_label": "Contradiction",
+     "top11_label": "Contradiction",
+     "top5_evidence": [
+      "All information (i) about the Disclosing Party or (ii) about a third party (which information was provided to the Disclosing Party subject to a confidentiality agreement with such third party) furnished by the Disclosing Party or its Representatives (as defined below) to the Receiving Party or its Representatives, whether furnished before or after the date hereof in connection with the Proposed Transaction, and regardless of the manner in which it is furnished, is referred to in this letter agreement as \"Evaluation Material.\""
+     ],
+     "top11_evidence": [
+      "All information (i) about the Disclosing Party or (ii) about a third party (which information was provided to the Disclosing Party subject to a confidentiality agreement with such third party) furnished by the Disclosing Party or its Representatives (as defined below) to the Receiving Party or its Representatives, whether furnished before or after the date hereof in connection with the Proposed Transaction, and regardless of the manner in which it is furnished, is referred to in this letter agreement as \"Evaluation Material.\"",
+      "In connection with the possible transaction (the \"Proposed Transaction\") between DTM Corporation (together with its subsidiaries, \"DTM\") and 3D Systems Corporation (together with its subsidiaries, \"3D\"), and in order to allow DTM and 3D to evaluate the Proposed Transaction, each of DTM and 3D have and will deliver to the other party hereto, upon the execution and delivery of this letter agreement by such other party, certain information about its properties, employees, finances, businesses and operations (such party when disclosing such information being the \"Disclosing Party\" and when receiving such information being the \"Receiving Party\")."
+     ],
+     "cls_transition": "unchanged_correct",
+     "joint_transition": "recovered",
+     "gold_in_top5": false,
+     "gold_in_top11": true,
+     "top5_gold_overlap": false,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11,
+     "gold_rank_expected": 8
+    },
+    {
+     "case_id": "train::160::nda-10",
+     "gold": "Entailment",
+     "top5_label": "NotMentioned",
+     "top11_label": "Entailment",
+     "top5_evidence": [],
+     "top11_evidence": [
+      "The term \"Information\" as used herein also includes (i) the fact that the Information has been made available to or is being inspected or evaluated by the receiving party, (ii) the fact that such discussions or negotiations are taking place concerning the Project or other related transactions between CVS and Vendor, and (iii) any of the terms, conditions, or other facts with respect to the Project or other related transactions, including the status thereof.",
+      "Each party receiving any Information shall keep such Information confidential and shall not disclose such Information, in whole or in part, to any person other than its representatives who need to know such Information in connection with the receiving party's evaluation thereof and determination of business strategies, or other actions in connection with the Project (it being agreed and understood that such representatives shall be informed by the receiving party of the confidential nature of the Information and shall be required by the receiving party to agree to treat the Information confidentially), except with the prior written consent of the other party hereto or as otherwise permitted hereunder."
+     ],
+     "cls_transition": "recovered",
+     "joint_transition": "recovered",
+     "gold_in_top5": false,
+     "gold_in_top11": true,
+     "top5_gold_overlap": false,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11,
+     "gold_rank_expected": 11
+    },
+    {
+     "case_id": "train::247::nda-10",
+     "gold": "Entailment",
+     "top5_label": "NotMentioned",
+     "top11_label": "NotMentioned",
+     "top5_evidence": [],
+     "top11_evidence": [],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": false,
+     "gold_in_top11": true,
+     "top5_gold_overlap": false,
+     "top11_gold_overlap": false,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11,
+     "gold_rank_expected": 9
+    },
+    {
+     "case_id": "train::353::nda-10",
+     "gold": "Entailment",
+     "top5_label": "NotMentioned",
+     "top11_label": "Entailment",
+     "top5_evidence": [],
+     "top11_evidence": [
+      "The potential Franchisee hereby agrees to respect unconditionally the confidential nature of all confidential information and to never disclose or communicate any confidential information to a third party, be it directly or indirectly, or knowingly use this information for any purpose whatsoever, except with the Franchisor\u2019s written consent.",
+      "CONSIDERING THAT the Franchisor is asking them to refrain from discussing the Franchise project and from disclosing any information (be it by written, oral, or electronic channels) to a third party (as described below), even if the information is known to the general public, since discussions between the potential Franchisee and a third party could jeopardize or be detrimental to the Franchisor\u2019s interests;",
+      "iv. the present confidentiality Agreement."
+     ],
+     "cls_transition": "recovered",
+     "joint_transition": "recovered",
+     "gold_in_top5": false,
+     "gold_in_top11": true,
+     "top5_gold_overlap": false,
+     "top11_gold_overlap": true,
+     "top11_source_valid": false,
+     "n_chunks_shown": 9,
+     "gold_rank_expected": 9
+    },
+    {
+     "case_id": "train::379::nda-10",
+     "gold": "Entailment",
+     "top5_label": "NotMentioned",
+     "top11_label": "Entailment",
+     "top5_evidence": [],
+     "top11_evidence": [
+      "(iv) not disclose to persons (other than those described in clause (iii) above) that the Confidential Information has been made available, that the Receiving Party is considering a possible Transaction or that the parties have had or are having discussions or negotiations with respect thereto."
+     ],
+     "cls_transition": "recovered",
+     "joint_transition": "recovered",
+     "gold_in_top5": false,
+     "gold_in_top11": true,
+     "top5_gold_overlap": false,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11,
+     "gold_rank_expected": 8
+    },
+    {
+     "case_id": "train::518::nda-10",
+     "gold": "Entailment",
+     "top5_label": "NotMentioned",
+     "top11_label": "Entailment",
+     "top5_evidence": [],
+     "top11_evidence": [
+      "The Receiving Party: (a) shall take all reasonable steps (defined below) to keep all Confidential Information strictly confidential; (b) shall not disclose or reveal any Confidential Information to any person other than its Representatives who are actively and directly participating in the Evaluation or who otherwise need to know the Confidential Information for the purpose of the Evaluation; (c) shall not use Confidential Information for any purpose other than in connection with the Evaluation; and (d) shall not disclose to any person (other than those of its Representatives who are actively and directly participating in the Evaluation or who otherwise need to know for the purpose of the Evaluation) any information about the Evaluation, or the terms or conditions or any other facts relating thereto, including, without limitation, the fact that discussions are taking place with respect thereto or the status thereof, or the fact that Confidential Information has been made available to the Receiving Party or its Representatives."
+     ],
+     "cls_transition": "recovered",
+     "joint_transition": "recovered",
+     "gold_in_top5": false,
+     "gold_in_top11": true,
+     "top5_gold_overlap": false,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11,
+     "gold_rank_expected": 9
+    }
+   ]
+  },
+  "EVIDENCE_SELECTION_LIMITED": {
+   "n": 6,
+   "cls": {
+    "unchanged_correct": 5,
+    "regressed": 1
+   },
+   "joint": {
+    "recovered": 4,
+    "unchanged_fail": 2
+   },
+   "gold_overlap_top5_to_top11": [
+    [
+     "(False, True)",
+     3
+    ],
+    [
+     "(True, True)",
+     1
+    ],
+    [
+     "(True, False)",
+     1
+    ],
+    [
+     "(False, False)",
+     1
+    ]
+   ],
+   "rows": [
+    {
+     "case_id": "train::318::nda-2",
+     "gold": "Contradiction",
+     "top5_label": "Contradiction",
+     "top11_label": "Contradiction",
+     "top5_evidence": [
+      "(iii) any marketing strategies, plans, financial information, or projections, opera-tions, sales estimates, business plans and performance results relating to the Discloser\u2019s past, present or future business activities, or those of its affiliates, subsidiaries and affiliated companies;",
+      "(v) any other information that should reasonably be recognized as Confidential Information by the Discloser."
+     ],
+     "top11_evidence": [
+      "1.1 For the purposes of this Agreement, Confidential Information means any data or proprietary information of the Discloser that is not generally known to the public or has not yet been revealed, whether in tangible or intangible form, whenever and however disclosed, including, but not limited to:",
+      "(iii) any marketing strategies, plans, financial information, or projections, opera-tions, sales estimates, business plans and performance results relating to the Discloser\u2019s past, present or future business activities, or those of its affiliates, subsidiaries and affiliated companies;",
+      "(v) any other information that should reasonably be recognized as Confidential Information by the Discloser."
+     ],
+     "cls_transition": "unchanged_correct",
+     "joint_transition": "recovered",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": true,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11
+    },
+    {
+     "case_id": "train::515::nda-2",
+     "gold": "Contradiction",
+     "top5_label": "Contradiction",
+     "top11_label": "Contradiction",
+     "top5_evidence": [
+      "b. \"Confidential Information\" shall mean any and all materials, records, data, documents, lists, writings, and information (whether in writing, printed, electronically stored, computerized, on disk or otherwise, including, but not limited to, all copies, summaries, analyses, drafts, and extracts) relating or referring in any manner to trade secrets (as currently defined under applicable law, including, but not limited to, the Indiana Uniform Trade Secrets Act and any amendments or successor statutes) of a Banking Organization, as well as other non-public financial or proprietary information of a Banking Organization including, but not limited to, business reports, business plans, projections, income statements, profit and loss statements, business strategies and/or strategic plans, internal audits, sales information, sales techniques, business costs, product pricing, budgets, research and development, intellectual property, software and/or computer programs, marketing strategies or ideas, marketing plans or materials, business development plans or strategies, records or information relating to customers or account holders, customer lists, inventions, and processes, systems, methods, documentation or devices which are unique or proprietary to the business of or services or products of a Banking Organization."
+     ],
+     "top11_evidence": [
+      "b. \u201cConfidential Information\u201d shall mean any and all materials, records, data, documents, lists, writings, and information (whether in writing, printed, electronically stored, computerized, on disk or otherwise, including, but not limited to, all copies, summaries, analyses, drafts, and extracts) relating or referring in any manner to trade secrets (as currently defined under applicable law, including, but not limited to, the Indiana Uniform Trade Secrets Act and any amendments or successor statutes) of a Banking Organization, as well as other non-public financial or proprietary information of a Banking Organization including, but not limited to, business reports, business plans, projections, income statements, profit and loss statements, business strategies and/or strategic plans, internal audits, sales information, sales techniques, business costs, product pricing, budgets, research and development, intellectual property, software and/or computer programs, marketing strategies or ideas, marketing plans or materials, business development plans or strategies, records or information relating to customers or account holders, customer lists, inventions, and processes, systems, methods, documentation or devices which are unique or proprietary to the business of or services or products of a Banking Organization."
+     ],
+     "cls_transition": "unchanged_correct",
+     "joint_transition": "recovered",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": false,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11
+    },
+    {
+     "case_id": "train::273::nda-10",
+     "gold": "Entailment",
+     "top5_label": "Entailment",
+     "top11_label": "NotMentioned",
+     "top5_evidence": [
+      "4.1 Subject to paragraphs 4.2 and 4.3, neither party shall make any announcement relating to the Possible Transaction without the prior written consent of the other party.",
+      "2.1 You shall treat and keep all Confidential Information as confidential and shall not, without our prior written consent, directly or indirectly disclose Confidential Information to any other person other than as permitted by paragraph 3.1. You shall ensure that the Confidential Information is protected with the same security measures and degree of care that would apply to your own confidential information."
+     ],
+     "top11_evidence": [],
+     "cls_transition": "regressed",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": true,
+     "top11_gold_overlap": false,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11
+    },
+    {
+     "case_id": "train::317::nda-13",
+     "gold": "Entailment",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "Nothing in this Agreement will be construed as a representation that a Receiving Party will not develop, communicate or use technology, information or products that, without violation of this Agreement, compete with, are the same as, or similar to the Disclosing Party\u2019s Confidential Information."
+     ],
+     "top11_evidence": [
+      "3.1.3 information that is or becomes available to a Receiving Party on a non-confidential basis from a source other than the Disclosing Party, provided that such source is not in breach of its obligations of non-disclosure towards the Disclosing Party;",
+      "6. INDEPENDENT DEVELOPMENT\nNothing in this Agreement will be construed as a representation that a Receiving Party will not develop, communicate or use technology, information or products that, without violation of this Agreement, compete with, are the same as, or similar to the Disclosing Party\u2019s Confidential Information."
+     ],
+     "cls_transition": "unchanged_correct",
+     "joint_transition": "recovered",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": false,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11
+    },
+    {
+     "case_id": "train::352::nda-12",
+     "gold": "Entailment",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "3. Exceptions. Notwithstanding the provisions of this Agreement, the obligations and restrictions set forth herein regarding Confidential Information shall not apply to information that the Receiving Party can establish (i) is or becomes publicly available other than as a result of a breach of this Agreement by the Receiving Party, (ii) is lawfully received from a third party which is, to the reasonable knowledge and belief of the Receiving Party, not under any obligation of confidentiality for the benefit of the Disclosing Party, (iii) was either in the possession of or known to the Receiving Party at the time of disclosure without any limitation on use or disclosure for the benefit of the Receiving Party, or (iv) is independently developed by the Receiving Party without the use, reference to or benefit of the Disclosing Party\u2019s Confidential Information."
+     ],
+     "top11_evidence": [
+      "Notwithstanding the provisions of this Agreement, the obligations and restrictions set forth herein regarding Confidential Information shall not apply to information that the Receiving Party can establish",
+      "(iv) is independently developed by the Receiving Party without the use, reference to or benefit of the Disclosing Party\u2019s Confidential Information."
+     ],
+     "cls_transition": "unchanged_correct",
+     "joint_transition": "recovered",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": false,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 9
+    },
+    {
+     "case_id": "train::500::nda-13",
+     "gold": "Entailment",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "The disclosure and use restrictions imposed in this Agreement do not apply to Proprietary Material that: (a) Pinetree can show by documentary evidence was already in Pinetree's possession before the disclosure hereunder to Pinetree; (b) is hereafter disclosed to Pinetree by a third party who has no duty of confidentiality to STI in respect of it; or (c) is or becomes generally available to the public through no act or default on Pinetree's part."
+     ],
+     "top11_evidence": [
+      "a. GENERAL EXCEPTIONS. The disclosure and use restrictions imposed in this Agreement do not apply to Proprietary Material that: (a) Pinetree can show by documentary evidence was already in Pinetree's possession before the disclosure hereunder to Pinetree; (b) is hereafter disclosed to Pinetree by a third party who has no duty of confidentiality to STI in respect of it; or (c) is or becomes generally available to the public through no act or default on Pinetree's part."
+     ],
+     "cls_transition": "unchanged_correct",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": false,
+     "top11_gold_overlap": false,
+     "top11_source_valid": false,
+     "n_chunks_shown": 11
+    }
+   ]
+  },
+  "MODEL_REASONING_LIMITED": {
+   "n": 26,
+   "cls": {
+    "unchanged_wrong": 22,
+    "recovered": 4
+   },
+   "joint": {
+    "unchanged_fail": 22,
+    "recovered": 4
+   },
+   "gold_overlap_top5_to_top11": [
+    [
+     "(None, None)",
+     11
+    ],
+    [
+     "(True, True)",
+     10
+    ],
+    [
+     "(False, True)",
+     2
+    ],
+    [
+     "(True, False)",
+     2
+    ],
+    [
+     "(False, False)",
+     1
+    ]
+   ],
+   "rows": [
+    {
+     "case_id": "train::92::nda-17",
+     "gold": "Contradiction",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "In addition, each party undertakes not to use the other party's Confidential Information except for the Purpose, not to disclose, copy, reproduce or distribute the other party's Confidential Information to a third person and to use all reasonable efforts to prevent any such disclosure except as permitted under Clause 4 but in no event less than reasonable security measures and reasonable care.",
+      "4.1 Each party may disclose the Confidential Information of the other party in the following circumstances:",
+      "(a) with the prior written consent of the other party;",
+      "(b) to its employees, professional advisors, affiliates, consultants, shareholders, financiers and authorised representatives but only to the extent that disclosure is necessary for the purpose;"
+     ],
+     "top11_evidence": [
+      "In addition, each party undertakes not to use the other party's Confidential Information except for the Purpose, not to disclose, copy, reproduce or distribute the other party's Confidential Information to a third person and to use all reasonable efforts to prevent any such disclosure except as permitted under Clause 4 but in no event less than reasonable security measures and reasonable care.",
+      "4.1 Each party may disclose the Confidential Information of the other party in the following circumstances:",
+      "(b) to its employees, professional advisors, affiliates, consultants, shareholders, financiers and authorised representatives but only to the extent that disclosure is necessary for the purpose; or",
+      "(b) to destroy by shredding or incineration all of the other party's Confidential Information and that part of all documents and other material in its possession, custody or control which bear or incorporate any part of the other party's Confidential Information and take reasonable steps to expunge all Confidential Information (and any copy that may have been made) from any computer, word processor or other device containing the Confidential Information. Any destruction of Confidential Information will be certified in writing to the other party by an authorised officer supervising it."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": true,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 10
+    },
+    {
+     "case_id": "train::102::nda-19",
+     "gold": "Contradiction",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "10. Term. The confidentiality obligations contained in this Agreement expire and are of no further force or effect five (5) years from last date that Confidential Information was disclosed under this Agreement.",
+      "Recipient shall remain liable for any failure by its Representatives to comply with the terms of this Agreement."
+     ],
+     "top11_evidence": [
+      "10. Term. The confidentiality obligations contained in this Agreement expire and are of no further force or effect five (5) years from last date that Confidential Information was disclosed under this Agreement.",
+      "Recipient shall remain liable for any failure by its Representatives to comply with the terms of this Agreement."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": true,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 8
+    },
+    {
+     "case_id": "train::141::nda-7",
+     "gold": "Contradiction",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "the Recipient undertakes that it will respect and preserve the confidentiality of the Information and it will not without the express prior consent of the Donor either:",
+      "1.1 communicate or otherwise make available the Information to any third party, other than:",
+      "c) any person in any jurisdiction worldwide who has been authorised by the Donor or Recipient to act on behalf of, or otherwise assist, the Donor with respect to one or more of the Applications, and any duly authorised legal representative of the Donor in any jurisdiction worldwide;"
+     ],
+     "top11_evidence": [
+      "1 In consideration of the disclosure to it by the Donor of information (whether or not contained in documents) relating to a _______________________ (\u2018the Information\u2019) for the purposes of the preparation, filing and prosecution of one or more patent applications (\u2018the Applications\u2019) on behalf of the Donor (\u2018the Purpose\u2019) the Recipient undertakes that it will respect and preserve the confidentiality of the Information and it will not without the express prior consent of the Donor either:",
+      "1.1 communicate or otherwise make available the Information to any third party, other than:",
+      "c) any person in any jurisdiction worldwide who has been authorised by the Donor or Recipient to act on behalf of, or otherwise assist, the Donor with respect to one or more of the Applications, and any duly authorised legal representative of the Donor in any jurisdiction worldwide; and/or"
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": true,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 3
+    },
+    {
+     "case_id": "train::178::nda-17",
+     "gold": "Contradiction",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "3. Disclosure: A party (the \u201cdisclosing Party\u201d) may, in connection with the Business Discussions, disclose to the other Party information, including, without limitation, oral, written, graphical or electronic information and all compilations, analyses, notes, copies prepared, generated or delivered there from, which is identified as \u201cconfidential information\u201d or \u201cconfidential business information\u201d (the \u201cConfidential Business Information\u201d) by the Disclosing Party at the time of disclosure to the receiving party (the \u201cReceiving Party\u201d).",
+      "5. Neither party shall, with out the prior written consent of the other party, copy or reproduce any document which may be supplied hereunder and either party receiving any such document will a) return the same and any copies made thereof to the party supplying the same if so requested by the supplying party and b) certify in writing that it has complied with this agreement."
+     ],
+     "top11_evidence": [
+      "4. The restrictions as to the use and disclosure set out above shall not apply to:",
+      "5. Neither party shall, with out the prior written consent of the other party, copy or reproduce any document which may be supplied hereunder and either party receiving any such document will a) return the same and any copies made thereof to the party supplying the same if so requested by the supplying party and b) certify in writing that it has complied with this agreement."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": true,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 4
+    },
+    {
+     "case_id": "train::178::nda-20",
+     "gold": "Contradiction",
+     "top5_label": "NotMentioned",
+     "top11_label": "Contradiction",
+     "top5_evidence": [],
+     "top11_evidence": [
+      "5. Neither party shall, with out the prior written consent of the other party, copy or reproduce any document which may be supplied hereunder and either party receiving any such document will a) return the same and any copies made thereof to the party supplying the same if so requested by the supplying party and b) certify in writing that it has complied with this agreement.",
+      "Each party will treat the confidential information disclosed to it by the other party as a secret and confidential and will not except with the prior written consent of the other, make use of the same except for the purpose of evaluation thereof, nor disclose the same to any third party except, and then only to the extent necessary to evaluate the same, to such of its employees as shall have been made fully aware that the same is secret and confidential and are bound to treat it as such.",
+      "7. The confidential information, including any documents, drawings, sketches, designs, materials or samples supplied hereunder, will remain the property of the party disclosing or supplying the same and no rights are granted to the other party in the same, whether patented or not except the limited right to use set out above with respect to the said Field."
+     ],
+     "cls_transition": "recovered",
+     "joint_transition": "recovered",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": false,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 4
+    },
+    {
+     "case_id": "train::239::nda-17",
+     "gold": "Contradiction",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "2. No copies will be made or retained of any written information or prototypes supplied without the permission of XCZONE.TV."
+     ],
+     "top11_evidence": [
+      "2. No copies will be made or retained of any written information or prototypes supplied without the permission of XCZONE.TV."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": true,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 2
+    },
+    {
+     "case_id": "train::276::nda-17",
+     "gold": "Contradiction",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "3.3 Receiving Party shall not, without the prior written approval of Disclosing Party, use for Receiving Party's benefit, publish, copy, or otherwise disclose to others, or permit the use by others for their benefit or to the detriment of Disclosing Party, any Confidential Information.",
+      "(d) is disclosed by Receiving Party with Disclosing Party's prior written approval."
+     ],
+     "top11_evidence": [
+      "3.3 Receiving Party shall not, without the prior written approval of Disclosing Party, use for Receiving Party's benefit, publish, copy, or otherwise disclose to others, or permit the use by others for their benefit or to the detriment of Disclosing Party, any Confidential Information.",
+      "2. Exclusions from Confidential Information\nReceiving Party's obligations under this Agreement do not extend to information that is: (a) publicly known at the time of disclosure or subsequently becomes publicly known through no fault of the Receiving Party; (b) discovered or created by the Receiving Party before disclosure by Disclosing Party; (c) learned by the Receiving Party through legitimate means other than from the Disclosing Party or Disclosing Party's representatives; or (d) is disclosed by Receiving Party with Disclosing Party's prior written approval."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": true,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 6
+    },
+    {
+     "case_id": "train::316::nda-17",
+     "gold": "Contradiction",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "The Confidential Information, regardless of whether it is in oral or written, or partial or complete, form, shall be and remain the property of the Company, whether provided to or copied by Recipient.",
+      "Recipient shall not make or have made any partial or complete copies or derivative works, whether in hand copy or electronic form, of any of the Confidential Information without the express prior authorization of the Company, and any legends or notices used by the Company in the Confidential Information shall be reproduced in full in all copies."
+     ],
+     "top11_evidence": [
+      "Recipient shall not make or have made any partial or complete copies or derivative works, whether in hand copy or electronic form, of any of the Confidential Information without the express prior authorization of the Company, and any legends or notices used by the Company in the Confidential Information shall be reproduced in full in all copies.",
+      "The Confidential Information, regardless of whether it is in oral or written, or partial or complete, form, shall be and remain the property of the Company, whether provided to or copied by Recipient."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": true,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 9
+    },
+    {
+     "case_id": "train::338::nda-17",
+     "gold": "Contradiction",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "No reproductions may be made of the information disclosed by SINTEC.",
+      "SINTEC will consider the possibility of granting prior, express, written consent to reproduce information in exceptional cases only and subject to revocation at any time."
+     ],
+     "top11_evidence": [
+      "5.2 No reproductions may be made of the information disclosed by SINTEC.",
+      "SINTEC will consider the possibility of granting prior, express, written consent to reproduce information in exceptional cases only and subject to revocation at any time."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": true,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 8
+    },
+    {
+     "case_id": "train::438::nda-20",
+     "gold": "Contradiction",
+     "top5_label": "NotMentioned",
+     "top11_label": "Entailment",
+     "top5_evidence": [],
+     "top11_evidence": [
+      "All Evaluation Material provided by a party that is entitled to protection under the attorney-client privilege, work product doctrine or other applicable privilege shall remain entitled to such protection under these privileges to the fullest extent available under applicable law.",
+      "Nothing in this letter agreement obligates any party to reveal material subject to the attorney-client privilege, work product doctrine or any other applicable privilege.",
+      "In that case, or in the event that the Disclosing Party, in its sole discretion, so requests or the Proposed Transaction is not consummated by the Receiving Party, the Receiving party shall, upon the Disclosing Party's written request, promptly deliver to the Disclosing Party all Evaluation Material, and, at the Receiving Party's election, return or destroy (provided that any such destruction shall be certified by a duly authorized Representative of the Receiving Party) all copies, reproductions, summaries, analyses or extracts thereof, including any electronic or computer file copies, or based thereon in the Receiving Party's possession or in the possession of any Representative of the Receiving Party."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": false,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11
+    },
+    {
+     "case_id": "train::473::nda-17",
+     "gold": "Contradiction",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "Furthermore, without express written authorization of a NatWest officer who is empowered by NatWest to provide such an authorization, the Recipient will not make copies, in whole or in part, of the Confidential Information, including translating, in whole or in part, the Confidential Information into another language and/or shipping the Confidential Information, in whole or in part, or any direct product thereof, to any other country."
+     ],
+     "top11_evidence": [
+      "Recipient shall not, without the prior written permission of InterTrust's Chairman or such other InterTrust Officer as who has been designated in writing by InterTrust's Chairman (a \"Designated InterTrust Officer\"), disclose Confidential Information to any person other than as set forth immediately above.",
+      "Furthermore, without express written authorization of a NatWest officer who is empowered by NatWest to provide such an authorization, the Recipient will not make copies, in whole or in part, of the Confidential Information, including translating, in whole or in part, the Confidential Information into another language and/or shipping the Confidential Information, in whole or in part, or any direct product thereof, to any other country."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": true,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 7
+    },
+    {
+     "case_id": "train::551::nda-20",
+     "gold": "Contradiction",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "Promptly upon the written request of the Company, the Receiving Party will return or destroy, at its sole option, all copies of the Confidential Information to the Company, and all notes, studies, reports, memoranda and other documents prepared by the Receiving Party or its Representatives that contain or reflect to a substantial degree any Confidential Information.",
+      "Notwithstanding the foregoing, any return or destruction is subject to law, regulation and internal document retention policies."
+     ],
+     "top11_evidence": [
+      "Notwithstanding the foregoing, any return or destruction is subject to law, regulation and internal document retention policies."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": true,
+     "top11_gold_overlap": false,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11
+    },
+    {
+     "case_id": "train::248::nda-10",
+     "gold": "Entailment",
+     "top5_label": "Contradiction",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "8. The Receiving Party agrees not to issue or release for publication any articles or advertising or publicity matter relating to this Agreement which mention or imply the name of the Disclosing Party any of its affiliates, or subject matter hereof, unless prior written consent is granted by the Disclosing Party subject only to Clause 7.",
+      "3. All such Confidential Information shared under this Agreement shall be used by the Parties exclusively for the Purpose and neither Party shall disclose or otherwise use the Confidential Information for any other purpose or in any other manner without the prior written approval of the Disclosing Party."
+     ],
+     "top11_evidence": [
+      "8. The Receiving Party agrees not to issue or release for publication any articles or advertising or publicity matter relating to this Agreement which mention or imply the name of the Disclosing Party any of its affiliates, or subject matter hereof, unless prior written consent is granted by the Disclosing Party subject only to Clause 7.",
+      "3. All such Confidential Information shared under this Agreement shall be used by the Parties exclusively for the Purpose and neither Party shall disclose or otherwise use the Confidential Information for any other purpose or in any other manner without the prior written approval of the Disclosing Party."
+     ],
+     "cls_transition": "recovered",
+     "joint_transition": "recovered",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": true,
+     "top11_gold_overlap": true,
+     "top11_source_valid": true,
+     "n_chunks_shown": 6
+    },
+    {
+     "case_id": "train::466::nda-15",
+     "gold": "Entailment",
+     "top5_label": "Contradiction",
+     "top11_label": "Contradiction",
+     "top5_evidence": [
+      "1. RECIPIENT may view, have access to, and through verbal explanations learn of CONFIDENTIAL MATERIAL, samples, and other information, financial information, marketing information, data, special testing and training procedures and processes, specifications either owned by the COMPANY or used in the course of its business (collectively called \"CONFIDENTIAL MATERIAL\"). All such CONFIDENTIAL MATERIAL shall be considered to be TRADE SECRETS by the COMPANY and is disclosed IN CONFIDENCE to RECIPIENT.",
+      "2. All CONFIDENTIAL MATERIAL, which RECIPIENT shall use, view, receive or come in contact with, shall be and shall remain the COMPANY'S SOLE and EXCLUSIVE property, and shall be PROMPTLY RETURNED upon completion of the purpose for which it was provided, or when verbally communicated, will no longer be utilized to benefit RECIPIENT, but in NO EVENT, later than TEN (10) DAYS after request by COMPANY.",
+      "After execution thereof, the COMPANY will disclose to RECIPIENT certain of the CONFIDENTIAL MATERIAL and RECIPIENT, through his/her activities and by virtue of this relationship with the COMPANY, will become acquainted with certain CONFIDENTIAL MATERIAL."
+     ],
+     "top11_evidence": [
+      "RECIPIENT may view, have access to, and through verbal explanations learn of CONFIDENTIAL MATERIAL, samples, and other information, financial information, marketing information, data, special testing and training procedures and processes, specifications either owned by the COMPANY or used in the course of its business (collectively called \"CONFIDENTIAL MATERIAL\").",
+      "After execution thereof, the COMPANY will disclose to RECIPIENT certain of the CONFIDENTIAL MATERIAL and RECIPIENT, through his/her activities and by virtue of this relationship with the COMPANY, will become acquainted with certain CONFIDENTIAL MATERIAL."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": true,
+     "top11_gold_overlap": false,
+     "top11_source_valid": false,
+     "n_chunks_shown": 6
+    },
+    {
+     "case_id": "train::603::nda-15",
+     "gold": "Entailment",
+     "top5_label": "Contradiction",
+     "top11_label": "Contradiction",
+     "top5_evidence": [
+      "1.3 Each party will use the Confidential Information it receives solely for the purpose of evaluating the Acquisition and not for any other purpose and, except to the extent permitted by paragraph 1.5 hereof, will keep such Confidential Information strictly confidential, provided, however, that Confidential Information may be disclosed to such Representatives as needed to know such information for the purpose of evaluating and negotiating the terms of the Acquisition and for no other purpose.",
+      "1.2 For purposes of this Agreement, the term representatives (\u201cRepresentatives\u201d) shall mean each party, their directors, officers and employees, as well as their counsel, accountants, consultants and other representatives in connection with the transactions contemplated hereby provided that such persons are bound by confidentiality agreements no less stringent than those in this Agreement."
+     ],
+     "top11_evidence": [
+      "NOW THEREFORE THIS AGREEMENT WITNESSETH THAT in consideration of the exchange of Confidential Information (as defined herein) between Swansi and Zulu as may be reasonably requested from time to time and other good and valuable consideration, the receipt and sufficiency of which is hereby acknowledged, the parties hereto hereby agree as follows:",
+      "Each party will use the Confidential Information it receives solely for the purpose of evaluating the Acquisition and not for any other purpose and, except to the extent permitted by paragraph 1.5 hereof, will keep such Confidential Information strictly confidential, provided, however, that Confidential Information may be disclosed to such Representatives as needed to know such information for the purpose of evaluating and negotiating the terms of the Acquisition and for no other purpose."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": false,
+     "top11_gold_overlap": false,
+     "top11_source_valid": true,
+     "n_chunks_shown": 10
+    },
+    {
+     "case_id": "train::94::nda-13",
+     "gold": "NotMentioned",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "Confidential Information means any and all information which is now or at any time disclosed to one party by the other party and shall include without limitation, data, know-how, formulae, recipes, processes, designs and design rights, photographs, drawings, plans, intentions, product information, trade secrets, market opportunities, specifications, manufacturing data, which is disclosed to EFCA before or after the date of this Agreement but shall exclude any part of such information which:-",
+      "1.2 EFCA can show:-",
+      "1.2.1 was in its possession or known to it by being in its use or being recorded in its files or computers or other recording media prior to receipt from the disclosing party and which was not previously acquired by EFCA from the disclosing party under an obligation or confidence, or",
+      "1.2.2 to have been developed by EFCA, or EFCA\u2019s principals, at any time independently of any information disclosed to it by the disclosing party."
+     ],
+     "top11_evidence": [
+      "Confidential Information means any and all information which is now or at any time disclosed to one party by the other party and shall include without limitation, data, know-how, formulae, recipes, processes, designs and design rights, photographs, drawings, plans, intentions, product information, trade secrets, market opportunities, specifications, manufacturing data, which is disclosed to EFCA before or after the date of this Agreement but shall exclude any part of such information which:-",
+      "1.2 EFCA can show:-",
+      "1.2.1 was in its possession or known to it by being in its use or being recorded in its files or computers or other recording media prior to receipt from the disclosing party and which was not previously acquired by EFCA from the disclosing party under an obligation or confidence, or",
+      "1.2.2 to have been developed by EFCA, or EFCA\u2019s principals, at any time independently of any information disclosed to it by the disclosing party."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": null,
+     "gold_in_top11": null,
+     "top5_gold_overlap": null,
+     "top11_gold_overlap": null,
+     "top11_source_valid": true,
+     "n_chunks_shown": 7
+    },
+    {
+     "case_id": "train::126::nda-1",
+     "gold": "NotMentioned",
+     "top5_label": "Contradiction",
+     "top11_label": "Contradiction",
+     "top5_evidence": [
+      "a. means nonpublic information that IBC designates as being confidential or which, under the circumstances surrounding disclosure ought to be treated as confidential by Vendor."
+     ],
+     "top11_evidence": [
+      "a. means nonpublic information that IBC designates as being confidential or which, under the circumstances surrounding disclosure ought to be treated as confidential by Vendor."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": null,
+     "gold_in_top11": null,
+     "top5_gold_overlap": null,
+     "top11_gold_overlap": null,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11
+    },
+    {
+     "case_id": "train::187::nda-1",
+     "gold": "NotMentioned",
+     "top5_label": "Contradiction",
+     "top11_label": "Contradiction",
+     "top5_evidence": [
+      "All information disclosed by Writer to Producer, in writing, whether or not such information is also disclosed orally, that relates or refers, directly or indirectly, to the Submission, including the Submission itself, shall be deemed confidential and shall constitute Confidential Information, and shall include (i) all documents generated by Producer which contain, comment upon, or relate in any way to any Confidential Information received form Writer, and (ii) any written samples of the Submission received from Writer together with any information derived by Producer there from."
+     ],
+     "top11_evidence": [
+      "1. All information disclosed by Writer to Producer, in writing, whether or not such information is also disclosed orally, that relates or refers, directly or indirectly, to the Submission, including the Submission itself, shall be deemed confidential and shall constitute Confidential Information, and shall include (i) all documents generated by Producer which contain, comment upon, or relate in any way to any Confidential Information received form Writer, and (ii) any written samples of the Submission received from Writer together with any information derived by Producer there from."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": null,
+     "gold_in_top11": null,
+     "top5_gold_overlap": null,
+     "top11_gold_overlap": null,
+     "top11_source_valid": true,
+     "n_chunks_shown": 7
+    },
+    {
+     "case_id": "train::222::nda-3",
+     "gold": "NotMentioned",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "1.1.1 any information in respect of know-how, formulae, statistics, processes, systems, business methods, marketing, trading and merchandising methods and information, promotional and advertising plans and strategies, financial plans and models, inventions, long-term plans, research and development data, user or consumer data and profiles, ideas, computer programmes, drawings and any other information of a confidential nature of FP, in whatever form it may be;",
+      "1.1.6 generally, information that is disclosed in circumstances of confidence or would be understood by the Parties, exercising reasonable business judgement, to be confidential;"
+     ],
+     "top11_evidence": [
+      "1.1.1 any information in respect of know-how, formulae, statistics, processes, systems, business methods, marketing, trading and merchandising methods and information, promotional and advertising plans and strategies, financial plans and models, inventions, long-term plans, research and development data, user or consumer data and profiles, ideas, computer programmes, drawings and any other information of a confidential nature of FP, in whatever form it may be;",
+      "4.2 Any documentation or written record or other material containing confidential information (in whatsoever form) that comes into the possession of the SP shall itself be deemed to form part of the confidential information of FP."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": null,
+     "gold_in_top11": null,
+     "top5_gold_overlap": null,
+     "top11_gold_overlap": null,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11
+    },
+    {
+     "case_id": "train::278::nda-1",
+     "gold": "NotMentioned",
+     "top5_label": "Contradiction",
+     "top11_label": "Contradiction",
+     "top5_evidence": [
+      "1. All information disclosed by [Company Name] and/or those individuals or organizations working in collaboration with Back Burner Films, written, electronic or oral, that relates or refers directly or indi-rectly, to the Project including the script itself, shall hereafter and forever be deemed confidential and shall constitute Confidential Information."
+     ],
+     "top11_evidence": [
+      "All information disclosed by [Company Name] and/or those individuals or organizations working in collaboration with Back Burner Films, written, electronic or oral, that relates or refers directly or indi-rectly, to the Project including the script itself, shall hereafter and forever be deemed confidential and shall constitute Confidential Information."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": null,
+     "gold_in_top11": null,
+     "top5_gold_overlap": null,
+     "top11_gold_overlap": null,
+     "top11_source_valid": true,
+     "n_chunks_shown": 2
+    },
+    {
+     "case_id": "train::279::nda-1",
+     "gold": "NotMentioned",
+     "top5_label": "Contradiction",
+     "top11_label": "NotMentioned",
+     "top5_evidence": [
+      "To the extent previously, presently, or subsequently disclosed to the Receiving Party is hereinafter referred to as \"Proprietary Information\" of the Disclosing Party.",
+      "In consideration of the disclosure of Proprietary Information by the Disclosing Party, the Receiving Party hereby agrees: (i) to hold the Proprietary Information in strict confidence and to take all reasonable precautions to protect such Proprietary Information (including, without limitation, all precautions the Receiving Party employs with respect to its own confidential materials), (ii) not to disclose any such Proprietary Information or any information derived therefrom to any third person, (iii) not to make any use whatsoever at any time of such Proprietary Information except to evaluate internally its relationship with the Disclosing Party, and (iv) not to copy or reverse engineer any such Proprietary Information."
+     ],
+     "top11_evidence": [],
+     "cls_transition": "recovered",
+     "joint_transition": "recovered",
+     "gold_in_top5": null,
+     "gold_in_top11": null,
+     "top5_gold_overlap": null,
+     "top11_gold_overlap": null,
+     "top11_source_valid": true,
+     "n_chunks_shown": 7
+    },
+    {
+     "case_id": "train::320::nda-1",
+     "gold": "NotMentioned",
+     "top5_label": "Contradiction",
+     "top11_label": "NotMentioned",
+     "top5_evidence": [
+      "3.5) Petro-Lube agrees to provide a test report to (Your Company Name) of the results of the Evaluations in a form that does not disclose information which Petro-Lube deems to constitute confidential information regarding (Your Company Name), Petro-Lube, or any other third party.",
+      "4.1) It shall not be necessary for either Party to disclose to the other Party any confidential technical or commercial data or information about its products, technology, processes, commercial activities or otherwise for the purposes of this Agreement.",
+      "4.1) To the extent that either Party does disclose such data or information to the other Party, the other Party shall be entitled to regard such information as non-confidential in the absence of a written agreement between the Parties otherwise."
+     ],
+     "top11_evidence": [],
+     "cls_transition": "recovered",
+     "joint_transition": "recovered",
+     "gold_in_top5": null,
+     "gold_in_top11": null,
+     "top5_gold_overlap": null,
+     "top11_gold_overlap": null,
+     "top11_source_valid": true,
+     "n_chunks_shown": 10
+    },
+    {
+     "case_id": "train::328::nda-1",
+     "gold": "NotMentioned",
+     "top5_label": "Contradiction",
+     "top11_label": "Contradiction",
+     "top5_evidence": [
+      "\u201cConfidential Information\u201d means all confidential, proprietary, or non-public information of the Disclosing Parties (however recorded or preserved) that is disclosed or made available, directly or indirectly, by CGSH or its respective employees, officers, representatives or advisors to the Supplier or its affiliates, representatives, employees or agents, relating to the business of such Disclosing Party or that otherwise by its nature would be reasonably understood as confidential, whether provided in written or oral form and in any manner whatsoever."
+     ],
+     "top11_evidence": [
+      "A. \u201cConfidential Information\u201d means all confidential, proprietary, or non-public information of the Disclosing Parties (however recorded or preserved) that is disclosed or made available, directly or indirectly, by CGSH or its respective employees, officers, representatives or advisors to the Supplier or its affiliates, representatives, employees or agents, relating to the business of such Disclosing Party or that otherwise by its nature would be reasonably understood as confidential, whether provided in written or oral form and in any manner whatsoever."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": null,
+     "gold_in_top11": null,
+     "top5_gold_overlap": null,
+     "top11_gold_overlap": null,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11
+    },
+    {
+     "case_id": "train::350::nda-10",
+     "gold": "NotMentioned",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "The receiving party will not disclose this Agreement or Confidential Information, e(cid:91)cept to the receiving party's officials,\ndirectors, officers, employees and contractors who have a need to know for the purpose of carrying out the purpose of the Agreement and who have been advised of the obligation of confidentiality and who are bound, either as a condition of employment, or in order to obtain Confidential Information, by terms and conditions similar to those contained herein and are obligated to keep it confidential."
+     ],
+     "top11_evidence": [
+      "The receiving party will not disclose this Agreement or Confidential Information, e(cid:91)cept to the receiving party's officials, directors, officers, employees and contractors who have a need to know for the purpose of carrying out the purpose of the Agreement and who have been advised of the obligation of confidentiality and who are bound, either as a condition of employment, or in order to obtain Confidential Information, by terms and conditions similar to those contained herein and are obligated to keep it confidential.",
+      "The Parties wish to [enter into discussions with each other with respect to a potential business relationship between them. In the course of negotiations related to the Agreement, or in carrying out their obligations pursuant to the Agreement, the Parties may disclose to one another Confidential Information as defined below. For good and valuable consideration, the receipt and sufficiency of which is acknowledged by each of us, this Agreement sets out our respective obligations with respect to Confidential Information which one party to this Agreement receives (the \"receiving party\") from the other (the \"disclosing party\")]."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": null,
+     "gold_in_top11": null,
+     "top5_gold_overlap": null,
+     "top11_gold_overlap": null,
+     "top11_source_valid": false,
+     "n_chunks_shown": 8
+    },
+    {
+     "case_id": "train::379::nda-17",
+     "gold": "NotMentioned",
+     "top5_label": "Entailment",
+     "top11_label": "Entailment",
+     "top5_evidence": [
+      "The Receiving Party agrees, except as required by law, to: (i) protect the confidentiality of the other party\u2019s Confidential Information in whatever form maintained, including any notes, summaries, reports, analyses or other material derived by the Receiving Party, its Affiliates, or its or their Authorized Parties (defined below), in whole or in part, from the Confidential Information (collectively, \u201cNotes\u201d);",
+      "In any such case or upon any other termination of this Agreement, the Receiving Party will immediately: (i) return all Confidential Information disclosed to it and (ii) destroy, with such destruction to be certified by the Receiving Party, all Notes, without retaining any copy thereof.",
+      "If either party or any of their respective Affiliates or Authorized Parties is requested or required, by interrogatories, subpoena or similar legal process, to disclose any Confidential Information or Notes, such party agrees to provide the Disclosing Party with prompt notice of each such request, to the extent practicable, so that the Disclosing Party may seek an appropriate protective order, waive compliance by the Receiving Party with the provisions of this Agreement, or both."
+     ],
+     "top11_evidence": [
+      "The Receiving Party agrees, except as required by law, to: (i) protect the confidentiality of the other party\u2019s Confidential Information in whatever form maintained, including any notes, summaries, reports, analyses or other material derived by the Receiving Party, its Affiliates, or its or their Authorized Parties (defined below), in whole or in part, from the Confidential Information (collectively, \u201cNotes\u201d);",
+      "The Receiving Party further agrees that prior to disclosing any Confidential Information to its Affiliates, or its or their Authorized Parties, as allowed hereunder, such Affiliates and/or Authorized Parties will be advised of the confidential nature of the Confidential Information, provided a copy of this Agreement and directed to abide by its terms.",
+      "In any such case or upon any other termination of this Agreement, the Receiving Party will immediately: (i) return all Confidential Information disclosed to it and (ii) destroy, with such destruction to be certified by the Receiving Party, all Notes, without retaining any copy thereof."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": null,
+     "gold_in_top11": null,
+     "top5_gold_overlap": null,
+     "top11_gold_overlap": null,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11
+    },
+    {
+     "case_id": "train::439::nda-2",
+     "gold": "NotMentioned",
+     "top5_label": "Contradiction",
+     "top11_label": "Contradiction",
+     "top5_evidence": [
+      "The Product and related information is proprietary and confidential information to MS and its suppliers.",
+      "Recipient agrees not to disclose or provide the Product, documentation, or any related information (including the Product features or the results of use or testing) to any third party or use the Product for any purpose other than as provided in this Agreement."
+     ],
+     "top11_evidence": [
+      "The Product and related information is proprietary and confidential information to MS and its suppliers.",
+      "Recipient agrees not to disclose or provide the Product, documentation, or any related information (including the Product features or the results of use or testing) to any third party or use the Product for any purpose other than as provided in this Agreement."
+     ],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": null,
+     "gold_in_top11": null,
+     "top5_gold_overlap": null,
+     "top11_gold_overlap": null,
+     "top11_source_valid": true,
+     "n_chunks_shown": 10
+    }
+   ]
+  },
+  "DYNAMIC_INFORMATION_ACQUISITION": {
+   "n": 1,
+   "cls": {
+    "unchanged_wrong": 1
+   },
+   "joint": {
+    "unchanged_fail": 1
+   },
+   "gold_overlap_top5_to_top11": [
+    [
+     "(False, False)",
+     1
+    ]
+   ],
+   "rows": [
+    {
+     "case_id": "train::273::nda-1",
+     "gold": "Entailment",
+     "top5_label": "NotMentioned",
+     "top11_label": "NotMentioned",
+     "top5_evidence": [],
+     "top11_evidence": [],
+     "cls_transition": "unchanged_wrong",
+     "joint_transition": "unchanged_fail",
+     "gold_in_top5": true,
+     "gold_in_top11": true,
+     "top5_gold_overlap": false,
+     "top11_gold_overlap": false,
+     "top11_source_valid": true,
+     "n_chunks_shown": 11
+    }
+   ]
+  }
+ },
+ "contradiction": {
+  "recall_top5": 0.76,
+  "recall_top11": 0.76,
+  "recoveries": [
+   "train::178::nda-20"
+  ],
+  "regressions": [
+   "train::553::nda-20"
+  ],
+  "joint_top5": 0.7,
+  "joint_top11": 0.72,
+  "joint_recoveries": [
+   "train::178::nda-20",
+   "train::318::nda-2",
+   "train::438::nda-2",
+   "train::515::nda-2"
+  ],
+  "joint_regressions": [
+   "train::88::nda-1",
+   "train::161::nda-7",
+   "train::553::nda-20"
+  ]
+ },
+ "saturation": {
+  "A_<=5_chunks": {
+   "n": 17,
+   "mean_candidate_chunks_shown": 3.411764705882353,
+   "mean_control_chunks_shown": 3.411764705882353,
+   "top5_acc": 0.7058823529411765,
+   "top11_acc": 0.7647058823529411,
+   "top5_joint": 0.7058823529411765,
+   "top11_joint": 0.7058823529411765,
+   "cls_transitions": {
+    "wrong_to_right": 1,
+    "right_to_wrong": 0,
+    "both_right": 12,
+    "both_wrong": 4
+   },
+   "joint_transitions": {
+    "wrong_to_right": 1,
+    "right_to_wrong": 1,
+    "both_right": 11,
+    "both_wrong": 4
+   },
+   "acc_delta": 0.05882352941176461,
+   "joint_delta": 0.0
+  },
+  "B_6-10_chunks": {
+   "n": 77,
+   "mean_candidate_chunks_shown": 7.8441558441558445,
+   "mean_control_chunks_shown": 5,
+   "top5_acc": 0.7922077922077922,
+   "top11_acc": 0.8311688311688312,
+   "top5_joint": 0.7792207792207793,
+   "top11_joint": 0.8181818181818182,
+   "cls_transitions": {
+    "wrong_to_right": 4,
+    "right_to_wrong": 1,
+    "both_right": 60,
+    "both_wrong": 12
+   },
+   "joint_transitions": {
+    "wrong_to_right": 5,
+    "right_to_wrong": 2,
+    "both_right": 58,
+    "both_wrong": 12
+   },
+   "acc_delta": 0.038961038961038974,
+   "joint_delta": 0.038961038961038974
+  },
+  "C_>=11_chunks": {
+   "n": 56,
+   "mean_candidate_chunks_shown": 11,
+   "mean_control_chunks_shown": 5,
+   "top5_acc": 0.8035714285714286,
+   "top11_acc": 0.7857142857142857,
+   "top5_joint": 0.6964285714285714,
+   "top11_joint": 0.75,
+   "cls_transitions": {
+    "wrong_to_right": 3,
+    "right_to_wrong": 4,
+    "both_right": 41,
+    "both_wrong": 8
+   },
+   "joint_transitions": {
+    "wrong_to_right": 7,
+    "right_to_wrong": 4,
+    "both_right": 35,
+    "both_wrong": 10
+   },
+   "acc_delta": -0.017857142857142905,
+   "joint_delta": 0.0535714285714286
+  }
+ },
+ "regression_dossier": [
+  {
+   "case_id": "train::88::nda-1",
+   "hypothesis": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+   "gold": "Contradiction",
+   "top5_label": "Contradiction",
+   "top11_label": "Contradiction",
+   "cls_regression": false,
+   "joint_regression": true,
+   "top5_evidence": [
+    "Confidential Information includes, without limitation, non-public information relating to released or unreleased Disclosing Party software products, the marketing or promotion of any Disclosing Party product, Disclosing Party\u2019s business policies or practices, financial information, technical information, computer systems, infrastructure designs, data, analysis, compilations, studies or other documentation and information received from others that Disclosing Party is obligated to treat as confidential.",
+    "1. Confidential Information \u201cConfidential Information\u201d means nonpublic information that disclosing party (\u201cDisclosing Party\u201d) designates as being confidential or which, under the circumstances surrounding disclosure the receiving party (\u201cReceiving Party\u201d) should know is treated as confidential by the Disclosing Party."
+   ],
+   "top11_evidence": [
+    "\"Confidential Information\" means nonpublic information that disclosing party (\"Disclosing Party\") designates as being confidential or which, under the circumstances surrounding disclosure the receiving party (\"Receiving Party\") should know is treated as confidential by the Disclosing Party."
+   ],
+   "top11_evidence_gold_overlap": false,
+   "n_added_chunks": 2,
+   "gold_span_in_added_chunks": false,
+   "added_chunks_ranks_6_to_11": [
+    "7. Miscellaneous\nI. This Agreement constitutes the entire agreement between the parties with respect to the subject matter hereof. It shall not be modified except by a written agreement dated subsequent to the date of this Agreement and signed by both parties. None of the provisions of this Agreement shall be deemed to have been waived by any act or acquiescence on the part of Disclosing Party, its agents, or employees, but only by an instrument in writing signed by an authorized officer of Disclosing Party. No waiver of any provision of this Agreement shall constitute a waiver of any other provision(s) or of the same provision on another occasion.\nII. This Agreement shall be construed and controlled by the laws of the State of Massachusetts and both parties further consent to jurisdiction by the state and federal courts sitting in Boston, Massachusetts.\nIII. Subject to the limitations set forth in this Agreement, this Agreement will inure to the benefit of and be binding upon the parties, their successors and assigns. Neither party may assign, delegate or otherwise transfer this Agreement or any of its rights or obligations hereunder without the other party's prior approval.\nData Boiler Technologies, LLC.",
+    "XXXXX\nSigned: _________________________ Signed: _________________________\nName: _________________________ Name: _________________________\nTitle: __________________________ Title: __________________________\nDate: __________________________ Date: __________________________"
+   ]
+  },
+  {
+   "case_id": "train::161::nda-7",
+   "hypothesis": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+   "gold": "Contradiction",
+   "top5_label": "Contradiction",
+   "top11_label": "Contradiction",
+   "cls_regression": false,
+   "joint_regression": true,
+   "top5_evidence": [
+    "(a) not to, directly or indirectly, in any way, disclose, make accessible, reveal, report, publish, disseminate or transfer any Confidential Information to any third party;",
+    "(c) to restrict access to Confidential Information to those of its officers, directors and employees who have a legitimate need-to-know to carry out the Purpose and who are obligated to protect such Confidential Information pursuant to terms and conditions no less protective of Discloser than those contained in this Agreement; and",
+    "Recipient may disclose Discloser\u2019s Confidential Information to Recipient\u2019s affiliates on the condition that Recipient shall restrict access to Discloser\u2019s Confidential Information to those of Recipient\u2019s affiliates\u2019 officers, directors and employees who have a legitimate need-to-know to carry out the Purpose and who are obligated to protect such Confidential Information pursuant to terms and conditions no less protective of Discloser than those contained in this Agreement and Recipient shall be liable for any failure of its affiliates to abide by the provisions of this Agreement as if such failure was the act or omission of such party."
+   ],
+   "top11_evidence": [
+    "(a) not to, directly or indirectly, in any way, disclose, make accessible, reveal, report, publish, disseminate or transfer any Confidential Information to any third party;",
+    "(c) to restrict access to Confidential Information to those of its officers, directors and employees who have a legitimate need-to-know to carry out the Purpose and who are obligated to protect such Confidential Information pursuant to terms and conditions no less protective of Discloser than those contained in this Agreement; and"
+   ],
+   "top11_evidence_gold_overlap": true,
+   "n_added_chunks": 6,
+   "gold_span_in_added_chunks": false,
+   "added_chunks_ranks_6_to_11": [
+    "6. No Warranty. Confidential Information is provided \u201cAS IS\u201d and \u201cAS AVAILABLE\u201d without any warranty, express, implied or otherwise, regarding such Confidential Information. Nothing herein shall be construed as a commitment by any party to disclose any Confidential Information, to commence or continue negotiations or to enter into any contract or business relationship. Neither this Agreement, nor the disclosure or receipt of Confidential Information, shall constitute or imply any promise or intention by any of the parties or their affiliates to develop, make, purchase or sell any present or future products or services. Any commitment to do or promise any of the foregoing must be in a separate writing signed by an authorized representative of each party. If any such agreement contains warranty provisions, those provisions shall prevail over the corresponding provisions in this Agreement. Each party shall bear its own fees, costs and expenses incurred in carrying out, or otherwise in relation to, this Agreement.\n7. Independent Development. This Agreement shall not preclude or limit the independent development by or on behalf of any party of any products or systems involving technology or information of a similar nature to that disclosed hereunder or which compete with products or systems contemplated by such information, provided that it is done without use of or reliance upon the other party\u2019s Confidential Information.",
+    "8. Term and Termination. This Agreement shall be effective from the Effective Date until 24 months thereafter. Either party may terminate this Agreement for any or no reason upon 10 days written notice to the other party. However, any termination of this Agreement shall not relieve Recipient of its confidentiality and use obligations with respect to Confidential Information disclosed prior to the date of such termination. Except for the right to use Confidential Information for the Purpose, which right terminates when this Agreement terminates, Recipient\u2019s duty to protect Discloser\u2019s Confidential Information expires 5 years from the date on which that Confidential Information was disclosed to Recipient. Sections 4, 5, 7, 8, 10, 11, 12, 13, 14, 15 and 16 shall survive any termination of this Agreement.\n9. Contacts. All notices, documentation and communications shall be in English and sent by personal delivery, pre-paid registered mail, overnight courier or facsimile transmission, to the relevant address set out below and shall be deemed to have been given on the date of receipt.\n As record of this registration in the registration system.",
+    "(d) not to reproduce or copy Confidential Information except to the extent necessary to further the Purpose.\nFurthermore, the existence of any business negotiations, discussions or agreements in progress between the parties shall be kept confidential and shall not be disclosed without written approval of all the parties. For the purposes of this Agreement, Company shall not disclose Confidential Information to any other division, department, group, or unit other than Samsung KNOX Business and Technology Division.",
+    "10. Export. Each party shall comply with all applicable US and other export laws, regulations and rules and, in particular, will not export or re-export Confidential Information without obtaining all required government licenses, approvals or waivers.\n11. Remedies. Each party acknowledges that any disclosure, use or misappropriation of Confidential Information of another party in violation of this Agreement would cause such party irreparable harm for which there may be no adequate remedy at law. Accordingly, each party agrees that such other party shall have the right to apply to any court of competent jurisdiction for injunctive relief and specific performance, without prejudice to any remedies available to it at law or in equity.\n12. Assignment. No party shall be entitled to assign, transfer or convey this Agreement or any of its rights or obligations hereunder, in whole or in part, by operation of law or otherwise, without the prior written consent of the other party, and any attempt to do so without such consent shall be void.",
+    "16. Entire Agreement. This Agreement constitutes the entire agreement of the parties with respect to the subject matter hereof and may not be amended or modified except in writing signed by each of the parties to this Agreement. The English language text of this Agreement shall prevail over any translations thereof. If a contract is entered into by the parties in respect of the Purpose, this Agreement shall be deemed incorporated into such contract in addition to any confidentiality obligations set forth in such contract, if any, and the term of this Agreement is deemed to be extended (but not shorted) to be the same as that of the contract.",
+    "15. Law and Jurisdiction. This Agreement shall be governed by and construed in accordance with the laws of the Republic of Korea (excluding conflict of laws provisions which may direct the application of another jurisdiction\u2019s laws). All disputes, controversies or claims between the parties arising out of or in connection with this Agreement (including its existence, validity or termination) shall be finally resolved by arbitration to be held in Seoul, Korea and conducted in English under the Rules of Arbitration of the International Chamber of Commerce; provided, however, that each party may enforce its or its affiliates\u2019 intellectual property rights in any court of competent jurisdiction, including but not limited to equitable relief. The arbitral award shall be final and binding on the parties. Except to the extent entry of judgment and any subsequent enforcement may require disclosure, all matters relating to the arbitration, including the award, shall be held in confidence."
+   ]
+  },
+  {
+   "case_id": "train::553::nda-20",
+   "hypothesis": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+   "gold": "Contradiction",
+   "top5_label": "Contradiction",
+   "top11_label": "Entailment",
+   "cls_regression": true,
+   "joint_regression": true,
+   "top5_evidence": [
+    "Shareholder hereby agrees not to, at any time, disclose to any unauthorized Persons or use for his or its own account or for the benefit of any third party any Confidential Information, whether or not such information is embodied in writing or other physical form or is retained in the memory of Shareholder, without Heritage\u2019s written consent, unless and to the extent that the Confidential Information is or becomes generally known to and available for use by the public other than as a result of Shareholder\u2019s fault or the fault of any other Person bound by a duty of confidentiality to Heritage, HBC or the Affiliated Companies.",
+    "Shareholder agrees to deliver to Heritage at the Effective Date, and at any other time Heritage may request, all documents, memoranda, notes, plans, records, reports and other documentation, models, components, devices or computer software, whether embodied in a disk or in other form (and all copies of all of the foregoing), that contain Confidential Information and any other Confidential Information that Shareholder may then possess or have under Shareholder\u2019s control."
+   ],
+   "top11_evidence": [
+    "Shareholder hereby agrees not to, at any time, disclose to any unauthorized Persons or use for his or its own account or for the benefit of any third party any Confidential Information, whether or not such information is embodied in writing or other physical form or is retained in the memory of Shareholder, without Heritage\u2019s written consent, unless and to the extent that the Confidential Information is or becomes generally known to and available for use by the public other than as a result of Shareholder\u2019s fault or the fault of any other Person bound by a duty of confidentiality to Heritage, HBC or the Affiliated Companies.",
+    "Shareholder agrees to deliver to Heritage at the Effective Date, and at any other time Heritage may request, all documents, memoranda, notes, plans, records, reports and other documentation, models, components, devices or computer software, whether embodied in a disk or in other form (and all copies of all of the foregoing), that contain Confidential Information and any other Confidential Information that Shareholder may then possess or have under Shareholder\u2019s control."
+   ],
+   "top11_evidence_gold_overlap": true,
+   "n_added_chunks": 6,
+   "gold_span_in_added_chunks": false,
+   "added_chunks_ranks_6_to_11": [
+    "15. Entire Agreement. This Agreement constitutes the entire agreement between the parties with respect to the subject matter of this Agreement and supersedes all prior written and oral agreements and understandings between the parties with respect to the subject matter of this Agreement. This Agreement may not be amended except by a written agreement executed by the party to be charged with the amendment.\n[signature page follows]\nIN WITNESS WHEREOF, the parties hereto have executed this Non-Compete, Non-Solicitation and Confidentiality Agreement on the date first set forth above.\nHERITAGE COMMERCE CORP\nBy: /s/ Walter T. Kaczmarek\nWalter T. Kaczmarek\nChief Executive Officer\nHERITAGE BANK OF COMMERCE\nBy: /s/.Walter T. Kaczmarek\nWalter T. Kaczmarek\nPresident\nSHAREHOLDER\n/s/ James Mayer\nJames Mayer",
+    "7. Waiver. The rights and remedies of the parties to this Agreement are cumulative and not alternative. Neither the failure nor any delay by any party in exercising any right, power or privilege under this Agreement will operate as a waiver of such right, power or privilege, and no single or partial exercise of any such right, power or privilege will preclude any other or further exercise of such right, power or privilege or the exercise of any other right, power or privilege. To the maximum extent permitted by applicable law, (a) no claim or right arising out of this Agreement can be discharged, in whole or in part, by a waiver or renunciation of the claim or right except in writing; (b) no waiver that may be given by a party will be applicable except in the specific instance for which it is given; and (c) no notice to or demand on one party will be deemed to be a waiver of any obligation of such party, or of the right of the party giving such notice or demand to require the other party, to take further action without notice or demand as provided in this Agreement.",
+    "Exhibit 10.5\nNON-COMPETE, NON-SOLICITATION AND CONFIDENTIALITY AGREEMENT\nTHIS NON-COMPETE, NON-SOLICITATION AND CONFIDENTIALITY AGREEMENT (this \u201cAgreement\u201d) is entered into this 8 day of February, 2007, by and among Heritage Commerce Corp, a California Corporation (\u201cHeritage\u201d), Heritage Bank ofth Commerce, a California banking corporation (\u201cHBC\u201d) and James Mayer (\u201cShareholder\u201d).\nWHEREAS, concurrently with the execution of this Agreement, Heritage, HBC and Diablo Valley Bank (\u201cDiablo\u201d) have entered into that certain Agreement and Plan of Merger (the \u201cMerger Agreement\u201d) dated as of February 8, 2007 whereby on the Effective Date (as defined in the Merger Agreement) Diablo will merge with and into HBC and HBC shall survive the merger (the \u201cMerger\u201d).",
+    "2. Purpose. Shareholder acknowledges and agrees that the market for the Business is very competitive within the Restrictive Territory (as defined herein), and one way that Diablo maintained its business and its competitive position in the marketplace prior to the Closing was by investing time and money in developing proprietary products, unique approaches to the business, banking systems and strong client, vendor, and employee relationships. Shareholder further acknowledges and agrees that proprietary and other information related to such products, approaches and relationships are highly confidential, and maintaining that confidentiality is critical to Diablo\u2019s success. Shareholder further acknowledges and agrees that Diablo has invested substantial time and resources into developing relationships, customer lists and business models and strategies and that disruption of such relationships or misuse of such lists, models, and strategies would damage Heritage and HBC.\n3. Shareholder Covenants.\n(a) Non-Competition.",
+    "Shareholder hereby covenants and agrees that from the Effective Date until the third (3 )rd anniversary of the Effective Date (\u201cRestricted Period\u201d), Shareholder will not without the prior written consent of Heritage, engage or participate or have any interest, directly or indirectly, in any Business anywhere in the counties of Santa Clara, Alameda, Contra Costa, Marin, San Francisco and San Mateo located in the State of California (\u201cRestricted Territory\u201d) (all such entities shall be referred to each as \u201cCompetitor\u201d or collectively as \u201cCompetitors,\u201d), with respect to the following acts: (i) own any equity interest in any Competitor; (ii) operate, join, control, advise, become a founder or otherwise participate in any Competitor; (iii) lend credit or money for the purpose of assisting another to establish or operate any Competitor; (iv) request or advise any customer, strategic partner or vendor of Diablo that becomes a present or future customer, strategic partner or vendor of Heritage, HBC or their subsidiaries now and hereinafter existing (collectively, the \u201cAffiliated Companies\u201d) to withdraw, curtail or cancel its business with Heritage, HBC or the Affiliated Companies anywhere in the Restricted Territory; (v) induce or influence (or attempt to induce or influence) any person or entity who is engaged (as an employee, agent, independent contractor or otherwise) by Heritage, HBC or the Affiliated Companies to terminate his, her or its employment or engagement for the purpose of obtaining employment with a Competitor; (vi) solicit any employee of Heritage, HBC or the Affiliated Companies to leave employment and become affiliated with any Competitor; (vii) solicit any actual or \u201cprospective customer\u201d (as hereinafter defined), which was served by Diablo in connection with any business of Diablo, or (viii) solicit, influence or attempt to influence any customer which is or was served by Diablo to discontinue its business or service available from Heritage, HBC or the Affiliated Companies; provided, that, Shareholder may own and hold as an investment of up to 1% of any corporation within the Restricted Territory that is listed on a national stock exchange and that is engaged in a business that is competitive with Heritage, HBC or an Affiliated Company, but Shareholder may not otherwise participate (whether in management or otherwise) in such corporation.",
+    "WHEREAS, Shareholder is the President and Chief Executive Officer of Diablo and beneficially owns approximately 5.77% of the issued and outstanding shares of Diablo common stock;\nWHEREAS, Shareholder acknowledges that the execution and delivery of this Agreement by Shareholder is a condition precedent to the obligations of the parties entering into the Merger Agreement and the consummation of the Merger, and Shareholder acknowledges and agrees that Heritage, HBC and Diablo would not proceed forward and consummate the transactions contemplated under the Merger Agreement unless Shareholder enters into this Agreement;\nWHEREAS, Heritage, HBC and Shareholder acknowledge that the covenants and agreements of Shareholder contained in this Agreement are necessary to protect and preserve Diablo\u2019s business for the benefit of Heritage and HBC after consummation of the transactions contemplated by the Merger Agreement;\nWHEREAS, Shareholder has significant knowledge and information concerning the business of Diablo and that such business is very competitive;\nWHEREAS, Shareholder will receive significant consideration for the Shareholder\u2019s exchange of his Diablo common stock through the Merger;\nWHEREAS, HBC has agreed to provide Shareholder with a three year employment agreement pursuant to which Shareholder will become an Executive Vice President of HBC on the Effective Date (as defined herein);\nWHEREAS, this Agreement shall become effective at the Effective Time (as defined in the Merger Agreement) of the Merger (the \u201cEffective Date\u201d);\nNOW, THEREFORE, in consideration of the promises and covenants contained herein and for other good and valuable consideration, the receipt, sufficiency and adequacy of which are mutually acknowledged by each party, it is agreed as follows:"
+   ]
+  },
+  {
+   "case_id": "train::226::nda-12",
+   "hypothesis": "Receiving Party may independently develop information similar to Confidential Information.",
+   "gold": "Entailment",
+   "top5_label": "Entailment",
+   "top11_label": "Entailment",
+   "cls_regression": false,
+   "joint_regression": true,
+   "top5_evidence": [
+    "2. Exclusions from Confidential Information. Receiving Party's obligations under this Agreement do not extend to information that is: (a) publicly known at the time of\ndisclosure or subsequently becomes publicly known through no fault of the Receiving Party; (b) discovered or created by the Receiving Party before disclosure by Disclosing Party; (c) learned by the Receiving Party through legitimate means other than from the Disclosing Party or Disclosing Party's representatives; or (d) is disclosed by Receiving Party with Disclosing Party's prior written approval."
+   ],
+   "top11_evidence": [
+    "2. Exclusions from Confidential Information. Receiving Party's obligations under this Agreement do not extend to information that is: (a) publicly known at the time of disclosure or subsequently becomes publicly known through no fault of the Receiving Party; (b) discovered or created by the Receiving Party before disclosure by Disclosing Party; (c) learned by the Receiving Party through legitimate means other than from the Disclosing Party or Disclosing Party's representatives; or (d) is disclosed by Receiving Party with Disclosing Party's prior written approval."
+   ],
+   "top11_evidence_gold_overlap": false,
+   "n_added_chunks": 0,
+   "gold_span_in_added_chunks": false,
+   "added_chunks_ranks_6_to_11": []
+  },
+  {
+   "case_id": "train::273::nda-10",
+   "hypothesis": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+   "gold": "Entailment",
+   "top5_label": "Entailment",
+   "top11_label": "NotMentioned",
+   "cls_regression": true,
+   "joint_regression": false,
+   "top5_evidence": [
+    "4.1 Subject to paragraphs 4.2 and 4.3, neither party shall make any announcement relating to the Possible Transaction without the prior written consent of the other party.",
+    "2.1 You shall treat and keep all Confidential Information as confidential and shall not, without our prior written consent, directly or indirectly disclose Confidential Information to any other person other than as permitted by paragraph 3.1. You shall ensure that the Confidential Information is protected with the same security measures and degree of care that would apply to your own confidential information."
+   ],
+   "top11_evidence": [],
+   "top11_evidence_gold_overlap": false,
+   "n_added_chunks": 6,
+   "gold_span_in_added_chunks": false,
+   "added_chunks_ranks_6_to_11": [
+    "16.4 You acknowledge and agree that, in accordance with paragraph 13, each Third Party has the right under the 1999 Act to enforce paragraphs 16.2 and 16.3 against you and that the application of paragraphs 16.2 and 16.3 is not limited to Proceedings and Disputes between you and us but shall also apply to Proceedings and Disputes between you and any Third Party.\n17. COUNTERPARTS\nThis agreement may be executed in any number of counterparts, each of which is an original and all of which together evidence the same agreement. This agreement shall not come into effect until each party has executed at least one counterpart.\nPlease acknowledge your entry into this agreement by signing, dating and returning the enclosed copy of this agreement to us.\nYours faithfully\nfor and on behalf of\nJardine Lloyd Thompson Group plc\nAgreed and accepted by\nfor and on behalf of Marsh McLennan Companies, Inc\nDate: 442-. /3, 201$",
+    "14.1 Each party acknowledges and agrees that damages alone would not be an adequate remedy for a breach of this agreement or breach of confidence and that the other party shall be entitled to seek the remedies of injunction, specific performance and other equitable relief for any threatened or actual breach of this agreement or breach of confidence.\n14.2 The failure to exercise or delay in exercising a right or remedy provided by this agreement or by law does not impair or constitute a waiver of the right or remedy or an impairment of or a waiver of any other rights or remedies. No single or partial exercise of any right or remedy provided by this agreement or by law prevents further exercise of the right or remedy or the exercise of another right or remedy.\n14.3 A variation of this agreement or a waiver granted by a party or any member of its Group or its Representatives in respect of any action taken by the other party is valid only if it is in writing and signed by such party.",
+    "(i) Information that at the date of disclosure to you or your Representatives is publicly known or at any time after that date becomes publicly known or otherwise becomes available to you (otherwise than as a consequence of any breach of this agreement by you (or would constitute a breach by your Representatives, if they were a party) or which you know (or ought reasonably to have known having made reasonable enquiry) to have been disclosed in breach of any duty of confidentiality owed to us or any member of our Group);\n(ii) Information that was properly and lawfully in your or your Representatives' possession (and not subject to a confidentiality restriction) prior to the time that it was disclosed by us, any member of our Group or any of our Representatives; and\n(iii) Information independently derived by you, whether before, on or after the date of this letter, and which is not Derivative Information.\n\"Derivative Information\" means all Information created by you or your Representatives, or on your or their behalf, to the extent containing or reflecting or generated from the Confidential Information;\n\"Group\" means in relation to a party, such party's respective ultimate parent undertaking and such parent undertaking's subsidiary undertakings from time to time; \"Information\" means all information of any nature and in any form, including in writing or orally or in a visual or an electronic form or in a magnetic or digital form;\n\"JLT Group\" means the Company and each of its subsidiary undertakings from time to time;\n\"Permitted Finance Provider\" means (a) Goldman Sachs International in its capacity as a provider or prospective provider of debt finance to you or a member of your Group, and (b) any other provider or prospective provider of debt to whom we have given our prior consent in writing to you disclosing Confidential Information in accordance with paragraph 4.4, other than any such finance provider who has entered into a direct confidentiality undertaking with us in relation to the Possible Transaction on terms acceptable to us;\n\"Possible Transaction\" means the acquisition of the JLT Group by you or a member of your Group, whether by takeover offer or a scheme of arrangement, in each case pursuant to the Code;\n\"Representatives\" means the directors, officers, employees, agents and professional advisers of a party or any member of such party's Group from time to time and any Permitted Finance Providers;\n\"Restricted Person\" means any director, officer or employee of a Party or any member of their Group with whom the other Party or its Representatives comes into contact in connection with the Possible Transaction; and\n\u201cTarget Confidential Information\u201d means Information falling within paragraphs (a) to (c) of the definition of \u201cConfidential Information\u201d.",
+    "11.5 Nothing in this paragraph 10 shall have the effect of limiting or restricting any liability arising as a result of fraud.\n12. DURATION\nThis agreement shall continue for 18 months after the date of this agreement.\n13. THIRD PARTY RIGHTS\nThe provisions of this agreement confer benefits on the persons referred to in paragraph 1.4 (other than us) (each, a \"Third Party\") and each Third Party will have the right under the Contracts (Rights of Third Parties) Act 1999 (the \"1999 Act\") to enforce its respective rights under this agreement. The parties to this agreement do not require the consent of any Third Party to rescind or vary this agreement (other than paragraphs 10, 13 and 16) at any time. No other person who is not a party to this agreement has any right under the 1999 Act to enforce any term of this agreement but this does not affect any right or remedy of a third party which exists or is available apart from the 1999 Act.\n14. GENERAL",
+    "9.2 Each Party confirms that it is taking, or will take, appropriate legal and financial advice on the application of the Takeover Code to the Possible Transaction.\n9.3 Each Party confirms that it understands the requirements of Rule 2 of the Takeover Code (and Practice Statement 20) and, in particular, (i) the need for secrecy prior to announcement of any Possible Transaction; (ii) the obligation to minimise the chances of a leak; and (iii) the \u201cRule of 6\u201d as it is applied to the restriction on extending discussions beyond a very limited number of people.\n9.4 Nothing in this agreement shall oblige the Company to take any action or not take any action with the Takeover Panel determines would not be permitted by Rule 21.2 of the Code.\n10. STANDSTILL AGREEMENT\n10.1 For a period of 12 months starting on the date of this agreement, and unless terminated in accordance with paragraph 10.3 below, you shall not, and shall procure that none of your concert parties shall, either alone or acting in concert with other persons, directly or indirectly, without the prior written consent of the Company:",
+    "6.3.1 except as otherwise permitted by this Agreement and subject to paragraph 6.4, initiate or knowingly engage in discussions in connection with the Possible Transaction with any shareholder, employee (including the JLT directors nominated by Jardine Matheson Holdings Limited (or its subsidiary) but excluding any other director of a Party who is also an employee), customer or supplier of or lender to any member of the other party's Group; or\n6.3.2 solicit, engage or employ (whether paid or unpaid) any Restricted Person of the other Party. For the avoidance of doubt this restriction shall not prohibit either Party from engaging or employing any such Restricted Person who has responded to a bona fide recruitment advertisement not specifically targeted at such Restricted Person or from engaging or employing any Restricted Person whose employment has been terminated by the party by whom such Restricted Person was employed, provided that such employment and engagement commences following such termination."
+   ]
+  },
+  {
+   "case_id": "train::375::nda-15",
+   "hypothesis": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+   "gold": "Entailment",
+   "top5_label": "Entailment",
+   "top11_label": "Contradiction",
+   "cls_regression": true,
+   "joint_regression": true,
+   "top5_evidence": [
+    "Nothing in this Agreement is intended to grant any rights to either party under any patent, mask work right or copyright of Company, nor shall this Agreement grant Receiving Party any rights in or to Confidential Information except as expressly set forth herein."
+   ],
+   "top11_evidence": [
+    "Nothing in this Agreement is intended to grant any rights to either party under any patent, mask work right or copyright of Company, nor shall this Agreement grant Receiving Party any rights in or to Confidential Information except as expressly set forth herein.",
+    "The Receiving Party agrees not to use any Confidential Information for any purpose except to evaluate and engage in discus-sions concerning a potential business relationship between the parties hereto."
+   ],
+   "top11_evidence_gold_overlap": true,
+   "n_added_chunks": 1,
+   "gold_span_in_added_chunks": false,
+   "added_chunks_ranks_6_to_11": [
+    "Mutual Non-Disclosure Agreement\nTHIS NON-DISCLOSURE AGREEMENT (\u201cAgreement\u201d) is made and entered into as of between thoughtbot, inc. having its place of business at 41 Winter Street, 7th Floor, Boston, MA 02108 and , having its place of business at .\n1. Purpose\nThe above named entities wish to explore a business opportunity of mutual interest and in connection with this opportunity wishes to execute this Non Disclosure Agreement (\u201cAgreement\u201d)."
+   ]
+  },
+  {
+   "case_id": "train::86::nda-1",
+   "hypothesis": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+   "gold": "NotMentioned",
+   "top5_label": "NotMentioned",
+   "top11_label": "Contradiction",
+   "cls_regression": true,
+   "joint_regression": true,
+   "top5_evidence": [],
+   "top11_evidence": [
+    "\u201cConfidential Information\u201d means any Idea disclosed to Mentor, all data and information, know-how, business concepts, software, procedures, products, services, development projects, and programmes contained in such Idea and/or its description and any conclusions.",
+    "In case of doubt any information is deemed to be Confidential Information unless Mentor proves that such information is not confidential."
+   ],
+   "top11_evidence_gold_overlap": null,
+   "n_added_chunks": 6,
+   "gold_span_in_added_chunks": null,
+   "added_chunks_ranks_6_to_11": [
+    "7 Notice of Required Disclosure\nIf Mentor is required by mandatory, non-appealable judicial or administrative process and/or order to disclose Confidential Information, then Mentor shall promptly notify Organiser and allow Organiser and the Participants reasonable time to oppose such process unless this is not admissible under a mandatory law, judicial or administrative order. Notwithstanding the foregoing, Mentor shall disclose Confidential Information only to the minimum extent required to comply with such order.\n8 Proprietary Rights, Limited Right to Use\nAny and all proprietary rights, including but not limited to rights to and in inventions, patent rights, utility models, copyrights, trademarks and trade secrets, in and to any Confidential Information shall be and remain with the Participants respectively, and Mentor shall not have any right, license, title or interest in or to any Confidential Information, except the limited right to review, assess and help develop such Confidential Information in connection with the Copernicus Accelerator 2017.\n9 Term\nThis Agreement shall be effective as of 2 May 2017 and may not be terminated except for important cause.",
+    "NON-DISCLOSURE AGREEMENT AND TERMS OF PARTICIPATION\nTable of Content\n1 Eligibility ..........................................................................................................................................2\n2 Procedure and terms of participation ...............................................................................................3\n3 Payment ..........................................................................................................................................4\n4 Definition of confidential information ..............................................................................................4\n5 Non-disclosure of confidential information / obligations of Mentor .................................................4\n6 Discontinuation of use, return of materials ......................................................................................5\n7 Notice of required disclosure ...........................................................................................................5\n8 Proprietary rights, limited right to use ..............................................................................................6\n9 Term ................................................................................................................................................6\n10 Governing law ................................................................................................................................6\n11 Jurisdiction .....................................................................................................................................6\n12 Notification of unauthorised use ....................................................................................................6\n13 Remedies .......................................................................................................................................7\n14 Miscellaneous ................................................................................................................................7\nPreamble\nThe Organiser of the Copernicus Masters and the Copernicus Accelerator 2017 is Anwendungszentrum GmbH Oberpfaffenhofen (hereinafter \u201cOrganiser\u201d). The Earth monitoring competition Copernicus Masters aims to support the development of market-oriented applications based on Earth observation data. In 2017, the Copernicus Masters is again enriched by the Copernicus Accelerator, a European Commission programme.",
+    "The Organiser and the European Commission will use the Mentor\u00b4s contact information to inform him/her of all matters related to the Copernicus Accelerator 2017 and of any other issues the Organiser and the European Commission deem relevant and appropriate. The failure or delay on the part of either party to exercise any right under this agreement shall not be deemed a waiver of any rights under this agreement.",
+    "Through this initiative, the 50 best finalists of the Copernicus Masters, selected by an international expert panel will automatically be granted access to a business coaching scheme provided by high-level professionals, that will act as mentors. To actively participate in the Copernicus Accelerator programme, Mentor commits to the following Non-Disclosure-Agreement and Terms of Participation.\n1 Eligibility\nMentor is a resident of one of the Copernicus participating countries1 or is employed with a legal identity registered in the territory of one of the Copernicus participating countries, willing to support and help develop the Ideas of the finalists of the Copernicus Masters 2017 (hereinafter \u201cParticipants\u201d). Professionals who pursue becoming mentors need to apply via the dedicated platform, inserting all required details, which can be edited anytime by Mentor. Their request needs to be validated by the Organiser and the European Commission, who can refuse participation in case of non-eligibility or conflict of interest. After verification of all details entered, the Organiser will notify the Mentor about the outcome of his/her submission.\nEven after validation, the Organiser cannot guarantee that there will be an actual match between Mentor and Participants.",
+    "Mentor will actively support Participants until July 2018, and will then submit a final report together, detailing the outcome of the coaching experience. The Organiser will continuously monitor all relationships, in order to assist both parties and guarantee a positive outcome of the programme. Mentor needs to deliver all requested reports and schedule all requested meetings. The Organiser will provide Mentor with templates for the documents to be produced. Mentors and Participants will meet again at the closing bootcamp, held in October/November 2018, that will official seal the closing of their mentoring relationship.\nAt the end of the coaching service, Mentor will fill in a questionnaire on the coaching service and the overall experience and will also be subject to a specific questionnaire compiled by Participants.\n3 Payment\nThe Organiser will reimburse Mentor the travel arrangements and accommodation for the Acceleration Bootcamp in Tallinn in 2017 (a maximum of EUR 800) and the closing bootcamp in 2018 (a maximum of EUR 700).",
+    "Mentors will meet the Participants at the Accelerator Bootcamp, that will take place in line with the Awards Ceremony of the Copernicus Masters, the European Satellite Navigation Competition (ESNC), and the accompanying Satellite Masters Conference from 6 - 8 November 2017 in Tallinn, Estonia. Mentor\u00b4s participation to this event is mandatory, as it will set forth the official start of their relationship: Mentor and Participants will begin developing a coaching plan together, that will include objectives and KPIs of their affiliation.\nMonthly virtual interactions need to be planned by Mentor, to ensure a continuous acceleration of the Participants Ideas\u00b4 towards business maturity. A mid-term review and survey will be required by April 2018, to evaluate progress made and ensure that the recommendations of the coaching plan are currently implemented by Participants. In case of a non-positive matching or non-compliance to his/her assigned duties (having monthly interactions with the mentees, keeping contacts with the Copernicus Accelerator team, promptly informing the organizers about any relevant issue connected to the coaching relationship), Mentor may be replaced by a more suitable candidate for the Participants\u00b4 needs."
+   ]
+  },
+  {
+   "case_id": "train::297::nda-1",
+   "hypothesis": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+   "gold": "NotMentioned",
+   "top5_label": "NotMentioned",
+   "top11_label": "Contradiction",
+   "cls_regression": true,
+   "joint_regression": true,
+   "top5_evidence": [],
+   "top11_evidence": [
+    "1. Confidential Information \u2013 The term \u201cConfidential Information\u201d means: (a) any and all information of whatever nature (including information in the form not only of written information but also information which may be transmitted orally, visually, graphically, electronically, or by any other means) relating to the Company, the Business, the Property, or the Transaction including, without limitation, information concerning any past, present, or future customers, suppliers or our technology, and any correspondence, internal business discussions, strategic plans, budgets, financial statements, records, reports, evaluations, notes, analyses, documents, engineering, trade secrets, know-how, data, patents, copyrights, processes, business rules, tools, business processes, techniques, programs, designs, formulae, marketing, advertising, financial, commercial, sales or programming materials, equipment configurations, system access codes and passwords, written materials, compositions, drawings, diagrams, computer programs, studies, works in progress, visual demonstrations, ideas, concepts, or any other documents or information pertaining in any way whatsoever to the Company; (b) all information about an identifiable individual or other information that is subject to any federal, provincial, or other applicable statute, law, or regulation of any governmental or regulatory authority in Canada relating to the collection, use, storage, and/or disclosure of information about an identifiable individual, including the Personal Information and Protection of Electronic Documents Act (Canada) and equivalent provincial legislation, whether or not any such information is confidential (\u201cPersonal Information\u201d); and (c) all summaries, notes, analyses, compilations, data, studies, or other documents or records prepared by the Potential Bidder or its Representatives that contain or otherwise reflect or have been generated, wholly or partly, or derived from, any such information (\u201cDerivative Information\u201d).",
+    "In addition, you agree that the Company may, in its sole discretion, withhold or provide information requested by you."
+   ],
+   "top11_evidence_gold_overlap": null,
+   "n_added_chunks": 6,
+   "gold_span_in_added_chunks": null,
+   "added_chunks_ranks_6_to_11": [
+    "7. Proprietary Rights \u2013 You acknowledge that the Confidential Information is a proprietary asset of the Company and its affiliates and agree that, as between you and the Company, the Company will retain proprietary rights in the Confidential Information and the disclosure of such Confidential Information shall not be deemed to confer upon you any rights whatsoever in respect of any Confidential Information.\n8. Return of Confidential Information \u2013 If you determine not to pursue a Transaction, you will advise us of that fact forthwith upon such determination being made. At the time of such notice, or if, at any earlier time, we so direct (whether or not you determine to pursue a Transaction), you and your Representatives will, at your own expense, promptly return or destroy all copies of the Confidential Information upon our request (and, in any event, within five (5) business days after such request), except for that portion of the Confidential Information which consists of Derivative Information, which will be destroyed, and in the case of information stored in electronic form, it will be permanently erased. If requested by us, compliance with this Section 8 shall be certified in writing by an authorized officer of the Potential Bidder.",
+    "The Potential Bidder will take all necessary precautions or measures as may be reasonable in the circumstances to prevent improper access to the Confidential Information or use or disclosure of the Confidential Information by the Potential Bidder\u2019s Representatives and will be responsible and liable for any breach of this NDA by any of the Potential Bidder\u2019s Representatives. You will, in the event of a breach of this NDA or any disclosure of Confidential Information by you or any of your Representatives, other than as permitted by this NDA through accident, inadvertence, or otherwise, notify us of the nature of the breach promptly upon your discovery of the breach or disclosure.\nYou acknowledge that certain of our books, records, or information representing or containing Confidential Information to which you may be given access are books, records, and information to which solicitor-client privilege and/or litigation privilege (\u201cPrivilege\u201d) attaches. You recognize and acknowledge that we have a material interest in the preservation of Privilege in respect of all Privileged material (collectively, the \u201cPrivileged Material\u201d).",
+    "In that regard, you have requested that Confidential Information (as defined herein) be furnished to you. As a condition to us furnishing Confidential Information to you, and in consideration of the foregoing and for other good and valuable consideration, the receipt and sufficiency of which is hereby acknowledged, you agree on behalf of yourself, your affiliates, and Representatives (as defined herein and to the extent such affiliates and Representatives are in receipt of all or any part of the Confidential Information) as follows:",
+    "1. Confidential Information \u2013 The term \u201cConfidential Information\u201d means: (a) any and all information of whatever nature (including information in the form not only of written information but also information which may be transmitted orally, visually, graphically, electronically, or by any other means) relating to the Company, the Business, the Property, or the Transaction including, without limitation, information concerning any past, present, or future customers, suppliers or our technology, and any correspondence, internal business discussions, strategic plans, budgets, financial statements, records, reports, evaluations, notes, analyses, documents, engineering, trade secrets, know-how, data, patents, copyrights, processes, business rules, tools, business processes, techniques, programs, designs, formulae, marketing, advertising, financial, commercial, sales or programming materials, equipment configurations, system access codes and passwords, written materials, compositions, drawings, diagrams, computer programs, studies, works in progress, visual demonstrations, ideas, concepts, or any other documents or information pertaining in any way whatsoever to the Company; (b) all information about an identifiable individual or other information that is subject to any federal, provincial, or other applicable statute, law, or regulation of any governmental or regulatory authority in Canada relating to the collection, use, storage, and/or disclosure of information about an identifiable individual, including the Personal Information and Protection of Electronic Documents Act (Canada) and equivalent provincial legislation, whether or not any such information is confidential (\u201cPersonal Information\u201d); and (c) all summaries, notes, analyses, compilations, data, studies, or other documents or records prepared by the Potential Bidder or its Representatives that contain or otherwise reflect or have been generated, wholly or partly, or derived from, any such information (\u201cDerivative Information\u201d).",
+    "10. Definitive Agreement \u2013 You acknowledge and agree that no agreement relating to or providing for the Transaction shall exist unless and until a Definitive Agreement with respect to Transaction has been executed by you and us (or any of our affiliates). It is agreed that unless and until such a Definitive Agreement has been executed and delivered pursuant to the terms of the SISP, neither we nor you shall have any legal obligation of any kind whatsoever with respect to the completion of the Transaction by virtue of this NDA except as otherwise contemplated by the SISP. We and you further understand and agree that: (a) we are under no obligation to provide Confidential Information and any data room containing Confidential Information may be closed by us at any time; and (b) you shall not have any claim whatsoever against us (nor any of our affiliates or Representatives) arising out of or relating to the completion of the Transaction (other than as expressly set forth in a subsequent Definitive Agreement entered into by us and you in connection with the Transaction and pursuant to the terms of the SISP). The process leading up to a Transaction shall be governed by the applicable terms of the SISP.",
+    "5. No Disclosure of Transaction \u2013 The Potential Bidder and its Representatives will not, without our prior written consent, disclose to any person the fact that the Confidential Information has been made available, that this NDA has been entered into, that discussions or negotiations are taking place or have taken place concerning a possible Transaction, or any of the terms, conditions, or other facts with respect to any such possible Transaction or the SISP.\n6. Contact Persons \u2013 In respect of Confidential Information requests or any other matters concerning the Confidential Information or the Transaction, you agree to communicate only with Deryck Helkaa and/or Dustin Olver, or with such other individual or individuals as they may authorize in writing. Without our prior written consent, neither you nor any of your Representatives will initiate or cause to be initiated or maintain any communication with any officer, director, agent, or employee of ours, or any affiliate, creditor, shareholder, customer, supplier, or lender of ours concerning our business, operations, prospects, or finances, or the Confidential Information or the Transaction."
+   ]
+  }
+ ],
+ "mcnemar_classification": {
+  "top5_only": 5,
+  "top11_only": 8,
+  "n_discordant": 13,
+  "p": 0.5810546875
+ },
+ "mcnemar_joint": {
+  "top5_only": 7,
+  "top11_only": 13,
+  "n_discordant": 20,
+  "p": 0.26317596435546875
+ },
+ "bootstrap": {
+  "accuracy": {
+   "point": 0.020000000000000018,
+   "ci95": [
+    -0.026666666666666727,
+    0.06666666666666665
+   ]
+  },
+  "macro_f1": {
+   "point": 0.020916664887978165,
+   "ci95": [
+    -0.026489332588586434,
+    0.06950192353800544
+   ]
+  },
+  "contradiction_recall": {
+   "point": 0.0,
+   "ci95": [
+    -0.05882352941176472,
+    0.05769230769230771
+   ]
+  },
+  "joint": {
+   "point": 0.040000000000000036,
+   "ci95": [
+    -0.019999999999999907,
+    0.09999999999999998
+   ]
+  }
+ },
+ "cost_projection": {
+  "top5_per_1000": 1.7046183333333333,
+  "top11_per_1000": 1.9915100000000001,
+  "top5_per_8000": 13.636946666666667,
+  "top11_per_8000": 15.932080000000001,
+  "increase_pct": 16.83025819073869
+ },
+ "input_token_increase": {
+  "abs": 733.0066666666667,
+  "pct": 63.80517980768674,
+  "forecast_mean": 1884.6
+ },
+ "latency_change": {
+  "abs_ms": 790.974064477874,
+  "pct": 10.672351240534827
+ },
+ "run": {
+  "total_wall_seconds": 1230.7540405000327,
+  "n_cases": 150,
+  "run_id": "e12a_190f715d",
+  "run_spend_usd": 0.2987265000000002,
+  "pre_run_ledger_spend_usd": 0.4090479499999999,
+  "post_run_ledger_spend_usd": 0.7077744499999996
+ }
+}
