@@ -1,0 +1,159 @@
+experiment_id: E08_rag_failure_analysis
+status: COMPLETE  # full manual-review diagnostic complete -- no LLM call anywhere, see
+                  # summary.md's "Full Analysis Results" section and E08 conclusion: B
+dataset_manifest: TRAIN_ARCH_v1  # identical to E05/E07 -- no new manifest
+split_role: development   # Role A, TRAIN only
+purpose: rag_failure_diagnostic_for_agent_justification
+
+inputs_used:  # E07 outputs only -- no model reruns
+  - experiments/E07_standard_rag/results/run_E07_A2_train_cases.jsonl
+  - experiments/E07_standard_rag/results/run_E07_A2_train.json
+  - experiments/E07_standard_rag/results/rag_failure_analysis.csv
+  - experiments/E07_standard_rag/results/e05_vs_e07_paired_comparison.json
+  - experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1.json
+  - experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1_GOLD.json
+  - experiments/E05_full_context/results/run_E05_A1_train_cases.jsonl
+  - data/contractnli/train.json  # doc.spans only, for gold-span character offsets
+
+verified_error_counts:  # recomputed directly from E07's saved outputs, not re-run
+  total_cases: 150
+  total_correct: 65
+  total_errors: 85
+  entailment_errors: 33
+  contradiction_errors: 29
+  notmentioned_errors: 23
+  wrong_label_valid_evidence_count: 54  # gold in {Entailment, Contradiction}, evidence_valid=True, label wrong
+  retrieval_limited_count: 6
+
+pilot_refinement_evidence_overlap_vs_verbatim:  # zero-cost, computed this pass, NOT in E07's original analysis
+  finding: >
+    Of the 54 "wrong-label-but-valid-evidence" cases (E07's headline number, where
+    evidence_valid means the quote is verbatim from the shown context and label-consistent),
+    only 4 actually overlap the TRUE gold-annotated span. The other 50 (92.6%) quote a real,
+    non-hallucinated excerpt that is simply NOT the gold-relevant one. This is a materially
+    different failure mode than "correct evidence in hand, still wrong" -- it is closer to
+    evidence SELECTION among multiple retrieved candidates than pure single-step reasoning.
+  wrong_valid_with_gold_overlap: 4
+  wrong_valid_without_gold_overlap: 50
+  breakdown_without_overlap_by_gold_label: {Contradiction: 28, Entailment: 22}
+  implication: >
+    E07's "79 reasoning-limited" bucket (defined as "gold evidence somewhere in the top-5
+    context, label wrong") conflates two different things: (a) the model's OWN returned
+    evidence actually points at the gold span and it still reasons wrong (a hard,
+    likely-not-agent-fixable reasoning failure), and (b) the model's returned evidence points at
+    a DIFFERENT retrieved chunk than the gold one (a selection-among-candidates failure, more
+    plausibly addressable by a follow-up/verification action). E08 must re-decompose this
+    bucket rather than treat "79 reasoning-limited" as a single homogeneous group.
+
+pilot_oracle_action_retrieval_limited:  # zero-cost, computed this pass -- local BM25 re-query, no LLM
+  method: >
+    For all 6 retrieval-limited cases, queried the SAME frozen retrieval_v1 BM25 index (already
+    cached, retrieval_v1 not modified) at top_k=50 instead of the frozen top-5/candidate-pool-20,
+    purely to check whether gold evidence exists at all in the lexical index and at what rank.
+  finding: >
+    ALL 6 retrieval-limited cases have gold evidence within BM25's own top-50 candidates, and in
+    fact within the top-9 for every case (ranks: 6, 2, 6, 9, 3, 1) -- well inside the existing
+    candidate_pool_size=20 that feeds the reranker. This means retrieval_v1's LEXICAL stage
+    (BM25) did NOT fail to find the evidence in any of these 6 cases -- the cross-encoder
+    reranker demoted a correct candidate below the top-5 cutoff in every single one.
+    "Retrieval-limited" is therefore, for this specific set, better described as
+    "reranker-limited" or "top-k-cutoff-limited," not "lexical-index-coverage-limited" -- a
+    genuinely different, more specific diagnosis than the coarse E07 category name suggests.
+  cases:
+    - {case_id: "train::438::nda-2", gold_label: Contradiction, bm25_top50_rank: 6}
+    - {case_id: "train::160::nda-10", gold_label: Entailment, bm25_top50_rank: 2}
+    - {case_id: "train::247::nda-10", gold_label: Entailment, bm25_top50_rank: 6}
+    - {case_id: "train::353::nda-10", gold_label: Entailment, bm25_top50_rank: 9}
+    - {case_id: "train::379::nda-10", gold_label: Entailment, bm25_top50_rank: 3}
+    - {case_id: "train::518::nda-10", gold_label: Entailment, bm25_top50_rank: 1}
+  oracle_action_implication: >
+    All 6 are "recoverable_in_principle" via a plausible agentic action (expand/re-query with a
+    larger effective k, or a targeted follow-up search) -- NOT via re-tuning retrieval_v1 itself
+    (which stays frozen/unmodified per the brief). This is exactly the kind of diagnostic oracle-
+    action label section 11 asks for, computed here for the full retrieval-limited set already.
+
+proposed_manual_review_sample:
+  selection_rule: deterministic, seed=1000 (random.Random(1000).sample on sorted case_id lists)
+  categories:
+    - {name: retrieval_limited, rule: ALL, n: 6, status: pilot analysis already complete this pass}
+    - {name: contradiction_failures, rule: ALL (practical at n=29, headline risk class), n: 29}
+    - {name: wrong_valid_entailment_not_in_contradiction_set, rule: "deterministic sample, seed=1000", n: 15, pool_size: 25}
+    - {name: e05_gain_not_already_covered, rule: "deterministic sample, seed=1000", n: 10, pool_size: 24}
+    - {name: e05_regression_not_already_covered, rule: "deterministic sample, seed=1000", n: 10, pool_size: 12}
+  total_unique_cases_after_dedup: 66  # 44% of the full 150-case set
+  note: >
+    "ALL Contradiction failures" already subsumes most Contradiction-labeled wrong-valid cases,
+    so the incremental wrong-valid sample only needs to cover the Entailment-labeled subset not
+    already in the Contradiction set (25 candidates, sample n=15). Rare/uncertain categories
+    (ambiguous/mixed) will be added to the manual-review set as they're identified during Stage B
+    review itself, per the brief's "all rare/uncertain failure categories" instruction -- cannot
+    be enumerated before the taxonomy is actually applied case-by-case.
+
+model_calls: NONE -- E08 is diagnostic-only, zero LLM calls anywhere, retrieval_v1/
+  classification_prompt_v1 read but never modified or re-invoked
+api_calls: NONE
+hosted_calls: NONE
+
+final_manual_review_union:
+  total_unique_cases: 73  # 48.7% of the full 150-case set -- expanded from Stage A's proposed
+                           # 66-case sample per the approved instruction to review ALL 54
+                           # wrong-label+source-valid-evidence cases, not a sample
+  reviewed_error_count: 63
+  composition: {reranker_limited_all: 6, contradiction_failures_all: 29,
+                wrong_label_source_valid_all: 54, e05_gain_sample: 10, e05_regress_sample: 8,
+                mandatory_dedup_subtotal: 55}
+
+wrong_label_source_valid_refinement:  # the central Stage B finding
+  total: 54
+  group_a_gold_overlap: 4   # model's own evidence IS the gold span, label still wrong
+  group_b_no_gold_overlap: 50  # model quoted a real, verbatim, but WRONG chunk
+  group_b_by_gold_label: {Contradiction: 28, Entailment: 22}
+
+reranker_limited_diagnostic:  # renamed from "retrieval-limited" -- gold WAS in BM25 top-20 every time
+  n: 6
+  all_cases_gold_within_bm25_top20: true
+  all_cases_gold_within_reranked_top11: true
+  classification: STATIC_PIPELINE_FIXABLE for all 6 -- not agentic
+  candidate_intervention_not_implemented: "raise final top_k from 5 to ~11-12 -- recorded as a candidate, retrieval_v1 NOT changed"
+
+quantification:
+  overall: {static_pipeline_fixable_pct: 9.5, agentically_fixable_pct: 41.3, model_reasoning_limited_pct: 49.2, evidence_output_ambiguous_other_pct: 0.0}
+  contradiction: {static_pipeline_fixable_pct: 3.4, agentically_fixable_pct: 31.0, model_reasoning_limited_pct: 65.5, evidence_output_ambiguous_other_pct: 0.0}
+  notmentioned_confusion_empty_evidence_count: 42  # of 63 reviewed errors -- model returns empty evidence, defaults to NotMentioned
+
+runtime_observable_signal_caveat: >
+  exception_carveout_cue (whole-context, i.e. the realistically-implementable version) appears
+  in 62/63 reviewed errors -- far too frequent to serve as a standalone escalation trigger
+  without additional conditioning. This gap between evaluator-confirmed relevance (checked on
+  the gold chunk specifically) and a real runtime-observable trigger (checked on any of the 5
+  candidate chunks, since the real system doesn't know which is gold) is itself a finding for
+  E09, not resolved here.
+
+e08_conclusion: B  # NARROW SELECTIVE AGENT POTENTIALLY JUSTIFIED -- not A (41.3% agentic bucket
+                    # too large to dismiss), not C (49.2%/65.5% model-reasoning-limited bucket,
+                    # the largest single bucket, has no identified fix an agent provides; the
+                    # runtime-observable trigger candidate is too undiscriminating for broad use)
+
+downstream_decision: >
+  A3 implementation is DEFERRED. E08's conclusion (B) is evidence an agent might earn its
+  complexity, not authorization to build one. The next required diagnostic is a matched
+  stronger-model (GPT-5 mini) comparison on frozen A2 to determine whether the large
+  MODEL_REASONING_LIMITED bucket (49.2% overall, 65.5% Contradiction -- the single largest
+  bucket) can be reduced without agentic complexity. Only after that result should E09 make the
+  final agent-justification decision. Neither E09 nor A3 has been started.
+
+recommended_next_diagnostic: >
+  Matched stronger-model (GPT-5 mini) diagnostic on the frozen A2 setup, BEFORE committing to
+  substantial A3 implementation -- to determine whether MODEL_REASONING_LIMITED failures
+  resolve with a stronger model alone. NOT executed in E08; requires separate authorization.
+
+model_calls: NONE -- zero LLM calls anywhere in E08 (Stage A or Stage B). The reranker-limited
+  diagnostic used only the already-cached, local, non-LLM retrieval_v1 index (BM25) and the
+  local, non-LLM cross-encoder reranker (cross-encoder/ms-marco-MiniLM-L-12-v2) -- the same two
+  models already used throughout E06/E07 for identical deterministic diagnostic purposes.
+  retrieval_v1 and classification_prompt_v1 were never modified or re-invoked for classification.
+
+outputs:
+  - results/rag_failure_analysis.csv (73 rows, full diagnostic record)
+  - results/agent_opportunity_quantification.json (all quantification/diagnostic numbers)
+  - E08_rag_failure_analysis.ipynb (executed, zero errors)
