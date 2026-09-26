@@ -1,5 +1,5 @@
 experiment_id: E11_selective_agent_evaluation
-status: NOT_STARTED  # frozen configuration only, prepared alongside E10 -- no run has occurred
+status: COMPLETE  # 15 real openai/gpt-5-mini calls executed; see results/ and summary.md
 dataset_manifest: TRAIN_ARCH_v1  # identical 150 cases as E05/E07/E08/E08B/E09/E10
 purpose: empirical_bounded_agent_evaluation_vs_frozen_A2
 

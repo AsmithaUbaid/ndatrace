@@ -5,9 +5,8 @@ Question: Does the bounded selective agent (A3) designed and offline-verified in
 Hypothesis: not pre-assumed. E09 concluded A3 is not justified as the likely final architecture;
     E11 exists to empirically test that no-go conclusion against E10's real, bounded prototype,
     not to force an agent win.
-Status: NOT STARTED. This file and config.yaml exist only so E10's design has a concrete,
-    reviewable landing point -- no benchmark result, no hosted/local model call, no agent run has
-    occurred under this experiment ID.
+Status: COMPLETE. 15 real openai/gpt-5-mini calls executed through the frozen E10 agent path;
+    135 non-triggered cases reused E08B's frozen A2 output directly (zero new hosted calls).
 Input dataset/split: TRAIN_ARCH_v1, the same 150 cases used by E05/E07/E08/E08B/E09/E10. No DEV,
     no TEST.
 Frozen dependencies (from E10, NOT to be re-tuned here): the cross_reference_to_named_provision_cue
@@ -34,8 +33,10 @@ Stop condition: this experiment does not begin until separately authorized. When
     follow E10's frozen configuration exactly (config.yaml) and report course-comparison outcome
     A/B/C (does A3 empirically earn reconsideration, show limited benefit, or confirm E09's no-go)
     without forcing an agent win.
-Result: NOT STARTED.
-Decision: NOT STARTED.
+Result: A3 accuracy 79.33% vs A2's 78.67% (+0.67pp); joint success unchanged at 74.0% (1 recovery,
+    1 regression -- net zero); zero tool calls made across all 15 triggered cases, including both
+    predeclared special cases. McNemar not significant on either metric.
+Decision: C -- A3 CONFIRMS E09 NO-GO for this tested configuration. See summary.md for full detail.
 ```
 
 ## Relationship to E09/E10

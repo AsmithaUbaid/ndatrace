@@ -1,0 +1,88 @@
+{
+  "n_cases": 150,
+  "classification": {
+    "accuracy": 0.7933333333333333,
+    "macro_f1": 0.7935946887346003,
+    "per_class_recall": {
+      "Entailment": 0.82,
+      "Contradiction": 0.76,
+      "NotMentioned": 0.8
+    },
+    "contradiction_recall": 0.76,
+    "contradiction_recall_ci95": [
+      0.6258705062480764,
+      0.8570274759812778
+    ],
+    "contradiction_n": 50,
+    "confusion_matrix": {
+      "labels": [
+        "Entailment",
+        "Contradiction",
+        "NotMentioned"
+      ],
+      "matrix": [
+        [
+          41,
+          3,
+          6
+        ],
+        [
+          10,
+          38,
+          2
+        ],
+        [
+          4,
+          6,
+          40
+        ]
+      ]
+    }
+  },
+  "evidence": {
+    "evidence_bearing_n": 100,
+    "evidence_recall": 0.84,
+    "evidence_precision": 0.8235294117647058
+  },
+  "joint": {
+    "overall": 0.74,
+    "by_class": {
+      "Entailment": 0.74,
+      "Contradiction": 0.68,
+      "NotMentioned": 0.8
+    }
+  },
+  "agent_behavior": {
+    "n_triggered": 15,
+    "escalation_rate": 0.1,
+    "mean_steps": 1,
+    "median_steps": 1,
+    "mean_model_calls": 1,
+    "mean_tool_calls": 0,
+    "tool_usage_counts": {
+      "FOLLOW_CROSS_REFERENCE": 0,
+      "GET_MORE_CANDIDATES": 0
+    },
+    "cases_no_tool_before_final": 15,
+    "fallback_count": 0,
+    "fallback_rate": 0.0,
+    "stop_reason_distribution": {
+      "final": 15
+    }
+  },
+  "incremental_cost_usd": {
+    "total": 0.02180875,
+    "per_escalated_case": 0.0014539166666666665,
+    "per_agent_call": 0.0014539166666666665
+  },
+  "incremental_tokens": {
+    "total_input": 22619,
+    "total_output": 8077
+  },
+  "incremental_latency_s": {
+    "mean": 6.074642247116814,
+    "median": 5.620381542015821,
+    "p90": 9.70008962508291,
+    "max": 9.780524958041497
+  }
+}
