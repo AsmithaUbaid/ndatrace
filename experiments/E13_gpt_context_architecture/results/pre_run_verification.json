@@ -1,0 +1,27 @@
+{
+  "checks": {
+    "manifest_DEV_ARCH_v1_seed1400_150_51docs": true,
+    "full_artifact_same_ids_order": true,
+    "rag_artifact_same_ids_order": true,
+    "same_hypothesis_text_both_arms": true,
+    "full_context_is_complete_dev_document": true,
+    "rag_top5_only": true,
+    "no_evaluator_truth_in_model_facing": true,
+    "system_prompt_full_hash_is_gpt_p0": true,
+    "ledger_approx_2_2317": true,
+    "no_existing_e13_ledger_rows": true,
+    "prior_ledger_rows_e12b_600_e12c_300": true,
+    "no_existing_e13_outputs": true,
+    "budget_gate_pass": true
+  },
+  "pre_run_ledger_usd": 2.2317324500000013,
+  "gate_reason": "OK: projected total $3.1368 <= allowed $3.7500 (planning budget $5.00 - reserve $1.25)",
+  "gate_arithmetic": 4.386832450000002,
+  "max_concurrency": 5,
+  "timeout_seconds": 60,
+  "arm_order": [
+    "full",
+    "rag"
+  ],
+  "timestamp": "2026-09-26T18:10:08.307426+00:00"
+}

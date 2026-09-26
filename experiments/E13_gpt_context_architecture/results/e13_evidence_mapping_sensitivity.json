@@ -1,0 +1,43 @@
+{
+ "note": "POST-HOC sensitivity, not the frozen result. Same tolerant mapping applied to both arms.",
+ "full": {
+  "joint_strict": 116,
+  "joint_tolerant": 121,
+  "rescued_by_tolerant_mapping": [
+   "dev::69::nda-2",
+   "dev::563::nda-2",
+   "dev::13::nda-12",
+   "dev::15::nda-12",
+   "dev::610::nda-12"
+  ],
+  "quotes_unmappable_strict": 4,
+  "quotes_unmappable_tolerant": 0,
+  "evidence_recall_tolerant": 0.94,
+  "evidence_precision_tolerant": 0.8952380952380953
+ },
+ "rag": {
+  "joint_strict": 113,
+  "joint_tolerant": 114,
+  "rescued_by_tolerant_mapping": [
+   "dev::435::nda-2"
+  ],
+  "quotes_unmappable_strict": 0,
+  "quotes_unmappable_tolerant": 0,
+  "evidence_recall_tolerant": 0.84,
+  "evidence_precision_tolerant": 0.8155339805825242
+ },
+ "net_joint_tolerant": -7,
+ "guards_tolerant": {
+  "contradiction_delta": -2,
+  "macro_f1_delta": -0.01959617867106389,
+  "evidence_recall_delta": -0.09999999999999998,
+  "evidence_precision_delta": -0.07970411465557103,
+  "fails": {
+   "1": false,
+   "2": false,
+   "3": true,
+   "4": true
+  }
+ },
+ "outcome_letter_if_this_mapping_had_been_frozen": "B"
+}

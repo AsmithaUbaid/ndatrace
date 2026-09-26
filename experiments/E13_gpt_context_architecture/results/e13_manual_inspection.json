@@ -1,0 +1,75 @@
+{
+ "note": "Manual inspection of every discordant case from the saved traces (labels, quoted evidence, mapped spans, whether gold spans lay inside the RAG top-5). Classifications are trace-supported judgements, not causal proofs.",
+ "context_loss_FULL_success_to_RAG_failure_18": {
+  "retrieval_filtering_omission (gold spans not in RAG top-5)": [
+   "dev::37::nda-2 (C: label kept, evidence from wrong clauses)",
+   "dev::440::nda-1 (C: RAG NotMentioned, no evidence)",
+   "dev::478::nda-1 (C: 'Notwithstanding' carve-out clause missed -> Entailment)",
+   "dev::563::nda-1 (C: RAG NotMentioned)",
+   "dev::590::nda-2 (C: label kept, definition span missed)",
+   "dev::37::nda-19 (E: label kept, gold survival clause missed)",
+   "dev::73::nda-13 (E: RAG NotMentioned; longest NDA, 6.2K tokens)"
+  ],
+  "evidence_selection_issue (gold in RAG context, partial/alternative evidence)": [
+   "dev::435::nda-2 (C: only 1 of 4 gold spans quoted)",
+   "dev::37::nda-12 (E: 1 of 3 gold spans)",
+   "dev::56::nda-13 (E: cited a different valid exclusion clause)"
+  ],
+  "context_isolation_over_inference_on_absent_topics (gold NotMentioned; RAG saw only related chunks and inferred a label)": [
+   "dev::13::nda-11",
+   "dev::547::nda-15",
+   "dev::563::nda-11",
+   "dev::598::nda-16"
+  ],
+  "model_variability_or_unclear (gold in context, label lost anyway)": [
+   "dev::56::nda-20",
+   "dev::547::nda-16",
+   "dev::7::nda-1 (long 5.9K-token NDA; RAG cited other clauses)",
+   "dev::547::nda-10 (clause refers to 'previous paragraph'; possible isolation)"
+  ]
+ },
+ "distractor_FULL_failure_to_RAG_success_14": {
+  "evaluation_mapping_artifact (correct label; FULL quote merged lines/ellipsis so exact-substring span mapping failed; rescued by tolerant mapping)": [
+   "dev::69::nda-2",
+   "dev::563::nda-2",
+   "dev::13::nda-12",
+   "dev::15::nda-12",
+   "dev::610::nda-12 (also partial-evidence drift)"
+  ],
+  "plausible_full_context_over_inference (gold NotMentioned; FULL cited related clauses -> Entailment/Contradiction; RAG returned NotMentioned)": [
+   "dev::64::nda-10 (5.7K-token NDA)",
+   "dev::507::nda-1",
+   "dev::563::nda-16 (conditional return/destroy clause)",
+   "dev::595::nda-1 (definition-clause distraction, 4.3K tokens)"
+  ],
+  "carve_out_surfaced_by_retrieval": [
+   "dev::610::nda-4 (FULL Entailment missed the 'Residuals' exception; RAG's top-5 surfaced it -> Contradiction)"
+  ],
+  "model_variability_or_unclear": [
+   "dev::44::nda-7 (identical evidence spans, different label)",
+   "dev::456::nda-15 (442-token NDA; RAG context ~ whole document)",
+   "dev::152::nda-1 (label recovered, evidence still wrong)",
+   "dev::75::nda-20 (FULL cited an extra retention clause)"
+  ]
+ },
+ "contradiction_discordant_13": {
+  "RAG_worse_8": [
+   "37::nda-2 evidence loss (omission)",
+   "56::nda-20 label lost (unclear, gold in context)",
+   "435::nda-2 partial evidence",
+   "440::nda-1 label lost (omission)",
+   "478::nda-1 label lost (carve-out omission)",
+   "547::nda-16 label lost (variability)",
+   "563::nda-1 label lost (omission)",
+   "590::nda-2 evidence loss (omission)"
+  ],
+  "RAG_better_5": [
+   "44::nda-7 (variability)",
+   "69::nda-2 (mapping artifact)",
+   "75::nda-20 (possible FULL distractor/variability)",
+   "563::nda-2 (mapping artifact)",
+   "610::nda-4 (carve-out surfaced by retrieval)"
+  ],
+  "net": "Contradiction correct FULL 42 vs RAG 40 (RAG lost 5, gained 3); Contradiction joint 37 vs 36"
+ }
+}

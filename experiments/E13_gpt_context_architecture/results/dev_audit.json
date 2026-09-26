@@ -1,0 +1,134 @@
+{
+  "audit": {
+    "dev_docs": 61,
+    "dev_cases": 1037,
+    "dev_label_counts": {
+      "Entailment": 519,
+      "Contradiction": 95,
+      "NotMentioned": 423
+    },
+    "reconstruction_v2_E00_E12C_dev_usage": "none (E04 rule baseline, E06 retrieval, E07-E12C all ran on TRAIN; E07/E04 text mentioning DEV describes historical T-series prior art)",
+    "historical_150_case_seed42_sample": {
+      "cases": 150,
+      "docs": 58,
+      "labels": {
+        "Entailment": 75,
+        "NotMentioned": 61,
+        "Contradiction": 14
+      }
+    },
+    "historical_golden_battery_cases": {
+      "unique_cases": 55,
+      "docs": 24,
+      "by_file": {
+        "agent_cases.json": 7,
+        "confidence_cases.json": 2,
+        "evidence_quality_cases.json": 4,
+        "golden_cases.json": 30,
+        "llm_behaviour_cases.json": 5,
+        "negative_cases.json": 15
+      },
+      "labels": {
+        "Entailment": 21,
+        "Contradiction": 16,
+        "NotMentioned": 18
+      }
+    },
+    "historical_full_dev_use": "full 1,037-case rule baseline (B02) and 614 E/C-case retrieval experiments (T020-T023) touched every DEV document; deterministic/free but shaped the OLD retrieval config",
+    "docs_touched_by_sample_or_golden": 58,
+    "docs_untouched_by_sample_or_golden": 3,
+    "doc_level_disjoint_pool_labels": {
+      "NotMentioned": 29,
+      "Entailment": 17,
+      "Contradiction": 5
+    },
+    "case_level_disjoint_pool_labels": {
+      "Entailment": 427,
+      "NotMentioned": 351,
+      "Contradiction": 68
+    },
+    "doc_level_disjointness_feasible": false,
+    "case_level_disjoint_balanced_150_feasible": true
+  },
+  "manifest_summary": {
+    "manifest_id": "DEV_ARCH_v1",
+    "purpose": "E13 GPT full-context vs RAG architecture validation (DEV = Role B)",
+    "source_split": "dev",
+    "seed": 1400,
+    "target_per_class": 50,
+    "max_cases_per_doc_per_class": 2,
+    "sampling_algorithm": "Pool = DEV cases not in the historical 150-case seed-42 sample and not in any data/golden case (case-level exclusion; document-level exclusion infeasible). Per class: sort doc ids, shuffle with random.Random(1400), take <= 2 cases/doc until 50. Sorted by (class, doc, hyp). Performance-agnostic; no hard-case enrichment.",
+    "total_cases": 150,
+    "per_class_case_counts": {
+      "Contradiction": 50,
+      "Entailment": 50,
+      "NotMentioned": 50
+    },
+    "total_unique_documents": 51,
+    "selected_document_ids": [
+      7,
+      9,
+      13,
+      14,
+      15,
+      16,
+      17,
+      19,
+      20,
+      27,
+      28,
+      32,
+      33,
+      35,
+      37,
+      39,
+      44,
+      45,
+      54,
+      56,
+      63,
+      64,
+      69,
+      70,
+      71,
+      72,
+      73,
+      75,
+      79,
+      81,
+      82,
+      152,
+      205,
+      398,
+      405,
+      411,
+      435,
+      440,
+      456,
+      478,
+      482,
+      486,
+      507,
+      547,
+      563,
+      575,
+      590,
+      595,
+      598,
+      605,
+      610
+    ],
+    "documents_also_touched_by_historical_sample_or_golden": 48,
+    "verified_case_disjoint_from_historical_150_sample": true,
+    "verified_case_disjoint_from_golden_battery": true,
+    "remaining_never_used_dev_cases_after_selection": {
+      "total": 696,
+      "labels": {
+        "Entailment": 377,
+        "NotMentioned": 301,
+        "Contradiction": 18
+      }
+    },
+    "dev_docs_touched_by_DEV_ARCH_v1": 51
+  }
+}
