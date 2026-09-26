@@ -1,0 +1,96 @@
+{
+  "manual_review_union_size": 73,
+  "mandatory_size": 55,
+  "e05_gain_sample": [
+    "train::125::nda-10",
+    "train::159::nda-1",
+    "train::220::nda-12",
+    "train::317::nda-12",
+    "train::320::nda-12",
+    "train::338::nda-17",
+    "train::341::nda-11",
+    "train::501::nda-1",
+    "train::553::nda-20",
+    "train::88::nda-2"
+  ],
+  "e05_regress_sample": [
+    "train::187::nda-10",
+    "train::222::nda-18",
+    "train::264::nda-12",
+    "train::341::nda-12",
+    "train::375::nda-15",
+    "train::379::nda-11",
+    "train::505::nda-4",
+    "train::619::nda-10"
+  ],
+  "reranker_diag": {
+    "train::160::nda-10": {
+      "bm25_top20_rank": 2,
+      "post_rerank_rank_of_20": 11,
+      "static_fix_k_needed": 11,
+      "would_top10_include": false
+    },
+    "train::247::nda-10": {
+      "bm25_top20_rank": 6,
+      "post_rerank_rank_of_20": 9,
+      "static_fix_k_needed": 9,
+      "would_top10_include": true
+    },
+    "train::353::nda-10": {
+      "bm25_top20_rank": 9,
+      "post_rerank_rank_of_20": 9,
+      "static_fix_k_needed": 9,
+      "would_top10_include": true
+    },
+    "train::379::nda-10": {
+      "bm25_top20_rank": 3,
+      "post_rerank_rank_of_20": 8,
+      "static_fix_k_needed": 8,
+      "would_top10_include": true
+    },
+    "train::438::nda-2": {
+      "bm25_top20_rank": 6,
+      "post_rerank_rank_of_20": 8,
+      "static_fix_k_needed": 8,
+      "would_top10_include": true
+    },
+    "train::518::nda-10": {
+      "bm25_top20_rank": 1,
+      "post_rerank_rank_of_20": 9,
+      "static_fix_k_needed": 9,
+      "would_top10_include": true
+    }
+  },
+  "reviewed_error_count": 63,
+  "quantification_overall": {
+    "model_reasoning_limited": 31,
+    "agentically_fixable": 26,
+    "static_pipeline_fixable": 6
+  },
+  "quantification_overall_pct": {
+    "model_reasoning_limited": 49.2,
+    "agentically_fixable": 41.3,
+    "static_pipeline_fixable": 9.5
+  },
+  "quantification_contradiction": {
+    "model_reasoning_limited": 19,
+    "agentically_fixable": 9,
+    "static_pipeline_fixable": 1
+  },
+  "quantification_contradiction_pct": {
+    "model_reasoning_limited": 65.5,
+    "agentically_fixable": 31.0,
+    "static_pipeline_fixable": 3.4
+  },
+  "runtime_signal_frequencies": {
+    "cross_reference_cue,exception_carveout_cue": 26,
+    "cross_reference_cue,exception_carveout_cue,defined_term_missing_cue": 5,
+    "exception_carveout_cue": 16,
+    "exception_carveout_cue,defined_term_missing_cue": 12,
+    "cross_reference_cue,exception_carveout_cue,low_score_margin": 3,
+    "low_score_margin,low_score_margin": 1
+  },
+  "notmentioned_confusion_empty_evidence_count": 42,
+  "wrong_valid_group_a_gold_overlap": 4,
+  "wrong_valid_group_b_no_overlap": 50
+}
