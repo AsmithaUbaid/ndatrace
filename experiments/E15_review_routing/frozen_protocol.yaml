@@ -1,0 +1,21 @@
+# FROZEN before the fresh-DEV model calls. Not to be modified after results are seen.
+manifest: DEV_ROUTING_v1 (seed 1500, n=138: 60 E / 18 C / 60 NM; all remaining fresh Contradictions)
+model: openai/gpt-5-mini via openrouter; prompt GPT-P0 (sha1 3fcc7c95...); FULL NDA context; temperature 0.0; concurrency 5; timeout 60s; run once, no reruns; run_id e15_dev_routing_validation
+policies: {R0: none, R1: "source/structural integrity", R2: "R1 + all predicted Contradiction (reference only)", R3: "R1 + keyword-rule disagreement (primary candidate)"}  # implemented in scripts/e15_routing_stage_a.py, unmodified
+provisional_constraints:   # provisional project-level values inherited from the earlier abstention plan; NOT measured capacity, SLA, or customer requirement
+  MAX_DEV_STANDARDIZED_REVIEW_RATE: 0.40
+  MAX_RESIDUAL_JOINT_ERROR_RATE: 0.10   # reconstruction-era operational proxy, not a validated legal-risk threshold
+  standardization_weights: {Entailment: 519, Contradiction: 95, NotMentioned: 423}   # /1037, official DEV true-label distribution; evaluation-only
+selection_rule:
+  R3_selected_if_all: [standardized_review_rate<=0.40, residual_joint_error<0.10, "R3 captures materially more joint failures than R1", "no obvious Contradiction-safety regression", "no runtime/structural problem"]
+  else: "R1 only if R3 fails workload but R1 useful as structural guard; else no effective selective routing (outcome C)"
+r3_disclosure: "keyword rules have historical DEV exposure (written against DEV hypothesis text in the old project); not a pristine signal."
+no_iteration: "no R4, no rule/threshold changes, no second validation set"
+# ---- interpretation addendum, written BEFORE any model output was inspected (after the 138 calls finished, before analysis) ----
+criteria_operationalization:
+  review_ceiling_test: "R3 DEV-standardized review rate <= 0.40 (standardized from validation class-conditional review rates)"
+  residual_error_test: "literal rule: raw validation residual joint error among AUTO-HANDLE cases < 0.10; DEV-standardized residual is reported alongside and any disagreement flagged"
+  materially_more_capture: "R3 joint-failure capture minus R1 joint-failure capture >= 20 percentage points"
+  contradiction_safety: "R3 leaves no more residual automated Contradiction failures than R1 (descriptive; n=18)"
+  structural_problem_test: "any provider outage/circuit-breaker stop or manifest/artifact verification failure; a single model output that is not parseable JSON is a real unusable-parse case (counts as failure, routed by R1), not a runtime problem"
+execution_note: "138/138 API calls completed and were ledgered; 1 response (dev::406::nda-1) had no valid JSON -> parse_status invalid; NOT rerun per protocol."

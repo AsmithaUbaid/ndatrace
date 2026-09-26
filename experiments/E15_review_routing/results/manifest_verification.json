@@ -1,0 +1,14 @@
+{
+ "checks": {
+  "seed_1500": true,
+  "n_138": true,
+  "class_counts_60_18_60": true,
+  "all_remaining_fresh_contradictions_used": true,
+  "disjoint_seed42_sample": true,
+  "disjoint_golden": true,
+  "disjoint_E13_DEV_ARCH_v1": true,
+  "gold_labels_match_dev": true
+ },
+ "manifest_sha256": "aa2ef2c274c51266e6daba7b33d167b7f9215929d7a6081d9ba76cb8e9065855",
+ "n_docs": 41
+}

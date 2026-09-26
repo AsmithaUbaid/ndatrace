@@ -1,0 +1,17 @@
+experiment_id: E15_review_routing
+status: STAGE_A
+question: "Using only inference-time signals, can NDATrace route cases to human review so residual automated decisions are safer without excessive review load?"
+architecture_candidate: "openai/gpt-5-mini + GPT-P0 (classification_prompt_v1) + FULL NDA context"
+evaluator: evidence_evaluator_v2
+runtime_validator: runtime_evidence_validator_v2
+policy_development_data: "stored E13 FULL DEV outputs (150 cases, 50/50/50) - policy DEVELOPMENT only, not validation"
+fresh_validation: "one confirmation on DEV_ROUTING_v1 (proposed, unfrozen); routing frozen before it; no tuning on it"
+policies:
+  R0: "never review"
+  R1: "review if unusable parse/error, OR pred E/C with no source-valid evidence, OR any hallucinated (non-source, runtime validator v2) quote, OR pred NotMentioned with evidence"
+  R2: "R1 OR predicted label == Contradiction"
+  R3: "R1 OR deterministic keyword rule baseline (pipeline/rule_baseline.py) label != model label"
+forbidden_features: [gold_label, gold_evidence, joint_success, correctness, gold_retrieval_rank, manual_error_categories, TEST]
+no_model_calls: true
+no_test: true
+no_confidence_prompt: true

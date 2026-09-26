@@ -1,0 +1,33 @@
+{
+ "ledger_now": 2.80439895,
+ "pool_after_exclusions": {
+  "total": 696,
+  "Entailment": 377,
+  "NotMentioned": 301,
+  "Contradiction": 18
+ },
+ "manifest_size": 138,
+ "expected_calls": 138,
+ "expected_cost": 0.287,
+ "conservative_cost_p90_every_call": 0.4582,
+ "per_call_mean": 0.002079765,
+ "per_call_p90": 0.0033204999999999997,
+ "expected_joint_failures_in_manifest_(from_E13_class_rates)": 26.8,
+ "E13_FULL_joint_failure_rate_by_gold_class": {
+  "Entailment": 0.18,
+  "Contradiction": 0.22,
+  "NotMentioned": 0.2
+ },
+ "budget_plan": 5.0,
+ "reserve": 1.25,
+ "gate_expected": 4.3414,
+ "gate_conservative": 4.5126,
+ "gate_pass": true,
+ "remaining_after_conservative": 1.7374,
+ "reserve_intact": true,
+ "pool_left_after_manifest": {
+  "Entailment": 317,
+  "NotMentioned": 241,
+  "Contradiction": 0
+ }
+}

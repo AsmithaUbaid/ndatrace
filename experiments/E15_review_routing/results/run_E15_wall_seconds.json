@@ -1,0 +1,16 @@
+{
+  "spend_usd": 0.30771675000000004,
+  "wall_seconds": 230.33479229197837,
+  "stopped": null,
+  "successful_calls": 137,
+  "failed_calls": 1,
+  "verify": {
+    "records_138": true,
+    "no_duplicates": true,
+    "all_ids": true,
+    "all_successful": false
+  },
+  "pre_run_ledger_usd": 2.80439895,
+  "post_run_ledger_usd": 3.112115699999999,
+  "completed": false
+}
