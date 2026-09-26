@@ -92,10 +92,26 @@ class ModelGateway:
         base_url: str | None = None,
         max_retries: int | None = None,
         timeout_seconds: int | None = None,
+        num_ctx: int | None = None,
     ):
         self.model = model or settings.default_model
         self.max_retries = max_retries if max_retries is not None else settings.max_retries
         self.timeout_seconds = timeout_seconds or settings.request_timeout_seconds
+        # Ollama-specific context-window override, passed through as extra_body's
+        # {"options": {"num_ctx": N}}. Default None preserves every existing caller's exact
+        # prior behavior, unchanged.
+        #
+        # CAVEAT found during E05 calibration (2026-09-26, experiments/E05_full_context/
+        # summary.md): confirmed via direct curl, independent of this code, that Ollama's
+        # OpenAI-compatible /v1/chat/completions endpoint does NOT honor options.num_ctx in
+        # the installed Ollama version (0.34.3) -- `ollama ps` stays at the model's already-
+        # loaded context size regardless. This kwarg is kept (harmless, may work on other
+        # Ollama versions/endpoints, and is unit-tested for correct request construction) but
+        # is NOT a verified way to raise Ollama's local context window today. The validated
+        # fix is a Modelfile-based custom model tag with `PARAMETER num_ctx N` baked in as the
+        # model's own default (see configs/ollama/qwen2.5-7b-instruct-ctx16k.Modelfile) --
+        # point `model=` at that tag instead of relying on this parameter.
+        self.num_ctx = num_ctx
 
         api_key = api_key or settings.openrouter_api_key
         base_url = base_url or settings.openrouter_base_url
@@ -114,6 +130,7 @@ class ModelGateway:
         base_url: str | None = None,
         max_retries: int | None = None,
         timeout_seconds: int | None = None,
+        num_ctx: int | None = None,
     ) -> "ModelGateway":
         """
         Gateway pointed at a local Ollama instance instead of OpenRouter -
@@ -122,12 +139,19 @@ class ModelGateway:
         complete()/retry/cost-tracking logic unchanged; only the base_url,
         api_key (Ollama ignores it, but the openai client requires a
         non-empty string), and pricing (registered at $0 above) differ.
+
+        `num_ctx` (optional): explicitly sets Ollama's context window for this gateway's
+        calls (default None -- Ollama's own server default applies, unchanged from every
+        caller before E05). Needed because Ollama silently truncates earlier context rather
+        than erroring when a request exceeds the active context window -- E01/E03's inputs
+        were always short enough for this to never matter, but E05's full-NDA-document inputs
+        are not (E05 Stage A audit, experiments/E05_full_context/summary.md section 5).
         """
         return cls(
             model=model or settings.local_model_name,
             api_key="ollama",
             base_url=base_url or settings.local_base_url,
-            max_retries=max_retries, timeout_seconds=timeout_seconds,
+            max_retries=max_retries, timeout_seconds=timeout_seconds, num_ctx=num_ctx,
         )
 
     @classmethod
@@ -185,6 +209,8 @@ class ModelGateway:
                 kwargs = {}
                 if response_format is not None:
                     kwargs["response_format"] = response_format
+                if self.num_ctx is not None:
+                    kwargs["extra_body"] = {"options": {"num_ctx": self.num_ctx}}
 
                 response = self._client.chat.completions.create(
                     model=self.model,
