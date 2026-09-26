@@ -1,6 +1,15 @@
-# E03 Controlled Prompt Selection — PENDING (resequenced after E06)
+# E03 Controlled Prompt Selection — COMPLETE
 
-## Status: PENDING, not COMPLETE — Stage B attempt SUPERSEDED / INVALIDATED BEFORE COMPLETION
+## Status: COMPLETE — resumed 2026-09-26 after E06 froze retrieval_v1; classification_prompt_v1 = P0
+
+**Result in one line**: P0 (minimal instruction) beats P1 (+label definitions) and P2
+(+decision procedure) on both top-priority metrics simultaneously — Contradiction Recall
+(22.0% vs 6.0% vs 2.0%) and Macro-F1 (0.507 vs 0.448 vs 0.403) — the opposite of this
+experiment's own pre-registered hypothesis. Full results in "## Stage B (resumed) — Results"
+below. The original pre-E06 partial-run history is preserved immediately below for
+traceability.
+
+### History: the original pre-E06 attempt was superseded, not completed
 
 **What happened**: Stage A (below) was approved and Stage B execution began — the P0 (minimal
 direct) prompt started its full 150-case run against the full-context NDA text condition.
@@ -23,7 +32,9 @@ independently of any classification prompt, using purely deterministic retrieval
 (Evidence Recall@K, Precision@K, MRR, retrieval miss analysis) — no prompt is required to
 select retrieval.
 
-**Preserved, not deleted**: `results/run_E03_prompt_selection_p00.jsonl` (88 real records) and
+**Preserved, not deleted**: `results/SUPERSEDED_run_E03_prompt_selection_p00.jsonl` (88 real
+records — renamed 2026-09-26 when the resumed run needed the plain filename for its own real
+150-case output; content is byte-identical to the original) and
 `results/SUPERSEDED_run_E03_prompt_selection_p00.md` (the supersession record). **No
 classification metric was computed from the partial P0 run, and none was used for any
 prompt-selection decision.**
@@ -36,6 +47,153 @@ prompt-selection decision.**
 - `configs/prompts/classification/classification_p0{0,1,2}.yaml` (P0/P1/P2) — retained as
   proposed candidates; their content is unaffected, only the *context* they'll be tested
   against changes once E06 freezes retrieval.
+
+---
+
+## Stage B (resumed) — Results (2026-09-26)
+
+**Verified before running**: TRAIN_PROMPT_v1 manifest — 150 cases, class balance exactly
+{Entailment: 50, Contradiction: 50, NotMentioned: 50}. Frozen retrieval context
+(`TRAIN_PROMPT_v1_RETRIEVED_retrieval_v1.json`) — same case ordering as the manifest, config
+confirmed `{method: bm25, chunk_method: clause, chunk_size: 256, candidate_pool_size: 20,
+top_k: 5, reranking: true, reranker_model: cross-encoder/ms-marco-MiniLM-L-12-v2}`, zero
+hypothesis_text mismatches between manifest and retrieved-context file.
+
+**A pre-existing wording bug was fixed before running, identically across P0/P1/P2**: the
+prompt configs said "the full text of the NDA" / "NDA text: {context_text}", a stale artifact
+from the pre-E06 full-context design. Corrected to "excerpts retrieved from the NDA" /
+"Retrieved NDA excerpts: {context_text}" — applied uniformly to all three variants (not part
+of the P0/P1/P2 independent variable), since `context_text` is now built from retrieval_v1's
+top-5 reranked chunks, not the full document.
+
+**Execution**: 450 real local inference calls (150 cases x 3 prompts) against
+`qwen2.5:7b-instruct` via Ollama, temperature 0, ~37 minutes wall time, $0 hosted spend
+(spend ledger unchanged, 601 lines). 100% parse-valid across all three prompts, zero retries,
+zero model errors.
+
+### Metric table
+
+| Prompt | Accuracy | Macro-F1 | Entailment Recall | **Contradiction Recall (95% CI)** | NotMentioned Recall | Parse-valid | Mean latency (ms) | Mean input tokens |
+|---|---|---|---|---|---|---|---|---|
+| P0 (minimal) | 52.7% | 0.507 | 56.0% | **22.0% [12.8%, 35.2%]** | 80.0% | 100% | 4,856 | 1,142 |
+| P1 (+definitions) | 51.3% | 0.448 | 60.0% | **6.0% [2.1%, 16.2%]** | 88.0% | 100% | 4,799 | 1,176 |
+| P2 (+decision procedure) | 48.0% | 0.403 | 52.0% | **2.0% [0.4%, 10.5%]** | 90.0% | 100% | 4,881 | 1,245 |
+
+### Confusion matrices (rows = gold, cols = predicted; order Entailment/Contradiction/NotMentioned)
+
+- **P0**: Entailment `[28, 5, 17]`, Contradiction `[2, 11, 37]`, NotMentioned `[6, 4, 40]`
+- **P1**: Entailment `[30, 0, 20]`, Contradiction `[3, 3, 44]`, NotMentioned `[6, 0, 44]`
+- **P2**: Entailment `[26, 0, 24]`, Contradiction `[3, 1, 46]`, NotMentioned `[4, 1, 45]`
+
+The pattern is monotonic and unambiguous: as instruction structure increases (P0→P1→P2), real
+Contradiction cases collapse into NotMentioned predictions (37→44→46 of 50) — each added layer
+of explicit guidance made the model *more* conservative/default-prone, not less confused, on
+the label that matters most for this domain (missing a real conflict is the costly error).
+
+### Contradiction-focused comparison
+
+Contradiction Recall is reported alone (not folded into an averaged risk-sensitive metric),
+consistent with the reconstruction brief and the project's own prior instructor-feedback fix.
+P0's 22.0% is itself weak in absolute terms (E01's Oracle already established Contradiction is
+a genuine reasoning bottleneck even with perfect evidence) — but it is 3.7x P1's rate and 11x
+P2's rate, a decisive, non-tied gap given non-overlapping-in-practice confidence intervals at
+this sample size.
+
+### Prompt-sensitivity and agreement
+
+34/150 (22.7%) cases are prompt-sensitive (not all three prompts agree on label or
+correctness). 62/150 all three correct; 60/150 all three wrong (a genuinely hard subset for
+this model regardless of prompt wording). Head-to-head: P0 wrong→P1 correct (10) vs. P1
+wrong→P0 correct (12) — roughly a wash; but P0 wrong→P2 correct (8) vs. P2 wrong→P0 correct
+(15) — P0 clearly dominates P2. Full correctness-pattern table and per-case detail:
+`results/prompt_failure_analysis.csv`, `results/prompt_failure_analysis_summary.json`.
+
+### Retrieval-limited vs. reasoning/prompt-limited failures
+
+Of 88 total error cases (150 − 62 all-correct): **6 are retrieval-limited** (gold evidence
+genuinely absent from the frozen retrieval_v1 top-5 context — not the prompt's fault) and
+**82 are reasoning/prompt-limited** (evidence was present, or the case is NotMentioned with no
+evidence to miss, and at least one prompt still answered wrong). This confirms E03's errors are
+overwhelmingly a prompt/reasoning story, not a retrieval-coverage story — consistent with
+E06's own measured ~92% evidence-recall ceiling leaving only a small residual retrieval gap.
+
+**Contradiction-specific failure families**: 43/46 non-retrieval-limited Contradiction failures
+contained an exception/carve-out indicator in the retrieved context (keyword match on
+"except"/"unless"/"provided that"/"notwithstanding"/etc.). This is an automated co-occurrence
+signal, not a manual causal annotation of every case — see the caveat immediately below before
+citing this number.
+
+| Count | Failure family (automated keyword-heuristic candidate tag) |
+|---|---|
+| 41 | Contradiction→NotMentioned, candidate: exception/carve-out clause present |
+| 3 | Contradiction→NotMentioned/Contradiction confusion (no exception keyword) |
+| 3 | Gold evidence absent from retrieval_v1 top-5 context (retrieval-limited) |
+| 2 | Contradiction→Entailment, candidate: exception/carve-out clause present |
+
+**Methodology caveat, stated plainly**: the "exception/carve-out" tag is an automated keyword
+heuristic on the retrieved context text, flagging *candidates* for manual review — not a
+confirmed reading of every one of the 43 cases. It is offered as a real, observed signal (the
+keyword literally co-occurs with the failure in 43/46 cases), not a forced categorization, per
+the instruction to use only evidence-supported categories. This pattern independently echoes
+the T-series historical finding (`docs/decisions.md`'s "Golden battery Categories 1-2" entry):
+Contradiction established via a narrow exception/carve-out clause against an apparent general
+rule is a real, recurring weakness, not unique to one model version or prompt.
+
+### Token/latency overhead — did prompt complexity earn itself?
+
+No. P2's system prompt is 2.3x P0's length (197 vs 84 approx tokens) and its mean input
+context is 9% larger (1,245 vs 1,142 tokens, since the longer system prompt itself counts) —
+for a *worse* result on every headline metric. P1 is a smaller step up (124 tokens, +3% input)
+but still regresses Contradiction Recall by 3.7x and Macro-F1 by 0.06. Latency is flat across
+all three (~4.8-4.9s mean — dominated by local model inference, not prompt length at this
+scale). There is no dimension on which P1 or P2 wins outright; added structure cost tokens and
+Contradiction detection simultaneously.
+
+### Final selection
+
+**Selected: `classification_prompt_v1` = P0 (minimal instruction), content unchanged.**
+Applying the predeclared priority order: (1) Contradiction Recall — P0 wins outright (22.0% vs
+6.0% vs 2.0%, non-tied). No lower-priority criterion needed to be consulted, since P0 is not
+tied with either alternative on priority #1, and it also happens to win priority #2 (Macro-F1)
+and priority #7 (simplicity/cost) — a clean, non-arbitrary result with no threshold invented
+after the fact. Full frozen artifact: `configs/prompts/classification/classification_prompt_v1.yaml`.
+
+**What was rejected and why**: P1 and P2 both regressed Contradiction Recall and Macro-F1
+monotonically, with the regression driven by a consistent, identifiable mechanism (increasing
+default-to-NotMentioned bias on Contradiction cases) rather than random noise — this mirrors
+the T-series historical prompt-tuning lineage (`docs/decisions.md`, v3/v4 entries: "engineering
+the prompt's decision *structure* ... tends to cost real accuracy," and specifically hurts
+Contradiction, the label with the fewest examples). Independent confirmation of a known pattern
+under a different model (qwen2.5:7b-instruct vs. the T-series' hosted models) and a different
+context condition (retrieved excerpts vs. full document) strengthens confidence this is a real
+phenomenon, not an artifact of one setup.
+
+**Connection to downstream work**: `classification_prompt_v1` becomes the default prompt for
+E05 (full-context baseline), E07 (standard RAG), E08 (RAG failure analysis), and E09-E11
+(agentic work), per the reconstruction brief. This freeze does not by itself establish that any
+particular architecture is superior — prompt selection and architecture comparison remain
+separate questions, to be settled by E12.
+
+### Files created (Stage B, resumed run)
+
+- `experiments/E03_prompt_selection/E03_prompt_selection.ipynb` (18-section notebook per the
+  reconstruction brief's outline, re-executed, zero errors).
+- `experiments/E03_prompt_selection/results/run_E03_prompt_selection_p0{0,1,2}.jsonl` (450
+  fully-traceable prediction records: run_id, experiment_id, case_id, document_id,
+  hypothesis_id, gold_label, predicted_label, parse_valid, input/output tokens, latency,
+  provider, model, prompt_version, raw_output, retry_count, error_type/message,
+  retrieval_config_version, prompt_config_hash, timestamp).
+- `experiments/E03_prompt_selection/results/prompt_failure_analysis.csv` and
+  `prompt_failure_analysis_summary.json` (case-level retrieval-vs-reasoning failure attribution
+  and aggregate metrics).
+- `scripts/run_e03_prompt_selection.py` (updated to build `context_text` from the frozen
+  retrieval_v1 top-5 chunks instead of the pre-E06 full-document text).
+- `scripts/analyze_e03_prompt_selection.py` (new — metrics + failure-attribution analysis).
+- `configs/prompts/classification/classification_p0{0,1,2}.yaml` (context-framing wording
+  fixed identically in all three) and `classification_prompt_v1.yaml` (new — the frozen
+  downstream default, = P0).
+- `evaluation/prompt_selection.py` (docstring updated — no longer describes the superseded
+  full-context rationale).
 
 ---
 

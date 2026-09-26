@@ -1,6 +1,9 @@
 # SUPERSEDED / INVALIDATED BEFORE COMPLETION
 
-**File:** `run_E03_prompt_selection_p00.jsonl`
+**File:** `SUPERSEDED_run_E03_prompt_selection_p00.jsonl` (renamed 2026-09-26 when E03 resumed
+— the resumed P0 run needed the plain `run_E03_prompt_selection_p00.jsonl` filename for its
+own, real, complete 150-case output; this file's content is byte-identical to the original
+88-case partial run, restored from git history at commit `85f23f2`, only the filename changed).
 **Status:** SUPERSEDED / INVALIDATED BEFORE COMPLETION — not used for any prompt-selection
 decision.
 **Completed cases:** 88 of 150 (stopped cleanly mid-run, file not corrupted — last record is
@@ -24,4 +27,7 @@ not scored, not compared across prompts, and not used to justify any decision.
   proposed candidates; their content is unaffected by this supersession, only the *context*
   they'll be tested against changes.
 
-E03 status: **PENDING**, not COMPLETE. No prompt-selection decision was made.
+**Update 2026-09-26**: E03 has since resumed and completed under the frozen retrieval_v1
+context — see `../summary.md`'s "Stage B (resumed) — Results" section and
+`../config.yaml`. `classification_prompt_v1` (= P0) is now frozen. This file remains untouched
+as the historical record of the abandoned full-context attempt described above.
