@@ -1,0 +1,230 @@
+experiment_id: E05_full_context
+status: COMPLETE  # full 150-case A1_full_context_v1 benchmark run and frozen -- see
+                   # results/run_E05_A1_train.json and summary.md's "Full Benchmark Results"
+dataset_manifest: TRAIN_ARCH_v1  # proposed new manifest, NOT TRAIN_PROMPT_v1 -- see summary.md section 9
+split_role: development   # Role A, TRAIN only
+purpose: full_context_architecture_baseline
+
+architecture_under_test:
+  name: A1_full_context
+  input: full NDA document text + hypothesis
+  prompt: classification_prompt_v1  # = P0, byte-for-byte unchanged system_prompt/output_schema
+  model: qwen2.5:7b-instruct
+  retrieval: NONE  # retrieval_v1 deliberately not used -- A1 is retrieval-free by design
+  reranker: NONE
+  agent: NONE
+  tools: NONE
+
+manifest:
+  proposed: TRAIN_ARCH_v1
+  path: experiments/E05_full_context/TRAIN_ARCH_v1.json
+  seed: 700  # distinct from every prior project seed (42, 99, 123, 300, 500)
+  target_per_class: 50
+  verified_class_balance: {Entailment: 50, Contradiction: 50, NotMentioned: 50}
+  verified_document_diversity: {Entailment: 26, Contradiction: 28, NotMentioned: 26}  # unique docs per class
+  total_unique_documents: 78
+  verified_zero_overlap_with_TRAIN_PROMPT_v1: true  # by construction -- excluded from the sampling pool, not just checked after
+  reuse_vs_fresh_decision: >
+    FRESH manifest proposed, not TRAIN_PROMPT_v1 reuse. classification_prompt_v1 (=P0) was
+    SELECTED by evaluating P0/P1/P2 on TRAIN_PROMPT_v1's exact 150 cases (E03) -- reusing that
+    same population for the architecture comparison the selected prompt now feeds into would
+    mean the prompt was chosen to do well on precisely the population judging architecture.
+    Real, though likely mild given P0's decisive margin (22.0% vs 6.0% vs 2.0% Contradiction
+    Recall). A fresh, disjoint-by-construction set avoids the question rather than requiring a
+    severity judgment call.
+  shared_with: E07  # matched-comparison manifest -- E07 must build retrieval_v1 context from
+                     # the same case_id/document_id/hypothesis_id triples in this exact file
+
+full_context_token_distribution:  # cl100k_base tiktoken approximation, TRAIN_ARCH_v1's 150 cases
+  mean: 2084
+  median: 1879
+  p90: 3788
+  p95: 4636
+  max: 5581
+  min: 329
+  cases_over_2048_tokens: {count: 60, pct: 0.40}
+  cases_over_4096_tokens: {count: 12, pct: 0.08}
+  cases_over_8192_tokens: {count: 0, pct: 0.0}
+  full_train_universe_max_for_reference: 11340  # all 7191 cases, in case manifest is ever regenerated
+
+model_context_window:
+  native_context_length: 32768  # ollama show qwen2.5:7b-instruct
+  configured_num_ctx_in_modelfile: null  # no PARAMETER num_ctx set -- inherits Ollama server default
+  current_pipeline_model_gateway_behavior: >
+    pipeline/model_gateway.py's complete() passes no `options`/`extra_body` to the OpenAI-
+    compatible endpoint -- num_ctx is never explicitly set anywhere in the codebase, for any
+    experiment. This was invisible/harmless for E01 Oracle (single-sentence evidence) and E03
+    (retrieved top-5 context, ~1,100-1,250 tokens) since both stayed safely under even a
+    conservative 2048-token default. It is NOT safe for E05: 40% of TRAIN_ARCH_v1 cases exceed
+    2048 tokens before adding system prompt + hypothesis + output budget.
+  resolved_finding: >
+    CONFIRMED REAL during calibration (2026-09-26), then RESOLVED. `ollama ps` showed the
+    resident model running at CONTEXT=4096 -- Ollama's actual default, not a hypothetical risk.
+    Two calibration cases (5,554-5,581 raw doc tokens) came back with usage.prompt_tokens ~2050,
+    confirming genuine silent truncation, exactly as feared. Root-caused via direct curl (no
+    ModelGateway code involved): Ollama's OpenAI-compatible /v1/chat/completions endpoint does
+    NOT honor a per-request `options.num_ctx` override in the installed Ollama version (0.34.3)
+    -- `ollama ps` stayed at 4096 regardless, and even reverted an already-16384-loaded instance
+    back to 4096 on the next OpenAI-compat call. Ollama's NATIVE /api/chat endpoint DOES honor
+    it (verified: context correctly jumped to 16384). Since ModelGateway is built entirely on
+    the OpenAI-compatible client, the fix is a Modelfile-based custom model tag with
+    `PARAMETER num_ctx 16384` baked in as the model's own default
+    (`configs/ollama/qwen2.5-7b-instruct-ctx16k.Modelfile`, tag
+    `qwen2.5:7b-instruct-ctx16k`) -- verified working via curl (prompt_tokens correctly reports
+    ~5,640-5,806 for the same long documents, `ollama ps` shows CONTEXT=16384).
+  pipeline_model_gateway_num_ctx_kwarg_status: >
+    Implemented and unit-tested (tests/test_model_gateway.py) as a general-purpose,
+    backward-compatible extension (default None, zero behavior change for existing callers) --
+    but NOT the mechanism that actually works for local Ollama today; kept for forward
+    compatibility, documented with this caveat in the module docstring. E05's Stage B runner
+    uses the model-tag approach instead.
+  num_ctx: 16384  # baked into the qwen2.5:7b-instruct-ctx16k model tag, confirmed via curl and
+                   # via the recalibrated 8-case run (all input_tokens now match full document
+                   # length, no truncation)
+
+request_timeout_risk:
+  current_setting: 30  # pipeline/config.py's request_timeout_seconds, unchanged since E01/E03
+  measured: >
+    8-case calibration (post num_ctx fix) observed latencies 6.0-28.8s, max case at 28.8s --
+    within the current 30s limit but with almost no margin. No timeout actually occurred in
+    this calibration, but the longest documents in the full 150-case manifest are close enough
+    to warrant raising it before the full run rather than risk retry storms.
+  recommended_timeout_seconds: 60  # ~2x the observed max (28.8s), applied uniformly via
+                                    # ModelGateway.local(timeout_seconds=60) for the E05 runner
+                                    # -- an operational fix, not an experiment variable
+
+evidence_output:
+  current_schema: '{"label": "Entailment" | "Contradiction" | "NotMentioned"}'  # classification_prompt_v1, unchanged
+  proposed_extension: '{"label": ..., "evidence": [...]}'  # additive only -- no new reasoning instructions
+  extension_type: architecture_wrapper_not_new_prompt_variant
+  validation_mechanism: pipeline/evidence_validator.py's validate_evidence()  # reused unmodified,
+    historical (T-series), deterministic verbatim-substring check, $0, no LLM call
+  span_mapping: same interval-overlap mechanism already used for A0 (rule baseline, E04) and
+    retrieval scoring -- doc.text.find(quote) for char offsets, then overlap-mapped onto
+    doc.spans for Evidence Recall/Precision/joint-metric scoring
+  historical_anti_pattern_identified_and_rejected: >
+    scripts/run_final_test_evaluation.py's T041 full_context arm assigns
+    retrieved_span_indices=list(range(len(doc.spans))) -- i.e. claims EVERY span in the document
+    as "evidence" by construction, trivially satisfying the joint metric for any correct label.
+    This IS "full-document access counted as evidence success," exactly what section 5 of the
+    brief prohibits. E05 will NOT repeat this pattern -- evidence must be an explicit quoted
+    string the model chooses, verified verbatim, span-mapped, same standard as every other
+    architecture.
+
+prompt_architecture_wrapper:
+  frozen_prompt_untouched: configs/prompts/classification/classification_prompt_v1.yaml  # system_prompt byte-for-byte identical, label definitions/decision logic/output schema core unchanged
+  wrapper_scope: user_template header text only
+  frozen_wording: 'Retrieved NDA excerpts: {context_text}'  # classification_prompt_v1's own user_template
+  proposed_e05_wording: 'Full NDA text: {context_text}'  # architecture-specific substitution, not a new prompt variant
+  proposed_evidence_instruction_addition: >
+    One additive line appended to the existing system_prompt (not replacing or reordering
+    anything already there): 'Also return the exact sentence(s) from the text that support your
+    label, verbatim, as a list under "evidence". Return an empty list for NotMentioned.' No new
+    label definitions, no new decision procedure, no chain-of-thought instruction -- purely a
+    structural output request, per section 6 of the brief.
+  not_modified: E03's frozen classification_prompt_v1.yaml file itself -- the wrapper lives in
+    the E05 runner script (Stage B), not in the frozen prompt config.
+
+calibration_8case_pre_recovery:  # historical -- superseded by calibration_8case_final below
+  status: COMPLETE -- diagnostics only, NOT scored against gold, NOT used for any prompt/model decision
+  model: qwen2.5:7b-instruct-ctx16k
+  n_cases: 8
+  selection: 2 near Q1, 2 near median, 2 near p90, 2 longest (by doc token length), distinct
+    documents and mixed classes where possible
+  input_token_correctness: >
+    Confirmed correct after the model-tag fix -- all 8 cases' usage.prompt_tokens match their
+    expected full-document length (e.g. longest cases: 5766/5806 actual vs. ~5,700-5,800
+    expected, vs. the pre-fix run's erroneous ~2050 for the same cases). No truncation.
+  latency_seconds: {min: 6.0, max: 28.8, mean: 17.34, values_by_bucket: {q1: [9.77, 6.0], median: [9.29, 15.72], p90: [19.86, 20.92], longest: [28.33, 28.8]}}
+  parse_valid_count: 5   # of 8
+  parse_invalid_count: 3   # all in p90/longest buckets
+  parse_invalid_cause: >
+    NOT truncation, NOT malformed JSON -- in all 3 cases the model emitted a well-formed
+    {"label": ...} JSON object FIRST, then appended free-text commentary/rationale afterward
+    (once in Chinese), which breaks parse_oracle_output's strict "entire response must be
+    exactly one JSON object" rule. A real, disclosed long-context instruction-following
+    degradation, distinct from and in addition to the (now-fixed) truncation risk -- flagged as
+    an open design question for Stage B, not resolved unilaterally here.
+  runtime_projection:
+    method: linear regression (latency_s ~ a + b*input_tokens) fit on the 8 real calibration
+      points, applied to all 150 TRAIN_ARCH_v1 cases' actual token counts
+    fitted_equation: "latency_s = 2.145 + 0.004582 * input_tokens"
+    projected_mean_s_per_case: 12.33
+    projected_median_s_per_case: 11.40
+    projected_p90_s_per_case: 20.14
+    projected_max_s_per_case: 28.37
+    projected_total_150_cases_minutes: 30.8
+
+calibration_8case_final:  # after deterministic JSON recovery parser + 60s timeout
+  status: COMPLETE -- diagnostics only, NOT scored against gold, NOT used for any prompt/model decision
+  model: qwen2.5:7b-instruct-ctx16k
+  request_timeout_seconds: 60
+  n_cases: 8  # identical case_ids to calibration_8case_pre_recovery -- re-verified, not reselected
+  strict_parse_count: 5
+  recovered_parse_count: 3
+  invalid_parse_count: 0
+  strict_parse_validity_pct: 62.5
+  usable_structured_output_validity_pct: 100.0   # strict + recovered
+  evidence_valid_count: 5   # of 8 -- the 3 non-evidence-valid are strict parses with paraphrased (non-verbatim) evidence, a distinct real finding
+  timeout_count: 0
+  error_count: 0
+  latency_seconds: {min: 6.37, max: 28.67, values: [14.17, 6.37, 9.54, 16.68, 20.24, 21.07, 28.67, 28.25]}
+  input_token_verification: >
+    All 8 cases' input_tokens exactly match expected full-document length (e.g. longest cases:
+    5766/5806) -- no truncation, confirmed via ollama ps showing CONTEXT=16384 throughout.
+  authorization_gate_status: ALL CONDITIONS MET -- 16k context active, zero truncation, zero
+    timeouts, deterministic parser correct (13/13 tests + 0/8 invalid on real data), recovered
+    outputs evidence-valid where appropriate, full suite 293/293 passing. Full 150-case
+    benchmark still NOT authorized/run pending explicit review of this report.
+
+frozen_a1:
+  name: A1_full_context_v1
+  note: >
+    "Frozen" means a reproducible architecture configuration for later comparison (E07/E12) --
+    NOT a claim that A1 is production-ready. Contradiction Recall, evidence quality, and
+    long-context behavior are all real, disclosed limitations of this configuration, not fixed
+    in response to seeing them (per explicit instruction).
+  model: qwen2.5:7b-instruct-ctx16k  # num_ctx=16384 baked into configs/ollama/qwen2.5-7b-instruct-ctx16k.Modelfile
+  temperature: 0.0
+  request_timeout_seconds: 60
+  prompt: classification_prompt_v1  # = P0, system_prompt byte-for-byte unchanged
+  architecture_wrapper: 'user template header "Full NDA text:" instead of the frozen prompt''s "Retrieved NDA excerpts:"'
+  evidence_instruction: additive single line, no new label definitions/decision logic
+  output_schema: '{"label": "Entailment"|"Contradiction"|"NotMentioned", "evidence": [...]}'
+  parser: evaluation.structured_output.parse_structured_output  # deterministic strict/recovery
+  evidence_validator: pipeline.evidence_validator.validate_evidence  # unmodified
+  manifest: TRAIN_ARCH_v1  # 150 cases, 50/50/50, seed=700, shared with future E07
+  metrics:
+    accuracy: 0.4000
+    macro_f1: 0.3974
+    entailment_recall: 0.48
+    contradiction_recall: 0.28
+    contradiction_recall_ci95: [0.1747, 0.4167]
+    notmentioned_recall: 0.44
+    strict_parse_validity_pct: 94.0
+    recovered_parse_count: 9
+    invalid_parse_count: 0
+    usable_parse_validity_pct: 100.0
+    evidence_recall: 0.2500
+    evidence_precision: 0.2874
+    joint_overall: 0.28
+    joint_by_class: {Entailment: 0.24, Contradiction: 0.16, NotMentioned: 0.44}
+    mean_latency_ms: 12764
+    p90_latency_ms: 22214
+    max_latency_ms: 84039  # 1 case (3,345 input tokens) completed in ~84s without raising a
+                            # timeout despite request_timeout_seconds=60 -- operational
+                            # observation only, NOT a model-quality result; the configured
+                            # timeout should not be treated as a strict enforced latency ceiling
+                            # under this Ollama/OpenAI-compatible path; not retroactively fixed
+    total_wall_seconds: 1914.8  # 31.9 minutes for 150 cases
+    cost_usd: 0.0
+
+outputs:
+  - experiments/E05_full_context/TRAIN_ARCH_v1.json (built, local-only, deterministic)
+  - experiments/E05_full_context/results/calibration_8case.json (8-case diagnostic run, final version post-recovery)
+  - experiments/E05_full_context/results/run_E05_A1_train_cases.jsonl (150 fully-traceable records)
+  - experiments/E05_full_context/results/run_E05_A1_train.json (aggregate metrics)
+  - experiments/E05_full_context/results/full_context_failure_analysis.csv
+  - experiments/E05_full_context/E05_full_context.ipynb (executed, zero errors)
+  - configs/ollama/qwen2.5-7b-instruct-ctx16k.Modelfile (required Ollama model tag)
+  - evaluation/structured_output.py (deterministic JSON recovery parser)

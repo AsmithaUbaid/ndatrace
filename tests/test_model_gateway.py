@@ -147,6 +147,38 @@ def test_local_gateway_allows_model_override():
     assert gw.model == "llama3.2:1b"
 
 
+def test_default_num_ctx_is_none_unset_for_every_existing_caller():
+    """Existing callers (E01/E03, any code not passing num_ctx) must behave exactly as
+    before -- no extra_body/options sent at all."""
+    with patch("pipeline.model_gateway.OpenAI"):
+        gw = ModelGateway.local()
+    assert gw.num_ctx is None
+
+
+def test_local_gateway_passes_num_ctx_through():
+    with patch("pipeline.model_gateway.OpenAI"):
+        gw = ModelGateway.local(model="qwen2.5:7b-instruct", num_ctx=16384)
+    assert gw.num_ctx == 16384
+
+
+def test_complete_without_num_ctx_sends_no_extra_body(gateway):
+    """gateway fixture has no num_ctx set -- confirms zero behavior change for every
+    existing caller (E01 Oracle, E03 prompt selection, etc.)."""
+    gateway._client.chat.completions.create = MagicMock(return_value=fake_completion())
+    gateway.complete("system", "user")
+    call_kwargs = gateway._client.chat.completions.create.call_args.kwargs
+    assert "extra_body" not in call_kwargs
+
+
+def test_complete_with_num_ctx_sends_ollama_options():
+    with patch("pipeline.model_gateway.OpenAI"):
+        gw = ModelGateway.local(model="qwen2.5:7b-instruct", num_ctx=16384, max_retries=2)
+    gw._client.chat.completions.create = MagicMock(return_value=fake_completion())
+    gw.complete("system", "user")
+    call_kwargs = gw._client.chat.completions.create.call_args.kwargs
+    assert call_kwargs["extra_body"] == {"options": {"num_ctx": 16384}}
+
+
 def test_groq_gateway_raises_without_api_key(monkeypatch):
     monkeypatch.setattr("pipeline.model_gateway.settings.groq_api_key", "")
     with pytest.raises(ModelError, match="GROQ_API_KEY"):
