@@ -1,0 +1,164 @@
+{
+  "n_cases": 150,
+  "metrics": {
+    "p00": {
+      "n": 150,
+      "accuracy": 0.5266666666666666,
+      "macro_f1": 0.5070013535129815,
+      "per_class_recall": {
+        "Entailment": 0.56,
+        "Contradiction": 0.22,
+        "NotMentioned": 0.8
+      },
+      "contradiction_recall": 0.22,
+      "contradiction_recall_ci95": [
+        0.1275378622430229,
+        0.35241815689459555
+      ],
+      "contradiction_n": 50,
+      "confusion_matrix": {
+        "labels": [
+          "Entailment",
+          "Contradiction",
+          "NotMentioned"
+        ],
+        "matrix": [
+          [
+            28,
+            5,
+            17
+          ],
+          [
+            2,
+            11,
+            37
+          ],
+          [
+            6,
+            4,
+            40
+          ]
+        ]
+      },
+      "parse_valid_rate": 1.0,
+      "total_retries": 0,
+      "latency_ms": {
+        "mean": 4855.646206130429,
+        "median": 4970.848437980749,
+        "p90": 5597.886750008911
+      },
+      "mean_input_tokens": 1141.9266666666667,
+      "mean_output_tokens": 12.626666666666667
+    },
+    "p01": {
+      "n": 150,
+      "accuracy": 0.5133333333333333,
+      "macro_f1": 0.44810895861901784,
+      "per_class_recall": {
+        "Entailment": 0.6,
+        "Contradiction": 0.06,
+        "NotMentioned": 0.88
+      },
+      "contradiction_recall": 0.06,
+      "contradiction_recall_ci95": [
+        0.02061459636463048,
+        0.16217343370877002
+      ],
+      "contradiction_n": 50,
+      "confusion_matrix": {
+        "labels": [
+          "Entailment",
+          "Contradiction",
+          "NotMentioned"
+        ],
+        "matrix": [
+          [
+            30,
+            0,
+            20
+          ],
+          [
+            3,
+            3,
+            44
+          ],
+          [
+            6,
+            0,
+            44
+          ]
+        ]
+      },
+      "parse_valid_rate": 1.0,
+      "total_retries": 0,
+      "latency_ms": {
+        "mean": 4799.259530549559,
+        "median": 4854.861208528746,
+        "p90": 5408.663582988083
+      },
+      "mean_input_tokens": 1175.9266666666667,
+      "mean_output_tokens": 12.72
+    },
+    "p02": {
+      "n": 150,
+      "accuracy": 0.48,
+      "macro_f1": 0.4034740360041565,
+      "per_class_recall": {
+        "Entailment": 0.52,
+        "Contradiction": 0.02,
+        "NotMentioned": 0.9
+      },
+      "contradiction_recall": 0.02,
+      "contradiction_recall_ci95": [
+        0.0035391680889764613,
+        0.10495686471836953
+      ],
+      "contradiction_n": 50,
+      "confusion_matrix": {
+        "labels": [
+          "Entailment",
+          "Contradiction",
+          "NotMentioned"
+        ],
+        "matrix": [
+          [
+            26,
+            0,
+            24
+          ],
+          [
+            3,
+            1,
+            46
+          ],
+          [
+            4,
+            1,
+            45
+          ]
+        ]
+      },
+      "parse_valid_rate": 1.0,
+      "total_retries": 0,
+      "latency_ms": {
+        "mean": 4881.155658569187,
+        "median": 4955.5213954881765,
+        "p90": 5605.66999996081
+      },
+      "mean_input_tokens": 1244.9266666666667,
+      "mean_output_tokens": 12.766666666666667
+    }
+  },
+  "prompt_sensitive_count": 34,
+  "all_wrong_count": 60,
+  "all_correct_count": 62,
+  "retrieval_limited_count": 6,
+  "reasoning_prompt_limited_count": 82,
+  "ambiguous_count": 0,
+  "contradiction_failure_families": {
+    "Contradiction->NotMentioned (candidate: exception/carve-out clause present)": 41,
+    "Contradiction->NotMentioned (NotMentioned/Contradiction confusion)": 3,
+    "gold evidence absent from retrieval_v1 top-5 context": 3,
+    "Contradiction->Entailment (candidate: exception/carve-out clause present)": 2
+  }
+}

@@ -25,20 +25,35 @@ Expected runtime: extrapolated ~55-65 minutes for P0+P1+P2 combined (150 cases x
     see Stage A report for the calculation and its caveats)
 Stop condition: Stage A ends at this proposal; Stage B ends when P0/P1/P2 (and P3 if approved)
     have each produced a complete 150-case result file
-Result: PENDING -- Stage B not yet approved
-Decision: PENDING
-What becomes frozen after this: PENDING (see summary.md's Stage A section)
+Result: COMPLETE -- P0 (minimal) wins decisively on both top-priority metrics
+Decision: classification_prompt_v1 = P0, unchanged content
+What becomes frozen after this: `configs/prompts/classification/classification_prompt_v1.yaml`,
+    the default prompt for E05/E07/E08/E09-E11
 ```
 
 ## Stage A vs. Stage B
 
-Same two-stage structure as E01. **Stage A (this commit's state): design/freeze.** Manifest,
-context condition, prompt ladder, schema, and decision rule proposed and frozen. **No
-inference performed.** **Stage B (after explicit approval): execution.**
+Same two-stage structure as E01. **Stage A (frozen earlier): design.** Manifest, context
+condition, prompt ladder, schema, and decision rule proposed and frozen before any inference.
+**Stage B (this run, 2026-09-26): execution, complete.** Resumed after E06 froze `retrieval_v1`
+-- P0/P1/P2 each ran all 150 TRAIN_PROMPT_v1 cases against the frozen retrieval_v1 top-5
+context (BM25/clause_256/top-20/rerank/top-5), qwen2.5:7b-instruct, temperature 0, local-only
+($0 hosted spend). 450 total inference calls.
 
-Full Stage A proposal: `summary.md`. Reusable logic: `evaluation/prompt_selection.py` (message
-construction + prompt-config loading; output parsing and result-record shape are reused
-directly from `evaluation/oracle.py`, not duplicated). Runner: `scripts/run_e03_prompt_selection.py`
-(written, syntax-checked, **not executed**). Manifest generation:
-`scripts/build_train_prompt_manifest.py` (already run — local-only, deterministic, no model
-calls). Prompt configs: `configs/prompts/classification/classification_p0{0,1,2}.yaml`.
+**Result**: P0 (minimal instruction, no label definitions, no decision procedure) dominates P1
+(+definitions) and P2 (+decision procedure) on Contradiction Recall (22.0% vs 6.0% vs 2.0%) and
+Macro-F1 (0.507 vs 0.448 vs 0.403) simultaneously -- the opposite of this experiment's own
+pre-registered hypothesis that explicit structure would reduce label confusion. Adding
+structure instead made the model default to NotMentioned on real Contradiction cases far more
+often (Contradiction->NotMentioned: 37/50 under P0, 44/50 under P1, 46/50 under P2). Full
+metrics, confusion matrices, and retrieval-vs-reasoning failure attribution: `summary.md` and
+`E03_prompt_selection.ipynb`.
+
+Full Stage A proposal: `summary.md`'s earlier sections. Reusable logic:
+`evaluation/prompt_selection.py` (message construction + prompt-config loading; output parsing
+and result-record shape reused directly from `evaluation/oracle.py`). Runner:
+`scripts/run_e03_prompt_selection.py`. Analysis: `scripts/analyze_e03_prompt_selection.py`
+(metrics + retrieval-aware failure attribution -> `results/prompt_failure_analysis.csv`).
+Manifest generation: `scripts/build_train_prompt_manifest.py`. Prompt configs:
+`configs/prompts/classification/classification_p0{0,1,2}.yaml` (candidates, retained) and
+`classification_prompt_v1.yaml` (the frozen winner).

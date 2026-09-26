@@ -27,7 +27,7 @@ def test_load_prompt_config_p00():
 def test_load_prompt_config_p01_has_label_definitions():
     cfg = load_prompt_config("p01")
     assert "Entailment" in cfg["system_prompt"]
-    assert "states or clearly implies" in cfg["system_prompt"]
+    assert "state or clearly imply" in cfg["system_prompt"]
 
 
 def test_load_prompt_config_p02_has_decision_procedure():

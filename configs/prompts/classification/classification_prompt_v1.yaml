@@ -1,0 +1,46 @@
+version: classification_prompt_v1
+status: FROZEN
+purpose: "E03 downstream default -- frozen classification prompt for qwen2.5:7b-instruct
+  under the retrieval_v1 context condition (E05/E07/E08/E09-E11)"
+source_prompt_variant: p00  # minimal direct instruction -- won decisively, see E03 summary.md
+system_prompt: |
+  You are given an NDA requirement and relevant excerpts retrieved from the NDA.
+
+  Classify the requirement against the excerpts as exactly one of:
+  - "Entailment"
+  - "Contradiction"
+  - "NotMentioned"
+
+  Respond with ONLY a JSON object with this exact field:
+  {
+    "label": "Entailment" | "Contradiction" | "NotMentioned"
+  }
+user_template: |
+  Requirement: {hypothesis_text}
+
+  Retrieved NDA excerpts: {context_text}
+output_schema: '{"label": "Entailment" | "Contradiction" | "NotMentioned"}'
+model: qwen2.5:7b-instruct
+temperature: 0.0
+date_frozen: "2026-09-26"
+experiment_id: E03_prompt_selection
+dataset_manifest: TRAIN_PROMPT_v1  # 150 cases, 50/50/50 balance, seed=500
+retrieval_config: retrieval_v1  # BM25/clause_256/top-20/rerank(ms-marco-MiniLM-L-12-v2)/top-5, frozen in E06
+
+selection_rationale: >
+  P0 (this prompt, unchanged from the minimal baseline) dominates P1 (+label definitions) and
+  P2 (+5-step decision procedure) on both top-priority selection metrics simultaneously:
+  Contradiction Recall (P0 22.0% [95% CI 12.8-35.2%] vs P1 6.0% vs P2 2.0%) and Macro-F1
+  (P0 0.507 vs P1 0.448 vs P2 0.403). Adding label definitions and a decision procedure did
+  NOT earn their added complexity -- both made the model progressively more likely to default
+  to NotMentioned on real Contradiction cases (confusion matrix: Contradiction->NotMentioned
+  rose from 37/50 under P0 to 44/50 under P1 to 46/50 under P2), the opposite of the
+  pre-registered hypothesis that explicit structure would reduce label confusion. Head-to-head
+  case counts confirm the same ordering: P2 wrong->P0 correct (15) far exceeds P0 wrong->P2
+  correct (8). No priority beyond #1/#2 needed to be consulted -- P0 was not tied with either
+  alternative. P0 is also the simplest and cheapest prompt (84 vs 124 vs 197 approx tokens),
+  reinforcing rather than overriding the metric-based decision.
+what_was_rejected: >
+  P1 (explicit label definitions) and P2 (P1 + structured decision procedure) -- both
+  regressed Contradiction Recall and Macro-F1 monotonically relative to P0, with no
+  compensating gain large enough to outweigh the Contradiction-Recall loss (priority #1).

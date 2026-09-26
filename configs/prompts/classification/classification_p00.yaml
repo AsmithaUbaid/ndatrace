@@ -1,9 +1,9 @@
 version: p00
 purpose: "E03 baseline -- minimal direct classification instruction, no label definitions, no decision procedure"
 system_prompt: |
-  You are given an NDA requirement and the full text of the NDA.
+  You are given an NDA requirement and relevant excerpts retrieved from the NDA.
 
-  Classify the requirement against the NDA text as exactly one of:
+  Classify the requirement against the excerpts as exactly one of:
   - "Entailment"
   - "Contradiction"
   - "NotMentioned"
@@ -15,7 +15,7 @@ system_prompt: |
 user_template: |
   Requirement: {hypothesis_text}
 
-  NDA text: {context_text}
+  Retrieved NDA excerpts: {context_text}
 output_schema: '{"label": "Entailment" | "Contradiction" | "NotMentioned"}'
 model: qwen2.5:7b-instruct
 temperature: 0.0
@@ -23,3 +23,8 @@ date: "2026-09-26"
 experiment_id: E03_prompt_selection
 change_from_previous: "n/a -- baseline"
 system_prompt_tokens_cl100k_approx: 84
+context_framing_fix_2026_09_26: "Previously said 'the full text of the NDA' / 'NDA text:',
+  a stale artifact from before E06 resequencing when E03 used full-context input. Corrected
+  to say 'excerpts retrieved from the NDA' since context_text is now the frozen retrieval_v1
+  top-5 reranked context, not the full document. Applied identically to p00/p01/p02 -- this
+  is a factual-accuracy fix, not part of the P0/P1/P2 independent variable."

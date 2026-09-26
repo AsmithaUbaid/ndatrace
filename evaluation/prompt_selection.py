@@ -1,11 +1,16 @@
 """
 E03 controlled prompt selection — reusable, provider-agnostic logic (reconstruction-v2).
 
-Pure functions: build the model-visible user message for one TRAIN_PROMPT_v1 case (full NDA
-context, not gold evidence — this is NOT Oracle), and load a versioned prompt config. Output
-parsing and result-record shape are identical to E01's compact `{"label": ...}` schema, so
-they are reused directly from evaluation.oracle (parse_oracle_output, build_result_record) —
-not duplicated here.
+Pure functions: build the model-visible user message for one TRAIN_PROMPT_v1 case, and load a
+versioned prompt config. Output parsing and result-record shape are identical to E01's compact
+`{"label": ...}` schema, so they are reused directly from evaluation.oracle
+(parse_oracle_output, build_result_record) — not duplicated here.
+
+E03 resumed after E06 froze retrieval_v1 (BM25 -> clause_256 -> top-20 -> rerank -> top-5).
+`case["context_text"]` is now built by the runner from retrieval_v1's reranked top-5 chunks
+(joined), not the full NDA document text used in the original, superseded pre-E06 attempt —
+this function itself is agnostic to that distinction, it just renders whatever context_text
+it's given.
 """
 
 from __future__ import annotations
@@ -30,11 +35,9 @@ def build_classification_user_message(case: dict[str, Any], user_template: str) 
     Render the user message for one TRAIN_PROMPT_v1 case from the prompt config's
     `user_template` (e.g. "Requirement: {hypothesis_text}\n\nNDA text: {context_text}").
 
-    `case["context_text"]` is the FULL NDA document text (E03's controlled context
-    condition — see docs/experiment_registry.md/E03 summary for why full-context was chosen
-    over a retrieval-based condition: no reconstruction-v2 retrieval config has been frozen
-    yet, so using retrieved context here would smuggle in an unscrutinized retrieval decision
-    into what is meant to be a pure prompt comparison). `gold_label` is never read here.
+    `case["context_text"]` is caller-provided (the frozen retrieval_v1 reranked top-5 context,
+    per the resumed E03 design — see docs/experiment_registry.md). `gold_label` is never read
+    here.
     """
     return user_template.format(
         hypothesis_text=case["hypothesis_text"],
