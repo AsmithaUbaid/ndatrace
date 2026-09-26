@@ -1,0 +1,86 @@
+{
+  "candidate_pool_size": 20,
+  "final_top_k": 5,
+  "control": {
+    "metrics": {
+      "n_cases": 4371,
+      "overall": {
+        "evidence_recall_at_k": 0.8843922008429554,
+        "evidence_precision": 0.05267703012156794,
+        "mrr": 0.31020950914679346
+      },
+      "entailment": {
+        "n": 3530,
+        "evidence_recall_at_k": 0.8836157482350823,
+        "evidence_precision": 0.05299961215275917,
+        "mrr": 0.302671063420245
+      },
+      "contradiction": {
+        "n": 841,
+        "evidence_recall_at_k": 0.8876512706477034,
+        "evidence_precision": 0.051323029443678995,
+        "mrr": 0.3418512611262561
+      },
+      "miss_count": 349
+    },
+    "context_size": {
+      "mean_chunks": 4.887211164493251,
+      "mean_chars": 5393.160375200183,
+      "mean_tokens": 1009.2372454815832,
+      "median_tokens": 1019,
+      "p90_tokens": 1163,
+      "max_tokens": 1569
+    }
+  },
+  "rerank": {
+    "metrics": {
+      "n_cases": 4371,
+      "overall": {
+        "evidence_recall_at_k": 0.9221819462725427,
+        "evidence_precision": 0.05349220017072343,
+        "mrr": 0.3764499663676861
+      },
+      "entailment": {
+        "n": 3530,
+        "evidence_recall_at_k": 0.9180738792211875,
+        "evidence_precision": 0.05374663848427403,
+        "mrr": 0.377388700717588
+      },
+      "contradiction": {
+        "n": 841,
+        "evidence_recall_at_k": 0.9394250814583751,
+        "evidence_precision": 0.052424224847497605,
+        "mrr": 0.37250973776465846
+      },
+      "miss_count": 190
+    },
+    "context_size": {
+      "mean_chunks": 4.887211164493251,
+      "mean_chars": 5459.706474490963,
+      "mean_tokens": 1022.8400823610158,
+      "median_tokens": 1033,
+      "p90_tokens": 1167,
+      "max_tokens": 1649
+    }
+  },
+  "recovered_count": 231,
+  "regressed_count": 72,
+  "net_gain": 159,
+  "contradiction_recovered": 53,
+  "contradiction_regressed": 9,
+  "candidate_generation_latency_ms": {
+    "mean": 1.1135666355558014,
+    "median": 0.04054210148751736,
+    "p90": 0.048999907448887825
+  },
+  "reranking_latency_ms": {
+    "mean": 120.60766546323076,
+    "median": 99.50741706416011,
+    "p90": 217.39808400161564
+  },
+  "total_query_latency_ms": {
+    "mean": 121.72123209878656,
+    "median": 99.5463760336861,
+    "p90": 217.60062500834465
+  }
+}
