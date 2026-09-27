@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { FinalReviewResponse } from "@/lib/api";
+import { EvidenceSection } from "@/components/EvidenceSection";
 import { ReviewMetadata } from "@/components/ReviewMetadata";
 import { retrievalTier } from "@/lib/retrievalPresentation";
 import { toVerdict, VERDICT_COLORS, VERDICT_ICONS, VERDICT_TITLES } from "@/lib/verdict";
@@ -14,8 +14,6 @@ const NOTMENTIONED_NOTE =
 // from a real deterministic condition (parse failure, non-source-valid
 // evidence, provider error), set server-side in pipeline/final_review.py.
 export function ResultCard({ result }: { result: FinalReviewResponse }) {
-  const [showEvidence, setShowEvidence] = useState(false);
-
   if (!result.label) {
     return (
       <div className="overflow-hidden rounded-lg border border-amber-300 bg-amber-50 shadow-sm dark:border-amber-800 dark:bg-amber-950/40">
@@ -66,38 +64,12 @@ export function ResultCard({ result }: { result: FinalReviewResponse }) {
           retrievedChunks={result.retrieved_chunks}
         />
 
-        {result.retrieved_chunks.length > 0 && (
-          <button
-            type="button"
-            onClick={() => setShowEvidence((shown) => !shown)}
-            aria-expanded={showEvidence}
-            className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 underline decoration-dotted underline-offset-4 transition-colors hover:text-slate-800"
-          >
-            {showEvidence ? "Hide evidence" : "Show evidence"}
-            <span aria-hidden className="text-[10px]">{showEvidence ? "▲" : "▼"}</span>
-          </button>
-        )}
-
-        {showEvidence && result.retrieved_chunks.length > 0 && (
-          <div className="result-card__evidence-panel mt-4 flex flex-col gap-2.5">
-            <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#7c7373]">
-              Evidence Retrieved
-            </span>
-            {[...result.retrieved_chunks].sort((a, b) => a.rank - b.rank).map((chunk) => (
-              <div key={chunk.chunk_id} className="result-card__evidence-quote">
-                <blockquote className="font-mono text-xs leading-relaxed text-[#29313d]">
-                  {chunk.text}
-                </blockquote>
-                <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-black/5 pt-2 text-[11px] text-[#6b7280]">
-                  <span>Evidence chunk {chunk.chunk_id + 1} · Rank #{chunk.rank}</span>
-                  <span className="font-mono text-[#8a9099]">
-                    Raw reranker score: {chunk.reranker_score.toFixed(3)}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        <EvidenceSection
+          label={result.label}
+          evidence={result.evidence}
+          sourceValid={result.source_valid}
+          retrievedChunks={result.retrieved_chunks}
+        />
 
         <div className="mt-4 rounded-md bg-zinc-50 px-3 py-2 text-xs text-zinc-500 dark:bg-zinc-800/60 dark:text-zinc-400">
           Decision support only. Final NDA review remains with the human reviewer.

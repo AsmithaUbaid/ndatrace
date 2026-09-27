@@ -96,6 +96,10 @@ Implementation details: [`docs/architecture.md`](docs/architecture.md).
 The project began with the cheapest deterministic approach. Each additional layer had to justify
 its quality, cost, latency, and failure modes before it could remain in the system.
 
+A conventional fixed classifier would be cheap at inference time, but the project required
+semantic reasoning over paraphrases, exceptions and evidence spans; Rules were therefore retained
+as the non-AI baseline.
+
 ```mermaid
 flowchart LR
     A0["A0 · Rules<br/>Start with the cheapest<br/>deterministic baseline"]
@@ -164,6 +168,9 @@ This is a measured product trade-off, not a claim that RAG is more accurate or p
 100-page contracts. ContractNLI's document lengths are not sufficient to establish that broader
 scaling claim.
 
+Cost-to-serve considers AI inference, expected human fallback, and fixed operating cost — not API
+price alone.
+
 ## Evaluation: label correctness is not enough
 
 NDATrace evaluates three distinct questions:
@@ -179,6 +186,9 @@ NDATrace evaluates three distinct questions:
 
 Joint is therefore the headline measure. The evaluation also reports Contradiction Recall,
 Evidence Recall and Precision, source validity, retrieval Recall@K, latency, and token use.
+
+Evaluation combines deterministic schema/source checks with ContractNLI's human-annotated labels
+and evidence. Joint success requires both a correct label and valid supporting evidence.
 
 ## Evaluation protocol
 
@@ -256,6 +266,9 @@ hijacks**. Joint success fell from **85% clean to 75% under attack**. Attack evi
 source-grounded, demonstrating an important limitation: a source-valid quote can still contain
 malicious instructions. E16 was a small controlled test, not a certification of the current RAG
 runtime.
+
+Silent failure means a plausible-looking verdict backed by incomplete or misleading evidence;
+Joint scoring, source validation and human review are used to surface this risk.
 
 **Implemented controls**
 

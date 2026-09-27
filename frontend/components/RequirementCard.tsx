@@ -1,12 +1,10 @@
-import { useState } from "react";
 import { RequirementResult } from "@/lib/api";
 import { retrievalTier } from "@/lib/retrievalPresentation";
 import { isLowConfidence, toVerdict, VERDICT_COLORS, VERDICT_ICONS, VERDICT_TITLES } from "@/lib/verdict";
+import { EvidenceSection } from "@/components/EvidenceSection";
 import { ReviewMetadata } from "@/components/ReviewMetadata";
 
 export function RequirementCard({ r }: { r: RequirementResult }) {
-  const [showEvidence, setShowEvidence] = useState(false);
-
   if (r.error || !r.label) {
     return (
       <li className="overflow-hidden rounded-lg border border-amber-300 bg-amber-50 shadow-sm dark:border-amber-800 dark:bg-amber-950/40">
@@ -38,7 +36,6 @@ export function RequirementCard({ r }: { r: RequirementResult }) {
   const confidencePercent = r.confidence == null ? null : Math.round(r.confidence * 100);
   const topChunk = r.retrieved_chunks.find((chunk) => chunk.rank === 1) ?? r.retrieved_chunks[0];
   const topMatch = retrievalTier(topChunk?.reranker_score ?? null);
-  const chunkCount = r.retrieved_chunks.length;
 
   return (
     <li
@@ -112,38 +109,12 @@ export function RequirementCard({ r }: { r: RequirementResult }) {
           retrievedChunks={r.retrieved_chunks}
         />
 
-        {chunkCount > 0 && (
-          <button
-            type="button"
-            onClick={() => setShowEvidence((shown) => !shown)}
-            aria-expanded={showEvidence}
-            className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 underline decoration-dotted underline-offset-4 transition-colors hover:text-slate-800"
-          >
-            {showEvidence ? "Hide evidence" : "Show evidence"}
-            <span aria-hidden className="text-[10px]">{showEvidence ? "▲" : "▼"}</span>
-          </button>
-        )}
-
-        {showEvidence && chunkCount > 0 && (
-          <div className="result-card__evidence-panel mt-4 flex flex-col gap-2.5">
-            <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#7c7373]">
-              Evidence Retrieved
-            </span>
-            {[...r.retrieved_chunks].sort((a, b) => a.rank - b.rank).map((chunk) => (
-              <div key={chunk.chunk_id} className="result-card__evidence-quote">
-                <blockquote className="font-mono text-xs leading-relaxed text-[#29313d]">
-                  {chunk.text}
-                </blockquote>
-                <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-black/5 pt-2 text-[11px] text-[#6b7280]">
-                  <span>Evidence chunk {chunk.chunk_id + 1} · Rank #{chunk.rank}</span>
-                  <span className="font-mono text-[#8a9099]">
-                    Raw reranker score: {chunk.reranker_score.toFixed(3)}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        <EvidenceSection
+          label={r.label}
+          evidence={r.evidence}
+          sourceValid={r.source_valid}
+          retrievedChunks={r.retrieved_chunks}
+        />
       </div>
     </li>
   );
