@@ -24,15 +24,52 @@ reviewer remains the final authority.
 
 ```mermaid
 flowchart TD
-    A[Requirement + NDA] --> B[Clause-aware document chunks]
-    B --> C[BM25 top-20]
-    C --> D[Cross-encoder reranking]
-    D --> E[Top-5 clauses]
-    E --> F[GPT-5-mini + frozen P0]
-    F --> G[Structured parser]
-    G --> H[Evidence and source validation]
-    H --> I[Verdict + ranked source clauses]
-    I --> J[Human reviewer]
+    INPUT(["NDA + confidentiality requirement"])
+
+    subgraph RETRIEVAL["1 · RETRIEVE"]
+        direction LR
+        CHUNK["Clause-aware chunking<br/>256 tokens · overlap config 50"]
+        BM25["Candidate search<br/>BM25 · top-20"]
+        RERANK["Cross-encoder reranking<br/>MiniLM-L-12-v2"]
+        CONTEXT["Selected context<br/>top-5 clauses"]
+        CHUNK --> BM25 --> RERANK --> CONTEXT
+    end
+
+    subgraph CLASSIFY["2 · CLASSIFY"]
+        direction LR
+        MODEL["GPT-5-mini<br/>frozen P0 · temperature 0"]
+        PARSER["Structured output<br/>parser"]
+        MODEL --> PARSER
+    end
+
+    subgraph VERIFY["3 · VERIFY"]
+        direction LR
+        VALIDATE["Evidence / source<br/>validation"]
+        RESULT["Verdict + evidence<br/>ranked source clauses"]
+        VALIDATE --> RESULT
+    end
+
+    REVIEW(["Human reviewer<br/>final authority"])
+
+    INPUT --> CHUNK
+    CONTEXT --> MODEL
+    PARSER --> VALIDATE
+    RESULT --> REVIEW
+
+    classDef input fill:#f8fafc,stroke:#64748b,stroke-width:1.5px,color:#0f172a;
+    classDef retrieval fill:#eff6ff,stroke:#93b4d8,stroke-width:1px,color:#17324d;
+    classDef classify fill:#f5f3ff,stroke:#b7a8d9,stroke-width:1px,color:#312e55;
+    classDef verify fill:#fffaf0,stroke:#d6b879,stroke-width:1px,color:#4a3513;
+    classDef human fill:#edf8f1,stroke:#78a98a,stroke-width:1.5px,color:#163522;
+    class INPUT input;
+    class CHUNK,BM25,RERANK,CONTEXT retrieval;
+    class MODEL,PARSER classify;
+    class VALIDATE,RESULT verify;
+    class REVIEW human;
+    style RETRIEVAL fill:#f8fbff,stroke:#cbd9ea,stroke-width:1px
+    style CLASSIFY fill:#faf9ff,stroke:#d8d0e8,stroke-width:1px
+    style VERIFY fill:#fffdf8,stroke:#e5d8ba,stroke-width:1px
+    linkStyle default stroke:#94a3b8,stroke-width:1.5px;
 ```
 
 Both the single-requirement and batch-review endpoints use the same frozen pipeline. The batch
@@ -58,6 +95,25 @@ Implementation details: [`docs/architecture.md`](docs/architecture.md).
 
 The project began with the cheapest deterministic approach. Each additional layer had to justify
 its quality, cost, latency, and failure modes before it could remain in the system.
+
+```mermaid
+flowchart LR
+    A0["A0 · Rules<br/>Start with the cheapest<br/>deterministic baseline"]
+    A1["A1 · FULL<br/>Add whole-document<br/>semantic reasoning<br/>Benchmark winner"]
+    A2["A2 · RAG<br/>Bound context and return<br/>clause provenance<br/>Prototype runtime"]
+    A3["A3 · Agent<br/>Try tools on difficult<br/>retrieval cases<br/>Rejected"]
+
+    A0 --> A1 --> A2 --> A3
+
+    classDef baseline fill:#f8fafc,stroke:#94a3b8,color:#1f2937;
+    classDef winner fill:#eff6ff,stroke:#93b4d8,color:#17324d;
+    classDef runtime fill:#f0fdf4,stroke:#86b89a,color:#163522;
+    classDef rejected fill:#fff7f7,stroke:#d6a3a3,color:#572727;
+    class A0 baseline;
+    class A1 winner;
+    class A2 runtime;
+    class A3 rejected;
+```
 
 | Rung | Architecture | What it added | Decision |
 |---|---|---|---|

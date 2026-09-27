@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { RequirementResult } from "@/lib/api";
+import { retrievalTier } from "@/lib/retrievalPresentation";
 import { isLowConfidence, toVerdict, VERDICT_COLORS, VERDICT_ICONS, VERDICT_TITLES } from "@/lib/verdict";
+import { ReviewMetadata } from "@/components/ReviewMetadata";
 
 export function RequirementCard({ r }: { r: RequirementResult }) {
-  const [showDetails, setShowDetails] = useState(false);
+  const [showEvidence, setShowEvidence] = useState(false);
 
   if (r.error || !r.label) {
     return (
@@ -34,6 +36,9 @@ export function RequirementCard({ r }: { r: RequirementResult }) {
   const colors = VERDICT_COLORS[verdict];
   const lowConfidence = isLowConfidence(r);
   const confidencePercent = r.confidence == null ? null : Math.round(r.confidence * 100);
+  const topChunk = r.retrieved_chunks.find((chunk) => chunk.rank === 1) ?? r.retrieved_chunks[0];
+  const topMatch = retrievalTier(topChunk?.reranker_score ?? null);
+  const chunkCount = r.retrieved_chunks.length;
 
   return (
     <li
@@ -76,13 +81,7 @@ export function RequirementCard({ r }: { r: RequirementResult }) {
               <span className="font-semibold tabular-nums text-[#4b5563]">{confidencePercent}%</span>
             </div>
           )}
-          <span>Reviewed against retrieved source clauses</span>
-          <button
-            onClick={() => setShowDetails((s) => !s)}
-            className="text-[#9ca3af] underline decoration-dotted underline-offset-2 transition-colors hover:text-[#4b5563]"
-          >
-            {showDetails ? "Hide details" : "Details"}
-          </button>
+          <span>Reviewed against retrieved evidence chunks</span>
         </div>
 
         {lowConfidence && (
@@ -101,40 +100,47 @@ export function RequirementCard({ r }: { r: RequirementResult }) {
           <p className="mt-4 text-sm leading-6 text-[#4b5563]">{r.explanation}</p>
         )}
 
-        {r.evidence.length > 0 && (
+        {r.label === "NotMentioned" && topMatch.label === "Low" && (
+          <p className="mt-3 rounded-lg border border-slate-200 bg-slate-50/80 px-3 py-2 text-xs leading-5 text-slate-600">
+            No explicit supporting or contradicting provision was identified.
+          </p>
+        )}
+
+        <ReviewMetadata
+          costUsd={r.cost_usd}
+          latencyMs={r.latency_ms}
+          retrievedChunks={r.retrieved_chunks}
+        />
+
+        {chunkCount > 0 && (
+          <button
+            type="button"
+            onClick={() => setShowEvidence((shown) => !shown)}
+            aria-expanded={showEvidence}
+            className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 underline decoration-dotted underline-offset-4 transition-colors hover:text-slate-800"
+          >
+            {showEvidence ? "Hide evidence" : "Show evidence"}
+            <span aria-hidden className="text-[10px]">{showEvidence ? "▲" : "▼"}</span>
+          </button>
+        )}
+
+        {showEvidence && chunkCount > 0 && (
           <div className="result-card__evidence-panel mt-4 flex flex-col gap-2.5">
             <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#7c7373]">
               Evidence Retrieved
             </span>
-            {r.evidence.map((e, i) => (
-              <blockquote
-                key={i}
-                className="result-card__evidence-quote font-mono text-xs leading-relaxed text-[#29313d]"
-              >
-                {e}
-              </blockquote>
-            ))}
-            {r.sources.length > 0 && (
-              <div className="flex flex-wrap gap-x-3 gap-y-1 border-t border-black/5 pt-2 text-[11px] text-[#6b7280]">
-                {r.sources.map((source) => (
-                  <span key={source.chunk_id}>
-                    Source clause {source.chunk_id + 1} · rank {source.rank}
+            {[...r.retrieved_chunks].sort((a, b) => a.rank - b.rank).map((chunk) => (
+              <div key={chunk.chunk_id} className="result-card__evidence-quote">
+                <blockquote className="font-mono text-xs leading-relaxed text-[#29313d]">
+                  {chunk.text}
+                </blockquote>
+                <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-black/5 pt-2 text-[11px] text-[#6b7280]">
+                  <span>Evidence chunk {chunk.chunk_id + 1} · Rank #{chunk.rank}</span>
+                  <span className="font-mono text-[#8a9099]">
+                    Raw reranker score: {chunk.reranker_score.toFixed(3)}
                   </span>
-                ))}
+                </div>
               </div>
-            )}
-          </div>
-        )}
-
-        {showDetails && (
-          <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 border-t border-black/5 pt-3 text-xs text-[#7c8490]">
-            <span>Cost: ${r.cost_usd.toFixed(6)}</span>
-            <span>Latency: {Math.round(r.latency_ms)}ms</span>
-            <span>{r.retrieved_chunks.length} clauses retrieved</span>
-            {r.retrieved_chunks.map((chunk) => (
-              <span key={chunk.chunk_id} className="font-mono">
-                #{chunk.rank} clause {chunk.chunk_id + 1} · score {chunk.reranker_score.toFixed(3)}
-              </span>
             ))}
           </div>
         )}
