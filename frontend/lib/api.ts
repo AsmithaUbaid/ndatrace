@@ -6,6 +6,50 @@ export type Hypothesis = {
   hypothesis_text: string;
 };
 
+// Legacy RAG + selective-agent pipeline (POST /review), restored alongside
+// /history - batch review of multiple hypotheses at once, with a
+// self-reported confidence score and agent-escalation info. Distinct from
+// the final single-requirement FinalReviewResponse below.
+export type RequirementResult = {
+  hypothesis_id: string;
+  hypothesis_text: string;
+  label: "Entailment" | "Contradiction" | "NotMentioned";
+  confidence: number;
+  explanation: string;
+  evidence: string[];
+  agent_used: boolean;
+  agent_steps: number;
+  cost_usd: number;
+  latency_ms: number;
+  error: string | null;
+};
+
+export type ReviewResponse = {
+  review_id: string;
+  doc_id: string;
+  created_at: string;
+  results: RequirementResult[];
+  total_cost_usd: number;
+  total_latency_ms: number;
+  model: string;
+};
+
+export type ReviewSummary = {
+  review_id: string;
+  doc_id: string;
+  created_at: string;
+  num_requirements: number;
+  total_cost_usd: number;
+  model: string;
+};
+
+export type CostEstimate = {
+  avg_cost_per_requirement_usd: number;
+  source_experiment_id: string;
+  source_sample_size: number;
+  model: string;
+};
+
 // E19: the final, frozen product path (GPT-5-mini + P0 + FULL NDA context).
 // No confidence score (the frozen prompt doesn't request one), no agent
 // fields (no agent in the final architecture).
@@ -79,4 +123,13 @@ export const api = {
     formData.append("file", file);
     return requestMultipart<{ text: string }>("/extract-pdf", formData);
   },
+  // Legacy RAG + selective-agent batch review, restored alongside /history.
+  createReview: (ndaText: string, hypothesisIds?: string[]) =>
+    request<ReviewResponse>("/review", {
+      method: "POST",
+      body: JSON.stringify({ nda_text: ndaText, hypothesis_ids: hypothesisIds ?? null }),
+    }),
+  getReview: (reviewId: string) => request<ReviewResponse>(`/review/${reviewId}`),
+  listResults: () => request<ReviewSummary[]>("/results"),
+  getCostEstimate: () => request<CostEstimate>("/cost-estimate"),
 };

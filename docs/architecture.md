@@ -1,12 +1,12 @@
 # NDATrace Architecture
 
-This describes the **final, currently-selected** architecture (reconstruction-v2, frozen in E19),
-verified directly against `pipeline/final_review.py` and `backend/routes/review.py` —
-`POST /api/review` is the sole review endpoint the backend serves. For the superseded RAG +
-selective-agent architecture (removed from the active product; preserved in
-`archive/pre_reconstruction/pipeline/` for historical reproduction), see
-`docs/archive/architecture_pre_reconstruction.md`. For the full reasoning and every rejected
-alternative, see `docs/decisions.md`.
+This describes the **final, selected** architecture (reconstruction-v2, frozen in E19), verified
+directly against `pipeline/final_review.py` and `backend/routes/review.py` —
+`POST /api/review` is the primary review endpoint. The superseded RAG + selective-agent
+architecture (`POST /review`, `pipeline/orchestrator.py`) is also served, restored as a real
+working batch-review alternative, not just historical record — see §4 below and
+`docs/archive/architecture_pre_reconstruction.md`. For the full reasoning behind the selection and
+every rejected alternative, see `docs/decisions.md`.
 
 ## 1. Request flow (`POST /api/review`, `backend/routes/review.py`)
 
@@ -63,11 +63,12 @@ correctness or uncertainty signal.
 Full breakdown, comparators (rule baseline, local Qwen), and provenance: `results/final/README.md`,
 `docs/experiment_registry.md` (E17/E17B), `docs/decisions.md`.
 
-## 4. Legacy path (removed from the active product)
+## 4. Legacy path (restored, not the selected architecture)
 
-The earlier RAG + selective-agent pipeline (`archive/pre_reconstruction/pipeline/orchestrator.py`)
-and its endpoints (`POST /review`, `GET /review/{review_id}`, `GET /results`,
-`GET /cost-estimate`) were removed from the active backend and frontend during final submission
-cleanup — there is no `/history` feature in the current product. The legacy pipeline code, its
-tests, and the SQLite persistence layer it used are preserved under `archive/pre_reconstruction/`
-for historical reproduction only; see `docs/archive/architecture_pre_reconstruction.md`.
+The earlier RAG + selective-agent pipeline (`pipeline/orchestrator.py`) and its endpoints
+(`POST /review`, `GET /review/{review_id}`, `GET /results`, `GET /cost-estimate`) are live in the
+current backend and frontend — batch review of multiple hypotheses at once (checkbox picker of the
+17 fixed requirements), self-reported confidence, agent escalation, and SQLite-backed `/history`.
+It is **not** the selected final architecture (see §2/§3 above) — full-context GPT-5-mini + P0 is —
+but it is a real, working alternative, not merely preserved for reproduction. Full detail:
+`docs/archive/architecture_pre_reconstruction.md`, `docs/api.md`'s "Legacy batch-review endpoints".

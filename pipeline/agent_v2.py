@@ -2,7 +2,7 @@
 E10/E11 (reconstruction-v2) -- the NEW bounded selective agent (A3) prototype: routing trigger,
 strict agent-action schema/validation, a finite bounded loop, hard limits enforced OUTSIDE the
 model, duplicate-call protection, and a fallback-to-A2 policy. Does NOT modify or import
-`archive/pre_reconstruction/pipeline/agent.py`/`archive/pre_reconstruction/pipeline/agent_tools.py`/`archive/pre_reconstruction/pipeline/confidence.py` (T-series, historical,
+`pipeline/agent.py`/`pipeline/agent_tools.py`/`pipeline/confidence.py` (T-series, historical,
 byte-unchanged).
 
 Frozen per E10 Stage A (experiments/E10_agent_design/summary.md) -- nothing here is tuned on E11

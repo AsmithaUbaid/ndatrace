@@ -127,9 +127,10 @@ An earlier pass through this project (before reconstruction-v2) built and measur
 architecture — RAG + a selective agent, on `google/gemini-2.5-flash-lite`, reaching 78.7%/77.7%
 accuracy (RAG/RAG+agent) on the same TEST split. That work is preserved for provenance in
 `docs/decisions.md`, `docs/experiments.md`, and `archive/pre_reconstruction/` — it is **not** the
-final, selected result and should not be cited as such. That pipeline's code, tests, and endpoints
-(including the `/history` frontend feature) were removed from the active product during final
-submission cleanup — see `docs/architecture.md`'s "Legacy path" section.
+final, selected result and should not be cited as such. That pipeline's code and endpoints
+(`POST /review`, `/history`) remain live as a restored, working batch-review alternative — not
+the selected architecture, but not merely historical either — see `docs/architecture.md`'s
+"Legacy path" section.
 
 ## Where to look for more detail
 

@@ -19,8 +19,8 @@ solely on a diagnostic estimate. This is not a reversal of E09's finding.
 
 ## 1. Historical agent architecture audited
 
-`archive/pre_reconstruction/pipeline/agent.py` (bounded ReAct loop, step/time/token limits, duplicate-call detection,
-fallback-to-classify), `archive/pre_reconstruction/pipeline/agent_tools.py` (5 read-only tools), `archive/pre_reconstruction/pipeline/confidence.py`
+`pipeline/agent.py` (bounded ReAct loop, step/time/token limits, duplicate-call detection,
+fallback-to-classify), `pipeline/agent_tools.py` (5 read-only tools), `pipeline/confidence.py`
 (rule-agreement routing), `prompts/agent_step_v1.txt`/`agent_step_v2.txt`, and
 `data/agent_experiment.json`'s result schema — the same inventory E09 already produced via a
 read-only audit, extended here with an explicit keep/rewrite/discard call per component.
@@ -203,7 +203,7 @@ explicit approval to proceed to E11.
 
 Implemented `pipeline/agent_v2.py` (routing trigger, action schema/validation, bounded loop, hard
 limits, duplicate protection, fallback policy, result trace) and `pipeline/agent_tools_v2.py`
-(the 2 frozen tools) as entirely new files — `archive/pre_reconstruction/pipeline/agent.py`/`agent_tools.py`/`confidence.py`
+(the 2 frozen tools) as entirely new files — `pipeline/agent.py`/`agent_tools.py`/`confidence.py`
 untouched. `prompts/agent_v2_control.txt` written separately from `classification_prompt_v1`.
 
 **Tool set finalized at 2, not 3**: `get_definition` was dropped as a standalone action before

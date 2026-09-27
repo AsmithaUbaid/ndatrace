@@ -1,16 +1,15 @@
 """
-Historical tests for the removed legacy backend surface (pre-reconstruction
-RAG + selective-agent pipeline): POST /review, GET /review/{review_id},
-GET /results, GET /cost-estimate, and the old results/runs/*.jsonl-backed
-GET /experiments schema.
+Tests for the restored legacy backend surface (pre-reconstruction RAG +
+selective-agent pipeline): POST /review, GET /review/{review_id},
+GET /results, GET /cost-estimate. Restored alongside the batch-review +
+/history frontend UI - POST /api/review remains the final, selected
+architecture, but this legacy flow is a real, working alternative, not
+just historical record.
 
-These routes, backend/database.py, and backend/routes/results.py were
-removed from the active product during the final submission cleanup
-(reconstruction-v2) - POST /api/review is the sole review endpoint now.
-This file is NOT part of the active test suite (see the root pytest.ini's
-testpaths = tests) and will fail if run against the current backend/app.py,
-since the routes it exercises no longer exist. Kept for historical record
-of what was tested, not for reproduction.
+GET /experiments itself is NOT reverted to the old results/runs/*.jsonl
+browser schema - it now serves the reconstruction-v2 final TEST comparison
+(see tests/test_backend.py); only GET /cost-estimate reads results/runs/
+here, to estimate the legacy pipeline's own per-requirement cost.
 """
 
 from __future__ import annotations
@@ -38,13 +37,6 @@ def _fake_completion(content: str, tokens_in: int = 100, tokens_out: int = 20):
         choices=[SimpleNamespace(message=SimpleNamespace(content=content))],
         usage=SimpleNamespace(prompt_tokens=tokens_in, completion_tokens=tokens_out),
     )
-
-
-def test_list_experiments_excludes_checkpoints(client):
-    r = client.get("/experiments")
-    assert r.status_code == 200
-    for exp in r.json():
-        assert exp["experiment_id"] != "unknown"
 
 
 def test_cost_estimate_reflects_real_rag_agent_data(client):

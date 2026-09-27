@@ -32,16 +32,16 @@ count, not inferred.
 
 ## 6-7. Historical agent audit (T-series prior art — hypothesis-generation only)
 
-Audited `archive/pre_reconstruction/pipeline/agent.py`, `archive/pre_reconstruction/pipeline/agent_tools.py`, `archive/pre_reconstruction/pipeline/confidence.py`,
+Audited `pipeline/agent.py`, `pipeline/agent_tools.py`, `pipeline/confidence.py`,
 `prompts/agent_step_v1.txt`/`agent_step_v2.txt`, `data/agent_experiment.json`, and
 `docs/decisions.md`'s ADR-005 through ADR-009. Full inventory in `config.yaml`'s
 `historical_agent_audit` block; summary:
 
 | Component | Read-only? | Reusable? | Key risk |
 |---|---|---|---|
-| Agent loop (`archive/pre_reconstruction/pipeline/agent.py`) | Yes | Pattern only (step/time/token limits + duplicate-call detection + fallback-to-classify) | ~21% duplicate-loop rate, never root-caused |
-| 5 tools (`archive/pre_reconstruction/pipeline/agent_tools.py`) | Yes, confirmed no write/mutation anywhere | Pattern only (5-tool "why retrieval missed it" taxonomy) | `search_exceptions` exists specifically for carve-out patterns but has a documented **100% (4/4) failure rate** on exactly those golden-battery cases — a tool existing is not evidence it works |
-| Confidence routing (`archive/pre_reconstruction/pipeline/confidence.py`) | Yes | Pattern only ("validate the signal isn't circular") | (1) originally circular (C-1: rule match fed into RAG context AND the routing check); (2) no signal ever cleared 0.7 AUROC — confidence gating is unsolved prior art, not something to reuse as a working signal |
+| Agent loop (`pipeline/agent.py`) | Yes | Pattern only (step/time/token limits + duplicate-call detection + fallback-to-classify) | ~21% duplicate-loop rate, never root-caused |
+| 5 tools (`pipeline/agent_tools.py`) | Yes, confirmed no write/mutation anywhere | Pattern only (5-tool "why retrieval missed it" taxonomy) | `search_exceptions` exists specifically for carve-out patterns but has a documented **100% (4/4) failure rate** on exactly those golden-battery cases — a tool existing is not evidence it works |
+| Confidence routing (`pipeline/confidence.py`) | Yes | Pattern only ("validate the signal isn't circular") | (1) originally circular (C-1: rule match fed into RAG context AND the routing check); (2) no signal ever cleared 0.7 AUROC — confidence gating is unsolved prior art, not something to reuse as a working signal |
 | Agent experiment schema (`data/agent_experiment.json`) | n/a | Schema directly reusable for E09's own logging | — |
 
 **Most important finding**: ADR-007's dev-sample (67 cases) and 500-case T041-subsample results

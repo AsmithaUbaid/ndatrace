@@ -164,11 +164,11 @@ their findings remain documented here rather than only in the JSON:
   cost topped out around $0.0006, `settings.agent_max_tokens` is 3000) — verified instead by
   `tests/test_agent.py::test_agent_respects_token_limit`. This cap was itself a real gap found while
   building this eval case — `settings.agent_max_tokens` existed in config but wasn't enforced in
-  `archive/pre_reconstruction/pipeline/agent.py` until then.
-- **075 (abstains when stuck):** a deliberate design deviation, not a gap — `archive/pre_reconstruction/pipeline/agent.py` does
+  `pipeline/agent.py` until then.
+- **075 (abstains when stuck):** a deliberate design deviation, not a gap — `pipeline/agent.py` does
   not implement a distinct "abstain" action when the step/time/token limit is hit without a
   conclusion; it falls back to a plain `classify()` call over everything gathered instead. Whether to
-  abstain on the final answer is left entirely to `archive/pre_reconstruction/pipeline/confidence.py` upstream, so there is no
+  abstain on the final answer is left entirely to `pipeline/confidence.py` upstream, so there is no
   separate agent-level abstain path to test.
 
 ---
@@ -199,7 +199,7 @@ real `doc_id`/`hypothesis_id`); their findings remain documented here rather tha
 - **079 (abstained cases are hard, target >50% would-have-been-wrong):** target **not met** — at the
   selected threshold (`rule_agrees`), abstention effectiveness is only 19.4%, meaning the
   "would-abstain" bucket is still 80.6% correct on its own. This is exactly why
-  `archive/pre_reconstruction/pipeline/confidence.py` routes ACCEPT/REVIEW rather than ACCEPT/ABSTAIN (ADR-005) — hard
+  `pipeline/confidence.py` routes ACCEPT/REVIEW rather than ACCEPT/ABSTAIN (ADR-005) — hard
   abstention here would discard far more right answers than wrong ones.
 - **080 (threshold sweep):** using the `rule_agrees` signal (self-confidence excluded as already
   shown unusable), selective accuracy is monotonically non-decreasing as the threshold rises:

@@ -14,7 +14,7 @@ the backend doesn't yet expose it.
 
 ## Terminology: "abstain" vs. "route to human review"
 
-**Gap:** `archive/pre_reconstruction/pipeline/confidence.py`'s `Route` enum only has `ACCEPT`/`REVIEW` — there is no hard
+**Gap:** `pipeline/confidence.py`'s `Route` enum only has `ACCEPT`/`REVIEW` — there is no hard
 `ABSTAIN` path (see ADR-005). Some docs/prose (including the project contract itself) use
 "abstention" loosely, which reads as if a hard-abstain mechanism exists.
 

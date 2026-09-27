@@ -1,6 +1,6 @@
 """
 E10/E11 (reconstruction-v2) -- the NEW, minimal read-only tool set for the bounded selective
-agent (A3) prototype. Does NOT modify or import `archive/pre_reconstruction/pipeline/agent.py`/`archive/pre_reconstruction/pipeline/agent_tools.py`
+agent (A3) prototype. Does NOT modify or import `pipeline/agent.py`/`pipeline/agent_tools.py`
 (T-series, historical, byte-unchanged).
 
 All three tools are read-only and deterministic (no LLM calls anywhere in this module). Each

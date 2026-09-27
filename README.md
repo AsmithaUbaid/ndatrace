@@ -80,13 +80,13 @@ Full detail: `experiments/E17_final_test/`, `experiments/E17B_full_test_completi
 ## Architecture
 
 Synchronous modular monolith: Python AI pipeline (`pipeline/`) served by a FastAPI backend
-(`backend/`) and a Next.js frontend (`frontend/`). The live (and only) product path is
-`pipeline/final_review.py` → `POST /api/review` (see `backend/app.py`). The earlier RAG +
-selective-agent pipeline and its endpoints (`POST /review`, `GET /review/{id}`, `GET /results`,
-`GET /cost-estimate`, and the `/history` frontend feature) were removed from the active product
-during final submission cleanup — that architecture is preserved in
-`archive/pre_reconstruction/pipeline/` for historical reproduction only. Full request-flow detail:
-**`docs/architecture.md`**.
+(`backend/`) and a Next.js frontend (`frontend/`). The primary, selected product path is
+`pipeline/final_review.py` → `POST /api/review` (see `backend/app.py`, frontend `/final`). The
+earlier RAG + selective-agent pipeline (`pipeline/orchestrator.py`) and its endpoints
+(`POST /review`, `GET /review/{id}`, `GET /results`, `GET /cost-estimate`) are also live, restored
+as a real, working batch-review alternative — checkbox multi-select of the 17 fixed requirements,
+self-reported confidence, agent escalation, and SQLite-backed `/history` (frontend `/`). It is not
+the selected final architecture. Full request-flow detail: **`docs/architecture.md`**.
 
 ## Experiment progression (original pre-reconstruction pipeline — historical)
 
@@ -168,8 +168,8 @@ a reviewer should generally only need **Production**, **Evaluation**, **Experime
 
 | Path | Purpose |
 |---|---|
-| `pipeline/` | Production AI pipeline. `final_review.py` is the sole live path (GPT-5-mini + P0 + FULL + runtime validator). Retrieval/rule/classifier modules are also required by E-series reproduction (see Experiments below); the legacy RAG+agent orchestrator and its agent/confidence modules were removed to `archive/pre_reconstruction/pipeline/` since nothing live uses them |
-| `backend/` | FastAPI application — a single review endpoint (`POST /api/review`) plus the reconstruction-v2 experiment comparison (`GET /experiments`) — see `docs/api.md` |
+| `pipeline/` | Production AI pipeline. `final_review.py` is the selected final path (GPT-5-mini + P0 + FULL + runtime validator). `orchestrator.py`/`agent.py`/`agent_tools.py`/`confidence.py` are the restored legacy RAG+agent batch-review path — live, not the selected architecture. Retrieval/rule/classifier modules are shared with E-series reproduction (see Experiments below) |
+| `backend/` | FastAPI application — `POST /api/review` (final), `POST /review` + `/history` support (legacy batch), and the reconstruction-v2 experiment comparison (`GET /experiments`) — see `docs/api.md` |
 | `frontend/` | Next.js application — see `frontend/README.md` |
 
 **Evaluation:**
@@ -222,9 +222,11 @@ uvicorn backend.app:app --reload            # backend, http://localhost:8000
 cd frontend && npm install && npm run dev   # frontend, http://localhost:3000
 ```
 
-Open `http://localhost:3000`, paste or upload an NDA, pick or type a requirement, and click
-"Review NDA". This calls `POST /api/review` — the final architecture described above — and makes a
-real, billed OpenRouter call per review.
+Open `http://localhost:3000/final` for the final architecture: paste or upload an NDA, type a
+requirement, and click "Run review" — calls `POST /api/review` and makes a real, billed OpenRouter
+call. `http://localhost:3000/` (home) is the restored legacy batch-review UI (checkbox picker of
+the 17 fixed requirements, `POST /review`, with `/history` to browse past batch reviews) — a real,
+working alternative, not the selected final architecture.
 
 ## Known limitations
 
