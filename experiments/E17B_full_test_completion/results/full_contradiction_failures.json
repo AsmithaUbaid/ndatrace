@@ -1,0 +1,646 @@
+[
+ {
+  "case_id": "test::8::nda-1",
+  "pred": "Entailment",
+  "n_quotes": 1,
+  "gold_overlap": true,
+  "gold_idx": [
+   7
+  ]
+ },
+ {
+  "case_id": "test::18::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   24,
+   25
+  ]
+ },
+ {
+  "case_id": "test::23::nda-2",
+  "pred": "Contradiction",
+  "n_quotes": 3,
+  "gold_overlap": false,
+  "gold_idx": [
+   77,
+   78
+  ]
+ },
+ {
+  "case_id": "test::2::nda-7",
+  "pred": "Entailment",
+  "n_quotes": 4,
+  "gold_overlap": true,
+  "gold_idx": [
+   23
+  ]
+ },
+ {
+  "case_id": "test::77::nda-20",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   30
+  ]
+ },
+ {
+  "case_id": "test::80::nda-7",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   31,
+   32
+  ]
+ },
+ {
+  "case_id": "test::127::nda-1",
+  "pred": "NotMentioned",
+  "n_quotes": 0,
+  "gold_overlap": false,
+  "gold_idx": [
+   13,
+   14,
+   15
+  ]
+ },
+ {
+  "case_id": "test::387::nda-7",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   19,
+   20,
+   21
+  ]
+ },
+ {
+  "case_id": "test::413::nda-7",
+  "pred": "Entailment",
+  "n_quotes": 1,
+  "gold_overlap": true,
+  "gold_idx": [
+   11
+  ]
+ },
+ {
+  "case_id": "test::497::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   18,
+   19
+  ]
+ },
+ {
+  "case_id": "test::523::nda-19",
+  "pred": "Entailment",
+  "n_quotes": 5,
+  "gold_overlap": true,
+  "gold_idx": [
+   38,
+   44
+  ]
+ },
+ {
+  "case_id": "test::600::nda-2",
+  "pred": "Contradiction",
+  "n_quotes": 2,
+  "gold_overlap": false,
+  "gold_idx": [
+   1
+  ]
+ },
+ {
+  "case_id": "test::565::nda-20",
+  "pred": "Entailment",
+  "n_quotes": 1,
+  "gold_overlap": false,
+  "gold_idx": [
+   97,
+   98,
+   99
+  ]
+ },
+ {
+  "case_id": "test::1::nda-1",
+  "pred": "NotMentioned",
+  "n_quotes": 0,
+  "gold_overlap": false,
+  "gold_idx": [
+   25
+  ]
+ },
+ {
+  "case_id": "test::5::nda-3",
+  "pred": "Entailment",
+  "n_quotes": 1,
+  "gold_overlap": true,
+  "gold_idx": [
+   5,
+   6
+  ]
+ },
+ {
+  "case_id": "test::26::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   34
+  ]
+ },
+ {
+  "case_id": "test::41::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   17,
+   18
+  ]
+ },
+ {
+  "case_id": "test::41::nda-7",
+  "pred": "Entailment",
+  "n_quotes": 4,
+  "gold_overlap": true,
+  "gold_idx": [
+   11,
+   23
+  ]
+ },
+ {
+  "case_id": "test::46::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   69
+  ]
+ },
+ {
+  "case_id": "test::47::nda-2",
+  "pred": "Contradiction",
+  "n_quotes": 3,
+  "gold_overlap": true,
+  "gold_idx": [
+   2,
+   3,
+   4,
+   5,
+   6,
+   8,
+   20
+  ]
+ },
+ {
+  "case_id": "test::48::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 1,
+  "gold_overlap": true,
+  "gold_idx": [
+   17
+  ]
+ },
+ {
+  "case_id": "test::58::nda-7",
+  "pred": "Entailment",
+  "n_quotes": 3,
+  "gold_overlap": false,
+  "gold_idx": [
+   24
+  ]
+ },
+ {
+  "case_id": "test::60::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   13
+  ]
+ },
+ {
+  "case_id": "test::65::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   41
+  ]
+ },
+ {
+  "case_id": "test::62::nda-7",
+  "pred": "Entailment",
+  "n_quotes": 3,
+  "gold_overlap": true,
+  "gold_idx": [
+   38,
+   39,
+   40,
+   42,
+   56
+  ]
+ },
+ {
+  "case_id": "test::66::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   29,
+   36
+  ]
+ },
+ {
+  "case_id": "test::66::nda-7",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   29,
+   31
+  ]
+ },
+ {
+  "case_id": "test::67::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   13,
+   16
+  ]
+ },
+ {
+  "case_id": "test::68::nda-7",
+  "pred": "Entailment",
+  "n_quotes": 3,
+  "gold_overlap": false,
+  "gold_idx": [
+   33
+  ]
+ },
+ {
+  "case_id": "test::74::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   11
+  ]
+ },
+ {
+  "case_id": "test::80::nda-20",
+  "pred": "Entailment",
+  "n_quotes": 1,
+  "gold_overlap": true,
+  "gold_idx": [
+   41
+  ]
+ },
+ {
+  "case_id": "test::80::nda-2",
+  "pred": "Contradiction",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20
+  ]
+ },
+ {
+  "case_id": "test::85::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   17,
+   18
+  ]
+ },
+ {
+  "case_id": "test::127::nda-2",
+  "pred": "Contradiction",
+  "n_quotes": 6,
+  "gold_overlap": true,
+  "gold_idx": [
+   13,
+   15,
+   44,
+   45,
+   46,
+   47,
+   48,
+   49,
+   50,
+   51,
+   52,
+   53,
+   54,
+   55,
+   56,
+   57,
+   58,
+   59
+  ]
+ },
+ {
+  "case_id": "test::129::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 1,
+  "gold_overlap": true,
+  "gold_idx": [
+   16,
+   18
+  ]
+ },
+ {
+  "case_id": "test::181::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 3,
+  "gold_overlap": true,
+  "gold_idx": [
+   18,
+   19
+  ]
+ },
+ {
+  "case_id": "test::181::nda-20",
+  "pred": "Entailment",
+  "n_quotes": 5,
+  "gold_overlap": true,
+  "gold_idx": [
+   38,
+   39
+  ]
+ },
+ {
+  "case_id": "test::218::nda-7",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   19,
+   20
+  ]
+ },
+ {
+  "case_id": "test::227::nda-2",
+  "pred": "Contradiction",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   20,
+   21,
+   22,
+   23,
+   27
+  ]
+ },
+ {
+  "case_id": "test::310::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 1,
+  "gold_overlap": true,
+  "gold_idx": [
+   23
+  ]
+ },
+ {
+  "case_id": "test::357::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   14
+  ]
+ },
+ {
+  "case_id": "test::361::nda-1",
+  "pred": "Entailment",
+  "n_quotes": 4,
+  "gold_overlap": true,
+  "gold_idx": [
+   36
+  ]
+ },
+ {
+  "case_id": "test::389::nda-7",
+  "pred": "Entailment",
+  "n_quotes": 1,
+  "gold_overlap": true,
+  "gold_idx": [
+   13
+  ]
+ },
+ {
+  "case_id": "test::401::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": false,
+  "gold_idx": [
+   8,
+   13
+  ]
+ },
+ {
+  "case_id": "test::401::nda-19",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   16,
+   17,
+   18,
+   19,
+   20
+  ]
+ },
+ {
+  "case_id": "test::433::nda-7",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   6
+  ]
+ },
+ {
+  "case_id": "test::451::nda-20",
+  "pred": "Entailment",
+  "n_quotes": 4,
+  "gold_overlap": true,
+  "gold_idx": [
+   47
+  ]
+ },
+ {
+  "case_id": "test::451::nda-4",
+  "pred": "Contradiction",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   35,
+   38,
+   39,
+   40,
+   62
+  ]
+ },
+ {
+  "case_id": "test::452::nda-16",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   15,
+   16
+  ]
+ },
+ {
+  "case_id": "test::493::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   12,
+   16
+  ]
+ },
+ {
+  "case_id": "test::496::nda-20",
+  "pred": "Entailment",
+  "n_quotes": 3,
+  "gold_overlap": true,
+  "gold_idx": [
+   32
+  ]
+ },
+ {
+  "case_id": "test::521::nda-4",
+  "pred": "Entailment",
+  "n_quotes": 1,
+  "gold_overlap": false,
+  "gold_idx": [
+   49
+  ]
+ },
+ {
+  "case_id": "test::537::nda-1",
+  "pred": "NotMentioned",
+  "n_quotes": 0,
+  "gold_overlap": false,
+  "gold_idx": [
+   13
+  ]
+ },
+ {
+  "case_id": "test::540::nda-4",
+  "pred": "Entailment",
+  "n_quotes": 1,
+  "gold_overlap": false,
+  "gold_idx": [
+   23,
+   24
+  ]
+ },
+ {
+  "case_id": "test::543::nda-4",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": false,
+  "gold_idx": [
+   28
+  ]
+ },
+ {
+  "case_id": "test::555::nda-19",
+  "pred": "NotMentioned",
+  "n_quotes": 0,
+  "gold_overlap": false,
+  "gold_idx": [
+   65,
+   66,
+   67
+  ]
+ },
+ {
+  "case_id": "test::558::nda-2",
+  "pred": "Contradiction",
+  "n_quotes": 2,
+  "gold_overlap": true,
+  "gold_idx": [
+   4,
+   7,
+   18
+  ]
+ },
+ {
+  "case_id": "test::564::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 3,
+  "gold_overlap": false,
+  "gold_idx": [
+   22,
+   24
+  ]
+ },
+ {
+  "case_id": "test::564::nda-20",
+  "pred": "Entailment",
+  "n_quotes": 1,
+  "gold_overlap": false,
+  "gold_idx": [
+   42,
+   43
+  ]
+ },
+ {
+  "case_id": "test::565::nda-4",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": false,
+  "gold_idx": [
+   70
+  ]
+ },
+ {
+  "case_id": "test::600::nda-17",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": false,
+  "gold_idx": [
+   4,
+   13,
+   14
+  ]
+ },
+ {
+  "case_id": "test::606::nda-4",
+  "pred": "Entailment",
+  "n_quotes": 2,
+  "gold_overlap": false,
+  "gold_idx": [
+   44
+  ]
+ }
+]

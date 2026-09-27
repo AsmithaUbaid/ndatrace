@@ -64,3 +64,4 @@ these:
 **ADR-009 in particular is historical evidence only** — per `docs/project_contract.md`, it is
 not treated as the architecture freeze for reconstruction-v2. E12 independently re-evaluates
 A0–A3.
+| E17B | Full TEST completion | **EXECUTED (identical frozen E17 system; awaiting review; not committed).** Completed GPT-5-mini on the remaining 1,941 TEST cases and merged with E17's immutable 150. Full 2,091-case result: accuracy 77.6%, macro-F1 0.727, joint 74.6%, Contradiction recall 75.5% (166/220); spend $3.9035, final ledger $7.42152. Paired vs Qwen: p≈2.8e-71 (classification), p≈3.1e-102 (joint) overall; NotMentioned difference not significant (p≈0.22-0.24). E15/E16 disclosures unchanged. See experiments/E17B_full_test_completion/summary.md. |
