@@ -122,11 +122,10 @@ zero-width-character removal, whitespace collapse). This is **source-presence va
   endpoint still returns `200` with `label: null` (or a low-trust label) and
   `needs_human_review: true` plus a `review_reason`, so a partial/uncertain result is never silently
   dropped.
-- **Missing provider configuration currently surfaces as an unhandled `500`, not a graceful error
-  response.** `review_final()`'s default `ModelGateway(model="openai/gpt-5-mini")` construction (raised
-  when no `OPENROUTER_API_KEY` is configured) happens outside the function's own `try`/`except`, so
-  it is not caught before reaching FastAPI's default exception handler. This is current, real
-  behavior, not a designed error contract — noted here rather than glossed over.
+- **`503 Service Unavailable`** — no model provider is configured (`OPENROUTER_API_KEY` missing).
+  The route constructs the model gateway before calling `review_final()`; a construction failure
+  there returns `{"detail": "Review service is not configured."}` — no environment variable names,
+  key values, or stack trace are included in the response.
 
 ---
 

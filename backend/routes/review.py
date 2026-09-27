@@ -23,6 +23,7 @@ from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from backend import database
 from backend.models import FinalReviewRequest, FinalReviewResponse, RequirementResult, ReviewRequest, ReviewResponse
+from pipeline.final_review import MODEL as FINAL_REVIEW_MODEL
 from pipeline.final_review import review_final
 from pipeline.logging_config import get_logger
 from pipeline.model_gateway import ModelError, ModelGateway
@@ -37,8 +38,17 @@ router = APIRouter(tags=["review"])
 @router.post("/api/review", response_model=FinalReviewResponse)
 def create_final_review(request: FinalReviewRequest) -> FinalReviewResponse:
     """The primary product endpoint (E19). Never logs NDA text - only metadata."""
+    # Constructed here (not left to review_final()'s own default) so a
+    # missing-configuration error is caught before the request proceeds,
+    # distinct from a runtime provider failure mid-request - which
+    # review_final() already handles itself by returning needs_human_review.
+    try:
+        gateway = ModelGateway(model=FINAL_REVIEW_MODEL)
+    except ModelError as e:
+        raise HTTPException(status_code=503, detail="Review service is not configured.") from e
+
     trace_id = str(uuid.uuid4())
-    result = review_final(request.nda_text, request.requirement)
+    result = review_final(request.nda_text, request.requirement, gateway=gateway)
 
     logger.info("API: final review", extra={
         "stage": "api_final_review", "trace_id": trace_id, "model": result.model,

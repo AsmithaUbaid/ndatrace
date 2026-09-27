@@ -264,6 +264,18 @@ def test_final_review_flags_malformed_model_output(client):
         assert body["needs_human_review"] is True
 
 
+def test_final_review_returns_503_when_provider_not_configured(client, monkeypatch):
+    """Missing OPENROUTER_API_KEY must be a controlled 503, not an unhandled 500."""
+    monkeypatch.setattr("pipeline.model_gateway.settings.openrouter_api_key", "")
+    payload = {"nda_text": "Some NDA text.", "requirement": "Some requirement."}
+    r = client.post("/api/review", json=payload)
+    assert r.status_code == 503
+    body = r.json()
+    assert body == {"detail": "Review service is not configured."}
+    assert "OPENROUTER_API_KEY" not in r.text
+    assert "Traceback" not in r.text
+
+
 def test_final_review_rejects_empty_nda(client):
     r = client.post("/api/review", json={"nda_text": "", "requirement": "x"})
     assert r.status_code == 422  # pydantic min_length
