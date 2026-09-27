@@ -1,0 +1,18 @@
+{
+  "spend_usd_this_invocation": 3.517738749999996,
+  "wall_seconds": 2997.324337291997,
+  "stopped": null,
+  "records_total": 2091,
+  "successful_calls_total": 2091,
+  "failed_calls_total": 0,
+  "parse_failures_total": 2,
+  "verify": {
+    "records": 2091,
+    "expected": 2091,
+    "no_duplicates": true,
+    "all_ids_covered": true,
+    "no_provider_errors": true
+  },
+  "pre_run_ledger_usd": 8.047499200000026,
+  "post_run_ledger_usd": 11.56523795000004
+}

@@ -182,6 +182,7 @@ def run_selective_agent(
     a2_label: str,
     a2_evidence: list[str],
     model_call: Callable[[str, str], str],
+    force_agent: bool = False,
 ) -> AgentTrace:
     """Runs the bounded selective agent for ONE case. `model_call(system_prompt, user_prompt)`
     is injected so this function makes zero real model calls in E10's offline verification --
@@ -191,9 +192,15 @@ def run_selective_agent(
     """
     trace = AgentTrace(case_id=case_id, triggered=False, a2_label=a2_label, a2_evidence=a2_evidence)
 
-    triggered = cross_reference_to_named_provision_cue(a2_context_chunks)
+    # Stage E1 diagnostic switch: force_agent changes entry only.  The default preserves the
+    # frozen E10/E11 selective behavior; once inside, the controller prompt, tools, limits,
+    # fallback policy, and FINAL behavior are identical.
+    runtime_triggered = cross_reference_to_named_provision_cue(a2_context_chunks)
+    triggered = force_agent or runtime_triggered
     trace.triggered = triggered
-    if triggered:
+    if force_agent:
+        trace.trigger_reasons = ["experimental_force_agent"]
+    elif runtime_triggered:
         trace.trigger_reasons = ["cross_reference_to_named_provision_cue"]
     if not triggered:
         trace.final_label = a2_label

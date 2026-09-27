@@ -1,24 +1,20 @@
 """
 NDATrace API Routes - live requirement review.
 
-POST /api/review is the final, frozen reconstruction-v2 candidate that
-completed the one-shot TEST evaluation (E17/E17B) - openai/gpt-5-mini +
-GPT-P0 + FULL NDA context + structured parsing + runtime evidence-source
-validation. One NDA, one requirement in, one result out. No retrieval, no
-agent, no routing.
+POST /api/review is the single-requirement frozen E20 top-5 RAG product
+path: BM25 top-20, L-12 cross-encoder reranking, GPT-5-mini + GPT-P0 over
+the top five clauses, structured parsing, and source validation.
 
-POST /review (WBS T032, restored for /history's batch-review UI) runs the
-earlier RAG + selective agent pipeline (pipeline/orchestrator.py, T031) -
-that is a superseded, experimental architecture, not the selected final
-one; it is kept as a real, working alternative flow (checkbox multi-select
-of the 17 fixed hypotheses, self-reported confidence, agent escalation),
-not merely for historical reproduction.
+POST /review is the batch/history adapter used by the interactive UI. It
+uses the same frozen RAG path and reuses one document index across selected
+requirements. Neither endpoint invokes an agent or routing policy.
 """
 
 from __future__ import annotations
 
 import time
 import uuid
+from dataclasses import asdict
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
@@ -26,10 +22,9 @@ from fastapi import APIRouter, File, HTTPException, UploadFile
 from backend import database
 from backend.models import FinalReviewRequest, FinalReviewResponse, RequirementResult, ReviewRequest, ReviewResponse
 from pipeline.final_review import MODEL as FINAL_REVIEW_MODEL
-from pipeline.final_review import review_final
+from pipeline.final_review import MODEL_MAX_RETRIES, MODEL_TIMEOUT_SECONDS, review_final, review_final_document
 from pipeline.logging_config import get_logger
 from pipeline.model_gateway import ModelError, ModelGateway
-from pipeline.orchestrator import review_document
 from pipeline.parser import load_hypotheses
 from pipeline.pdf_extractor import PdfExtractionError, extract_text_from_pdf
 
@@ -39,13 +34,17 @@ router = APIRouter(tags=["review"])
 
 @router.post("/api/review", response_model=FinalReviewResponse)
 def create_final_review(request: FinalReviewRequest) -> FinalReviewResponse:
-    """The primary product endpoint (E19). Never logs NDA text - only metadata."""
+    """Single-requirement frozen RAG endpoint. Never logs NDA text - only metadata."""
     # Constructed here (not left to review_final()'s own default) so a
     # missing-configuration error is caught before the request proceeds,
     # distinct from a runtime provider failure mid-request - which
     # review_final() already handles itself by returning needs_human_review.
     try:
-        gateway = ModelGateway(model=FINAL_REVIEW_MODEL)
+        gateway = ModelGateway(
+            model=FINAL_REVIEW_MODEL,
+            max_retries=MODEL_MAX_RETRIES,
+            timeout_seconds=MODEL_TIMEOUT_SECONDS,
+        )
     except ModelError as e:
         raise HTTPException(status_code=503, detail="Review service is not configured.") from e
 
@@ -66,6 +65,8 @@ def create_final_review(request: FinalReviewRequest) -> FinalReviewResponse:
         review_reason=result.review_reason, model=result.model, latency_ms=result.latency_ms,
         input_tokens=result.input_tokens, output_tokens=result.output_tokens,
         estimated_cost_usd=result.cost_usd, trace_id=trace_id,
+        sources=[asdict(source) for source in result.sources],
+        retrieved_chunks=[asdict(chunk) for chunk in result.retrieved_chunks],
     )
 
 
@@ -81,40 +82,50 @@ def create_review(request: ReviewRequest) -> ReviewResponse:
         selected = {hid: entry["hypothesis"] for hid, entry in all_hypotheses.items()}
 
     try:
-        gateway = ModelGateway()
+        gateway = ModelGateway(
+            model=FINAL_REVIEW_MODEL,
+            max_retries=MODEL_MAX_RETRIES,
+            timeout_seconds=MODEL_TIMEOUT_SECONDS,
+        )
     except ModelError as e:
         raise HTTPException(status_code=503, detail=f"Model gateway unavailable: {e}") from e
 
     review_id = str(uuid.uuid4())
     doc_id = review_id[:8]
     start = time.time()
-    try:
-        results = review_document(request.nda_text, selected, gateway, doc_id=doc_id)
-    except ModelError as e:
-        # review_document() isolates per-hypothesis ModelErrors internally
-        # (eval case 095) - reaching here means every attempt failed before
-        # any hypothesis could even be processed (e.g. the provider is down
-        # entirely), not a partial failure.
-        raise HTTPException(status_code=503, detail=f"Model provider unavailable after retries: {e}") from e
+    results_by_id = review_final_document(request.nda_text, selected, gateway)
     duration_ms = (time.time() - start) * 1000
 
-    total_cost = sum(r.cost_usd for r in results)
-    total_latency = sum(r.latency_ms for r in results)
+    total_cost = sum(r.cost_usd or 0.0 for r in results_by_id.values())
+    total_latency = sum(r.latency_ms or 0.0 for r in results_by_id.values())
     created_at = datetime.now(timezone.utc).isoformat()
 
     items = [
         {
-            "hypothesis_id": r.hypothesis_id, "hypothesis_text": r.hypothesis_text, "label": r.label,
-            "confidence": r.confidence, "explanation": r.explanation, "evidence": r.evidence,
-            "agent_used": r.agent_used, "agent_steps": r.agent_steps, "cost_usd": r.cost_usd,
-            "latency_ms": r.latency_ms, "error": r.error,
+            "hypothesis_id": hypothesis_id,
+            "hypothesis_text": selected[hypothesis_id],
+            "label": result.label,
+            "confidence": None,
+            "confidence_available": False,
+            "explanation": result.explanation,
+            "evidence": result.evidence,
+            "source_valid": result.source_valid,
+            "needs_human_review": result.needs_human_review,
+            "review_reason": result.review_reason,
+            "sources": [asdict(source) for source in result.sources],
+            "retrieved_chunks": [asdict(chunk) for chunk in result.retrieved_chunks],
+            "agent_used": False,
+            "agent_steps": 0,
+            "cost_usd": result.cost_usd or 0.0,
+            "latency_ms": result.latency_ms or 0.0,
+            "error": result.error,
         }
-        for r in results
+        for hypothesis_id, result in results_by_id.items()
     ]
     database.save_review(review_id, doc_id, created_at, gateway.model, total_cost, total_latency, items)
 
     logger.info("API: review created", extra={
-        "stage": "api_review", "doc_id": doc_id, "num_requirements": len(results),
+        "stage": "api_review", "doc_id": doc_id, "num_requirements": len(items),
         "cost_usd": total_cost, "latency_ms": round(duration_ms, 1), "model": gateway.model,
     })
 

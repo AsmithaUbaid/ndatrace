@@ -1,96 +1,160 @@
-"use client";
+type ComparisonRow = {
+  system: string;
+  role: string;
+  accuracy: string;
+  joint: string;
+  contradictionRecall: string;
+  inputTokens: string;
+  apiCost: string;
+  emphasis: "neutral" | "benchmark" | "runtime";
+  strongest: Array<"accuracy" | "joint" | "contradictionRecall" | "inputTokens" | "apiCost">;
+};
 
-import { useEffect, useState } from "react";
-import { api, FinalTestResult } from "@/lib/api";
+const comparisonRows: ComparisonRow[] = [
+  {
+    system: "Rule",
+    role: "Baseline",
+    accuracy: "59.0%",
+    joint: "50.1%",
+    contradictionRecall: "16.8%",
+    inputTokens: "—",
+    apiCost: "No API",
+    emphasis: "neutral",
+    strongest: [],
+  },
+  {
+    system: "Qwen",
+    role: "Local baseline",
+    accuracy: "49.9%",
+    joint: "39.7%",
+    contradictionRecall: "25.5%",
+    inputTokens: "—",
+    apiCost: "Local",
+    emphasis: "neutral",
+    strongest: [],
+  },
+  {
+    system: "GPT-5-mini FULL",
+    role: "Benchmark winner",
+    accuracy: "77.6%",
+    joint: "74.6%",
+    contradictionRecall: "75.5%",
+    inputTokens: "2,279",
+    apiCost: "$0.00202",
+    emphasis: "benchmark",
+    strongest: ["accuracy", "joint"],
+  },
+  {
+    system: "GPT-5-mini RAG top-5",
+    role: "Prototype runtime",
+    accuracy: "76.8%",
+    joint: "72.5%",
+    contradictionRecall: "77.3%",
+    inputTokens: "1,131",
+    apiCost: "$0.00168",
+    emphasis: "runtime",
+    strongest: ["contradictionRecall", "inputTokens", "apiCost"],
+  },
+];
 
-function fmtPct(v: number | null): string {
-  return v === null ? "–" : `${(v * 100).toFixed(1)}%`;
-}
+const rowClasses: Record<ComparisonRow["emphasis"], string> = {
+  neutral: "bg-white hover:bg-zinc-50/70",
+  benchmark: "bg-sky-50/60 hover:bg-sky-50/90",
+  runtime: "bg-orange-50/60 hover:bg-orange-50/90",
+};
 
-function fmtUsd(v: number): string {
-  return v === 0 ? "$0" : `$${v.toFixed(4)}`;
+const roleClasses: Record<ComparisonRow["emphasis"], string> = {
+  neutral: "border-zinc-200 bg-zinc-50 text-zinc-700",
+  benchmark: "border-sky-200 bg-sky-50 text-sky-800",
+  runtime: "border-orange-200 bg-orange-50 text-orange-800",
+};
+
+function Metric({ value, strongest }: { value: string; strongest: boolean }) {
+  return strongest ? (
+    <strong className="font-semibold text-zinc-950">{value}</strong>
+  ) : (
+    <span>{value}</span>
+  );
 }
 
 export default function ExperimentsPage() {
-  const [rows, setRows] = useState<FinalTestResult[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    api
-      .listFinalTestComparison()
-      .then(setRows)
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
-  }, []);
-
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-6 py-10">
+    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-6 py-10">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Final held-out TEST comparison
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
+          Final architecture comparison
         </h1>
-        <p className="mt-1.5 max-w-2xl text-sm text-zinc-600 dark:text-zinc-400">
-          Rule, local Qwen, and GPT-5-mini + P0 + FULL NDA context (the final selected
-          architecture) measured on the identical n=2,091 official ContractNLI TEST population
-          (E17/E17B), read live from{" "}
-          <code className="rounded bg-zinc-200 px-1 py-0.5 text-xs dark:bg-zinc-800">
-            results/final/reconstruction_v2/
-          </code>
-          , never recomputed. RAG and a selective agent were evaluated during reconstruction-v2
-          and not selected; see <code className="rounded bg-zinc-200 px-1 py-0.5 text-xs dark:bg-zinc-800">docs/architecture.md</code>.
+        <p className="mt-1 text-xs font-medium uppercase tracking-wide text-zinc-500">
+          Final TEST: n=2,091
+        </p>
+        <p className="mt-3 max-w-4xl text-sm leading-6 text-zinc-600">
+          Four systems were evaluated across the same NDA-review task. The rule and Qwen systems
+          provide deterministic/local baselines, GPT-5-mini FULL achieved the strongest benchmark
+          Joint result, and GPT-5-mini RAG top-5 is the selected prototype runtime.
         </p>
       </header>
 
-      {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
-          {error}
-        </div>
-      )}
-
-      {loading && <p className="text-sm text-zinc-400 dark:text-zinc-500">Loading&hellip;</p>}
-
-      {!loading && rows.length > 0 && (
-        <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-          <table className="w-full min-w-[820px] text-left text-sm">
-            <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400">
-              <tr>
-                <th className="px-3 py-2 font-medium">System</th>
-                <th className="px-3 py-2 font-medium">n</th>
-                <th className="px-3 py-2 font-medium">Accuracy</th>
-                <th className="px-3 py-2 font-medium">Macro-F1</th>
-                <th className="px-3 py-2 font-medium">Joint</th>
-                <th className="px-3 py-2 font-medium">Contradiction recall</th>
-                <th className="px-3 py-2 font-medium">NotMentioned recall</th>
-                <th className="px-3 py-2 font-medium">Cost</th>
+      <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white shadow-sm">
+        <table className="w-full min-w-[900px] text-left text-sm">
+          <thead className="border-b border-zinc-200 bg-zinc-50/80 text-xs uppercase tracking-wide text-zinc-500">
+            <tr>
+              <th className="whitespace-nowrap px-4 py-3 font-medium">System</th>
+              <th className="whitespace-nowrap px-4 py-3 font-medium">Role</th>
+              <th className="whitespace-nowrap px-4 py-3 text-right font-medium">Accuracy</th>
+              <th className="whitespace-nowrap px-4 py-3 text-right font-medium">Joint</th>
+              <th className="whitespace-nowrap px-4 py-3 text-right font-medium">C Recall</th>
+              <th className="whitespace-nowrap px-4 py-3 text-right font-medium">Input tokens</th>
+              <th className="whitespace-nowrap px-4 py-3 text-right font-medium">
+                API cost / case
+              </th>
+            </tr>
+          </thead>
+          <tbody className="text-zinc-700">
+            {comparisonRows.map((row) => (
+              <tr
+                key={row.system}
+                className={`border-b border-zinc-100 transition-colors last:border-0 ${rowClasses[row.emphasis]}`}
+              >
+                <td className="whitespace-nowrap px-4 py-3.5 font-medium text-zinc-900">
+                  {row.system}
+                </td>
+                <td className="whitespace-nowrap px-4 py-3.5">
+                  <span
+                    className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-medium ${roleClasses[row.emphasis]}`}
+                  >
+                    {row.role}
+                  </span>
+                </td>
+                <td className="whitespace-nowrap px-4 py-3.5 text-right tabular-nums">
+                  <Metric value={row.accuracy} strongest={row.strongest.includes("accuracy")} />
+                </td>
+                <td className="whitespace-nowrap px-4 py-3.5 text-right tabular-nums">
+                  <Metric value={row.joint} strongest={row.strongest.includes("joint")} />
+                </td>
+                <td className="whitespace-nowrap px-4 py-3.5 text-right tabular-nums">
+                  <Metric
+                    value={row.contradictionRecall}
+                    strongest={row.strongest.includes("contradictionRecall")}
+                  />
+                </td>
+                <td className="whitespace-nowrap px-4 py-3.5 text-right tabular-nums">
+                  <Metric
+                    value={row.inputTokens}
+                    strongest={row.strongest.includes("inputTokens")}
+                  />
+                </td>
+                <td className="whitespace-nowrap px-4 py-3.5 text-right tabular-nums">
+                  <Metric value={row.apiCost} strongest={row.strongest.includes("apiCost")} />
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr
-                  key={r.system}
-                  className="border-b border-zinc-100 last:border-0 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800"
-                >
-                  <td className="px-3 py-2.5 font-medium text-zinc-800 dark:text-zinc-100">{r.system}</td>
-                  <td className="px-3 py-2.5 text-zinc-500 dark:text-zinc-400">{r.n}</td>
-                  <td className="px-3 py-2.5 font-medium text-zinc-800 dark:text-zinc-100">
-                    {fmtPct(r.accuracy)}
-                  </td>
-                  <td className="px-3 py-2.5 text-zinc-700 dark:text-zinc-300">{r.macro_f1.toFixed(3)}</td>
-                  <td className="px-3 py-2.5 text-zinc-700 dark:text-zinc-300">{r.joint.toFixed(3)}</td>
-                  <td className="px-3 py-2.5 text-zinc-700 dark:text-zinc-300">
-                    {fmtPct(r.contradiction_recall)}
-                  </td>
-                  <td className="px-3 py-2.5 text-zinc-700 dark:text-zinc-300">
-                    {fmtPct(r.notmentioned_recall)}
-                  </td>
-                  <td className="px-3 py-2.5 text-zinc-500 dark:text-zinc-400">{fmtUsd(r.api_cost_usd)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p className="text-sm leading-6 text-zinc-500">
+        FULL is the benchmark winner; RAG is the production-oriented prototype architecture.
+      </p>
     </main>
   );
 }

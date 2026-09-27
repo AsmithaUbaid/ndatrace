@@ -6,18 +6,16 @@ has no server-side logic of its own beyond Next.js routing.
 
 ## What it does
 
-- **`/` — batch review (legacy RAG + selective-agent pipeline, `POST /review`).** Submit an NDA
+- **`/` — frozen RAG batch review (`POST /review`).** Submit an NDA
   (paste text or upload a PDF) and pick which of the 17 standard confidentiality requirements to
-  check (checkbox multi-select, all selected by default). Results show label, self-reported
-  confidence, agent-escalation status, and evidence per requirement; results are saved to SQLite.
+  check (checkbox multi-select, all selected by default). Results show the verdict, explanation,
+  exact evidence, and source-clause provenance; results are saved to SQLite.
 - **`/history`** — browse past batch reviews (`GET /results`, `GET /review/{id}`).
 - **`/experiments`** — the reconstruction-v2 final TEST comparison (`GET /experiments`, reads
   `results/final/reconstruction_v2/`).
 
-`/` is the legacy, restored batch-review flow, not the selected final architecture (see
-`docs/architecture.md`) — there is currently no frontend page for the final single-requirement
-architecture (`POST /api/review`); the backend endpoint still exists but nothing in this UI calls
-it.
+`/` and the single-requirement backend endpoint use the same frozen top-5 RAG classifier path.
+The UI uses the batch adapter so one document index can serve multiple selected requirements.
 
 ## Local development
 
@@ -44,17 +42,17 @@ port; set `NEXT_PUBLIC_API_URL` only to point at a different backend host/port.
 
 | Path | Purpose |
 |---|---|
-| `app/page.tsx` | Batch review screen — NDA input, checkbox picker for the 17 requirements, submits to legacy `POST /review` |
+| `app/page.tsx` | Batch review screen — NDA input, checkbox picker for the 17 requirements, submits to frozen-RAG `POST /review` |
 | `app/history/page.tsx` | Past batch reviews (`GET /results`, `GET /review/{id}`) |
 | `app/experiments/page.tsx` | Reconstruction-v2 final TEST comparison (`GET /experiments`, reads `results/final/reconstruction_v2/`) |
-| `components/RequirementCard.tsx` | One legacy batch-review result: label, confidence, agent-escalation status, evidence |
+| `components/RequirementCard.tsx` | One result: verdict, explanation, source-validated evidence, and subtle retrieval provenance |
 | `components/ResultsSummaryBar.tsx`, `components/FilterTabs.tsx` | Batch-review result filtering by verdict/needs-attention |
 | `components/Checkbox.tsx` | Custom-styled checkbox for the requirement picker |
 | `components/ResultCard.tsx` | Renders a `POST /api/review` result (label, evidence, `needs_human_review`/`source_valid` state, no fabricated confidence) - not currently used by any page since `/final` was removed |
 | `components/LimitationsPanel.tsx` | Collapsible panel stating the system's known limitations (reviewer aid only, human final authority, NotMentioned/injection caveats) |
 | `components/NavBar.tsx` | Top navigation (Review / History / Experiments) |
 | `lib/api.ts` | Fetch wrappers + TypeScript types for every backend endpoint in `../docs/api.md` |
-| `lib/verdict.ts` | Label → normalized verdict (color/icon/filter-key) mapping, plus legacy confidence/attention helpers, shared across components |
+| `lib/verdict.ts` | Label → normalized verdict (color/icon/filter-key) mapping and review-attention helpers |
 | `lib/export.ts` | Copy-to-clipboard / download-as-text/JSON for a completed batch review |
 
 ## Build / production commands

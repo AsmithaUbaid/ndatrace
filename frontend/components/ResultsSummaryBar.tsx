@@ -17,9 +17,9 @@ export function ResultsSummaryBar({
   activeFilter: FilterKey;
   onSelect: (filter: FilterKey) => void;
 }) {
-  const counted = results.filter((r) => !r.error);
+  const counted = results.filter((r) => !r.error && r.label != null);
   const counts: Record<Verdict, number> = { contradiction: 0, entailment: 0, notmentioned: 0 };
-  for (const r of counted) counts[toVerdict(r.label)]++;
+  for (const r of counted) counts[toVerdict(r.label!)]++;
   const issues = counted.filter(needsAttention).length;
 
   return (

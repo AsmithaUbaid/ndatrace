@@ -1,15 +1,11 @@
 """
 NDATrace FastAPI Application.
 
-Serves the final frozen product pipeline (pipeline/final_review.py, E19:
-GPT-5-mini + P0 + FULL NDA context) at POST /api/review - the architecture
-that completed the one-shot TEST evaluation (E17/E17B) - plus the
-reconstruction-v2 final TEST comparison (GET /experiments, read from
-results/final/reconstruction_v2/). Also serves the earlier RAG +
-selective-agent pipeline (pipeline/orchestrator.py, T031) at POST /review,
-restored for /history's batch-review UI (checkbox multi-select of the 17
-fixed hypotheses, self-reported confidence, agent escalation) - plus read
-access to past reviews (SQLite) and its own cost estimate.
+Serves the frozen E20 top-5 RAG product pipeline at POST /api/review and
+through the batch/history adapter at POST /review. Both use BM25 top-20,
+cross-encoder reranking, top-5 GPT-5-mini + P0 classification, parsing,
+and evidence validation; neither uses an agent or routing. The historical
+FULL benchmark result remains available through GET /experiments.
 """
 
 from __future__ import annotations

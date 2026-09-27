@@ -22,15 +22,33 @@ class ReviewRequest(BaseModel):
     )
 
 
+class RetrievedChunkMetadata(BaseModel):
+    chunk_id: int
+    rank: int
+    start_char: int
+    end_char: int
+    bm25_score: float
+    reranker_score: float
+    text: str
+
+
 class RequirementResult(BaseModel):
     hypothesis_id: str
     hypothesis_text: str
-    label: str
-    confidence: float
+    label: str | None
+    confidence: float | None = None
+    confidence_available: bool = False
     explanation: str
     evidence: list[str]
-    agent_used: bool
-    agent_steps: int
+    source_valid: bool | None = None
+    needs_human_review: bool = False
+    review_reason: str | None = None
+    sources: list[RetrievedChunkMetadata] = Field(default_factory=list)
+    retrieved_chunks: list[RetrievedChunkMetadata] = Field(default_factory=list)
+    # Compatibility fields for historical rows. The current runtime never
+    # invokes an agent and always returns false/zero here.
+    agent_used: bool = False
+    agent_steps: int = 0
     cost_usd: float
     latency_ms: float
     error: str | None = None
@@ -47,8 +65,7 @@ class ReviewResponse(BaseModel):
 
 
 class FinalReviewRequest(BaseModel):
-    """Request for the final, frozen product pipeline (E19: GPT-5-mini + P0 + FULL context).
-    One NDA, one requirement - the primary reviewer-facing workflow, not the batch/experimental path."""
+    """One NDA and one requirement for the frozen top-5 RAG product path."""
     nda_text: str = Field(..., min_length=1, description="Full NDA document text to review.")
     requirement: str = Field(..., min_length=1, description="Confidentiality requirement to check, in free text.")
 
@@ -66,6 +83,8 @@ class FinalReviewResponse(BaseModel):
     output_tokens: int | None
     estimated_cost_usd: float | None
     trace_id: str
+    sources: list[RetrievedChunkMetadata] = Field(default_factory=list)
+    retrieved_chunks: list[RetrievedChunkMetadata] = Field(default_factory=list)
 
 
 class ReviewSummary(BaseModel):
@@ -79,9 +98,7 @@ class ReviewSummary(BaseModel):
 
 
 class CostEstimate(BaseModel):
-    """Real, measured average per-requirement cost for the legacy RAG +
-    selective-agent architecture (T031) - computed live from the most
-    recent matching experiment record, never hardcoded."""
+    """Historical RAG+agent cost record; retained for research provenance."""
     avg_cost_per_requirement_usd: float
     source_experiment_id: str
     source_sample_size: int
@@ -105,3 +122,4 @@ class FinalTestResult(BaseModel):
     evidence_precision: float | None = None
     source_valid_quote_rate: float | None = None
     api_cost_usd: float
+    architecture_status: str | None = None

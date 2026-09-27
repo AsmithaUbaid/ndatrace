@@ -1,7 +1,7 @@
 # NDATrace — Project Summary
 
 **NTU PE6201 Emerging AI Technologies.** Full detail is in `docs/decisions.md` (pre-reconstruction
-decision log), `docs/experiment_registry.md` (reconstruction-v2 experiment ledger, E00–E19), and
+decision log), `docs/experiment_registry.md` (reconstruction-v2 experiment ledger, E00–E20), and
 `docs/architecture.md` (implementation) — this page is the 5-minute version of the **final,
 selected** result.
 
@@ -13,12 +13,13 @@ this can be automated with evidence grounding — given an NDA and a confidentia
 classify it as **Entailment**, **Contradiction**, or **Not Mentioned**, and show the exact clause
 the answer rests on.
 
-## System design (final, selected)
+## System design (interactive prototype)
 
 ```text
 NDA + requirement
     -> input validation
-    -> GPT-5-mini + the frozen P0 prompt + FULL NDA context (no retrieval, no agent, no routing)
+    -> clause-256 chunking -> BM25 top-20 -> L-12 rerank -> top-5 context
+    -> GPT-5-mini + the frozen P0 prompt (no agent, no routing)
     -> structured output parser
     -> runtime evidence-source validator v2 (checks the cited evidence is a genuine
        verbatim quote from the submitted NDA text)
@@ -26,10 +27,10 @@ NDA + requirement
     -> human final decision
 ```
 
-Full-context GPT-5-mini is the selected prototype architecture. RAG and a selective agent were
-both evaluated during reconstruction-v2 (E06–E11) and **not selected** — see "The one key finding"
-below and `docs/architecture.md`/`docs/decisions.md` for the full reasoning. Full request-flow
-detail: `docs/architecture.md`.
+The interactive prototype uses frozen E20 RAG for bounded context, lower input-token use, and
+clause-level provenance. FULL-context GPT-5-mini remains the strongest measured ContractNLI TEST
+benchmark configuration. This is a productization decision, not a claim that RAG won on quality.
+The selective agent remains rejected. Full request-flow detail: `docs/architecture.md`.
 
 ## How the final configuration was chosen
 
@@ -39,8 +40,10 @@ selected the frozen `P0` classification prompt over 3 alternatives; E05–E09 co
 RAG, and a selective agent on a matched development sample; E12–E13 re-confirmed full-context GPT
 as the strongest candidate; E15 tested (and did not adopt) a deterministic review-routing policy;
 E16 ran a robustness/injection check; **E17 + E17B ran the one-shot final locked TEST evaluation**
-(150-case sample, then the remaining 1,941 cases) — this is the headline number below. Full
-reasoning and every rejected alternative: `docs/experiment_registry.md`, `docs/decisions.md`.
+(150-case sample, then the remaining 1,941 cases) — this is the headline number below. **E20
+subsequently ran RAG on the identical full TEST population for a same-population, paired
+comparison** (see "The one key finding" below). Full reasoning and every rejected alternative:
+`docs/experiment_registry.md`, `docs/decisions.md`.
 
 ## Framework
 
@@ -59,7 +62,7 @@ reading the cited clause, rather than trusting the label alone.
 |---|---:|---:|---:|---:|---:|---:|
 | Rule (no LLM) | 59.0% | 0.479 | 50.1% | 16.8% | 90.5% | $0 |
 | Local Qwen (ctx16k) | 49.9% | 0.431 | 39.7% | 25.5% | 59.7% | $0 (API); local compute not monetized |
-| **GPT-5-mini + P0 + FULL (final, selected)** | **77.6%** | **0.727** | **74.6%** | **75.5%** | **62.7%** | ≈$4.23 total |
+| **GPT-5-mini + P0 + FULL (benchmark best)** | **77.6%** | **0.727** | **74.6%** | **75.5%** | **62.7%** | ≈$4.23 total |
 
 Additional GPT-5-mini quality metrics (not architecture-comparison metrics, but part of the
 evidence-grounding design's own checkability claim): **Evidence recall 93.3%**, **evidence
@@ -76,13 +79,29 @@ n=2,091 population result, not the n=150 sample.
 
 ## The one key finding
 
-**Neither retrieval (RAG) nor a selective agent was needed, and full-context alone reached the
-best measured result on every headline metric** on the matched reconstruction-v2 development
-comparison (E06–E11) — RAG's context compression solves a token-budget problem this dataset's
-short, curated NDAs (median ~2,300 tokens) don't actually have, and the tested selective agent
-added orchestration and cost without a demonstrated benefit. Both were evaluated seriously, not
-dismissed by assumption — see `docs/decisions.md`'s ADR entries and `docs/architecture.md` §2 for
-the full record of what was tried and why it wasn't selected.
+**Benchmark result: full-context reached the best measured result, and it holds at full TEST
+scale, not just on the matched development comparison.** On the E06–E11 development comparison,
+and again on E20's same-population, all-2,091-case TEST comparison, full-context's Joint
+(evidence-grounded) success was higher than RAG's — and at TEST scale that gap is **statistically
+significant** (74.6% vs 72.5%, McNemar p=0.0047), not just directionally favorable. Classification
+accuracy alone was not distinguishable between the two architectures (p=0.217).
+
+**Production-oriented direction: RAG is retained, not because it won the benchmark, but because of
+its scaling profile.** RAG cut input tokens 50.4% and API cost 16.8% on E20's TEST run, and its
+context stays bounded regardless of document length — a real advantage for larger, repeatedly-
+queried enterprise contracts that this dataset (TEST median 1,836 tokens, max 7,861) is too short
+to stress-test. This is an explicit, documented engineering trade-off (~2.2pp of Joint success
+given up on ContractNLI) — not a claim that RAG is more accurate on long contracts, which remains
+an open validation question.
+
+The tested selective agent, separately, added orchestration and cost without a demonstrated
+benefit on either the development or TEST evidence and was not selected — the tested retrieval-
+agent configuration did not provide sufficient value for this task, not that agents cannot work
+here in principle.
+
+Both RAG and the agent were evaluated seriously, not dismissed by assumption — see
+`docs/architecture_decisions/INDEX.md` (ADR-012, E20) and `docs/decisions.md`'s ADR entries, plus
+`docs/architecture.md` §2, for the full record of what was tried and why.
 
 ## Limitations
 
@@ -108,8 +127,11 @@ the full record of what was tried and why it wasn't selected.
    rate, 4/4, on documents where a specific exception clause overrides an apparent general rule) —
    disclosed, not re-verified against reconstruction-v2's own case set, and not fixed.
 5. **Long-document scalability is an untested design hypothesis.** ContractNLI's documents are all
-   ordinary-length NDAs (median ~2,300 tokens); full-context's cost/latency profile at much longer,
-   noisier real contracts has not been measured.
+   ordinary-length NDAs (TEST-split median 1,836 tokens, max 7,861 — measured directly in E20);
+   full-context's cost/latency profile at much longer, noisier real contracts (50–100 page
+   enterprise agreements) has not been measured. This is precisely why RAG, despite trailing FULL
+   on this dataset's Joint-success benchmark (E20, ADR-012), is retained as the documented
+   production-oriented direction for a real deployment at that scale, rather than discarded outright.
 
 **Should this be deployed at all, given these numbers?** Not as a replacement for human review. A
 tool whose NotMentioned recall is 62.7% will, on average, under-flag a meaningful share of cases a
@@ -127,14 +149,14 @@ An earlier pass through this project (before reconstruction-v2) built and measur
 architecture — RAG + a selective agent, on `google/gemini-2.5-flash-lite`, reaching 78.7%/77.7%
 accuracy (RAG/RAG+agent) on the same TEST split. That work is preserved for provenance in
 `docs/decisions.md`, `docs/experiments.md`, and `archive/pre_reconstruction/` — it is **not** the
-final, selected result and should not be cited as such. That pipeline's code and endpoints
-(`POST /review`, `/history`) remain live as a restored, working batch-review alternative — not
-the selected architecture, but not merely historical either — see `docs/architecture.md`'s
-"Legacy path" section.
+final benchmark result and should not be cited as such. Its agent/routing code remains for
+experiment reproduction, but the live `POST /review` and `/history` product flow now uses the
+frozen E20 top-5 RAG runtime without the agent; see `docs/architecture.md`.
 
 ## Where to look for more detail
 
-- `docs/experiment_registry.md` — the reconstruction-v2 experiment ledger (E00–E19), with per-experiment status and artifact paths
+- `docs/experiment_registry.md` — the reconstruction-v2 experiment ledger (E00–E20), with per-experiment status and artifact paths
+- `docs/architecture_decisions/INDEX.md` — reconstruction-v2 ADRs (ADR-012: E20's benchmark-vs-production-oriented FULL/RAG finding)
 - `docs/decisions.md` — the pre-reconstruction decision log, with evidence and rejected alternatives (historical, cross-referenced by reconstruction-v2 docs where relevant)
 - `docs/architecture.md` — current implementation, traced directly from code
 - `docs/evaluation_case_design.md` — the regression/robustness/security test taxonomy

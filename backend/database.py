@@ -35,8 +35,14 @@ CREATE TABLE IF NOT EXISTS review_items (
     hypothesis_text TEXT NOT NULL,
     label TEXT NOT NULL,
     confidence REAL NOT NULL,
+    confidence_available INTEGER NOT NULL DEFAULT 1,
     explanation TEXT NOT NULL,
     evidence_json TEXT NOT NULL,
+    source_valid INTEGER,
+    needs_human_review INTEGER NOT NULL DEFAULT 0,
+    review_reason TEXT,
+    sources_json TEXT NOT NULL DEFAULT '[]',
+    retrieved_chunks_json TEXT NOT NULL DEFAULT '[]',
     agent_used INTEGER NOT NULL,
     agent_steps INTEGER NOT NULL,
     cost_usd REAL NOT NULL,
@@ -73,6 +79,19 @@ def init_db() -> None:
     Path(_db_path()).parent.mkdir(parents=True, exist_ok=True)
     with get_connection() as conn:
         conn.executescript(SCHEMA)
+        # Additive migration for databases created by the earlier batch UI.
+        existing = {row[1] for row in conn.execute("PRAGMA table_info(review_items)")}
+        additions = {
+            "confidence_available": "INTEGER NOT NULL DEFAULT 1",
+            "source_valid": "INTEGER",
+            "needs_human_review": "INTEGER NOT NULL DEFAULT 0",
+            "review_reason": "TEXT",
+            "sources_json": "TEXT NOT NULL DEFAULT '[]'",
+            "retrieved_chunks_json": "TEXT NOT NULL DEFAULT '[]'",
+        }
+        for name, definition in additions.items():
+            if name not in existing:
+                conn.execute(f"ALTER TABLE review_items ADD COLUMN {name} {definition}")
 
 
 def save_review(review_id: str, doc_id: str, created_at: str, model: str,
@@ -85,12 +104,20 @@ def save_review(review_id: str, doc_id: str, created_at: str, model: str,
         )
         conn.executemany(
             "INSERT INTO review_items (review_id, hypothesis_id, hypothesis_text, label, confidence, "
-            "explanation, evidence_json, agent_used, agent_steps, cost_usd, latency_ms, error) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "confidence_available, explanation, evidence_json, source_valid, needs_human_review, "
+            "review_reason, sources_json, retrieved_chunks_json, agent_used, agent_steps, cost_usd, "
+            "latency_ms, error) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
-                (review_id, it["hypothesis_id"], it["hypothesis_text"], it["label"], it["confidence"],
-                 it["explanation"], json.dumps(it["evidence"]), int(it["agent_used"]), it["agent_steps"],
-                 it["cost_usd"], it["latency_ms"], it.get("error"))
+                (
+                    review_id, it["hypothesis_id"], it["hypothesis_text"], it.get("label") or "",
+                    it.get("confidence") or 0.0, int(it.get("confidence_available", True)),
+                    it["explanation"], json.dumps(it["evidence"]),
+                    None if it.get("source_valid") is None else int(it["source_valid"]),
+                    int(it.get("needs_human_review", False)), it.get("review_reason"),
+                    json.dumps(it.get("sources", [])), json.dumps(it.get("retrieved_chunks", [])),
+                    int(it.get("agent_used", False)), it.get("agent_steps", 0),
+                    it["cost_usd"], it["latency_ms"], it.get("error"),
+                )
                 for it in items
             ],
         )
@@ -110,7 +137,18 @@ def get_review(review_id: str) -> dict | None:
     return {
         **dict(review_row),
         "items": [
-            {**dict(row), "evidence": json.loads(row["evidence_json"]), "agent_used": bool(row["agent_used"])}
+            {
+                **dict(row),
+                "label": row["label"] or None,
+                "confidence": row["confidence"] if row["confidence_available"] else None,
+                "confidence_available": bool(row["confidence_available"]),
+                "evidence": json.loads(row["evidence_json"]),
+                "source_valid": None if row["source_valid"] is None else bool(row["source_valid"]),
+                "needs_human_review": bool(row["needs_human_review"]),
+                "sources": json.loads(row["sources_json"]),
+                "retrieved_chunks": json.loads(row["retrieved_chunks_json"]),
+                "agent_used": bool(row["agent_used"]),
+            }
             for row in item_rows
         ],
     }

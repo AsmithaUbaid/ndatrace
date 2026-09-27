@@ -1,0 +1,1530 @@
+{
+  "experiment_id": "E11_addendum_full_agent_E1",
+  "records": [
+    {
+      "timestamp": "2026-09-27T14:32:29.500762+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1470",
+      "output_tokens": "611",
+      "cost_usd": "0.0015895",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:32:35.547646+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1464",
+      "output_tokens": "643",
+      "cost_usd": "0.001652",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:32:43.698232+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1420",
+      "output_tokens": "828",
+      "cost_usd": "0.0020109999999999998",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:32:52.157477+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1425",
+      "output_tokens": "871",
+      "cost_usd": "0.0020982500000000003",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:32:57.308927+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1203",
+      "output_tokens": "580",
+      "cost_usd": "0.00146075",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:33:03.242086+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1294",
+      "output_tokens": "486",
+      "cost_usd": "0.0012955",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:33:08.464918+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1469",
+      "output_tokens": "531",
+      "cost_usd": "0.00142925",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:33:15.726223+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1353",
+      "output_tokens": "739",
+      "cost_usd": "0.00181625",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:33:22.651716+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1395",
+      "output_tokens": "646",
+      "cost_usd": "0.0016407499999999998",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:33:32.121885+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1288",
+      "output_tokens": "1004",
+      "cost_usd": "0.0023299999999999996",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:33:39.309841+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1094",
+      "output_tokens": "689",
+      "cost_usd": "0.0016515000000000002",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:33:43.194004+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1389",
+      "output_tokens": "331",
+      "cost_usd": "0.0010092500000000002",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:33:50.810874+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1476",
+      "output_tokens": "888",
+      "cost_usd": "0.002145",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:33:54.977100+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1324",
+      "output_tokens": "400",
+      "cost_usd": "0.001131",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:34:03.747411+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1250",
+      "output_tokens": "1168",
+      "cost_usd": "0.0026485",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:34:15.572146+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1253",
+      "output_tokens": "1159",
+      "cost_usd": "0.0026312500000000003",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:34:20.510814+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "772",
+      "output_tokens": "382",
+      "cost_usd": "0.0009570000000000001",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:34:25.027618+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "775",
+      "output_tokens": "443",
+      "cost_usd": "0.00107975",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:34:31.644996+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1468",
+      "output_tokens": "732",
+      "cost_usd": "0.001831",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:34:39.187303+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1471",
+      "output_tokens": "791",
+      "cost_usd": "0.00194975",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:34:45.583242+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1611",
+      "output_tokens": "614",
+      "cost_usd": "0.0016307499999999998",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:34:53.764678+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1499",
+      "output_tokens": "1162",
+      "cost_usd": "0.00269875",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:34:59.107676+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1504",
+      "output_tokens": "558",
+      "cost_usd": "0.001492",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:35:02.964199+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1382",
+      "output_tokens": "332",
+      "cost_usd": "0.0010095",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:35:10.263557+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1337",
+      "output_tokens": "690",
+      "cost_usd": "0.00171425",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:35:16.209163+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1331",
+      "output_tokens": "519",
+      "cost_usd": "0.00137075",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:35:23.053495+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1429",
+      "output_tokens": "747",
+      "cost_usd": "0.00185125",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:35:29.393101+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1289",
+      "output_tokens": "670",
+      "cost_usd": "0.00166225",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:35:34.102399+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1293",
+      "output_tokens": "547",
+      "cost_usd": "0.0014172499999999999",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:35:38.325452+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1342",
+      "output_tokens": "378",
+      "cost_usd": "0.0010915",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:35:42.656405+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1350",
+      "output_tokens": "556",
+      "cost_usd": "0.0014494999999999998",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:35:49.363855+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1387",
+      "output_tokens": "715",
+      "cost_usd": "0.0017767500000000001",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:36:03.186032+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1459",
+      "output_tokens": "1538",
+      "cost_usd": "0.0034407500000000002",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:36:10.443878+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1526",
+      "output_tokens": "753",
+      "cost_usd": "0.0018874999999999999",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:36:22.442741+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1584",
+      "output_tokens": "1354",
+      "cost_usd": "0.003104",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:36:30.214781+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1378",
+      "output_tokens": "683",
+      "cost_usd": "0.0017105",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:36:37.872383+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1256",
+      "output_tokens": "914",
+      "cost_usd": "0.002142",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:36:45.598329+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1367",
+      "output_tokens": "924",
+      "cost_usd": "0.00218975",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:36:52.524707+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1346",
+      "output_tokens": "725",
+      "cost_usd": "0.0017865",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:36:57.548642+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1325",
+      "output_tokens": "482",
+      "cost_usd": "0.00129525",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:37:02.359830+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1320",
+      "output_tokens": "432",
+      "cost_usd": "0.001194",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:37:12.212465+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "2044",
+      "output_tokens": "1034",
+      "cost_usd": "0.0025789999999999997",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:37:26.025782+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1884",
+      "output_tokens": "1366",
+      "cost_usd": "0.003203",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:37:30.226852+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1395",
+      "output_tokens": "519",
+      "cost_usd": "0.00138675",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:37:37.286489+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1360",
+      "output_tokens": "992",
+      "cost_usd": "0.002324",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:37:43.118812+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1480",
+      "output_tokens": "697",
+      "cost_usd": "0.001764",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:37:54.068437+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1595",
+      "output_tokens": "1358",
+      "cost_usd": "0.0031147500000000003",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:37:58.744250+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1478",
+      "output_tokens": "449",
+      "cost_usd": "0.0012675",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:38:06.089954+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1564",
+      "output_tokens": "488",
+      "cost_usd": "0.001367",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:38:10.675554+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1472",
+      "output_tokens": "470",
+      "cost_usd": "0.001308",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:38:17.123452+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1635",
+      "output_tokens": "531",
+      "cost_usd": "0.00147075",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:38:23.236690+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1544",
+      "output_tokens": "481",
+      "cost_usd": "0.001348",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:38:30.273045+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1239",
+      "output_tokens": "746",
+      "cost_usd": "0.00180175",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:38:37.400336+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1239",
+      "output_tokens": "885",
+      "cost_usd": "0.00207975",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:38:42.524220+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1314",
+      "output_tokens": "597",
+      "cost_usd": "0.0015225",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:38:48.251654+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1458",
+      "output_tokens": "609",
+      "cost_usd": "0.0015825",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:38:52.350248+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1302",
+      "output_tokens": "271",
+      "cost_usd": "0.0008675",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:38:59.309011+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1379",
+      "output_tokens": "510",
+      "cost_usd": "0.00136475",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:39:04.023316+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1563",
+      "output_tokens": "304",
+      "cost_usd": "0.00099875",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:39:09.605797+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1566",
+      "output_tokens": "447",
+      "cost_usd": "0.0012855",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:39:15.904837+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1185",
+      "output_tokens": "613",
+      "cost_usd": "0.0015222500000000002",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:39:22.352657+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1183",
+      "output_tokens": "740",
+      "cost_usd": "0.00177575",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:39:27.174901+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1370",
+      "output_tokens": "466",
+      "cost_usd": "0.0012745",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:39:30.523071+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1388",
+      "output_tokens": "370",
+      "cost_usd": "0.0010869999999999999",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:39:34.182320+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1365",
+      "output_tokens": "444",
+      "cost_usd": "0.0012292499999999999",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:39:39.944442+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1508",
+      "output_tokens": "586",
+      "cost_usd": "0.001549",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:39:45.703158+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1505",
+      "output_tokens": "519",
+      "cost_usd": "0.0014142500000000001",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:39:50.442943+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1487",
+      "output_tokens": "453",
+      "cost_usd": "0.00127775",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:39:58.314709+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1485",
+      "output_tokens": "842",
+      "cost_usd": "0.00205525",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:40:02.698207+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1547",
+      "output_tokens": "402",
+      "cost_usd": "0.00119075",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:40:08.433554+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1545",
+      "output_tokens": "502",
+      "cost_usd": "0.00139025",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:40:13.124267+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1859",
+      "output_tokens": "329",
+      "cost_usd": "0.00112275",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:40:20.842818+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1487",
+      "output_tokens": "738",
+      "cost_usd": "0.00184775",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:40:25.638992+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1425",
+      "output_tokens": "491",
+      "cost_usd": "0.00133825",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:40:30.966237+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1427",
+      "output_tokens": "663",
+      "cost_usd": "0.00168275",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:40:34.606383+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1483",
+      "output_tokens": "249",
+      "cost_usd": "0.00086875",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:40:41.882633+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1486",
+      "output_tokens": "660",
+      "cost_usd": "0.0016914999999999999",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:40:47.051630+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1378",
+      "output_tokens": "399",
+      "cost_usd": "0.0011425",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:40:53.899841+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1195",
+      "output_tokens": "710",
+      "cost_usd": "0.00171875",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:40:57.384765+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1436",
+      "output_tokens": "286",
+      "cost_usd": "0.000931",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:41:01.375874+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1431",
+      "output_tokens": "343",
+      "cost_usd": "0.00104375",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:41:05.003473+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1502",
+      "output_tokens": "221",
+      "cost_usd": "0.0008175000000000001",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:41:09.166469+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1583",
+      "output_tokens": "409",
+      "cost_usd": "0.00121375",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:41:15.106545+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "834",
+      "output_tokens": "569",
+      "cost_usd": "0.0013464999999999998",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:41:21.038058+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "954",
+      "output_tokens": "651",
+      "cost_usd": "0.0015405",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:41:24.381226+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1391",
+      "output_tokens": "349",
+      "cost_usd": "0.00104575",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:41:29.853164+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1386",
+      "output_tokens": "726",
+      "cost_usd": "0.0017985",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:41:34.968096+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1550",
+      "output_tokens": "686",
+      "cost_usd": "0.0017595",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:41:44.086193+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1610",
+      "output_tokens": "994",
+      "cost_usd": "0.0023905000000000003",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:41:49.697464+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1487",
+      "output_tokens": "564",
+      "cost_usd": "0.0014997500000000002",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:41:54.756172+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1494",
+      "output_tokens": "523",
+      "cost_usd": "0.0014195000000000002",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:41:57.684231+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1476",
+      "output_tokens": "267",
+      "cost_usd": "0.0009029999999999999",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:42:03.728372+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1490",
+      "output_tokens": "572",
+      "cost_usd": "0.0015165",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:42:07.015394+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1738",
+      "output_tokens": "296",
+      "cost_usd": "0.0010265",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:42:12.940982+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1323",
+      "output_tokens": "621",
+      "cost_usd": "0.00157275",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:42:19.006093+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1726",
+      "output_tokens": "684",
+      "cost_usd": "0.0017995",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:42:24.733418+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1159",
+      "output_tokens": "720",
+      "cost_usd": "0.0017297500000000002",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:42:31.435609+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1439",
+      "output_tokens": "848",
+      "cost_usd": "0.00205575",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:42:40.716328+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1276",
+      "output_tokens": "996",
+      "cost_usd": "0.0023109999999999997",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:42:52.483899+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1345",
+      "output_tokens": "1289",
+      "cost_usd": "0.00291425",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:42:57.075057+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1350",
+      "output_tokens": "435",
+      "cost_usd": "0.0012075",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:43:04.467986+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1534",
+      "output_tokens": "630",
+      "cost_usd": "0.0016435",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:43:07.948931+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1547",
+      "output_tokens": "259",
+      "cost_usd": "0.00090475",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:43:13.960125+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1406",
+      "output_tokens": "754",
+      "cost_usd": "0.0018595",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:43:18.290171+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1407",
+      "output_tokens": "331",
+      "cost_usd": "0.0010137500000000001",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:43:20.814522+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1326",
+      "output_tokens": "240",
+      "cost_usd": "0.0008114999999999999",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:43:26.089501+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1417",
+      "output_tokens": "461",
+      "cost_usd": "0.00127625",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:43:30.849751+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1413",
+      "output_tokens": "377",
+      "cost_usd": "0.00110725",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:43:40.616729+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1658",
+      "output_tokens": "475",
+      "cost_usd": "0.0013645",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:43:42.792433+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1416",
+      "output_tokens": "166",
+      "cost_usd": "0.000686",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:43:48.793536+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1387",
+      "output_tokens": "465",
+      "cost_usd": "0.00127675",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:43:55.481412+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1516",
+      "output_tokens": "548",
+      "cost_usd": "0.001475",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:44:03.346092+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1387",
+      "output_tokens": "853",
+      "cost_usd": "0.00205275",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:44:06.514818+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1391",
+      "output_tokens": "258",
+      "cost_usd": "0.0008637499999999999",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:44:09.588111+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1394",
+      "output_tokens": "321",
+      "cost_usd": "0.0009905",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:44:13.646693+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1408",
+      "output_tokens": "306",
+      "cost_usd": "0.000964",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:44:20.546618+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1464",
+      "output_tokens": "729",
+      "cost_usd": "0.001824",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:44:24.804187+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1333",
+      "output_tokens": "322",
+      "cost_usd": "0.00097725",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:44:26.894660+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1318",
+      "output_tokens": "157",
+      "cost_usd": "0.0006435",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:44:30.069786+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1297",
+      "output_tokens": "289",
+      "cost_usd": "0.00090225",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:44:33.819293+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1593",
+      "output_tokens": "336",
+      "cost_usd": "0.00107025",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:44:38.385234+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1567",
+      "output_tokens": "437",
+      "cost_usd": "0.00126575",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:44:41.598656+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1426",
+      "output_tokens": "233",
+      "cost_usd": "0.0008225",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:44:45.231505+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1429",
+      "output_tokens": "230",
+      "cost_usd": "0.00081725",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:44:53.574966+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1411",
+      "output_tokens": "757",
+      "cost_usd": "0.00186675",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:44:56.204386+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1411",
+      "output_tokens": "225",
+      "cost_usd": "0.00080275",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:45:05.545164+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1300",
+      "output_tokens": "1046",
+      "cost_usd": "0.002417",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:45:10.525760+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "722",
+      "output_tokens": "519",
+      "cost_usd": "0.0012185",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:45:14.024697+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "725",
+      "output_tokens": "418",
+      "cost_usd": "0.00101725",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:45:17.964338+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1311",
+      "output_tokens": "286",
+      "cost_usd": "0.00089975",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:45:21.807941+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1360",
+      "output_tokens": "406",
+      "cost_usd": "0.001152",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:45:28.196021+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1485",
+      "output_tokens": "419",
+      "cost_usd": "0.00120925",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:45:34.449392+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1489",
+      "output_tokens": "476",
+      "cost_usd": "0.0013242500000000001",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:45:37.323814+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1470",
+      "output_tokens": "221",
+      "cost_usd": "0.0008095",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:45:47.372533+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1598",
+      "output_tokens": "1035",
+      "cost_usd": "0.0024695",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:45:52.198622+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1618",
+      "output_tokens": "360",
+      "cost_usd": "0.0011245",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:45:59.000386+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1557",
+      "output_tokens": "698",
+      "cost_usd": "0.0017852500000000002",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:46:03.307750+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1498",
+      "output_tokens": "244",
+      "cost_usd": "0.0008625",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:46:05.689023+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1387",
+      "output_tokens": "196",
+      "cost_usd": "0.00073875",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:46:09.320508+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1422",
+      "output_tokens": "269",
+      "cost_usd": "0.0008935",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:46:13.003911+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1529",
+      "output_tokens": "418",
+      "cost_usd": "0.0012182500000000001",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:46:21.873999+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1489",
+      "output_tokens": "871",
+      "cost_usd": "0.0021142500000000002",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:46:25.024541+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1350",
+      "output_tokens": "237",
+      "cost_usd": "0.0008114999999999999",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:46:30.806159+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1349",
+      "output_tokens": "547",
+      "cost_usd": "0.0014312499999999998",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:46:34.912619+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1532",
+      "output_tokens": "223",
+      "cost_usd": "0.000829",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:46:37.963976+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1466",
+      "output_tokens": "249",
+      "cost_usd": "0.0008645",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:46:41.340578+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1497",
+      "output_tokens": "217",
+      "cost_usd": "0.0008082499999999999",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:46:48.839812+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1522",
+      "output_tokens": "858",
+      "cost_usd": "0.0020965000000000003",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:46:52.208926+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1449",
+      "output_tokens": "243",
+      "cost_usd": "0.00084825",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:46:57.739536+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1426",
+      "output_tokens": "548",
+      "cost_usd": "0.0014525",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:47:01.654192+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1465",
+      "output_tokens": "237",
+      "cost_usd": "0.00084025",
+      "run_id": "d18612ddbc35"
+    },
+    {
+      "timestamp": "2026-09-27T14:47:04.006185+00:00",
+      "experiment_id": "E11_addendum_full_agent_E1",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "input_tokens": "1330",
+      "output_tokens": "211",
+      "cost_usd": "0.0007545",
+      "run_id": "d18612ddbc35"
+    }
+  ],
+  "record_count": 152,
+  "input_tokens": 214369,
+  "output_tokens": 86805,
+  "cost_usd": 0.22720225,
+  "commit_at_analysis": "7802b528c13bb67fd80d66e26bf42a9a3c8f640b"
+}

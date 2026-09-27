@@ -1,248 +1,327 @@
 # NDATrace
 
-Reviewing an NDA against a company's required confidentiality terms is manual, slow, and
-inconsistent — a lawyer has to read the whole document and check it against each requirement one by
-one. NDATrace evaluates whether that process can be reliably automated with evidence grounding:
-given an NDA and a specific confidentiality requirement, it classifies whether the NDA
-**Entails**, **Contradicts**, or does **Not Mention** that requirement, and shows the exact clause
-it based that answer on — so a reviewer can verify the answer in seconds rather than re-reading the
-document.
+**Evidence-grounded NDA requirement review for enterprise legal operations**
 
-**Course:** NTU PE6201 Emerging AI Technologies — End-of-Course Project
-**Dataset:** [ContractNLI](https://stanfordnlp.github.io/contract-nli/) — 607 NDAs, 17 standard
-confidentiality hypotheses each, with gold labels and evidence spans.
+NDATrace reviews an NDA against a confidentiality requirement, classifies it as Entailment,
+Contradiction, or Not Mentioned, and returns the supporting source clauses for human verification.
 
-## What the system does
+`Python` · `FastAPI` · `Next.js` · `GPT-5-mini` · `ContractNLI`
 
-```text
-NDA + one of 17 standard confidentiality requirements
-        |
-Retrieve relevant clauses (sentence chunking -> embed -> rerank -> rule-boost)
-        |
-Classify: Entailment / Contradiction / Not Mentioned
-        |
-Return the cited evidence (verbatim, validated against the source text)
-        |
-If the routing signal flags the case as uncertain: selectively
-investigate further with a bounded, tool-using agent before answering
+> **Prototype runtime:** frozen top-5 RAG<br>
+> **Benchmark winner:** GPT-5-mini with FULL context<br>
+> **Agentic escalation:** tested and rejected
+
+## Why NDATrace?
+
+Enterprise legal operations analysts often need to check whether an NDA satisfies a standard
+confidentiality requirement. The relevant language may be paraphrased, split across clauses, or
+qualified by definitions, exceptions, and cross-references. NDATrace narrows that review to a
+checkable classification and its supporting clauses, so the analyst can focus attention where it
+is needed. It is a reviewer aid—not legal advice or an automated NDA approval system—and the human
+reviewer remains the final authority.
+
+## Prototype architecture
+
+```mermaid
+flowchart TD
+    A[Requirement + NDA] --> B[Clause-aware document chunks]
+    B --> C[BM25 top-20]
+    C --> D[Cross-encoder reranking]
+    D --> E[Top-5 clauses]
+    E --> F[GPT-5-mini + frozen P0]
+    F --> G[Structured parser]
+    G --> H[Evidence and source validation]
+    H --> I[Verdict + ranked source clauses]
+    I --> J[Human reviewer]
 ```
 
-See `docs/architecture.md` for the full, currently-implemented request flow (including a detail
-worth knowing up front: the production path makes **two** classifier calls per requirement, not
-one, to keep the routing decision independent of the retrieval it's judging — see the
-routing-independence fix in `docs/decisions.md` for why).
+Both the single-requirement and batch-review endpoints use the same frozen pipeline. The batch
+path builds one document index and reuses it across the selected requirements. There is no agent,
+automated routing policy, rule boost, or silent FULL-context fallback in the runtime.
 
-## Current status — final selected architecture (reconstruction-v2)
-
-This project went through a full **reconstruction** (branch `reconstruction`, experiments E00–E18,
-`docs/experiment_registry.md`) that reran the experimental program end to end under corrected
-discipline (evaluator/validator hardening, a routing-independence fix, and a one-shot final TEST
-evaluation) and is the authoritative, final result. The original pre-reconstruction pipeline
-history below ("Experiment progression", "Key development findings") remains as documented record
-of earlier work and is **not** the final architecture.
-
-**Final selected architecture: `openai/gpt-5-mini` + the frozen `GPT-P0` prompt + FULL NDA context
-+ structured JSON output + a runtime evidence-source validator.** No retrieval, no agent, and no
-automated review-routing policy are part of the selected path — all three were built, measured, and
-explicitly **not selected** (see below).
-
-**Final held-out TEST result (n=2,091, all official TEST cases, one-shot):**
-
-| System | Accuracy | Macro-F1 | Joint (label+evidence) | Contradiction recall | Cost |
-|---|---|---|---|---|---|
-| Rule baseline | 59.0% | 0.479 | 50.1% | 16.8% | $0 |
-| Local Qwen (ctx16k) | 49.9% | 0.431 | 39.7% | 25.5% | $0 API (local compute not monetized) |
-| **GPT-5-mini + P0 + FULL (final)** | **77.6%** | **0.727** | **74.6%** | **75.5%** | ≈$4.23 total |
-
-Full detail: `experiments/E17_final_test/`, `experiments/E17B_full_test_completion/`,
-`experiments/E18_business_course_synthesis/`.
-
-- **Why RAG was not selected**: RAG cut input tokens substantially on longer NDAs (up to ~70% on
-  the longest documents) but did not beat full context on the matched dev-sample architecture
-  comparison (E13) — full context is the frozen candidate, RAG is a measured alternative kept for a
-  long-document scalability scenario that was never validated.
-- **Why the agent was not selected**: the tested selective agent (E09–E11) showed a small,
-  statistically inconclusive net effect and added orchestration and cost without a demonstrated
-  benefit; it is not part of the final path.
-- **No selective-review/abstention policy was adopted** (E15): every deterministic routing policy
-  tested either left a large share of failures silently unreviewed or required an unacceptable
-  review workload. The runtime evidence validator remains as a structural source-integrity check
-  only — it flags non-source-grounded evidence, not general uncertainty.
-- **Main residual limitation: "Not Mentioned" over-inference.** NotMentioned recall is 62.7% on the
-  final TEST result, and it is the largest single failure bucket (323 of 531 full-TEST joint
-  failures) — the model too often infers a relationship the NDA doesn't actually address.
-- **Prompt-injection limitation (E16, disclosed, not patched)**: the system is evidence-grounded but
-  **not** prompt-injection-hardened. In a small controlled test (20 matched clean/attack pairs), 4
-  of 11 injection-type attacks succeeded, including two cases where the model's answer flipped to
-  match an instruction embedded in the NDA text. Evidence-source validation does not detect this —
-  it confirms a quote came from the document, not that the document's content is trustworthy.
-
-## Architecture
-
-Synchronous modular monolith: Python AI pipeline (`pipeline/`) served by a FastAPI backend
-(`backend/`) and a Next.js frontend (`frontend/`). The primary, selected product path is
-`pipeline/final_review.py` → `POST /api/review` (see `backend/app.py`, frontend `/final`). The
-earlier RAG + selective-agent pipeline (`pipeline/orchestrator.py`) and its endpoints
-(`POST /review`, `GET /review/{id}`, `GET /results`, `GET /cost-estimate`) are also live, restored
-as a real, working batch-review alternative — checkbox multi-select of the 17 fixed requirements,
-self-reported confidence, agent escalation, and SQLite-backed `/history` (frontend `/`). It is not
-the selected final architecture. Full request-flow detail: **`docs/architecture.md`**.
-
-## Experiment progression (original pre-reconstruction pipeline — historical)
-
-The material in this section and "Key development findings" below describes the **original**
-pipeline history, before the reconstruction described in "Current status" above superseded it as
-the final result. Kept as documented record, not as the current final claim.
-
-```text
-Data Validation
-  -> Oracle / Full-Context ceiling
-  -> Model Selection
-  -> Retrieval Experiments
-  -> RAG end-to-end
-  -> Prompt Tuning (v1 -> v6)
-  -> Confidence & Routing Analysis
-  -> Selective-Agent Experiment
-  -> Architecture Comparison
-  -> Architecture Freeze
-  -> Official ContractNLI Test-Set Evaluation (the final, locked benchmark run)
-```
-
-This was not a neat, planned-in-advance sequence — retrieval configuration and prompt version were
-each revised multiple times in response to earlier results on the same dev sample. Full
-chronological ledger: `docs/experiments.md`. Reasoning and status (ADOPTED/REJECTED/SUPERSEDED) per
-decision: `docs/decisions.md`. Corresponding notebooks: `archive/pre_reconstruction/notebooks/`
-(see `archive/pre_reconstruction/notebooks/README.md`) — pre-reconstruction, development-stage
-work; reconstruction-v2's own notebooks live inside each `experiments/E*/` directory.
-
-## Key development findings (verified repository values, positive and negative)
-
-- Oracle (gold evidence given directly) reaches 95.3% accuracy — the model reasons well when
-  evidence is unambiguous; the real bottleneck is retrieval, not model reasoning.
-- **Full-context beats RAG and RAG+agent on raw accuracy** on both the dev sample (91.3% vs. 88.0%
-  / 90.0%) and the full hosted test set (81.2% vs. 78.7% / 77.7%). It was excluded from production
-  on a documented scalability *hypothesis* — see the full-context exclusion decision in
-  `docs/decisions.md` — not because it underperformed on any data collected so far.
-- **Cost, measured on the official test set (2,091 cases, real dollars spent)**: Full-context
-  $0.000328/case, RAG $0.000152/case, RAG+agent $0.000405/case (RAG+agent costs ~2.7x plain RAG —
-  two classifier calls for routing independence plus the agent's own calls on REVIEW-routed cases;
-  full-context costs ~2.2x RAG per case despite skipping retrieval, since the whole document goes to
-  the model every time). All three are cheap in absolute terms at this document length — cost alone
-  did not drive the architecture decision away from full-context; the long-document scalability
-  hypothesis did.
-- Full-context's advantage is not universal: on local Llama 3.2 3B, full-context (49.2%) actually
-  *underperforms* the zero-cost rule-based baseline (57.6%).
-- The selective agent's dev-sample gain (88.0%→90.0%) was never statistically significant
-  (McNemar p=0.51 on 67 cases), and the full 2,091-case hosted test-set result reverses the
-  direction entirely (regression 87 vs. recovery 65, p=0.088) — see the contradiction noted above.
-- Confidence/abstention: no signal tested cleared the 0.7 AUROC target (best: rule-agreement,
-  0.657–0.660) — hard abstention was rejected in favor of ACCEPT/REVIEW routing. See the
-  confidence/abstention design decision in `docs/decisions.md`.
-- A real prompt-injection vulnerability was found live through the product UI (a document that was
-  entirely an injected instruction, no real clause content) — fixed in the current prompt version,
-  with higher overall accuracy than the prior default but one fewer correct Contradiction case
-  (a real, disclosed trade-off, traced to a single specific misread case, not overall noise). See
-  the prompt-version decision in `docs/decisions.md`.
-- A real, systematic weakness was found in exception/carve-out clause reconciliation: 4/4 such
-  cases in the negative-case battery failed. See the golden-battery finding in `docs/decisions.md`.
-- A real bug silently broke the joint label+evidence correctness metric — headlined throughout this
-  project as the key rubric metric — for the entire official test-set evaluation. Root-caused,
-  fixed, and partially (not fully) retroactively corrected. See the joint-metric bug entry in
-  `docs/decisions.md`.
-
-## Evaluation discipline
-
-Development, regression, robustness, architecture-validation, and final-test evidence are
-**different categories that answer different questions** and should never be reported as one
-number. Full definitions, dataset roles, and freeze protocol: **`docs/evaluation_protocol.md`**.
-Case-category taxonomy (benchmark vs. regression vs. robustness vs. agent-behaviour vs.
-system/API): **`docs/evaluation_case_design.md`**.
-
-## Repository map
-
-What's current (reconstruction-v2) vs. historical is separated by directory, not by convention —
-a reviewer should generally only need **Production**, **Evaluation**, **Experiments**, and
-**Documentation** below; **Historical** exists for provenance/audit, not day-to-day navigation.
-
-**Production:**
-
-| Path | Purpose |
+| Component | Frozen choice |
 |---|---|
-| `pipeline/` | Production AI pipeline. `final_review.py` is the selected final path (GPT-5-mini + P0 + FULL + runtime validator). `orchestrator.py`/`agent.py`/`agent_tools.py`/`confidence.py` are the restored legacy RAG+agent batch-review path — live, not the selected architecture. Retrieval/rule/classifier modules are shared with E-series reproduction (see Experiments below) |
-| `backend/` | FastAPI application — `POST /api/review` (final), `POST /review` + `/history` support (legacy batch), and the reconstruction-v2 experiment comparison (`GET /experiments`) — see `docs/api.md` |
-| `frontend/` | Next.js application — see `frontend/README.md` |
+| Chunking | Clause-aware, 256-token limit |
+| Overlap | 50 in the frozen configuration; clause-aware chunking preserves boundaries rather than sliding windows |
+| Candidate retrieval | BM25 top-20 |
+| Reranker | `cross-encoder/ms-marco-MiniLM-L-12-v2` |
+| Final context | Top-5 clauses |
+| Model | `openai/gpt-5-mini` |
+| Prompt | Frozen `GPT-P0` |
+| Temperature | 0 |
+| Agent | Not used |
+| Routing | Not used |
 
-**Evaluation:**
+Implementation details: [`docs/architecture.md`](docs/architecture.md).
 
-| Path | Purpose |
+## Every rung had to earn its complexity
+
+The project began with the cheapest deterministic approach. Each additional layer had to justify
+its quality, cost, latency, and failure modes before it could remain in the system.
+
+| Rung | Architecture | What it added | Decision |
+|---|---|---|---|
+| A0 | Rules | Deterministic keyword baseline | Insufficient semantic coverage |
+| A1 | FULL-context LLM | Semantic reasoning over the complete NDA | Strongest benchmark Joint result |
+| A2 | RAG | Bounded context and clause provenance | Selected prototype runtime |
+| A3 | Selective/full agent | Dynamic retrieval tools and additional reasoning steps | Rejected: no useful quality gain |
+
+> **Key finding:** more autonomy did not automatically improve quality.
+
+## Final benchmark
+
+The final comparison used all **123 NDAs** and **2,091 document–hypothesis cases** in the official
+ContractNLI TEST set. FULL and RAG used the same GPT-5-mini model, frozen P0 prompt, parser, evidence
+evaluator, and TEST population; only the supplied context differed.
+
+| Metric | FULL | RAG top-5 |
+|---|---:|---:|
+| Accuracy | **77.6%** | 76.8% |
+| Macro-F1 | **0.727** | 0.723 |
+| Joint | **74.6%** | 72.5% |
+| Contradiction Recall | 75.5% | **77.3%** |
+| Evidence Recall | **93.3%** | 89.0% |
+| Source Validity | 98.0% | **99.2%** |
+| Mean input tokens | 2,279 | **1,131** |
+| Mean latency | 7.31s | **7.14s** |
+
+- Classification accuracy difference: McNemar **p=0.217**.
+- Joint difference: McNemar **p=0.0047**.
+
+FULL achieved the stronger evidence-grounded benchmark result. RAG retained similar
+classification quality while reducing classifier input context by **50.4%**. RAG did not beat
+FULL overall: it gave up approximately **2.2 percentage points** of Joint success on this
+benchmark.
+
+## Why RAG powers the prototype
+
+> **FULL remains the benchmark-quality winner on ContractNLI. RAG is the product-oriented
+> prototype architecture.**
+
+The top-5 RAG path uses about **50.4% fewer classifier input tokens** and **16.8% less raw API
+inference cost** in the matched E20 comparison. Its context is bounded, every result carries
+ranked clause-level provenance, and a document's retrieval index can be reused across multiple
+requirements. Those properties fit an interactive reviewer workflow even though FULL remains the
+stronger benchmark configuration.
+
+This is a measured product trade-off, not a claim that RAG is more accurate or proven superior on
+100-page contracts. ContractNLI's document lengths are not sufficient to establish that broader
+scaling claim.
+
+## Evaluation: label correctness is not enough
+
+NDATrace evaluates three distinct questions:
+
+| Measure | Question |
 |---|---|
-| `evaluation/` | Metrics, scoring, evaluation harness — reused by pipeline, scripts, and experiments |
-| `results/final/reconstruction_v2/` | Canonical final-result summaries (source of truth for the final report/demo) — see `results/final/README.md` |
-| `tests/` | Unit, integration, and data-leakage-prevention tests |
+| Accuracy | Was the label correct? |
+| Evidence quality | Did the system identify the correct source clause? |
+| Joint | Were both the label **and** evidence correct? |
 
-**Experiments (reconstruction-v2, E00–E19):**
+> For a legal-review assistant, a correct label backed by unsupported evidence is not a successful
+> result.
 
-| Path | Purpose |
+Joint is therefore the headline measure. The evaluation also reports Contradiction Recall,
+Evidence Recall and Precision, source validity, retrieval Recall@K, latency, and token use.
+
+## Evaluation protocol
+
+- ContractNLI's official TRAIN/DEV/TEST partition was preserved with no re-splitting.
+- TRAIN supported development and controlled, lower-cost ablations; DEV supported confirmation
+  and architecture selection.
+- The official TEST split was not accessed during reconstruction-v2 tuning. Model, prompt,
+  retrieval, routing, agent policy, and scoring configuration were frozen before final TEST runs.
+- Gold labels and evidence were hidden from normal inference and available only to the scorer.
+- FULL and RAG were compared on the same 2,091 TEST cases, followed by failure analysis—not
+  TEST-driven tuning.
+- Fixed 150-case TRAIN subsets made agent and prompt ablations affordable; they did not replace
+  the full TEST evaluation.
+
+The project describes this as the **final held-out benchmark under the reconstruction-v2
+protocol**, not as perfectly unseen data: earlier, pre-reconstruction work had historical TEST
+exposure. The reconstruction pass did not use those prior TEST outcomes to tune the final system.
+See [`docs/evaluation_protocol.md`](docs/evaluation_protocol.md) and the
+[`data contamination register`](docs/data_contamination_register.md).
+
+## Model selection
+
+Before optimizing retrieval, the Oracle experiment supplied gold evidence directly to each model
+to measure its reasoning ceiling. This diagnostic used a balanced 300-case TRAIN sample and must
+not be mixed with normal end-to-end benchmark results.
+
+| Model | Execution | Oracle Macro-F1 | Contradiction Recall |
+|---|---|---:|---:|
+| Llama 3.2 3B | Local | 0.601 | 25% |
+| Qwen 2.5 7B Instruct | Local | 0.638 | 30% |
+| Gemini 2.5 Flash Lite | Hosted | 0.867 | 71% |
+| **GPT-5-mini** | Hosted | **0.906** | **82%** |
+
+Qwen was also retained as the local comparator for the reconstruction-v2 full TEST evaluation.
+GPT-5-mini powered the final hosted comparisons because its measured evidence-conditioned
+reasoning quality was substantially stronger. Full Oracle methodology and caveats are recorded in
+[`experiments/E01_oracle/summary.md`](experiments/E01_oracle/summary.md).
+
+## Why the agent was rejected
+
+The agent experiments tested whether additional retrieval tools and controller steps could recover
+base RAG failures on a fixed 150-case TRAIN sample.
+
+| Configuration | Joint | Cases using tools |
+|---|---:|---:|
+| Base RAG | **75.3%** | — |
+| Agent V1 | 73.3% | 1.3% |
+| Agent V2 controller prompt | 68.7% | 20.0% |
+
+Changing the controller prompt increased tool use substantially, but produced no useful
+tool-mediated recoveries. The tested retrieval-agent configuration therefore did not earn its
+additional complexity. This is a finding about the tested design, not a claim that agents cannot
+work in other systems.
+
+## Where the system still fails
+
+E20 recorded 576 non-Joint outcomes:
+
+| Failure category | Cases |
+|---|---:|
+| Reasoning/classification | 448 |
+| Evidence selection | 59 |
+| Retrieval-limited | 55 |
+| Runtime/parser/source validity | 14 |
+
+Most remaining failures are reasoning/classification failures rather than retrieval failures.
+That distribution helps explain why an additional retrieval agent had limited opportunity to add
+value.
+
+## Security & responsible use
+
+E16 tested 20 matched clean/adversarial pairs against the frozen GPT-5-mini + P0 FULL candidate.
+Four of 11 prompt-injection/adversarial-instruction cases succeeded, including **two label
+hijacks**. Joint success fell from **85% clean to 75% under attack**. Attack evidence remained
+source-grounded, demonstrating an important limitation: a source-valid quote can still contain
+malicious instructions. E16 was a small controlled test, not a certification of the current RAG
+runtime.
+
+**Implemented controls**
+
+- Structured-output parsing and validation
+- Exact evidence grounding against NDA source text
+- Source-validation failures surfaced for human review
+- Bounded steps, bounded tools, and duplicate-action protection in the experimental agent path
+- Human final authority; no automatic NDA approval or rejection
+
+**Not production complete**
+
+- Strong prompt-injection isolation
+- Authentication and authorization
+- Rate limiting
+- Comprehensive upload and malware validation
+- Secrets hardening
+- Enterprise retention and PII controls
+- Broader adaptive adversarial testing
+
+## Build vs reuse
+
+| Layer | Decision |
 |---|---|
-| `experiments/E00_dataset_validation/` … `experiments/E18_business_course_synthesis/` | Reconstruction-v2 experiment record, including the final TEST evaluation (E17/E17B) and business/course synthesis (E18) — see `docs/experiment_registry.md` |
-| `prompts/` | Versioned prompt templates (incl. `prompts/reconstruction_v2/`) — see `prompts/README.md` |
-| `scripts/` | Reconstruction-v2 experiment/evaluation/utility scripts still in active use |
-| `data/` | ContractNLI dataset + golden/regression/robustness case files — see `data/README.md` |
+| Data | Reuse ContractNLI |
+| Model | Rent GPT-5-mini through OpenRouter |
+| Chunking and retrieval orchestration | Build |
+| BM25 | Reuse `rank_bm25` |
+| Cross-encoder | Reuse pretrained `ms-marco-MiniLM-L-12-v2` |
+| Evidence validation | Build |
+| Evaluation harness | Build |
+| API and UI | Build |
 
-**Historical (pre-reconstruction, retained for provenance only):**
+## Quick start
 
-| Path | Purpose |
-|---|---|
-| `archive/pre_reconstruction/` | The original T-series notebooks, scripts, and comparison figures — see `archive/pre_reconstruction/README.md` |
-| `results/final/legacy/`, `results/archive/` | Pre-reconstruction result files (T041/AV01-era) |
-| `docs/archive/` | Superseded architecture doc and initial project plan |
-
-**Documentation:**
-
-| Path | Purpose |
-|---|---|
-| `docs/` | Architecture, decisions, evaluation protocol, API, experiment ledger, and archived planning material |
-
-## Reproduction
-
-Commands that work without any paid API calls:
+### 1. Install the backend
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
+git clone https://github.com/AsmithaUbaid/ndatrace.git
+cd ndatrace
+git switch reconstruction
+
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
-bash scripts/download_data.sh          # ContractNLI dataset
-python scripts/verify_environment.py
-python -m pytest tests/                # 230 tests, no network/API calls (mocked model calls)
+bash scripts/download_data.sh
 ```
 
-To run the live product (requires an OpenRouter API key in `.env`, copied from `.env.example`):
+The first live retrieval may download the cross-encoder model. Copy the environment template and
+set `OPENROUTER_API_KEY` for live GPT-5-mini reviews:
 
 ```bash
-uvicorn backend.app:app --reload            # backend, http://localhost:8000
-cd frontend && npm install && npm run dev   # frontend, http://localhost:3000
+cp .env.example .env
+python scripts/verify_environment.py
+uvicorn backend.app:app --reload
 ```
 
-Open `http://localhost:3000/final` for the final architecture: paste or upload an NDA, type a
-requirement, and click "Run review" — calls `POST /api/review` and makes a real, billed OpenRouter
-call. `http://localhost:3000/` (home) is the restored legacy batch-review UI (checkbox picker of
-the 17 fixed requirements, `POST /review`, with `/history` to browse past batch reviews) — a real,
-working alternative, not the selected final architecture.
+The API runs at `http://localhost:8000`.
 
-## Known limitations
+### 2. Start the frontend
 
-- **"Not Mentioned" over-inference is the main residual weakness** (62.7% recall on the final TEST
-  result; the largest single failure category). See "Current status" above.
-- **The system is evidence-grounded but not prompt-injection-hardened** — see the E16 disclosure
-  above; adversarial NDA content is a known, disclosed limitation, not fixed in this project.
-- **No selective-review/abstention policy was adopted** — the runtime evidence validator is a
-  structural source-integrity check only, not a general uncertainty detector.
-- Exception/carve-out clause reconciliation is a known, disclosed weakness (originally found in the
-  pre-reconstruction golden battery; see `docs/decisions.md`).
-- Long-document scalability (the core argument for RAG over full-context) remains untested — RAG
-  saved tokens on longer documents but was not shown to improve quality.
-- This is a reviewer aid, not legal advice, and not an autonomous approval/rejection system — a
-  human reviewer remains the final authority in every case.
+In a second terminal:
 
-## License
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-Academic project — NTU PE6201.
+Open `http://localhost:3000`. Live reviews require hosted, billed OpenRouter inference. Unit and
+integration tests mock model calls and do not require paid inference:
+
+```bash
+python -m pytest tests/
+```
+
+## Reproduce the decision journey
+
+[`notebooks/NDATrace_Complete_Technical_Tour.ipynb`](notebooks/NDATrace_Complete_Technical_Tour.ipynb)
+is an executable walkthrough of the architecture decisions: rules, Oracle/model selection,
+retrieval design, prompt ablations, FULL versus RAG, routing, agent experiments, cost-to-serve,
+security, and the final architecture decision.
+
+`RUN_HOSTED_MODEL=False` by default. In that mode, the notebook reuses stored experiment outputs,
+recomputes chunking and retrieval locally, and requires zero paid model calls. Setting it to `True`
+enables exactly one live, billed GPT-5-mini demonstration call.
+
+## Repository structure
+
+```text
+pipeline/      Frozen RAG runtime, model gateway, parser integration, and historical agent modules
+backend/       FastAPI endpoints and SQLite-backed review history
+frontend/      Next.js reviewer interface
+evaluation/    Metrics, evaluators, schemas, and experiment harnesses
+experiments/   Frozen reconstruction-v2 protocols, outputs, and analyses
+notebooks/     Executable technical tour
+docs/          Architecture, API, evaluation, decisions, and experiment registry
+tests/         Unit, integration, robustness, and data-leakage tests
+```
+
+Useful entry points:
+
+- [`docs/architecture.md`](docs/architecture.md) — current runtime and benchmark/product decision
+- [`docs/architecture_decisions/INDEX.md`](docs/architecture_decisions/INDEX.md) — architecture decision records
+- [`docs/experiment_registry.md`](docs/experiment_registry.md) — reconstruction-v2 experiment ledger
+- [`docs/api.md`](docs/api.md) — API contract
+- [`frontend/README.md`](frontend/README.md) — frontend development guide
+
+## Limitations
+
+- ContractNLI is a proxy dataset, not a complete enterprise legal playbook.
+- Only the NDA requirements represented by ContractNLI are evaluated.
+- NDATrace does not provide legal advice or autonomously approve or reject agreements.
+- Quality on documents beyond ContractNLI's observed lengths is not established.
+- Prompt-injection hardening is incomplete.
+- Automatic uncertainty/review routing did not meet the desired reliability target and is not in
+  the runtime.
+- Most residual E20 errors are reasoning/classification failures; retrieval changes alone will not
+  resolve them.
+- Human review remains required.
+
+## Project context
+
+NDATrace was developed for NTU PE6201 Emerging AI Technologies using the
+[ContractNLI](https://stanfordnlp.github.io/contract-nli/) dataset. Historical and rejected paths
+remain in the repository for reproducibility; they are not part of the active runtime.

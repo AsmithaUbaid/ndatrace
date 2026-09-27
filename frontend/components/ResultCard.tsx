@@ -34,11 +34,11 @@ export function ResultCard({ result }: { result: FinalReviewResponse }) {
   const colors = VERDICT_COLORS[verdict];
 
   return (
-    <div className={`overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 ${colors.tint}`}>
-      <div className={`h-[3px] ${colors.stripe}`} />
-      <div className="p-5">
+    <div className="result-card" data-verdict={verdict}>
+      <div className={`result-card__accent ${colors.stripe}`} />
+      <div className="result-card__content p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 text-sm font-semibold ${colors.badge}`}>
+          <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold shadow-sm ${colors.badge}`}>
             <span aria-hidden>{VERDICT_ICONS[verdict]}</span>
             {VERDICT_TITLES[verdict]}
           </span>
@@ -51,23 +51,32 @@ export function ResultCard({ result }: { result: FinalReviewResponse }) {
           </div>
         )}
 
-        <p className="mt-3 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
+        <p className="mt-4 text-sm leading-6 text-[#4b5563]">
           {result.label === "NotMentioned" ? NOTMENTIONED_NOTE : result.explanation}
         </p>
 
         {result.evidence.length > 0 && (
-          <div className="mt-3 flex flex-col gap-2">
-            <span className="text-xs font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+          <div className="result-card__evidence-panel mt-4 flex flex-col gap-2.5">
+            <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#7c7373]">
               Supporting clause{result.evidence.length > 1 ? "s" : ""} (verbatim from the NDA)
             </span>
             {result.evidence.map((e, i) => (
               <blockquote
                 key={i}
-                className={`rounded-md border-l-4 px-3 py-2 font-mono text-xs leading-relaxed text-zinc-700 dark:text-zinc-200 ${colors.evidenceBorder}`}
+                className="result-card__evidence-quote font-mono text-xs leading-relaxed text-[#29313d]"
               >
                 {e}
               </blockquote>
             ))}
+            {result.sources.length > 0 && (
+              <div className="flex flex-wrap gap-x-3 gap-y-1 border-t border-black/5 pt-2 text-[11px] text-[#6b7280]">
+                {result.sources.map((source) => (
+                  <span key={source.chunk_id}>
+                    Source clause {source.chunk_id + 1} · rank {source.rank}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -89,6 +98,7 @@ export function ResultCard({ result }: { result: FinalReviewResponse }) {
             <Detail label="Output tokens" value={result.output_tokens ?? "–"} />
             <Detail label="Est. cost" value={result.estimated_cost_usd != null ? `$${result.estimated_cost_usd.toFixed(6)}` : "–"} />
             <Detail label="Trace ID" value={result.trace_id} mono />
+            <Detail label="Clauses retrieved" value={result.retrieved_chunks.length} />
           </dl>
         )}
       </div>

@@ -1,15 +1,7 @@
-"""
-Tests for the restored legacy backend surface (pre-reconstruction RAG +
-selective-agent pipeline): POST /review, GET /review/{review_id},
-GET /results, GET /cost-estimate. Restored alongside the batch-review +
-/history frontend UI - POST /api/review remains the final, selected
-architecture, but this legacy flow is a real, working alternative, not
-just historical record.
+"""Tests for the batch/history API backed by the frozen product RAG path.
 
-GET /experiments itself is NOT reverted to the old results/runs/*.jsonl
-browser schema - it now serves the reconstruction-v2 final TEST comparison
-(see tests/test_backend.py); only GET /cost-estimate reads results/runs/
-here, to estimate the legacy pipeline's own per-requirement cost.
+GET /cost-estimate remains a historical read-only endpoint but is no longer
+shown in the current UI because its source run used the rejected agent path.
 """
 
 from __future__ import annotations
@@ -20,6 +12,22 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from fastapi.testclient import TestClient
+from pipeline.frozen_rag import RetrievedChunk
+
+
+@pytest.fixture(autouse=True)
+def _stub_frozen_retriever(monkeypatch):
+    class StubRetriever:
+        def __init__(self, nda_text: str):
+            self.nda_text = nda_text
+
+        def retrieve(self, requirement: str):
+            return [RetrievedChunk(
+                chunk_id=0, rank=1, start_char=0, end_char=len(self.nda_text),
+                bm25_score=1.0, reranker_score=2.0, text=self.nda_text,
+            )]
+
+    monkeypatch.setattr("pipeline.final_review.FrozenRagRetriever", StubRetriever)
 
 
 @pytest.fixture
@@ -84,12 +92,18 @@ def test_review_end_to_end_with_mocked_model(client):
         body = r.json()
         assert len(body["results"]) == 1
         assert body["results"][0]["label"] == "Entailment"
-        assert body["results"][0]["agent_used"] is False  # rule agrees -> no escalation
+        assert body["results"][0]["agent_used"] is False
+        assert body["results"][0]["confidence"] is None
+        assert body["results"][0]["confidence_available"] is False
+        assert body["results"][0]["source_valid"] is True
+        assert body["results"][0]["retrieved_chunks"][0]["rank"] == 1
         review_id = body["review_id"]
 
         r2 = client.get(f"/review/{review_id}")
         assert r2.status_code == 200
         assert r2.json()["results"][0]["label"] == "Entailment"
+        assert r2.json()["results"][0]["sources"][0]["chunk_id"] == 0
+        assert r2.json()["results"][0]["retrieved_chunks"][0]["reranker_score"] == 2.0
 
         r3 = client.get("/results")
         assert r3.status_code == 200
@@ -98,11 +112,7 @@ def test_review_end_to_end_with_mocked_model(client):
 
 
 def test_one_hypothesis_failure_does_not_lose_the_others(client, monkeypatch):
-    """Eval case 095 ('1 of 17 fails -> other 16 succeed'): a ModelError
-    on one hypothesis must not discard results already computed for the
-    others - found as a real gap during the 2026-09-24 security review,
-    review_document() originally had no per-hypothesis error isolation
-    at all."""
+    """A provider failure for one requirement must not discard the others."""
     import httpx
     import openai
 
@@ -117,15 +127,13 @@ def test_one_hypothesis_failure_does_not_lose_the_others(client, monkeypatch):
         return openai.APITimeoutError(request=httpx.Request("POST", "https://openrouter.ai/x"))
 
     with patch("pipeline.model_gateway.OpenAI") as mock_openai:
-        # nda-11's rag classify succeeds, nda-5's rag classify exhausts all
-        # 4 attempts (max_retries=3 -> ModelError), nda-16's rag classify
-        # succeeds - the mock never even reaches nda-16's plain-context call
-        # since nda-5 raises before that, so nda-16 needs its own 2 calls.
+        # One frozen classifier call per requirement; retry limit is the
+        # E20 value of one, so nda-5 exhausts after two attempts.
         mock_openai.return_value.chat.completions.create = MagicMock(
             side_effect=[
-                _fake_completion(ok_json), _fake_completion(ok_json),  # nda-11 boosted + plain
-                timeout_error(), timeout_error(), timeout_error(), timeout_error(),  # nda-5 exhausts retries
-                _fake_completion(ok_json), _fake_completion(ok_json),  # nda-16 boosted + plain
+                _fake_completion(ok_json),
+                timeout_error(), timeout_error(),
+                _fake_completion(ok_json),
             ]
         )
         payload = {
@@ -148,28 +156,16 @@ def test_one_hypothesis_failure_does_not_lose_the_others(client, monkeypatch):
         assert results["nda-5"]["error"] is not None  # the one that failed is flagged, not silently dropped
 
 
-def test_review_escalates_to_agent_on_rule_disagreement(client):
-    # Model says Contradiction on a clause the keyword rule reads as
-    # Entailment (no "may reverse engineer" carve-out phrase present) ->
-    # rule disagrees -> should route to REVIEW and call the agent, which
-    # will make its own further model calls against the same mock.
+def test_review_never_invokes_agent_or_routing(client):
     contradiction_json = json.dumps({
         "label": "Contradiction", "confidence": 0.6,
         "evidence": ["reverse engineer"], "explanation": "test",
     })
-    conclude_json = json.dumps({
-        "label": "Contradiction", "confidence": 0.6,
-        "evidence": ["reverse engineer"], "explanation": "agent test",
-    })
-    with patch("pipeline.model_gateway.OpenAI") as mock_openai:
-        mock_openai.return_value.chat.completions.create = MagicMock(
-            side_effect=[
-                _fake_completion(contradiction_json),  # rule-boosted RAG classify (final-answer candidate)
-                _fake_completion(contradiction_json),  # plain (non-boosted) classify (routing-signal only)
-                _fake_completion(json.dumps({"action": "conclude", "query": ""})),  # agent step
-                _fake_completion(conclude_json),  # agent's final classify-over-everything
-            ]
-        )
+    with patch("pipeline.model_gateway.OpenAI") as mock_openai, patch(
+        "pipeline.agent.run_agent", side_effect=AssertionError("agent must not run")
+    ):
+        completion = MagicMock(return_value=_fake_completion(contradiction_json))
+        mock_openai.return_value.chat.completions.create = completion
         payload = {
             "nda_text": "Receiving Party shall not reverse engineer any objects embodying "
                         "Confidential Information.",
@@ -177,4 +173,5 @@ def test_review_escalates_to_agent_on_rule_disagreement(client):
         }
         r = client.post("/review", json=payload)
         assert r.status_code == 200
-        assert r.json()["results"][0]["agent_used"] is True
+        assert r.json()["results"][0]["agent_used"] is False
+        assert completion.call_count == 1

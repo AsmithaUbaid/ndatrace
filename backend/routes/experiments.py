@@ -6,9 +6,11 @@ GET /experiments reads results/final/reconstruction_v2/full_test_comparison.csv
 - the canonical, already-computed Rule/Qwen/GPT comparison on the identical
 n=2,091 official TEST population (E17/E17B). Never recomputes a metric.
 
-GET /cost-estimate reads the legacy results/runs/*.jsonl records (restored
-alongside the batch-review UI) to estimate the RAG+agent pipeline's real
-per-requirement cost before a batch review is submitted.
+GET /experiments/e20 reads the frozen E20 report and returns the matched
+FULL-versus-RAG comparison used for the final product architecture decision.
+
+GET /cost-estimate reads historical RAG+agent results/runs/*.jsonl records.
+The current product UI does not display this rejected architecture's estimate.
 """
 
 from __future__ import annotations
@@ -27,6 +29,11 @@ router = APIRouter(tags=["experiments"])
 
 def _comparison_csv_path() -> Path:
     return settings.results_path / "final" / "reconstruction_v2" / "full_test_comparison.csv"
+
+
+def _e20_report_path() -> Path:
+    project_root = Path(__file__).resolve().parents[2]
+    return project_root / "experiments" / "E20_final_rag_test" / "results" / "E20_final_report.json"
 
 
 def _to_float(value: str) -> float | None:
@@ -59,6 +66,43 @@ def list_final_test_comparison() -> list[FinalTestResult]:
     ]
 
 
+@router.get("/experiments/e20", response_model=list[FinalTestResult])
+def list_e20_architecture_comparison() -> list[FinalTestResult]:
+    """Return frozen E20 metrics without recomputing any experiment result."""
+    path = _e20_report_path()
+    if not path.exists():
+        return []
+
+    with open(path, encoding="utf-8") as f:
+        report = json.load(f)
+
+    n = int(report["population"]["n"])
+    comparison = report["full_vs_rag_same_population"]
+    rows: list[FinalTestResult] = []
+    for key, system, status in (
+        ("FULL", "gpt5mini_p0_full", "benchmark"),
+        ("RAG", "gpt5mini_p0_rag_top5", "final"),
+    ):
+        metrics = comparison[key]
+        recall = metrics["recall"]
+        rows.append(FinalTestResult(
+            system=system,
+            n=n,
+            accuracy=float(metrics["accuracy"]),
+            macro_f1=float(metrics["macro_f1"]),
+            joint=float(metrics["joint"]),
+            entailment_recall=float(recall["Entailment"]),
+            contradiction_recall=float(recall["Contradiction"]),
+            notmentioned_recall=float(recall["NotMentioned"]),
+            evidence_recall=float(metrics["evidence_recall"]),
+            evidence_precision=float(metrics["evidence_precision"]),
+            source_valid_quote_rate=float(metrics["source_valid_quote_rate"]),
+            api_cost_usd=float(metrics["cost_per_case"]) * n,
+            architecture_status=status,
+        ))
+    return rows
+
+
 def _runs_dir() -> Path:
     return settings.results_path / "runs"
 
@@ -85,11 +129,8 @@ def _iter_run_records():
 @router.get("/cost-estimate", response_model=CostEstimate)
 def get_cost_estimate() -> CostEstimate:
     """
-    Real, measured average cost per requirement for the legacy RAG +
-    selective-agent architecture (T031) - lets the batch-review UI show
-    "this will cost about $X" before the user spends real money. Prefers
-    the rag_agent record with the largest sample_size (most statistically
-    representative).
+    Historical measured average cost per requirement for the rejected
+    RAG+agent architecture. Prefers the largest available sample.
     """
     candidates = [
         rec for rec in _iter_run_records()

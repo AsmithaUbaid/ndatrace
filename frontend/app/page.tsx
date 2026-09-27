@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { api, CostEstimate, Hypothesis, ReviewResponse } from "@/lib/api";
+import { api, Hypothesis, ReviewResponse } from "@/lib/api";
 import { RequirementCard } from "@/components/RequirementCard";
 import { ResultsSummaryBar } from "@/components/ResultsSummaryBar";
 import { LimitationsPanel } from "@/components/LimitationsPanel";
@@ -35,18 +35,10 @@ export default function ReviewPage() {
   const [pdfName, setPdfName] = useState<string | null>(null);
   const [extractingPdf, setExtractingPdf] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [costEstimate, setCostEstimate] = useState<CostEstimate | null>(null);
   const [filter, setFilter] = useState<FilterKey>("all");
   const [copied, setCopied] = useState(false);
 
   const DRAFT_KEY = "ndatrace_nda_draft";
-
-  useEffect(() => {
-    api.getCostEstimate().then(setCostEstimate).catch(() => {
-      // Non-critical - if no rag_agent experiment record exists yet, just
-      // skip showing the estimate rather than blocking the review flow.
-    });
-  }, []);
 
   useEffect(() => {
     // Per-viewer convenience only - restores a draft if the tab was closed
@@ -133,7 +125,7 @@ export default function ReviewPage() {
       // Auto-switch to Contradictions if any exist, since that's the
       // highest-risk class - otherwise show everything.
       const hasContradiction = response.results.some(
-        (r) => !r.error && toVerdict(r.label) === "contradiction"
+        (r) => !r.error && r.label != null && toVerdict(r.label) === "contradiction"
       );
       setFilter(hasContradiction ? "contradiction" : "all");
     } catch (e) {
@@ -163,10 +155,12 @@ export default function ReviewPage() {
     if (filter === "all") return result.results;
     if (filter === "needs-attention") {
       return result.results.filter(
-        (r) => !r.error && (toVerdict(r.label) === "contradiction" || r.confidence < 0.5)
+        (r) => !r.error && r.label != null && (
+          toVerdict(r.label) === "contradiction" || r.needs_human_review
+        )
       );
     }
-    return result.results.filter((r) => !r.error && toVerdict(r.label) === filter);
+    return result.results.filter((r) => !r.error && r.label != null && toVerdict(r.label) === filter);
   }, [result, filter]);
 
   return (
@@ -177,8 +171,7 @@ export default function ReviewPage() {
         </h1>
         <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
           Paste an NDA and pick the standard confidentiality requirements to check. Each result comes
-          with a label, a confidence score, and the exact evidence text it was based on, not
-          just a verdict.
+          with a clear result and the exact source clause it was based on, not just a verdict.
         </p>
       </header>
 
@@ -349,13 +342,6 @@ export default function ReviewPage() {
             </span>
             <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Run the review</span>
           </div>
-          {costEstimate && selected.size > 0 && (
-            <span className="text-xs text-zinc-500 dark:text-zinc-400">
-              Estimated cost: ~${(costEstimate.avg_cost_per_requirement_usd * selected.size).toFixed(4)} for{" "}
-              {selected.size} requirement{selected.size === 1 ? "" : "s"}{" "}
-              <span className="text-zinc-400 dark:text-zinc-500">(based on past runs)</span>
-            </span>
-          )}
         </div>
         <button
           onClick={handleSubmit}
@@ -428,9 +414,9 @@ export default function ReviewPage() {
             How it works
           </summary>
           <ol className="mt-2 list-decimal space-y-1 pl-4 text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
-            <li>The NDA is chunked, embedded, and the relevant clauses for each selected requirement are retrieved and reranked.</li>
-            <li>A keyword rule and the language model each classify the requirement; if they disagree, a bounded tool-using agent investigates further before answering.</li>
-            <li>Each result includes the model&apos;s self-reported confidence and whether the agent was escalated.</li>
+            <li>The NDA is split into clauses and the most relevant clauses for each selected requirement are retrieved and reranked.</li>
+            <li>The five highest-ranked clauses are reviewed by the classifier using the frozen product prompt.</li>
+            <li>Every returned evidence quote is checked against the retrieved source text.</li>
             <li>The reviewer checks the evidence and makes the final decision.</li>
           </ol>
         </details>

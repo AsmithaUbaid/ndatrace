@@ -84,6 +84,19 @@ def test_trigger_true_enters_loop():
     assert trace.final_label == "Contradiction"
 
 
+def test_force_agent_enters_same_loop_without_runtime_trigger():
+    trace = run_selective_agent(
+        case_id="forced", doc_text=DOC, hypothesis_text="req",
+        a2_context_chunks=NON_TRIGGERING_CONTEXT, a2_label="NotMentioned", a2_evidence=[],
+        model_call=_scripted_stub([_final("Contradiction", ["quote"])]),
+        force_agent=True,
+    )
+    assert trace.triggered is True
+    assert trace.trigger_reasons == ["experimental_force_agent"]
+    assert trace.agent_model_calls == 1
+    assert trace.final_label == "Contradiction"
+
+
 def test_cross_reference_cue_detection():
     assert cross_reference_to_named_provision_cue(["pursuant to section 4"]) is True
     assert cross_reference_to_named_provision_cue(["a totally unrelated clause"]) is False

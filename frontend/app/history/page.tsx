@@ -39,9 +39,8 @@ export default function HistoryPage() {
           without re-running the model.
         </p>
         <p className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-500">
-          These records are from the earlier experimental RAG + selective-agent pipeline (kept for
-          history) and predate the final architecture (GPT-5-mini + P0 + FULL context) used on the
-          current Review page.
+          Current reviews use clause retrieval followed by evidence-grounded classification.
+          Older saved records may use the earlier experimental pipeline.
         </p>
       </header>
 

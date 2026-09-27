@@ -20,12 +20,18 @@ export function reviewToText(review: ReviewResponse): string {
       lines.push("");
       continue;
     }
+    if (!r.label) continue;
     const verdict = VERDICT_TITLES[toVerdict(r.label)];
     lines.push(`[${verdict.toUpperCase()}] ${r.hypothesis_text} (${r.hypothesis_id})`);
-    lines.push(`  Confidence: ${Math.round(r.confidence * 100)}%`);
-    lines.push(`  ${r.agent_used ? `Escalated for deeper review (${r.agent_steps} steps)` : "Answered directly"}`);
+    if (r.confidence_available && r.confidence != null) {
+      lines.push(`  Confidence: ${Math.round(r.confidence * 100)}%`);
+    }
+    lines.push("  Reviewed against retrieved source clauses");
     if (r.explanation) lines.push(`  Explanation: ${r.explanation}`);
     for (const e of r.evidence) lines.push(`  Evidence: "${e}"`);
+    for (const source of r.sources) {
+      lines.push(`  Source clause: ${source.chunk_id + 1} (retrieval rank ${source.rank})`);
+    }
     lines.push("");
   }
 

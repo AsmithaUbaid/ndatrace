@@ -1,12 +1,10 @@
 # NDATrace Architecture
 
-This describes the **final, selected** architecture (reconstruction-v2, frozen in E19), verified
-directly against `pipeline/final_review.py` and `backend/routes/review.py` —
-`POST /api/review` is the primary review endpoint. The superseded RAG + selective-agent
-architecture (`POST /review`, `pipeline/orchestrator.py`) is also served, restored as a real
-working batch-review alternative, not just historical record — see §4 below and
-`docs/archive/architecture_pre_reconstruction.md`. For the full reasoning behind the selection and
-every rejected alternative, see `docs/decisions.md`.
+This describes the interactive prototype runtime, verified directly against
+`pipeline/frozen_rag.py`, `pipeline/final_review.py`, and `backend/routes/review.py`. Both the
+single-requirement endpoint (`POST /api/review`) and the batch UI endpoint (`POST /review`) use the
+same frozen E20 RAG pipeline. For benchmark conclusions and rejected alternatives, see
+`docs/architecture_decisions/INDEX.md` and `docs/decisions.md`.
 
 ## 1. Request flow (`POST /api/review`, `backend/routes/review.py`)
 
@@ -15,32 +13,52 @@ NDA + requirement
         |
 input validation
         |
-openai/gpt-5-mini + GPT-P0 prompt + FULL NDA context   [pipeline/final_review.py]
+clause-aware chunking (256 tokens; frozen overlap config 50)
+        |
+BM25 top-20 -> ms-marco-MiniLM-L-12-v2 rerank -> top-5 context
+        |
+openai/gpt-5-mini + frozen GPT-P0 prompt   [pipeline/final_review.py]
         |
 structured output parser   [evaluation/structured_output.py]
         |
 runtime evidence-source validator v2   [pipeline/evidence_validator.py]
         |
-reviewer-facing result   { label, evidence, explanation, source_valid, needs_human_review }
+reviewer-facing result   { label, evidence, source clauses, source_valid, needs_human_review }
         |
 human final decision
 ```
 
-No retrieval and no agent sit in this path — the full NDA text is sent to the model directly. The
-GPT-P0 prompt requests only `{label, evidence}`; there is no model-reported confidence, so none is
-fabricated by the frontend or backend. The evidence validator checks only that the cited evidence
-is a genuine verbatim quote from the submitted NDA text — it is a source-integrity check, not a
-correctness or uncertainty signal.
+The classifier receives only the retrieved top-five context, never the full NDA. There is no
+agent, routing policy, rule boost, or silent FULL fallback. GPT-P0 requests only
+`{label, evidence}`; there is no model-reported confidence, so none is fabricated. The batch API
+retains its historical confidence field as `null` with `confidence_available: false`.
 
-## 2. Why this architecture was selected
+## 2. Product runtime decision versus benchmark result
 
-- **Full-context is the selected prototype architecture.** On the full 2,091-case official
+NDATrace's interactive prototype uses the frozen top-5 RAG pipeline because it offers a
+bounded-context architecture, lower input-token usage, and clause-level retrieval suitable for
+interactive NDA review.
+
+FULL-context GPT remains the strongest measured benchmark configuration on ContractNLI TEST,
+achieving higher Joint evidence-grounded correctness. Therefore the prototype runtime choice is
+an engineering/productization decision, not a claim that RAG achieved higher benchmark quality.
+
+- **Full-context is the strongest measured benchmark configuration.** On the full 2,091-case official
   ContractNLI TEST set, GPT-5-mini + P0 + FULL scored accuracy 77.6%, macro-F1 0.727, joint
   label+evidence correctness 74.6%, Contradiction recall 75.5% (n=2,091; see `docs/decisions.md`
   ADR entries for E17/E17B).
-- **RAG was evaluated but not selected as the primary path.** Retrieval reduced input tokens
-  substantially on longer documents but did not demonstrate a quality advantage over full context
-  on the matched architecture comparison; it remains a measured alternative, not the shipped path.
+- **RAG is the interactive prototype runtime.** On the matched development-sample
+  comparison (E13), retrieval reduced input tokens substantially but did not demonstrate a quality
+  advantage over full context. **E20 repeated this as a same-population, all-2,091-TEST-case
+  comparison with paired significance testing**: RAG's classification accuracy was statistically
+  indistinguishable from FULL (76.8% vs 77.6%, McNemar p=0.217), but FULL's Joint (evidence-
+  grounded) success was significantly higher (74.6% vs 72.5%, p=0.0047) — a real, not noise-level,
+  gap. RAG cut input tokens 50.4% and API cost 16.8% on the same run. It is the
+  **benchmark**-losing but **production-oriented** runtime: bounded context cost regardless of
+  document length, and reusable per-document retrieval indexing across the 17 requirement checks —
+  a scaling argument this dataset (median 1,836 / max 7,861 TEST tokens) is too short to itself
+  validate against real 50–100 page contracts. Full record: ADR-012,
+  `docs/architecture_decisions/INDEX.md`.
 - **The selective agent was evaluated but did not demonstrate useful tool-use benefit and was not
   selected.** Net effect was small and statistically inconclusive across every sample tested.
 - **E15 did not establish a sufficiently effective general selective-routing policy.** Every
@@ -58,17 +76,19 @@ correctness or uncertainty signal.
 
 | System | Accuracy | Macro-F1 | Joint (label+evidence) | Contradiction recall |
 |---|---:|---:|---:|---:|
-| **GPT-5-mini + P0 + FULL (selected)** | **77.6%** | **0.727** | **74.6%** | **75.5%** |
+| **GPT-5-mini + P0 + FULL (benchmark best)** | **77.6%** | **0.727** | **74.6%** | **75.5%** |
 
 Full breakdown, comparators (rule baseline, local Qwen), and provenance: `results/final/README.md`,
 `docs/experiment_registry.md` (E17/E17B), `docs/decisions.md`.
 
-## 4. Legacy path (restored, not the selected architecture)
+A same-population RAG comparator (frozen `retrieval_v1` top-5, identical model/prompt/evaluator)
+was also run on the full TEST split (E20) for a paired statistical comparison — FULL's Joint
+advantage held and is statistically significant there too. The interactive prototype nevertheless
+uses that unchanged RAG configuration for the product reasons in §2; see ADR-012 for the record.
 
-The earlier RAG + selective-agent pipeline (`pipeline/orchestrator.py`) and its endpoints
-(`POST /review`, `GET /review/{review_id}`, `GET /results`, `GET /cost-estimate`) are live in the
-current backend and frontend — batch review of multiple hypotheses at once (checkbox picker of the
-17 fixed requirements), self-reported confidence, agent escalation, and SQLite-backed `/history`.
-It is **not** the selected final architecture (see §2/§3 above) — full-context GPT-5-mini + P0 is —
-but it is a real, working alternative, not merely preserved for reproduction. Full detail:
-`docs/archive/architecture_pre_reconstruction.md`, `docs/api.md`'s "Legacy batch-review endpoints".
+## 4. Batch and single-requirement entry points
+
+`POST /api/review` reviews one free-text requirement. `POST /review` reuses one BM25 index to review
+any selected subset of the 17 standard requirements and persists the results for `/history`.
+Both call `pipeline/final_review.py`; neither calls `pipeline/orchestrator.py`, the agent, or a
+routing policy. The older agent code remains only for historical experiment reproducibility.

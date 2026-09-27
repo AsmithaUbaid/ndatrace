@@ -18,3 +18,148 @@
 body {
   color-scheme: light;
 }
+
+.app-background {
+  background-color: #faf9f7;
+  background-image: linear-gradient(180deg, #fdfcfb 0%, #f8f7f5 100%);
+  background-attachment: fixed;
+}
+
+/*
+ * Layered result surfaces. These are intentionally shared by both review
+ * card variants so verdict styling stays consistent without long gradient
+ * and shadow utility strings in the components.
+ */
+.result-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.875rem;
+  background:
+    radial-gradient(circle at 4% 0%, rgb(148 163 184 / 7%), transparent 38%),
+    linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+  box-shadow:
+    0 10px 30px rgb(31 41 55 / 6%),
+    inset 0 1px 0 rgb(255 255 255 / 85%);
+}
+
+.result-card::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  content: "";
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 38%);
+}
+
+.result-card[data-verdict="contradiction"] {
+  border-color: rgb(239 68 68 / 35%);
+  background:
+    radial-gradient(circle at 5% 0%, rgb(239 68 68 / 9%), transparent 40%),
+    linear-gradient(180deg, #ffffff 0%, #fff7f6 100%);
+  box-shadow:
+    0 10px 30px rgb(127 29 29 / 8%),
+    inset 0 1px 0 rgb(255 255 255 / 90%);
+}
+
+.result-card[data-verdict="entailment"] {
+  border-color: rgb(16 185 129 / 28%);
+  background:
+    radial-gradient(circle at 5% 0%, rgb(16 185 129 / 7%), transparent 40%),
+    linear-gradient(180deg, #ffffff 0%, #f4fbf8 100%);
+  box-shadow:
+    0 10px 30px rgb(6 78 59 / 7%),
+    inset 0 1px 0 rgb(255 255 255 / 90%);
+}
+
+.result-card[data-verdict="notmentioned"] {
+  border-color: rgb(148 163 184 / 38%);
+  background:
+    radial-gradient(circle at 7% 0%, rgb(219 234 254 / 46%), transparent 35%),
+    linear-gradient(145deg, #ffffff 0%, #ffffff 58%, #f8fafc 100%);
+  box-shadow:
+    0 12px 32px rgb(51 65 85 / 9%),
+    0 2px 8px rgb(51 65 85 / 4%),
+    inset 0 1px 0 #ffffff;
+}
+
+.result-card[data-verdict="notmentioned"] .result-card__accent {
+  background: linear-gradient(90deg, #cbd5e1 0%, #eef2f7 52%, #d8dee8 100%);
+}
+
+.result-card__accent {
+  height: 3px;
+  opacity: 0.9;
+}
+
+.result-card__content {
+  position: relative;
+  z-index: 1;
+}
+
+.result-card__confidence-track {
+  display: block;
+  width: 5.75rem;
+  height: 0.375rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: rgb(229 231 235 / 88%);
+  box-shadow: inset 0 1px 2px rgb(31 41 55 / 8%);
+}
+
+.result-card__confidence-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #71717a;
+}
+
+.result-card[data-verdict="contradiction"] .result-card__confidence-fill {
+  background: linear-gradient(90deg, #ef4444, #f97316);
+}
+
+.result-card[data-verdict="entailment"] .result-card__confidence-fill {
+  background: linear-gradient(90deg, #059669, #10b981);
+}
+
+.result-card[data-verdict="notmentioned"] .result-card__confidence-fill {
+  background: linear-gradient(90deg, #64748b, #94a3b8);
+}
+
+.result-card__evidence-panel {
+  border: 1px solid rgb(113 113 122 / 18%);
+  border-radius: 0.625rem;
+  background: rgb(244 244 245 / 76%);
+  padding: 0.875rem 1rem;
+  box-shadow:
+    inset 0 1px 3px rgb(31 41 55 / 5%),
+    0 1px 0 rgb(255 255 255 / 78%);
+}
+
+.result-card[data-verdict="contradiction"] .result-card__evidence-panel {
+  border-color: rgb(239 68 68 / 24%);
+  background: rgb(254 226 226 / 48%);
+  box-shadow:
+    inset 0 1px 4px rgb(127 29 29 / 6%),
+    0 1px 0 rgb(255 255 255 / 80%);
+}
+
+.result-card[data-verdict="entailment"] .result-card__evidence-panel {
+  border-color: rgb(16 185 129 / 20%);
+  background: rgb(209 250 229 / 42%);
+}
+
+.result-card[data-verdict="notmentioned"] .result-card__evidence-panel {
+  border-color: rgb(148 163 184 / 28%);
+  background: rgb(248 250 252 / 88%);
+  box-shadow:
+    inset 0 1px 4px rgb(51 65 85 / 5%),
+    0 1px 0 #ffffff;
+}
+
+.result-card__evidence-quote + .result-card__evidence-quote {
+  border-top: 1px solid rgb(113 113 122 / 14%);
+  padding-top: 0.625rem;
+}

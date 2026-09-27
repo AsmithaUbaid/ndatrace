@@ -6,17 +6,32 @@ export type Hypothesis = {
   hypothesis_text: string;
 };
 
-// Legacy RAG + selective-agent pipeline (POST /review), restored alongside
-// /history - batch review of multiple hypotheses at once, with a
-// self-reported confidence score and agent-escalation info. Distinct from
-// the final single-requirement FinalReviewResponse below.
+export type RetrievedChunk = {
+  chunk_id: number;
+  rank: number;
+  start_char: number;
+  end_char: number;
+  bm25_score: number;
+  reranker_score: number;
+  text: string;
+};
+
+// Batch adapter for the same frozen product RAG path used by /api/review.
+// Compatibility agent fields remain in saved historical responses, but the
+// current runtime never invokes an agent and P0 supplies no confidence.
 export type RequirementResult = {
   hypothesis_id: string;
   hypothesis_text: string;
-  label: "Entailment" | "Contradiction" | "NotMentioned";
-  confidence: number;
+  label: "Entailment" | "Contradiction" | "NotMentioned" | null;
+  confidence: number | null;
+  confidence_available: boolean;
   explanation: string;
   evidence: string[];
+  source_valid: boolean | null;
+  needs_human_review: boolean;
+  review_reason: string | null;
+  sources: RetrievedChunk[];
+  retrieved_chunks: RetrievedChunk[];
   agent_used: boolean;
   agent_steps: number;
   cost_usd: number;
@@ -50,7 +65,7 @@ export type CostEstimate = {
   model: string;
 };
 
-// E19: the final, frozen product path (GPT-5-mini + P0 + FULL NDA context).
+// Frozen product path (GPT-5-mini + P0 + retrieved top-5 context).
 // No confidence score (the frozen prompt doesn't request one), no agent
 // fields (no agent in the final architecture).
 export type FinalReviewResponse = {
@@ -66,6 +81,8 @@ export type FinalReviewResponse = {
   output_tokens: number | null;
   estimated_cost_usd: number | null;
   trace_id: string;
+  sources: RetrievedChunk[];
+  retrieved_chunks: RetrievedChunk[];
 };
 
 // One row of the reconstruction-v2 final held-out TEST comparison
@@ -85,6 +102,7 @@ export type FinalTestResult = {
   evidence_precision: number | null;
   source_valid_quote_rate: number | null;
   api_cost_usd: number;
+  architecture_status: "benchmark" | "final" | null;
 };
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -117,13 +135,13 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ nda_text: ndaText, requirement }),
     }),
-  listFinalTestComparison: () => request<FinalTestResult[]>("/experiments"),
+  listFinalTestComparison: () => request<FinalTestResult[]>("/experiments/e20"),
   extractPdf: (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
     return requestMultipart<{ text: string }>("/extract-pdf", formData);
   },
-  // Legacy RAG + selective-agent batch review, restored alongside /history.
+  // Batch/history adapter for the frozen product RAG path.
   createReview: (ndaText: string, hypothesisIds?: string[]) =>
     request<ReviewResponse>("/review", {
       method: "POST",

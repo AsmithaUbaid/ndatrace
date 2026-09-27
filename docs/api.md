@@ -5,20 +5,15 @@ CORS is currently permissive (`allow_origins=["*"]`) for local development — s
 comment noting this should be tightened before any non-local deployment (not done, since this
 project has no deployment target beyond local demo).
 
-Two review paths exist in this file:
+Two product entry points expose the same frozen RAG runtime:
 
-- **`POST /api/review`** — the final, selected reconstruction-v2 architecture (GPT-5-mini + P0 +
-  FULL NDA context). One requirement at a time, no confidence score, no history. Documented first,
-  below.
-- **`POST /review`** and its companions (`GET /review/{review_id}`, `GET /results`,
-  `GET /cost-estimate`) — the earlier RAG + selective-agent pipeline (`pipeline/orchestrator.py`,
-  T031). Restored as a real, working batch-review alternative (checkbox multi-select of the 17
-  fixed hypotheses, self-reported confidence, agent escalation, SQLite-backed history) — not merely
-  historical. See "Legacy batch-review endpoints" further down.
+- **`POST /api/review`** — one requirement at a time, no confidence score, no history.
+- **`POST /review`** and its history companions — batch review of the 17 fixed hypotheses, reusing
+  one document index and persisting results to SQLite.
 
 ---
 
-## `POST /api/review` — the final architecture's review endpoint
+## `POST /api/review` — single-requirement review
 
 Reviews one confidentiality requirement against one NDA using the final frozen NDATrace pipeline.
 **File:** `backend/routes/review.py` (`create_final_review`), `pipeline/final_review.py`
@@ -31,7 +26,11 @@ NDA + requirement
         |
 input validation (Pydantic: both fields required, non-empty)
         |
-openai/gpt-5-mini + GPT-P0 prompt + FULL NDA context   [pipeline/final_review.py]
+clause-aware 256-token chunks -> BM25 top-20
+        |
+ms-marco-MiniLM-L-12-v2 rerank -> top-5 context
+        |
+openai/gpt-5-mini + frozen GPT-P0 prompt   [pipeline/final_review.py]
         |
 structured output parser   [evaluation/structured_output.py]
         |
@@ -40,9 +39,8 @@ runtime evidence-source validator v2   [pipeline/evidence_validator.py]
 reviewer-facing result
 ```
 
-No retrieval, no agent, no routing — the full NDA text is sent to the model in one call. This
-endpoint does not persist results anywhere; each call is a one-shot request/response with no
-saved history (unlike the legacy `POST /review`, which does).
+No agent or routing is used, and there is no fallback to FULL. Only the retrieved top-five clause
+context is sent to the classifier. This endpoint does not persist results; each call is one-shot.
 
 ### Request body (`FinalReviewRequest`, `backend/models.py`)
 
@@ -71,6 +69,8 @@ saved history (unlike the legacy `POST /review`, which does).
 | `model` | string | Always `"openai/gpt-5-mini"` for this endpoint |
 | `latency_ms`, `input_tokens`, `output_tokens`, `estimated_cost_usd` | number or `null` | `null` only when the model call itself failed (no completion to measure) |
 | `trace_id` | string (uuid) | Generated per request; logged alongside metadata (see "Security / privacy" below), not returned by any other endpoint |
+| `sources` | list[object] | Retrieved clauses containing returned evidence, including chunk ID, source offsets, rank, and retrieval scores |
+| `retrieved_chunks` | list[object] | The complete bounded context (up to five ranked clauses) shown to the classifier |
 
 There is **no `confidence` field** — GPT-P0 requests only `{label, evidence}` from the model, so no
 calibrated confidence is fabricated.
@@ -88,7 +88,9 @@ calibrated confidence is fabricated.
   "input_tokens": 143,
   "output_tokens": 22,
   "estimated_cost_usd": 0.000041,
-  "trace_id": "a3f1e6c2-9b4d-4e21-8f0a-2d6c1b7e5a90"
+  "trace_id": "a3f1e6c2-9b4d-4e21-8f0a-2d6c1b7e5a90",
+  "sources": [],
+  "retrieved_chunks": []
 }
 ```
 
@@ -98,14 +100,14 @@ calibrated confidence is fabricated.
 - **`Contradiction`** — the quoted clause(s) conflict with the requirement.
 - **`NotMentioned`** — "No explicit supporting or contradicting provision was identified in the
   agreement." This does **not** claim the NDA has been proven not to address the requirement
-  anywhere — only that the model, given the full document, did not identify explicit language
-  either way.
+  anywhere — only that the model did not identify explicit language in the retrieved top-five
+  context.
 
 ### Evidence validation
 
 `source_valid` and `needs_human_review` are driven by `pipeline/evidence_validator.py`'s runtime
 validator (v2), which checks only that each returned evidence string is a genuine occurrence in the
-`nda_text` the model was given (exact substring, then a formatting-normalized fallback — NFC,
+retrieved context the model was given (exact substring, then a formatting-normalized fallback — NFC,
 zero-width-character removal, whitespace collapse). This is **source-presence validation only**:
 
 - It does **not** verify that the model interpreted the clause correctly — a verbatim quote can
@@ -159,22 +161,27 @@ experiment log). **File:** `backend/routes/experiments.py`.
 ]
 ```
 
-Three rows are returned: `rule`, `qwen_ctx16k` (local, free), and `gpt5mini_p0_full` (the final
-selected architecture).
+Three rows are returned: `rule`, `qwen_ctx16k` (local, free), and `gpt5mini_p0_full` (the strongest
+measured benchmark configuration).
+
+### `GET /experiments/e20`
+
+Returns the frozen, same-population E20 comparison used by the architecture page. The two rows are
+`gpt5mini_p0_full` (`architecture_status: "benchmark"`) and
+`gpt5mini_p0_rag_top5` (`architecture_status: "final"`). Metrics are read from
+`experiments/E20_final_rag_test/results/E20_final_report.json` and are never recomputed by the API.
 
 ---
 
-## Legacy batch-review endpoints
+## Batch-review and history endpoints
 
-The earlier RAG + selective-agent pipeline (`pipeline/orchestrator.py`) is not the final, selected
-architecture — but it's restored here as a real, working alternative flow, not just historical
-record: batch-review multiple requirements in one call, with a self-reported confidence score and
-selective-agent escalation, backed by SQLite history.
+The batch endpoint calls the same frozen top-5 RAG classifier as `/api/review`, once per selected
+requirement, while reusing the document's BM25 index. It never calls the agent or routing code.
 
 ### `POST /review`
 
-Runs the legacy pipeline (`pipeline/orchestrator.py`'s `review_document`) against a submitted NDA
-and persists the result to SQLite. **File:** `backend/routes/review.py`.
+Runs the frozen product RAG pipeline against a submitted NDA and persists the result to SQLite.
+**Files:** `backend/routes/review.py`, `pipeline/final_review.py`, `pipeline/frozen_rag.py`.
 
 **Request body** (`ReviewRequest`):
 ```json
@@ -195,9 +202,15 @@ and persists the result to SQLite. **File:** `backend/routes/review.py`.
       "hypothesis_id": "string",
       "hypothesis_text": "string",
       "label": "Entailment | Contradiction | NotMentioned",
-      "confidence": 0.0,
+      "confidence": null,
+      "confidence_available": false,
       "explanation": "string",
       "evidence": ["string", "..."],
+      "source_valid": true,
+      "needs_human_review": false,
+      "review_reason": null,
+      "sources": [],
+      "retrieved_chunks": [],
       "agent_used": false,
       "agent_steps": 0,
       "cost_usd": 0.0,
@@ -207,23 +220,21 @@ and persists the result to SQLite. **File:** `backend/routes/review.py`.
   ],
   "total_cost_usd": 0.0,
   "total_latency_ms": 0.0,
-  "model": "google/gemini-2.5-flash-lite"
+  "model": "openai/gpt-5-mini"
 }
 ```
 
 **Error responses:**
 - `400` — one or more `hypothesis_ids` not found among the 17 fixed hypotheses.
-- `503` — model gateway unavailable (no configured provider), or every hypothesis failed before any
-  could be processed.
+- `503` — model gateway unavailable because no provider is configured.
 
-**Partial failure is not an error response.** `review_document()` isolates errors per hypothesis: if
-one hypothesis (of up to 17) fails after retries are exhausted, that item in `results` has
-`label: "NotMentioned"`, `confidence: 0.0`, and a non-null `error` string; every other hypothesis's
-real result is still returned in the same 200 response.
+**Partial failure is not an error response.** If one requirement fails, its item has `label: null`,
+`needs_human_review: true`, and a non-null `error`; every other requirement remains in the same
+200 response. Retrieval failures never trigger a silent FULL-context fallback.
 
 ### `GET /review/{review_id}`
 
-Fetches a previously created legacy review from SQLite. **File:** `backend/routes/review.py`.
+Fetches a previously created batch review from SQLite. **File:** `backend/routes/review.py`.
 
 **Response 200:** same `ReviewResponse` shape as `POST /review`.
 
@@ -232,7 +243,7 @@ Fetches a previously created legacy review from SQLite. **File:** `backend/route
 
 ### `GET /results`
 
-Lists past reviews created via the legacy `POST /review` (SQLite-backed history — `POST /api/review`
+Lists past reviews created via `POST /review` (SQLite-backed history — `POST /api/review`
 does not write to this store). **File:** `backend/routes/results.py`.
 
 **Query params:** `limit` (default 50, 1–500).
@@ -253,9 +264,9 @@ does not write to this store). **File:** `backend/routes/results.py`.
 
 ### `GET /cost-estimate`
 
-Real, measured average cost per requirement for the legacy RAG+agent architecture, computed from
-the `rag_agent` experiment record with the largest `sample_size` in `results/runs/*.jsonl`. Used by
-the batch-review UI to show an estimated cost before a review is submitted. **File:**
+Historical measured average cost per requirement for the rejected RAG+agent architecture, computed
+from the `rag_agent` experiment record with the largest `sample_size` in `results/runs/*.jsonl`.
+Retained for research provenance but no longer displayed by the product UI. **File:**
 `backend/routes/experiments.py`.
 
 **Response 200:**
@@ -302,7 +313,7 @@ frontend to pre-fill the NDA text box before submitting to either review endpoin
 
 ### `GET /hypotheses`
 
-Lists all 17 fixed ContractNLI confidentiality hypotheses — the checkbox picker for the legacy
+Lists all 17 fixed ContractNLI confidentiality hypotheses — the checkbox picker for the
 batch `POST /review`, and suggested starting text for `POST /api/review`'s free-text `requirement`
 field. **File:** `backend/routes/review.py`.
 

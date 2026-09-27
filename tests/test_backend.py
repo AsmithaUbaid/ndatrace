@@ -1,7 +1,5 @@
 """
-Integration tests for the FastAPI backend (WBS T032; final submission
-cleanup removed the legacy RAG + selective-agent routes - see
-archive/pre_reconstruction/tests/test_legacy_backend.py for their tests).
+Integration tests for the FastAPI backend's frozen top-5 RAG product path.
 
 Mocks the OpenAI client the same way tests/test_model_gateway.py does -
 no real network calls, no API cost.
@@ -15,6 +13,22 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from fastapi.testclient import TestClient
+from pipeline.frozen_rag import RetrievedChunk
+
+
+@pytest.fixture(autouse=True)
+def _stub_frozen_retriever(monkeypatch):
+    class StubRetriever:
+        def __init__(self, nda_text: str):
+            self.nda_text = nda_text
+
+        def retrieve(self, requirement: str):
+            return [RetrievedChunk(
+                chunk_id=0, rank=1, start_char=0, end_char=len(self.nda_text),
+                bm25_score=1.0, reranker_score=2.0, text=self.nda_text,
+            )]
+
+    monkeypatch.setattr("pipeline.final_review.FrozenRagRetriever", StubRetriever)
 
 
 @pytest.fixture
@@ -61,6 +75,19 @@ def test_list_final_test_comparison_reads_canonical_csv(client):
     assert gpt["contradiction_recall"] == pytest.approx(0.7545454545454545)
 
 
+def test_list_e20_architecture_comparison_includes_final_rag(client):
+    r = client.get("/experiments/e20")
+    assert r.status_code == 200
+    rows = {row["architecture_status"]: row for row in r.json()}
+    assert set(rows) == {"benchmark", "final"}
+    assert rows["benchmark"]["system"] == "gpt5mini_p0_full"
+    assert rows["final"]["system"] == "gpt5mini_p0_rag_top5"
+    assert rows["final"]["n"] == 2091
+    assert rows["final"]["accuracy"] == pytest.approx(0.7675753228120517)
+    assert rows["final"]["joint"] == pytest.approx(0.7245337159253945)
+    assert rows["final"]["api_cost_usd"] == pytest.approx(3.51773875)
+
+
 # =========================================================================
 # Reliability / document robustness (WBS T040: K04, K05, K06)
 # =========================================================================
@@ -91,7 +118,7 @@ def test_unsupported_format_rejected(client):
 
 
 # =========================================================================
-# E19: the sole review endpoint (POST /api/review) - GPT-5-mini + P0 + FULL
+# Single-requirement endpoint - frozen retrieval + GPT-5-mini + P0
 # =========================================================================
 
 def test_final_review_end_to_end_with_mocked_model(client):
@@ -113,6 +140,8 @@ def test_final_review_end_to_end_with_mocked_model(client):
         assert body["trace_id"]
         assert "confidence" not in body  # no fabricated confidence score
         assert body["evidence"] == ["shall not reverse engineer"]
+        assert body["retrieved_chunks"][0]["rank"] == 1
+        assert body["sources"][0]["chunk_id"] == 0
 
 
 def test_final_review_flags_non_source_evidence_for_human_review(client):
