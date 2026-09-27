@@ -1,9 +1,11 @@
 # Citation Fixes for the Final Report
 
-Four precision issues flagged in instructor feedback on the Week 3 Problem Statement
-(`PE6201_Project_Problem_Statement_Asmitha.pdf`). These are report-writing
-fixes, not code changes — recorded here so they aren't lost before the final report is drafted.
-See `docs/decisions.md`'s Decisions Log ("Instructor feedback... Gap 3") for the original context.
+Precision issues to fix before/while drafting the final report. Items 1–3 are the original
+citation-precision issues flagged in instructor feedback on the Week 3 Problem Statement
+(`PE6201_Project_Problem_Statement_Asmitha.pdf`); items 4–5 were updated after reconstruction-v2
+completed, since the model/architecture identity they describe changed. These are report-writing
+fixes, not code changes. See `docs/decisions.md`'s Decisions Log ("Instructor feedback... Gap 3")
+for items 1–3's original context.
 
 ## 1. Workload/staff-hours figure — label as vendor research
 
@@ -40,30 +42,43 @@ before publishing):
 **Fix:** replace "0.389 for the original Span NLI BERT baseline" with "0.357 ± 0.039 for the
 original Span NLI BERT baseline (best-in-paper: 0.405, DeBERTa)".
 
-## 4. GPT-5 mini pricing — don't present as current
+## 4. Pricing — cite the model actually used in the final result, not an intermediate one
 
-The Problem Statement's cost-to-serve section uses GPT-5 mini pricing ($0.25/M input, $2/M
-output) as the live reference point. Two things have changed since:
-- This pricing is confirmed **legacy** as of the instructor's review — don't cite it as current
-  in the final report.
-- This project's own C01 model bake-off already moved the default model to
-  **`google/gemini-2.5-flash-lite`** ($0.10/M input, $0.40/M output, live-verified via OpenRouter)
-  specifically for cost/latency reasons — that's what was actually used throughout every real
-  experiment in this project (T018 onward).
+**Status update (post-reconstruction-v2): the final report's cost analysis should lead with
+`openai/gpt-5-mini` pricing and the real measured cost of the final TEST run, not Gemini's.**
 
-**Fix:** the final report's cost analysis should lead with Gemini's verified pricing and real
-measured costs (see `docs/experiments.md`'s C01/T018/T024/T030/T015 rows), not GPT-5 mini's,
-which only appears now as a documented fallback in `pipeline/model_gateway.py`'s
-`PRICING_PER_MILLION`.
+The history here has two steps, and the final report should reflect the *last* one, not the
+middle one:
 
-## Also worth including (not a citation fix, but related)
+1. The original Problem Statement's GPT-5-mini pricing reference ($0.25/M input, $2/M output) was
+   flagged by the instructor as not-yet-current at the time.
+2. The pre-reconstruction pipeline's own C01 model bake-off moved to
+   `google/gemini-2.5-flash-lite` for cost/latency reasons — that model was used throughout the
+   **pre-reconstruction** work (T018 onward), but **reconstruction-v2 re-derived the model choice
+   independently (E01) and selected `openai/gpt-5-mini`** as the final, selected architecture's
+   model. Gemini is not part of the final result and should not be presented as the cost-analysis
+   reference point.
 
-**A fifth model substitution occurred later in the project** and should be disclosed the same way:
-the problem statement committed to "Llama 3.2 3B Instruct locally" for the hosted-vs-local
-comparison (C02). Local Llama 3.2 3B via Ollama was built and used for the bulk of the final
-evaluation. Groq (a free-tier hosted alternative, tried to avoid heating the dev machine) no
-longer offers a general-purpose Llama chat model on its free tier (checked live) - only
-`llama-prompt-guard`, a content-moderation classifier. Where Groq is used at all in this project
-(see `pipeline/model_gateway.py`'s `ModelGateway.groq()`), it runs `openai/gpt-oss-20b` instead.
-The final report should state this plainly rather than let a reader assume "Llama" was used
-end-to-end.
+**Fix:** cite `openai/gpt-5-mini`'s real, live-verified OpenRouter pricing and the real measured
+total cost of the full n=2,091 final TEST run (**≈$4.23 total, ≈$0.0020/case** — see
+`results/final/reconstruction_v2/gpt_full_test_metrics.json`'s `ops` block, and
+`experiments/E18_business_course_synthesis/` for the full cost-to-serve business analysis). Gemini
+pricing may still be cited as historical context for the pre-reconstruction pipeline (see
+`docs/decisions.md`'s ADR-001), but must be clearly labeled as such, not as the current reference
+point.
+
+## 5. Local/hosted comparison — cite Qwen, not Llama/Groq
+
+The Problem Statement's hosted-vs-local commitment ("Llama 3.2 3B Instruct locally") went through
+two substitutions during the **pre-reconstruction** pipeline (local Llama 3.2 3B via Ollama, then
+a Groq-hosted `openai/gpt-oss-20b` fallback after Llama stopped being available free-tier — see
+`pipeline/model_gateway.py`'s `ModelGateway.groq()`) — neither of these is reconstruction-v2's
+local-model arm.
+
+**Reconstruction-v2's actual local/free-tier comparison is `qwen2.5:7b-instruct` (ctx16k,
+via Ollama)**, run on the full n=2,091 official TEST set: accuracy 49.9%, macro-F1 0.431, joint
+39.7%, Contradiction recall 25.5%, $0 API cost (local compute/wall-time not monetized — see
+`results/final/reconstruction_v2/qwen_full_test_metrics.json`). The final report's hosted-vs-local
+section should cite Qwen as the local comparator, not Llama or Groq's `gpt-oss-20b` — those remain
+accurate as pre-reconstruction historical record (`docs/decisions.md`'s instructor-feedback ADR
+entry) but are not part of the final result.

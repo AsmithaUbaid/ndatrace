@@ -9,10 +9,18 @@ correction of a prior version. It already reflects the catalogue correction (10
 non-single-case aggregate/structural entries removed from Categories 4–7 — see
 `docs/evaluation_case_design.md`), so the counts below are the final, corrected ones.
 
+**Note on era**: the "Reconstruction-v2 final TEST result" row below is the current, canonical,
+locked result. Every row after it (the independent validation check, the dev sample, and Categories
+1–10) documents the **pre-reconstruction pipeline's** own test-coverage story (RAG + selective
+agent, `google/gemini-2.5-flash-lite`) — real, historically meaningful work, but **not** the final
+selected architecture. See `docs/decisions.md`/`docs/experiments.md` for that lineage in full, and
+`docs/architecture.md` for why RAG/the agent were not selected for reconstruction-v2.
+
 | Case collection | Size | Executed against current pipeline? | Result | Source |
 |---|---:|---|---|---|
-| Official test set (final, locked) | 2,091 | Yes | Full-context 81.2% acc / RAG 78.7% / RAG+agent 77.7%; Contradiction recall 59.1%/63.6%/60.5% | `results/final/legacy/run_T041_final_test_*.jsonl` |
-| Independent validation check | 340 | Yes | Full-context 80.6% acc / RAG 80.3% / RAG+agent 77.6% (statistically indistinguishable FC vs RAG, p=1.000) | `results/final/legacy/run_AV01_architecture_validation_*.jsonl` |
+| **Reconstruction-v2 final TEST result** | **2,091** | Yes | **GPT-5-mini + P0 + FULL: accuracy 77.6%, macro-F1 0.727, joint 74.6%, Contradiction recall 75.5%, NotMentioned recall 62.7%.** Comparators (same population): Rule 59.0%/joint 50.1%/C-recall 16.8%; local Qwen (ctx16k) 49.9%/joint 39.7%/C-recall 25.5%. The original E17 run used a balanced n=150 hosted sample (now superseded for headline metrics); E17B completed the remaining 1,941 TEST cases to produce this full-population result. | `results/final/reconstruction_v2/{gpt,rule,qwen}_full_test_metrics.json`, `full_test_comparison.csv` |
+| *Pre-reconstruction* official test set (historical, superseded) | 2,091 | Yes (pre-reconstruction pipeline) | Full-context 81.2% acc / RAG 78.7% / RAG+agent 77.7%; Contradiction recall 59.1%/63.6%/60.5% | `results/final/legacy/run_T041_final_test_*.jsonl` |
+| *Pre-reconstruction* independent validation check | 340 | Yes (pre-reconstruction pipeline) | Full-context 80.6% acc / RAG 80.3% / RAG+agent 77.6% (statistically indistinguishable FC vs RAG, p=1.000) | `results/final/legacy/run_AV01_architecture_validation_*.jsonl` |
 | Dev sample (reused, adaptive) | 150 | Yes (repeatedly, across every tuning decision) | See `docs/decisions.md` for the full per-decision breakdown — not a single number, by design | `docs/decisions.md`, various `results/runs/*.jsonl` |
 | **Cat. 1 — Benchmark/ordinary** | 30 | Yes | 24/30 = 80.0% | `data/golden_battery_pipeline_verification.json` |
 | **Cat. 2 — Regression/negative** | 15 | Yes | 10/15 = 66.7%; found the 100%-failure exception/carve-out weakness (4/4 cases 034/038/039/040) | `data/golden_battery_pipeline_verification.json`, `docs/decisions.md` ADR-011 |

@@ -1,21 +1,19 @@
 # NDATrace API Documentation
 
 Documents only the endpoints that actually exist in `backend/app.py` and `backend/routes/*.py`, as
-CORS is currently permissive (`allow_origins=["*"]`) for local development — see
-`backend/app.py`'s comment noting this should be tightened before any non-local deployment (not
-done, since this project has no deployment target beyond local demo).
+CORS is currently permissive (`allow_origins=["*"]`) for local development — see `backend/app.py`'s
+comment noting this should be tightened before any non-local deployment (not done, since this
+project has no deployment target beyond local demo).
 
-Two review paths exist in this file:
-
-- **`POST /api/review`** — the primary product endpoint (E19): the final, frozen reconstruction-v2
-  architecture (`pipeline/final_review.py`). Documented first, below.
-- **`POST /review`** and its companions — the earlier RAG + selective-agent pipeline
-  (`pipeline/orchestrator.py`), superseded and kept only for historical/`/history` use. See
-  "Legacy / historical endpoint" further down. It has not been removed or modified.
+`POST /api/review` is the **sole** review endpoint. The earlier RAG + selective-agent pipeline and
+its endpoints (`POST /review`, `GET /review/{review_id}`, `GET /results`, `GET /cost-estimate`)
+were **removed** from the active backend during final submission cleanup — there is no `/history`
+feature in the current product. That pipeline is preserved in `archive/pre_reconstruction/pipeline/`
+for historical reproduction only; see `docs/archive/architecture_pre_reconstruction.md`.
 
 ---
 
-## `POST /api/review` — final product endpoint
+## `POST /api/review` — the review endpoint
 
 Reviews one confidentiality requirement against one NDA using the final frozen NDATrace pipeline.
 **File:** `backend/routes/review.py` (`create_final_review`), `pipeline/final_review.py`
@@ -38,8 +36,8 @@ reviewer-facing result
 ```
 
 No retrieval, no agent, no routing — the full NDA text is sent to the model in one call. This
-endpoint does **not** persist results to SQLite (unlike legacy `POST /review`); each call is a
-one-shot request/response with no saved history.
+endpoint does not persist results anywhere; each call is a one-shot request/response with no
+saved history (the backend has no database).
 
 ### Request body (`FinalReviewRequest`, `backend/models.py`)
 
@@ -129,80 +127,39 @@ zero-width-character removal, whitespace collapse). This is **source-presence va
 
 ---
 
-## Legacy / historical endpoint
+## `GET /experiments` — final TEST comparison
 
-**`POST /review`** (and its companions `GET /review/{review_id}`, plus the shared
-`POST /extract-pdf` / `GET /hypotheses`) run the earlier **RAG + selective-agent** pipeline
-(`pipeline/orchestrator.py`). This is **not** the selected final reconstruction-v2 product path —
-it is retained for historical RAG+agent records and `/history`'s existing saved reviews, and is not
-called from the main reviewer workflow. It has not been removed or modified as part of this
-documentation pass; it should not be used as the canonical final API for new integrations.
+Reads `results/final/reconstruction_v2/full_test_comparison.csv` — the already-computed
+Rule/Qwen/GPT-5-mini comparison on the identical n=2,091 official TEST population (E17/E17B).
+Never recomputes a metric and does not read `results/runs/*.jsonl` (the pre-reconstruction
+experiment log). **File:** `backend/routes/experiments.py`.
 
-### `POST /review`
-
-Runs the legacy pipeline (`pipeline/orchestrator.py`'s `review_document`) against a submitted NDA
-and persists the result to SQLite. **File:** `backend/routes/review.py`.
-
-**Request body** (`ReviewRequest`):
+**Response 200** (`FinalTestResult[]`):
 ```json
-{
-  "nda_text": "string, required",
-  "hypothesis_ids": ["nda-1", "nda-2"]   // optional; all 17 fixed hypotheses if omitted
-}
+[
+  {
+    "system": "rule",
+    "n": 2091,
+    "accuracy": 0.5901482544237207,
+    "macro_f1": 0.47930265224634533,
+    "joint": 0.5007173601147776,
+    "entailment_recall": 0.3925619834710744,
+    "contradiction_recall": 0.16818181818181818,
+    "notmentioned_recall": 0.9047619047619048,
+    "evidence_recall": 0.29292929292929293,
+    "evidence_precision": 0.6083916083916084,
+    "source_valid_quote_rate": null,
+    "api_cost_usd": 0.0
+  }
+]
 ```
 
-**Response 200** (`ReviewResponse`):
-```json
-{
-  "review_id": "uuid",
-  "doc_id": "string (first 8 chars of review_id)",
-  "created_at": "ISO 8601 timestamp",
-  "results": [
-    {
-      "hypothesis_id": "string",
-      "hypothesis_text": "string",
-      "label": "Entailment | Contradiction | NotMentioned",
-      "confidence": 0.0,
-      "explanation": "string",
-      "evidence": ["string", "..."],
-      "agent_used": false,
-      "agent_steps": 0,
-      "cost_usd": 0.0,
-      "latency_ms": 0.0,
-      "error": null
-    }
-  ],
-  "total_cost_usd": 0.0,
-  "total_latency_ms": 0.0,
-  "model": "google/gemini-2.5-flash-lite"
-}
-```
-
-**Error responses:**
-- `400` — one or more `hypothesis_ids` not found among the 17 fixed hypotheses.
-- `503` — model gateway unavailable (no configured provider), or every hypothesis failed before any
-  could be processed (the provider is down entirely — this is distinct from a single hypothesis
-  failing, see below).
-
-**Partial failure is not an error response.** `review_document()` isolates errors per hypothesis: if
-one hypothesis (of up to 17) fails after retries are exhausted, that item in `results` has
-`label: "NotMentioned"`, `confidence: 0.0`, and a non-null `error` string; every other hypothesis's
-real result is still returned in the same 200 response.
-
-### `GET /review/{review_id}`
-
-Fetches a previously created legacy review from SQLite. **File:** `backend/routes/review.py`.
-
-**Response 200:** same `ReviewResponse` shape as `POST /review`.
-
-**Error responses:**
-- `404` — no review with that ID.
+Three rows are returned: `rule`, `qwen_ctx16k` (local, free), and `gpt5mini_p0_full` (the final
+selected architecture).
 
 ---
 
 ## Shared / read-only endpoints
-
-These endpoints are not architecture-specific.
 
 ### `GET /health`
 
@@ -216,7 +173,7 @@ Liveness check. **File:** `backend/app.py`.
 ### `POST /extract-pdf`
 
 Extracts plain text from an uploaded PDF (multipart form upload, field name `file`), for the
-frontend to pre-fill the NDA text box before submitting to either review endpoint. **File:**
+frontend to pre-fill the NDA text box before submitting to `POST /api/review`. **File:**
 `backend/routes/review.py`.
 
 **Response 200:**
@@ -231,8 +188,9 @@ frontend to pre-fill the NDA text box before submitting to either review endpoin
 
 ### `GET /hypotheses`
 
-Lists all 17 fixed ContractNLI confidentiality hypotheses (used by the legacy `/review` workflow;
-`POST /api/review` accepts any free-text `requirement` instead). **File:** `backend/routes/review.py`.
+Lists all 17 fixed ContractNLI confidentiality hypotheses, used only as suggested starting text
+for the frontend's requirement picker — `POST /api/review` accepts any free-text `requirement`.
+**File:** `backend/routes/review.py`.
 
 **Response 200:**
 ```json
@@ -241,97 +199,17 @@ Lists all 17 fixed ContractNLI confidentiality hypotheses (used by the legacy `/
 ]
 ```
 
-### `GET /results`
-
-Lists past reviews created via the legacy `POST /review` (SQLite-backed history — `POST /api/review`
-does not write to this store). **File:** `backend/routes/results.py`.
-
-**Query params:** `limit` (default 50, 1–500).
-
-**Response 200:**
-```json
-[
-  {
-    "review_id": "uuid",
-    "doc_id": "string",
-    "created_at": "ISO 8601 timestamp",
-    "num_requirements": 17,
-    "total_cost_usd": 0.0,
-    "model": "string"
-  }
-]
-```
-
-### `GET /experiments`
-
-Lists offline experiment results from `results/runs/*.jsonl` (research/evaluation records, never
-written by the live API — only read). **File:** `backend/routes/experiments.py`.
-
-Reads only the **last** JSON record per file (files are append-only; a corrected/backfilled record
-supersedes an earlier one in the same file — see `docs/evaluation_protocol.md`). Excludes
-`checkpoint_*.jsonl` files (in-progress harness state, not finalized records).
-
-**Response 200:**
-```json
-[
-  {
-    "experiment_id": "string",
-    "experiment_name": "string",
-    "model": "string",
-    "split": "dev | test | null",
-    "sample_size": 150,
-    "accuracy": 0.88,
-    "macro_f1": 0.858,
-    "contradiction_recall": 0.857,
-    "contradiction_recall_ci_low": 0.601,
-    "contradiction_recall_ci_high": 0.96,
-    "joint_label_evidence_correctness": 0.813,
-    "total_cost_usd": 0.0216,
-    "timestamp": "ISO 8601 timestamp"
-  }
-]
-```
-
-### `GET /experiments/{experiment_id}`
-
-Fetches one experiment record by ID. **File:** `backend/routes/experiments.py`.
-
-**Response 200:** same shape as one entry of `GET /experiments`.
-
-**Error responses:**
-- `404` — no experiment record with that ID.
-
-### `GET /cost-estimate`
-
-Real, measured average cost per requirement for the legacy RAG+agent architecture, computed from
-the `rag_agent` experiment record with the largest `sample_size` on file. Used by the frontend to
-show an estimated cost before a legacy review is submitted; **not** derived from `POST /api/review`
-usage. **File:** `backend/routes/experiments.py`.
-
-**Response 200:**
-```json
-{
-  "avg_cost_per_requirement_usd": 0.000395,
-  "source_experiment_id": "string",
-  "source_sample_size": 2091,
-  "model": "string"
-}
-```
-
-**Error responses:**
-- `404` — no `rag_agent` experiment record exists to estimate cost from.
-
 ---
 
 ## Human authority
 
-NDATrace is a reviewer aid, not legal advice, and does not approve or reject an NDA. Every result —
-from either endpoint — is a checkable label plus cited evidence for a human reviewer to confirm or
-overrule; the human reviewer remains the final authority in every case.
+NDATrace is a reviewer aid, not legal advice, and does not approve or reject an NDA. Every result
+is a checkable label plus cited evidence for a human reviewer to confirm or overrule; the human
+reviewer remains the final authority in every case.
 
 ## Security / privacy notes
 
-- Neither endpoint returns API keys, provider credentials, or any secret material.
+- No endpoint returns API keys, provider credentials, or any secret material.
 - `POST /api/review`'s structured log entry (`pipeline/logging_config.py`) records only metadata —
   `trace_id`, model, label, parse/validation status, latency, token counts, cost, and error type —
   never the submitted `nda_text` or `evidence` text. NDA text is not intended to be written to

@@ -3,40 +3,30 @@ NDATrace FastAPI Application.
 
 Serves the final frozen product pipeline (pipeline/final_review.py, E19:
 GPT-5-mini + P0 + FULL NDA context) at POST /api/review - the architecture
-that completed the one-shot TEST evaluation (E17/E17B). Also serves the
-earlier RAG + selective agent pipeline (pipeline/orchestrator.py, T031) at
-POST /review for backward compatibility with /history's saved records -
-that architecture is superseded, not the selected final one - plus read
-access to past reviews (SQLite) and offline experiment records
-(results/runs/*.jsonl).
+that completed the one-shot TEST evaluation (E17/E17B) - plus the
+reconstruction-v2 final TEST comparison (GET /experiments, read from
+results/final/reconstruction_v2/). The earlier RAG + selective-agent
+pipeline and its legacy endpoints (POST /review, GET /review/{id},
+GET /results, GET /cost-estimate) were removed from the active product
+surface; that architecture is preserved in
+`archive/pre_reconstruction/pipeline/` for historical reproduction.
 """
 
 from __future__ import annotations
 
-from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend import database
-from backend.routes import experiments, results, review
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    database.init_db()
-    yield
-
+from backend.routes import experiments, review
 
 app = FastAPI(
     title="NDATrace API",
     description="Evidence-grounded NDA requirement review (ContractNLI).",
     version="0.1.0",
-    lifespan=lifespan,
 )
 
-# Permissive for local dev (Next.js frontend on a different port, T034-T037
-# not built yet); tighten to an explicit origin list once the frontend exists.
+# Permissive for local dev (Next.js frontend on a different port); tighten
+# to an explicit origin list once there's a non-local deployment target.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -51,5 +41,4 @@ def health() -> dict:
 
 
 app.include_router(review.router)
-app.include_router(results.router)
 app.include_router(experiments.router)

@@ -1,10 +1,12 @@
 # NDATrace Architecture
 
 This describes the **final, currently-selected** architecture (reconstruction-v2, frozen in E19),
-verified directly against `pipeline/final_review.py` and `backend/routes/review.py`. For the
-superseded RAG + selective-agent architecture (still present in the codebase for `/history`'s
-legacy records), see `docs/archive/architecture_pre_reconstruction.md`. For the full reasoning and
-every rejected alternative, see `docs/decisions.md`.
+verified directly against `pipeline/final_review.py` and `backend/routes/review.py` —
+`POST /api/review` is the sole review endpoint the backend serves. For the superseded RAG +
+selective-agent architecture (removed from the active product; preserved in
+`archive/pre_reconstruction/pipeline/` for historical reproduction), see
+`docs/archive/architecture_pre_reconstruction.md`. For the full reasoning and every rejected
+alternative, see `docs/decisions.md`.
 
 ## 1. Request flow (`POST /api/review`, `backend/routes/review.py`)
 
@@ -61,9 +63,11 @@ correctness or uncertainty signal.
 Full breakdown, comparators (rule baseline, local Qwen), and provenance: `results/final/README.md`,
 `docs/experiment_registry.md` (E17/E17B), `docs/decisions.md`.
 
-## 4. Legacy path (kept only for `/history`)
+## 4. Legacy path (removed from the active product)
 
-`POST /review` (`pipeline/orchestrator.py`) still exists for reading previously-saved legacy
-records via `GET /review/{review_id}` and `/history`. It is not part of the selected architecture
-and should not be treated as current — see
-`docs/archive/architecture_pre_reconstruction.md`.
+The earlier RAG + selective-agent pipeline (`archive/pre_reconstruction/pipeline/orchestrator.py`)
+and its endpoints (`POST /review`, `GET /review/{review_id}`, `GET /results`,
+`GET /cost-estimate`) were removed from the active backend and frontend during final submission
+cleanup — there is no `/history` feature in the current product. The legacy pipeline code, its
+tests, and the SQLite persistence layer it used are preserved under `archive/pre_reconstruction/`
+for historical reproduction only; see `docs/archive/architecture_pre_reconstruction.md`.

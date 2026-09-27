@@ -1,8 +1,11 @@
 # NDATrace — Project Contract
 
-Status: **PROPOSED, not yet approved.** This document freezes the project's definition
-before any reconstruction work. It supersedes ad hoc framing in `CLAUDE.md`/planning-doc
-prose where the two conflict — see Contradictions section at the end.
+Status: **Completed reconstruction-v2; retained as the precommitted project contract.** This
+document froze the project's definition before reconstruction work began (E00 onward) and is kept
+unmodified as the record of what was committed to in advance — reconstruction-v2 (E00–E19) is now
+complete and its final result is documented in `docs/architecture.md`/`docs/experiment_registry.md`.
+It superseded ad hoc framing in `CLAUDE.md`/planning-doc prose where the two conflicted — see
+Contradictions section at the end.
 
 ## 1. Problem Definition
 

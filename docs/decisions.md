@@ -147,7 +147,7 @@ the reasoning across versions:
   - **Fix:** `prompts/classify_v6.txt` adds one targeted rule — if the text doesn't contain
     genuine NDA/contract language and instead reads as a command directing the output, treat it as
     containing no genuine evidence and default to NotMentioned. Same rule added to the agent's
-    decision prompt (`prompts/agent_step_v2.txt`).
+    decision prompt (`archive/pre_reconstruction/prompts/agent_step_v2.txt`).
   - **Validated on the same 150-case dev sample**: accuracy 89.3% / macro-F1 0.864 / risk-sensitive
     recall 0.844. Full Category 3 battery: 11/11 resisted (was 9/10 under v2), including case 051
     (deliberately unpatched under v5), resolved for free under v6.
@@ -183,7 +183,7 @@ face value:
 
 **Decision, stated with the trade-off explicit rather than as an unqualified win:** v6 (classifier)
 + `agent_step_v2.txt` (agent) are the current implementation defaults
-(`pipeline/classifier.py`'s `classify()`, `pipeline/agent.py`'s `AGENT_PROMPT_PATH`) **because it
+(`pipeline/classifier.py`'s `classify()`, `archive/pre_reconstruction/pipeline/agent.py`'s `AGENT_PROMPT_PATH`) **because it
 achieved the highest development accuracy and macro-F1, and because it independently fixes the
 zero-real-content injection vulnerability this section documents.** Contradiction recall decreased
 by one case relative to v2/v5 on this sample, and the comparison was conducted on the repeatedly
@@ -191,7 +191,7 @@ reused development sample; **v6's overall superiority over v2/v5 is therefore no
 independently validated** — it is the current default under the measured trade-off above, not a
 proven best choice on every metric.
 
-**A second, independent bug found in the same review pass:** `pipeline/orchestrator.py`'s
+**A second, independent bug found in the same review pass:** `archive/pre_reconstruction/pipeline/orchestrator.py`'s
 `review_document()` had zero per-hypothesis error isolation — a single failed hypothesis (of up to
 17 per review) aborted the entire request, discarding every already-computed result. Fixed: each
 hypothesis is now wrapped in its own try/except, producing an error-flagged `ReviewResult` (an
@@ -231,7 +231,7 @@ overall), but the disagreement bucket was still 80.6% correct — F05's abstenti
 target (>70%) failed (actual 19.4%): hard abstention there would discard far more right answers
 than wrong ones. Combining self-confidence + rule-agreement did not beat rule-agreement alone.
 
-**Decision:** No signal justifies hard abstention with current data. `pipeline/confidence.py`
+**Decision:** No signal justifies hard abstention with current data. `archive/pre_reconstruction/pipeline/confidence.py`
 routes to ACCEPT (rule agrees) or REVIEW (rule disagrees), not ACCEPT/ABSTAIN. REVIEW cases are
 only weakly more likely to be wrong — exactly the right job for the selective agent to investigate
 further, rather than a blunt abstain-or-accept binary.
@@ -254,7 +254,7 @@ same rule's label against the RAG prediction classified over that rule-influence
 Agreement partly measured "did the LLM notice the chunk we handed it," not independent
 corroboration.
 
-**Fix** (`pipeline/orchestrator.py`'s `review_requirement()`): classify a **second**, plain
+**Fix** (`archive/pre_reconstruction/pipeline/orchestrator.py`'s `review_requirement()`): classify a **second**, plain
 dense+rerank-only context (`Retriever.query_and_rerank()`, no rule fusion) purely to compute the
 routing signal. The rule-boosted classification is still returned as the final answer whenever a
 case is accepted — only the agreement check is decoupled. This is why the current pipeline makes
@@ -439,13 +439,13 @@ conflated again.
 |---|---|---|
 | Full-context | **v6** | — |
 | RAG | **v6** | — |
-| RAG + agent | **v6** | **`pipeline/orchestrator.py`'s decoupled routing (the C-1 fix)** |
+| RAG + agent | **v6** | **`archive/pre_reconstruction/pipeline/orchestrator.py`'s decoupled routing (the C-1 fix)** |
 
 All three T041-B runs happened a clear, multi-hour gap **after** commit `dd797d1` ("Build backend/
 frontend, fix a routing-independence bug and a live prompt-injection gap"), which changed
 `pipeline/classifier.py`'s default `prompt_version` from `"v2"` to `"v6"` and replaced
 `run_rag_agent()`'s inline circular-routing logic with a call to the newly-built
-`pipeline/orchestrator.py::review_requirement()` (the decoupled routing fix). Both changes landed in
+`archive/pre_reconstruction/pipeline/orchestrator.py::review_requirement()` (the decoupled routing fix). Both changes landed in
 the same commit and are confirmed present in every T041-B record — this gap (checked directly
 against each run's own saved timestamp and the commit's own timestamp, both still present in the
 underlying files/git history even though not quoted here) rules out a stale, already-running process

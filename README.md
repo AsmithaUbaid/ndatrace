@@ -80,11 +80,13 @@ Full detail: `experiments/E17_final_test/`, `experiments/E17B_full_test_completi
 ## Architecture
 
 Synchronous modular monolith: Python AI pipeline (`pipeline/`) served by a FastAPI backend
-(`backend/`) and a Next.js frontend (`frontend/`). The live product path is
-`pipeline/final_review.py` → `POST /api/review` (see `backend/app.py`); the earlier RAG + selective
-agent pipeline (`pipeline/orchestrator.py`) is kept only for `/history`'s previously-saved records
-and is not the selected architecture. Full request-flow detail (including the superseded RAG+agent
-path, documented for history): **`docs/architecture.md`**.
+(`backend/`) and a Next.js frontend (`frontend/`). The live (and only) product path is
+`pipeline/final_review.py` → `POST /api/review` (see `backend/app.py`). The earlier RAG +
+selective-agent pipeline and its endpoints (`POST /review`, `GET /review/{id}`, `GET /results`,
+`GET /cost-estimate`, and the `/history` frontend feature) were removed from the active product
+during final submission cleanup — that architecture is preserved in
+`archive/pre_reconstruction/pipeline/` for historical reproduction only. Full request-flow detail:
+**`docs/architecture.md`**.
 
 ## Experiment progression (original pre-reconstruction pipeline — historical)
 
@@ -166,8 +168,8 @@ a reviewer should generally only need **Production**, **Evaluation**, **Experime
 
 | Path | Purpose |
 |---|---|
-| `pipeline/` | Production AI pipeline. `final_review.py` is the final selected path (GPT-5-mini + P0 + FULL + runtime validator); `orchestrator.py`/`agent.py`/retrieval modules are the superseded RAG+agent pipeline, kept for `/history` |
-| `backend/` | FastAPI application — see `docs/api.md` |
+| `pipeline/` | Production AI pipeline. `final_review.py` is the sole live path (GPT-5-mini + P0 + FULL + runtime validator). Retrieval/rule/classifier modules are also required by E-series reproduction (see Experiments below); the legacy RAG+agent orchestrator and its agent/confidence modules were removed to `archive/pre_reconstruction/pipeline/` since nothing live uses them |
+| `backend/` | FastAPI application — a single review endpoint (`POST /api/review`) plus the reconstruction-v2 experiment comparison (`GET /experiments`) — see `docs/api.md` |
 | `frontend/` | Next.js application — see `frontend/README.md` |
 
 **Evaluation:**

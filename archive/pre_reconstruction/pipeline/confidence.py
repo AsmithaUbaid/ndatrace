@@ -1,7 +1,7 @@
 """
 Confidence / abstention routing (WBS T027, Section 6 component).
 
-Built from T026's analysis (scripts/run_confidence_analysis.py,
+Built from T026's analysis (archive/pre_reconstruction/scripts/run_confidence_analysis.py,
 data/confidence_analysis.json) on the 150-case "Best RAG" sample
 (v2 prompt, T018). The plan's original design (Section 8's F01/F02/F04/F05)
 assumed a single confidence signal would clear ~0.7 AUROC and let hard

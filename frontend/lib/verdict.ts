@@ -1,5 +1,3 @@
-import { RequirementResult } from "./api";
-
 // Internal verdict keys, mapped from the real API's `label` field
 // ("Entailment" | "Contradiction" | "NotMentioned") - kept distinct from
 // `label` so display logic (color, icon, filter key) has one small,
@@ -77,15 +75,3 @@ export const VERDICT_COLORS: Record<
     dotActive: "bg-white",
   },
 };
-
-export const LOW_CONFIDENCE_THRESHOLD = 0.5;
-
-export function isLowConfidence(r: RequirementResult): boolean {
-  return !r.error && r.confidence < LOW_CONFIDENCE_THRESHOLD;
-}
-
-export function needsAttention(r: RequirementResult): boolean {
-  return !r.error && (toVerdict(r.label) === "contradiction" || isLowConfidence(r));
-}
-
-export type FilterKey = "all" | Verdict | "needs-attention";

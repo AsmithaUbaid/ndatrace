@@ -13,9 +13,9 @@
 | 3 | Token economics | E13 input token distributions (mean 2,455 FULL / 1,139 RAG) | Input tokens dominate cost, not output/explanation length | Fig 5, 6 |
 | 3 | Output-length/input-length cost | E17 GPT ops: input mean 2,383 tok ($0.25/M) vs output mean 790 tok ($2/M) — output still ~2/3 of per-case cost despite 3x fewer tokens | Output pricing multiplier matters even at moderate output length | §Cost-to-serve |
 | 3 | Complexity does not guarantee quality | E12B/E12C P3 regression; E13 FULL beating RAG; E15 R2 near-random | Added complexity (prompt elaboration, retrieval, naive routing) repeatedly failed to earn its cost | Fig 1, 5, 10 |
-| 4 | Agent loop | pipeline/agent.py, agent_v2.py; E09-E11 | Bounded ReAct loop built, evaluated, and REJECTED for production (E11: net effect not worth the risk at scale) | §26 |
+| 4 | Agent loop | archive/pre_reconstruction/pipeline/agent.py, agent_v2.py; E09-E11 | Bounded ReAct loop built, evaluated, and REJECTED for production (E11: net effect not worth the risk at scale) | §26 |
 | 4 | Step caps | E10 config: max_agent_steps=3, max_tool_calls=2 | Hard limits enforced in code, never model-controlled | Fig 3 |
-| 4 | Tool calls | pipeline/agent_tools.py (5 tools); E11 traces | All 15 real E11 traces concluded at step 1 — the agent never actually needed a tool call in this measured sample | Fig 3 |
+| 4 | Tool calls | archive/pre_reconstruction/pipeline/agent_tools.py (5 tools); E11 traces | All 15 real E11 traces concluded at step 1 — the agent never actually needed a tool call in this measured sample | Fig 3 |
 | 4 | Trajectory reliability | E11 A2-vs-A3 recovery/regression; McNemar p=0.51→0.058 across sample sizes | Recovery beat regression ~2:1 but was not statistically significant even at n=500 | §25 |
 | 4 | Quadratic token growth | Input(T) ≈ B·T + D·T(T-1)/2, B=2,004 tok (measured prompt+context), D≈1,000 tok/turn (config-derived, not measured) | Formula demonstrated; NDATrace's own agent never exercised turns 2-3 | Fig 3 |
 | 5 | Cost per task | E17: GPT $0.00218/case; Qwen/rule $0 API | Sub-cent inference cost; human fallback dominates total cost-to-serve | Fig 6, 7 |

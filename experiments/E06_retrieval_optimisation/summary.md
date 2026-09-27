@@ -191,7 +191,7 @@ in this project.
 ## 7. Query construction — audited and frozen
 
 `Retriever.query(query_text, top_k)` takes `query_text` as a plain argument — the caller
-decides its content. Production code (`pipeline/orchestrator.py`, historical) always passes
+decides its content. Production code (`archive/pre_reconstruction/pipeline/orchestrator.py`, historical) always passes
 the hypothesis text. **Frozen for E06**: query = `case["hypothesis_text"]` only (the
 ContractNLI requirement string) — verified to never contain `gold_label`, gold evidence text,
 or the annotation choice (`tests/test_retrieval_eval.py::test_query_text_is_hypothesis_only_no_gold_leakage`).

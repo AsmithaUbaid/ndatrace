@@ -6,35 +6,9 @@ export type Hypothesis = {
   hypothesis_text: string;
 };
 
-export type RequirementResult = {
-  hypothesis_id: string;
-  hypothesis_text: string;
-  label: "Entailment" | "Contradiction" | "NotMentioned";
-  confidence: number;
-  explanation: string;
-  evidence: string[];
-  agent_used: boolean;
-  agent_steps: number;
-  cost_usd: number;
-  latency_ms: number;
-  error: string | null;
-};
-
-export type ReviewResponse = {
-  review_id: string;
-  doc_id: string;
-  created_at: string;
-  results: RequirementResult[];
-  total_cost_usd: number;
-  total_latency_ms: number;
-  model: string;
-};
-
 // E19: the final, frozen product path (GPT-5-mini + P0 + FULL NDA context).
-// This is the primary reviewer workflow's response shape - deliberately
-// smaller than the legacy ReviewResponse: no confidence score (the frozen
-// prompt doesn't request one), no agent fields (no agent in the final
-// architecture).
+// No confidence score (the frozen prompt doesn't request one), no agent
+// fields (no agent in the final architecture).
 export type FinalReviewResponse = {
   label: "Entailment" | "Contradiction" | "NotMentioned" | null;
   evidence: string[];
@@ -50,36 +24,23 @@ export type FinalReviewResponse = {
   trace_id: string;
 };
 
-export type ReviewSummary = {
-  review_id: string;
-  doc_id: string;
-  created_at: string;
-  num_requirements: number;
-  total_cost_usd: number;
-  model: string;
-};
-
-export type CostEstimate = {
-  avg_cost_per_requirement_usd: number;
-  source_experiment_id: string;
-  source_sample_size: number;
-  model: string;
-};
-
-export type ExperimentSummary = {
-  experiment_id: string;
-  experiment_name: string;
-  model: string;
-  split: string | null;
-  sample_size: number | null;
-  accuracy: number | null;
-  macro_f1: number | null;
-  contradiction_recall: number | null;
-  contradiction_recall_ci_low: number | null;
-  contradiction_recall_ci_high: number | null;
-  joint_label_evidence_correctness: number | null;
-  total_cost_usd: number | null;
-  timestamp: string | null;
+// One row of the reconstruction-v2 final held-out TEST comparison
+// (E17/E17B), read server-side from
+// results/final/reconstruction_v2/full_test_comparison.csv - never
+// recomputed client-side.
+export type FinalTestResult = {
+  system: string;
+  n: number;
+  accuracy: number;
+  macro_f1: number;
+  joint: number;
+  entailment_recall: number;
+  contradiction_recall: number;
+  notmentioned_recall: number;
+  evidence_recall: number | null;
+  evidence_precision: number | null;
+  source_valid_quote_rate: number | null;
+  api_cost_usd: number;
 };
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -112,15 +73,7 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ nda_text: ndaText, requirement }),
     }),
-  createReview: (ndaText: string, hypothesisIds?: string[]) =>
-    request<ReviewResponse>("/review", {
-      method: "POST",
-      body: JSON.stringify({ nda_text: ndaText, hypothesis_ids: hypothesisIds ?? null }),
-    }),
-  getReview: (reviewId: string) => request<ReviewResponse>(`/review/${reviewId}`),
-  listResults: () => request<ReviewSummary[]>("/results"),
-  listExperiments: () => request<ExperimentSummary[]>("/experiments"),
-  getCostEstimate: () => request<CostEstimate>("/cost-estimate"),
+  listFinalTestComparison: () => request<FinalTestResult[]>("/experiments"),
   extractPdf: (file: File) => {
     const formData = new FormData();
     formData.append("file", file);

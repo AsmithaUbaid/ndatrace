@@ -1,9 +1,12 @@
 # Model configs
 
-One file per candidate model to be screened in E02 (model screening) — provider, model id,
-context window, and which pricing config (`configs/pricing/`) it pairs with. No models are
-selected yet; this directory is a placeholder for E02's output, not an input to it.
+**E02 (model screening) was SKIPPED** — E01 (Oracle) already performed a controlled comparison of
+2 local and 2 hosted models using the same manifest, prompt semantics, and output schema, so a
+separate model-screening experiment would have duplicated a question E01 already answered. Frozen
+from E01: primary local model `qwen2.5:7b-instruct`, hosted model `openai/gpt-5-mini` (the final
+selected model). See `docs/experiment_registry.md`'s E02 row and `experiments/E01_oracle/summary.md`.
 
-Existing historical model wiring lives in `pipeline/model_gateway.py` (`ModelGateway.local()`,
-`.groq()`, hosted OpenRouter default) — reused as-is, not duplicated here. This directory is
-for the versioned, reviewable config *record* of what E02 screens and selects, once run.
+This directory therefore never received the per-candidate-model config files it was originally
+scaffolded for. Model wiring lives in `pipeline/model_gateway.py` (`ModelGateway.local()`,
+`.groq()`, hosted OpenRouter default) and `configs/pricing/` — this directory is kept empty
+(besides this README) as a record of that decision, not as a gap to fill.

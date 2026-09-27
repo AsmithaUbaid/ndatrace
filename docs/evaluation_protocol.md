@@ -222,7 +222,7 @@ seeing everything means nothing can be missed. That conflates *access* to eviden
 construction — not a meaningful joint measurement. Rejected for reconstruction-v2.
 
 **Implementation consequence, documented but not built this phase** (would touch
-`pipeline/classifier.py`/`pipeline/rule_baseline.py`/`pipeline/orchestrator.py`, explicitly out of
+`pipeline/classifier.py`/`pipeline/rule_baseline.py`/`archive/pre_reconstruction/pipeline/orchestrator.py`, explicitly out of
 scope — "do not change model pipelines now"): A1's classification prompt/output schema must be
 extended to require the model to cite specific span/clause identifiers from the full document it
 was given, the same way A2/A3 already do via retrieval. A0's rule baseline must expose its
@@ -510,7 +510,7 @@ here after a forensic timestamp/git-history review (`docs/decisions.md` ADR-010)
 - **T041-B** (the full 2,091-case test set, run later, after a commit changed the default prompt and routing — **these are the
   numbers cited everywhere in this repo as "the T041 result"**): model unchanged, **prompt v6** /
   `agent_step_v2.txt` (the current shipped default), and for RAG+agent the **decoupled routing fix**
-  via `pipeline/orchestrator.py::review_requirement()` (ADR-006).
+  via `archive/pre_reconstruction/pipeline/orchestrator.py::review_requirement()` (ADR-006).
 
 **A previously-stated caveat here was wrong and is retracted**: earlier versions of this document
 said "T041 used prompt v2, not the current v6 default." That was true only for T041-A. **T041-B's

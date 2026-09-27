@@ -1,20 +1,14 @@
 # Budget tracking
 
-Empty until E00B runs. This is not calculated in this phase — see
-`docs/project_contract.md` §14 and Contradiction #4: `.env`'s `MAX_BUDGET_USD=6.99` is stale
-(last verified 2026-09-22, before substantial logged T041 spend) and must not be treated as
-current remaining credit.
+**E00B is complete.** This directory holds its reconciled output:
 
-E00B will reconcile, and write its output here:
+- `current_pricing.csv`, `experiment_forecast.csv`, `runtime_forecast.csv`, `token_estimates.csv`,
+  `historical_spend.csv`, `budget_plan.json` — the reconciled forecast/pricing/spend artifacts
+  (also mirrored in `experiments/E00B_budget_forecast/results/` as that experiment's own frozen
+  snapshot; both copies are required — `evaluation/budget.py` and `tests/test_budget.py` read from
+  this directory specifically)
+- `reconstruction_spend_ledger.csv` — the running, append-only spend ledger for every reconstruction-v2
+  experiment that made real API calls, updated as the project progressed (not a frozen E00B
+  snapshot; this is the live source)
 
-- actual historical hosted spend (derivable from `results/runs/*.jsonl` and
-  `results/final/*.jsonl` cost fields, and `data/cost_estimates.json` /
-  `data/budget_plan.json` as historical inputs — not yet re-summed)
-- remaining user credit (must be freshly verified against the provider, not assumed)
-- projected Oracle spend (E01)
-- projected prompt-selection spend (E03)
-- projected hosted-vs-local spend (E15)
-- reserve
-- estimated runtime
-
-No API calls, recomputation, or budget figure is produced in this phase.
+See `experiments/E00B_budget_forecast/summary.md` for the full reconciliation methodology.

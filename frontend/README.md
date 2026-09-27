@@ -6,12 +6,15 @@ has no server-side logic of its own beyond Next.js routing.
 
 ## What it does
 
-- Submit an NDA (paste text or upload a PDF, extracted server-side via `POST /extract-pdf`) and
-  select which of the 17 standard confidentiality requirements to check.
-- Display results per requirement: label (Entailment/Contradiction/NotMentioned), confidence,
-  cited evidence, whether the selective agent was escalated, and per-case cost/latency.
-- Browse past reviews (`/history`) and offline experiment results (`/experiments`).
-- Export/copy a review's results as text or JSON.
+- Submit an NDA (paste text or upload a PDF, extracted server-side via `POST /extract-pdf`) and a
+  confidentiality requirement (free text, with the 17 standard ContractNLI requirements offered as
+  suggested starting text).
+- Display the result: label (Entailment/Contradiction/NotMentioned), cited evidence,
+  `source_valid`/`needs_human_review` state — no fabricated confidence score.
+- Browse the reconstruction-v2 final TEST comparison (`/experiments`).
+
+There is no review-history feature — `POST /api/review` doesn't persist results, and the backend
+has no database.
 
 ## Local development
 
@@ -38,13 +41,11 @@ port; set `NEXT_PUBLIC_API_URL` only to point at a different backend host/port.
 
 | Path | Purpose |
 |---|---|
-| `app/page.tsx` | Main review screen — NDA/requirement input (with a sample NDA for demo use) submitted to `POST /api/review`, the final architecture |
-| `app/history/page.tsx` | Past legacy reviews (`GET /results`, `GET /review/{id}`) — the legacy RAG+agent pipeline's saved history, not `/api/review` |
-| `app/experiments/page.tsx` | Offline experiment browser (`GET /experiments`) |
+| `app/page.tsx` | Main review screen — NDA/requirement input (with a sample NDA for demo use) submitted to `POST /api/review`, the sole review endpoint |
+| `app/experiments/page.tsx` | Reconstruction-v2 final TEST comparison (`GET /experiments`, reads `results/final/reconstruction_v2/`) |
 | `components/ResultCard.tsx` | One `POST /api/review` result: label, evidence, `needs_human_review`/`source_valid` state — no fabricated confidence score |
-| `components/RequirementCard.tsx` | One legacy per-hypothesis result (label, evidence, confidence, agent/cost details) — used by the `/history` view |
 | `components/LimitationsPanel.tsx` | Collapsible panel stating the system's known limitations (reviewer aid only, human final authority, NotMentioned/injection caveats) |
-| `components/NavBar.tsx` | Top navigation (Review / History / Experiments) |
+| `components/NavBar.tsx` | Top navigation (Review / Experiments) |
 | `lib/api.ts` | Fetch wrappers + TypeScript types for every backend endpoint in `../docs/api.md` |
 | `lib/verdict.ts` | Label → normalized verdict (color/icon/filter-key) mapping shared across components |
 
