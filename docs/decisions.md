@@ -46,8 +46,8 @@ recall — never missing a Contradiction or NotMentioned case) is identical.
 tested here on 152 total calls). GPT-5 mini's pricing is still registered in
 `pipeline/model_gateway.py`'s `PRICING_PER_MILLION` as a documented fallback.
 
-**Evidence files:** `results/runs/run_B04_oracle_openai_gpt-5-mini.jsonl`,
-`results/runs/run_B04_oracle_google_gemini-2.5-flash-lite.jsonl`, `docs/experiments.md` C01 row.
+**Evidence files:** `results/archive/runs/run_B04_oracle_openai_gpt-5-mini.jsonl`,
+`results/archive/runs/run_B04_oracle_google_gemini-2.5-flash-lite.jsonl`, `docs/experiments.md` C01 row.
 
 ---
 
@@ -92,7 +92,7 @@ confidence/abstention and the selective agent exist to catch.
 `data/reranking_comparison.json`, `data/full_retrieval_comparison.json`, `data/top_k_sweep.json`,
 `data/pool_size_sweep.json`, `data/rule_boosted_retrieval.json`, `data/parent_child_retrieval.json`,
 `data/overlapping_chunks_comparison.json`, `data/stronger_reranker_comparison.json`,
-`notebooks/04_retrieval_experiments.ipynb`.
+`archive/pre_reconstruction/notebooks/04_retrieval_experiments.ipynb`.
 
 ---
 
@@ -110,7 +110,7 @@ consistent with the measured ~20% retrieval recall miss rate.
 confidence/abstention should catch the over-confident NotMentioned false positives; the selective
 agent should catch the under-confident Entailment misses.
 
-**Evidence file:** `results/runs/run_T024_rag.jsonl`.
+**Evidence file:** `results/archive/runs/run_T024_rag.jsonl`.
 
 ---
 
@@ -202,7 +202,7 @@ hypothesis instead of losing the rest.
 Entailment/Contradiction cases, or a future adversarial input finds a third distinct injection
 pattern.
 
-**Evidence files:** `data/golden/injection_cases.json`, `results/runs/run_T018_prompt_v2.jsonl`
+**Evidence files:** `data/golden/injection_cases.json`, `results/archive/runs/run_T018_prompt_v2.jsonl`
 through `run_T018_prompt_v6.jsonl`, `tests/test_backend.py`'s
 `test_one_hypothesis_failure_does_not_lose_the_others`.
 
@@ -264,7 +264,7 @@ this fix was made — the real, later-measured full 2,091-case cost came in clos
 RAG $0.317 total ($0.000152/case), RAG+agent $0.848 total ($0.000405/case) — still cheap in absolute
 terms).
 
-**Validated** (`scripts/validate_decoupled_routing_signal.py`, $0.0215, 150 dev cases): the
+**Validated** (`archive/pre_reconstruction/scripts/validate_decoupled_routing_signal.py`, $0.0215, 150 dev cases): the
 decoupled signal survives essentially unchanged — AUROC 0.660 (new) vs. 0.657 (old), coverage
 56.0% vs. 55.3%, selective accuracy identical at 94.0%. **The circularity was real (a correct
 methodology finding) but was not measurably inflating the reported numbers** here — the
@@ -313,7 +313,7 @@ at the conventional threshold.
 **UPDATE — the "revisit if" condition below has actually happened, and is disclosed
 here rather than silently resolved.** Recomputing this comparison directly against the now-complete
 full 2,091-case hosted T041 result files (not the 500-case subsample summary above) in
-`notebooks/07_selective_agent_experiments.ipynb` found: **regression (87 cases) now exceeds
+`archive/pre_reconstruction/notebooks/07_selective_agent_experiments.ipynb` found: **regression (87 cases) now exceeds
 recovery (65 cases)**, and RAG+agent's overall accuracy (77.7%) is actually *below* plain RAG's
 (78.7%) at full scale. McNemar's test on this larger sample: p=0.088 — still not significant, so
 neither direction is statistically proven, but the point estimate has reversed, not merely
@@ -324,7 +324,7 @@ on test-set results" rule, the freeze is not being retroactively reversed here. 
 professor/reviewer evaluating the agent-inclusion decision should see this contradiction directly:
 the strongest, most complete evidence currently available (2,091 real, held-out test cases) does
 not confirm the dev-sample rationale for including the agent. See
-`notebooks/07_selective_agent_experiments.ipynb` for the full recomputation and
+`archive/pre_reconstruction/notebooks/07_selective_agent_experiments.ipynb` for the full recomputation and
 `docs/evaluation_protocol.md` for how this interacts with the still-unbackfilled joint-evidence
 metric on these same files.
 
@@ -332,7 +332,7 @@ metric on these same files.
 update above — this has happened), or the duplicate-loop rate (~21% of dev cases) turns out to mean
 the agent exhausts investigation options too easily rather than resolving cases.
 
-**Tool-count ablation (`scripts/run_agent_tool_ablation.py`, `data/agent_tool_ablation.json`):**
+**Tool-count ablation (`archive/pre_reconstruction/scripts/run_agent_tool_ablation.py`, `data/agent_tool_ablation.json`):**
 tested a reduced 3-tool agent (`prompts/agent_step_v1_3tools.txt`) against the same 67-case dev
 REVIEW subset. Result: 133/150 = 88.7% overall (vs. the 5-tool agent's 90.0%), recovery 7/regression
 6 on the REVIEW subset (vs. 5-tool's 6/3) — a worse recovery-to-regression ratio and no accuracy
@@ -366,7 +366,7 @@ documents far longer and noisier than this dataset's short, curated NDAs, where 
 cost/latency and "irrelevant content dilutes accuracy" risk both get worse, not better. This
 tradeoff has **not been directly tested** on longer documents — see the proposed long-document
 stress test in `docs/architecture.md`'s open questions. Full-context stays in the codebase
-permanently as a diagnostic ceiling benchmark (`scripts/run_full_context_baseline.py`), re-run
+permanently as a diagnostic ceiling benchmark (`archive/pre_reconstruction/scripts/run_full_context_baseline.py`), re-run
 whenever retrieval changes to answer "how far is RAG from the ceiling now?"
 
 **The real signal this carries:** RAG+agent (90.0%) trails full-context by only 1.3pt with zero
@@ -378,7 +378,7 @@ full-context's token cost would stop being trivial — retrieval's value proposi
 documents grow past what fits cheaply in context. This is currently a design hypothesis, not an
 experimentally validated one (see the long-document stress test proposal).
 
-**Evidence files:** `results/runs/run_B03_full_context.jsonl`,
+**Evidence files:** `results/archive/runs/run_B03_full_context.jsonl`,
 `data/hybrid_fallback_experiment.json`.
 
 ---
@@ -474,21 +474,21 @@ invalid" and not understated into "this is a pristine one-shot test either):**
    comparison between them is a comparison of two different configurations, not a sample-size
    effect.
 3. **The joint label+evidence correctness metric was broken in the code that actually executed
-   both T041-A and T041-B.** `scripts/run_final_test_evaluation.py` never populated
+   both T041-A and T041-B.** `archive/pre_reconstruction/scripts/run_final_test_evaluation.py` never populated
    `Prediction.retrieved_span_indices` for any architecture at the time either phase ran (confirmed
    directly: the fix is absent from every commit up to and including `dd797d1`, so both phases
    executed with the bug still live). The joint metric — reported throughout this project as a
    headline metric — silently degenerated into measuring only the NotMentioned-correct fraction.
    Confirmed precisely: the reported joint value (0.334 for hosted full_context) exactly equalled
    that run's NotMentioned-only-correct fraction. **Any corrected joint value now on record is a
-   post-hoc backfilled metric** (`scripts/backfill_joint_metric.py`, applied after the fact to the
+   post-hoc backfilled metric** (`archive/pre_reconstruction/scripts/backfill_joint_metric.py`, applied after the fact to the
    already-saved predictions — retrieval is deterministic, so this required zero new LLM calls but
    it is a reconstruction, not something the original run computed correctly). This did **not**
    affect the dev-sample joint numbers reported elsewhere (ADR-003, ADR-004) — those used a
-   different, correctly-written script (`scripts/run_rag_experiment.py`) from the start.
+   different, correctly-written script (`archive/pre_reconstruction/scripts/run_rag_experiment.py`) from the start.
 
 **Corrected (backfilled) joint values, T041-B, full 2,091-case set — all three hosted architectures
-now fixed** (`scripts/backfill_joint_metric.py --write`, re-run against all 7 T041 result
+now fixed** (`archive/pre_reconstruction/scripts/backfill_joint_metric.py --write`, re-run against all 7 T041 result
 files, zero LLM/API calls since retrieval is deterministic):
 
 | Architecture | Accuracy | Macro-F1 | Contradiction recall | Joint (corrected) |
@@ -527,7 +527,7 @@ exceeds recovery), the opposite direction from T041-A's small-sample estimate (b
 which favored the agent). **Because T041-A and T041-B ran different routing logic, these two
 McNemar results are not even measuring the same comparison — T041-B's is the one that reflects the
 actually-shipped decoupled-routing architecture** and is the number that should be cited going
-forward. Full reproduction: `notebooks/07_selective_agent_experiments.ipynb`.
+forward. Full reproduction: `archive/pre_reconstruction/notebooks/07_selective_agent_experiments.ipynb`.
 
 **Local Llama (500-case, T041-A-scale sample size), for reference:** b=6, c=9, n_discordant=15,
 p=0.607 (clearly not significant).

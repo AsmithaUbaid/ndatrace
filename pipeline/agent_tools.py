@@ -31,7 +31,7 @@ from pipeline.chunker import Chunk
 from pipeline.retriever import RetrievalResult, Retriever
 
 # Carve-out/exception markers - matches the proxies used in
-# scripts/build_negative_cases.py's "conflicting clauses" category, since
+# archive/pre_reconstruction/scripts/build_negative_cases.py's "conflicting clauses" category, since
 # those are exactly the constructs this tool needs to surface.
 EXCEPTION_MARKERS = (
     "except", "notwithstanding", "provided that", "provided, however",

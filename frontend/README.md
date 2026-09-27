@@ -38,18 +38,15 @@ port; set `NEXT_PUBLIC_API_URL` only to point at a different backend host/port.
 
 | Path | Purpose |
 |---|---|
-| `app/page.tsx` | Main review screen — NDA input, requirement selection, results display |
-| `app/history/page.tsx` | Past live reviews (`GET /results`) |
+| `app/page.tsx` | Main review screen — NDA/requirement input (with a sample NDA for demo use) submitted to `POST /api/review`, the final architecture |
+| `app/history/page.tsx` | Past legacy reviews (`GET /results`, `GET /review/{id}`) — the legacy RAG+agent pipeline's saved history, not `/api/review` |
 | `app/experiments/page.tsx` | Offline experiment browser (`GET /experiments`) |
-| `components/RequirementCard.tsx` | One requirement's result: label, evidence, confidence, agent/cost details |
-| `components/ResultsSummaryBar.tsx` | Headline + clickable Entailment/Contradiction/NotMentioned count chips |
-| `components/FilterTabs.tsx` | Filter results by label or "needs attention" (low confidence / agent-escalated) |
-| `components/ConfidenceBar.tsx` | Visual confidence indicator |
-| `components/Checkbox.tsx` | Custom-styled checkbox (requirement selection) |
-| `components/NavBar.tsx` | Top navigation |
-| `lib/api.ts` | Fetch wrappers for every backend endpoint in `../docs/api.md` |
-| `lib/verdict.ts` | Label → color/icon/filter-key mapping shared across components |
-| `lib/export.ts` | Copy-to-clipboard / download-as-text/JSON for a completed review |
+| `components/ResultCard.tsx` | One `POST /api/review` result: label, evidence, `needs_human_review`/`source_valid` state — no fabricated confidence score |
+| `components/RequirementCard.tsx` | One legacy per-hypothesis result (label, evidence, confidence, agent/cost details) — used by the `/history` view |
+| `components/LimitationsPanel.tsx` | Collapsible panel stating the system's known limitations (reviewer aid only, human final authority, NotMentioned/injection caveats) |
+| `components/NavBar.tsx` | Top navigation (Review / History / Experiments) |
+| `lib/api.ts` | Fetch wrappers + TypeScript types for every backend endpoint in `../docs/api.md` |
+| `lib/verdict.ts` | Label → normalized verdict (color/icon/filter-key) mapping shared across components |
 
 ## Build / production commands
 

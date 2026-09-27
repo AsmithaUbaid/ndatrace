@@ -4,7 +4,7 @@ frozen production architecture (T031: RAG + selective agent): retrieve
 -> rerank -> rule-boost -> classify -> confidence-route -> selective
 agent.
 
-This mirrors the per-case logic in scripts/run_final_test_evaluation.py's
+This mirrors the per-case logic in archive/pre_reconstruction/scripts/run_final_test_evaluation.py's
 run_rag_agent(), extracted into pipeline/ so the backend (and any future
 notebook or script) calls one real implementation instead of
 re-implementing the routing decision (Section 0A: notebooks/scripts

@@ -15,7 +15,7 @@ held constant.
 
 ## 2. Existing RAG runner(s) found in repo — audit
 
-**Found**: `scripts/run_rag_experiment.py` (T-series T024, historical). **Not reusable
+**Found**: `archive/pre_reconstruction/scripts/run_rag_experiment.py` (T-series T024, historical). **Not reusable
 unmodified**:
 - Uses a **different retrieval configuration entirely** — `Retriever(doc.text,
   chunk_method="sentence")` + `query_rerank_and_boost` (sentence chunking, rule-boosted RRF

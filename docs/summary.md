@@ -62,7 +62,7 @@ reading the cited clause, rather than trusting the label alone.
 
 Recomputed directly from `results/final/legacy/run_T041_final_test_*.jsonl`, not quoted from
 memory. Joint label+evidence correctness required a retroactive, zero-cost fix
-(`scripts/backfill_joint_metric.py` — deterministic retrieval recomputation, no new API calls) after
+(`archive/pre_reconstruction/scripts/backfill_joint_metric.py` — deterministic retrieval recomputation, no new API calls) after
 a bug was found where evidence spans were never recorded for any architecture; all three hosted
 values above are the corrected numbers.
 
@@ -123,4 +123,4 @@ without softening them.
 - `docs/evaluation_protocol.md` — dataset roles, freeze discipline, development-reuse caveats
 - `docs/architecture.md` — current implementation, traced directly from code
 - `docs/evaluation_case_design.md` — the regression/robustness/security test taxonomy
-- `notebooks/09_complete_experiment_story.ipynb` — the full experiment narrative with live-computed tables
+- `archive/pre_reconstruction/notebooks/09_complete_experiment_story.ipynb` — the full experiment narrative with live-computed tables

@@ -135,9 +135,9 @@ corrections reflected in the Stage B results above) and executed.
 | Caching | `cache/{embeddings,indexes,parsed}/` directories exist (per `docs/experiment_protocol.md`'s repo layout) but are **currently empty** — no caching layer was ever actually wired up in production code | n/a | New for E06 — `evaluation/retrieval_eval.py`'s cache design (section 20) is the first real use of these directories |
 | Rule baseline (A0) | `pipeline/rule_baseline.py::classify_with_span` — a deterministic keyword rule producing one best-match span per hypothesis, not a ranked top-K retriever | Historical: 72.6% precision / 20.4% recall standalone (high-precision, low-recall) | **Not used as R0** — it doesn't produce a ranked list comparable via Evidence Recall@K/MRR the way BM25 does; it's the separate A0 architecture, a different concern from R0's lexical-retrieval-rung question |
 
-**Historical notebooks/scripts found**: `notebooks/04_retrieval_experiments.ipynb`,
-`scripts/sweep_top_k.py`, `scripts/sweep_pool_size.py`, `scripts/compare_*retrieval*.py`,
-`scripts/compare_stronger_rerankers.py`, `data/retrieval_experiment_results.json`,
+**Historical notebooks/scripts found**: `archive/pre_reconstruction/notebooks/04_retrieval_experiments.ipynb`,
+`archive/pre_reconstruction/scripts/sweep_top_k.py`, `archive/pre_reconstruction/scripts/sweep_pool_size.py`, `scripts/compare_*retrieval*.py`,
+`archive/pre_reconstruction/scripts/compare_stronger_rerankers.py`, `data/retrieval_experiment_results.json`,
 `data/full_retrieval_comparison.json`, `data/top_k_sweep.json`, `data/pool_size_sweep.json`,
 `data/rule_boosted_retrieval.json`, `data/parent_child_retrieval.json`,
 `data/overlapping_chunks_comparison.json`, `data/stronger_reranker_comparison.json` — all

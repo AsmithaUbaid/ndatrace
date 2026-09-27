@@ -66,7 +66,7 @@ historical T-series notebooks were meant to follow).
   — config snapshot, git commit, predictions, metrics, token/cost log, runtime log. Never
   overwritten; each run gets a new timestamped directory.
 - Aggregate/comparison tables across runs: `results/aggregate/` (reconstruction-v2) —
-  distinct from the historical `results/comparisons/`.
+  distinct from the historical `archive/pre_reconstruction/results/comparisons/`.
 - Budget reconciliation: `results/budget/` (see its README — populated by E00B, not before).
 
 ## Data immutability

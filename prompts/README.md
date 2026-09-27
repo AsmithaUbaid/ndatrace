@@ -18,5 +18,5 @@ initial answer and its own history of tool calls) is different from the classifi
 | Version | Status | Notes |
 |---|---|---|
 | `agent_step_v1.txt` | Superseded | Original 5-tool agent decision prompt, used for the T028-T030 agent experiment and the original T041 run |
-| `agent_step_v1_3tools.txt` | Experimental, not the production default | A 3-tool variant used specifically by `scripts/run_agent_tool_ablation.py` to test whether a reduced tool set changes agent behavior (see `data/agent_tool_ablation.json`). Not referenced by `pipeline/agent.py`'s production `AGENT_PROMPT_PATH` |
+| `agent_step_v1_3tools.txt` | Experimental, not the production default | A 3-tool variant used specifically by `archive/pre_reconstruction/scripts/run_agent_tool_ablation.py` to test whether a reduced tool set changes agent behavior (see `data/agent_tool_ablation.json`). Not referenced by `pipeline/agent.py`'s production `AGENT_PROMPT_PATH` |
 | **`agent_step_v2.txt`** | **Current default** (`pipeline/agent.py`'s `AGENT_PROMPT_PATH`) | Adds the same instruction-only-input rule as `classify_v6.txt` (see the v6 row above) - the agent's decision step had the identical injection vulnerability, confirmed independently by calling `run_agent()` directly, not just via `classify()` |

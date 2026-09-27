@@ -32,7 +32,7 @@ def _iter_records():
     # Yield only the LAST line per file, not every line: results/runs/ is
     # append-only (Section 0A) - a file can carry more than one record for
     # the same experiment_id (e.g. an older run re-scored after a schema
-    # gain, scripts/backfill_missing_metrics.py, 2026-09-24). The last line
+    # gain, archive/pre_reconstruction/scripts/backfill_missing_metrics.py, 2026-09-24). The last line
     # is always the current one; matches the convention already used by
     # scripts/run_evaluation.py and this same module's get_experiment().
     for path in sorted(_runs_dir().glob("*.jsonl")):

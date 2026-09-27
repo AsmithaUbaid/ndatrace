@@ -21,7 +21,7 @@ optimisation (E06 is already frozen and untouched here) and not prompt selection
 | **Decision priority** | negative match -> Contradiction; else positive match -> Entailment; else -> NotMentioned | Unchanged since B02 | Yes | NotMentioned is a pure default fallback -- structurally the "easy" label here too, same caveat as Oracle's NotMentioned (E01) |
 | **Negation logic** | None generic -- negation is baked into literal pre-composed phrases (e.g. `"shall not solicit"` as its own full string), not detected algorithmically | Unchanged since B02 | Yes, with caveat: this means novel negation phrasings not in the literal list are invisible to the rule, by design (deliberately crude, per the module's own docstring) | No leakage risk; a genuine coverage gap, expected for a "cheap" baseline |
 | **Contradiction-specific patterns** | None beyond the same per-hypothesis negative-phrase list -- no exception/carve-out handling, no cross-clause reasoning | Unchanged since B02 | Yes | Directly relevant: E03 already found 43/46 of Qwen's non-retrieval-limited Contradiction failures co-occurred with an exception/carve-out indicator (`experiments/E03_prompt_selection/summary.md`) -- the rule baseline has *zero* mechanism for this at all, so its Contradiction recall is expected to be weak for the same underlying reason, independent of any LLM |
-| **Evidence output** | `classify_with_span` returns the character span of the *first* matching phrase (not the whole clause), mapped to overlapping `doc.spans` indices for scoring (`scripts/run_full_rule_baseline_test.py`'s pattern) | Added after B02's original run specifically to support Evidence Recall/Precision/MRR comparison against semantic retrieval (`docs/experiments.md`) | Yes -- see section 6, sufficient for the joint metric | None identified -- see section 6 |
+| **Evidence output** | `classify_with_span` returns the character span of the *first* matching phrase (not the whole clause), mapped to overlapping `doc.spans` indices for scoring (`archive/pre_reconstruction/scripts/run_full_rule_baseline_test.py`'s pattern) | Added after B02's original run specifically to support Evidence Recall/Precision/MRR comparison against semantic retrieval (`docs/experiments.md`) | Yes -- see section 6, sufficient for the joint metric | None identified -- see section 6 |
 | **Confidence / fallback logic** | None in the module itself -- callers (harness/`Prediction`) stamp a flat `confidence=1.0` regardless of match; no abstention | Unchanged since B02 | N/A for E04 (confidence/abstention is a separate reconstruction-v2 phase, not E04's scope) | None |
 
 **Historical rule experiments found**: exactly one build (B02, WBS T014). No ADR or dated
@@ -35,7 +35,7 @@ the keyword lists themselves.
 
 ## 3. What does the rule baseline see? (full text vs. retrieved excerpts vs. matched clauses)
 
-**Audited, not assumed**: every historical invocation (`scripts/run_full_rule_baseline_test.py`,
+**Audited, not assumed**: every historical invocation (`archive/pre_reconstruction/scripts/run_full_rule_baseline_test.py`,
 and by inspection the same call pattern in the original B02/evidence-comparison scripts) passes
 `doc.text` -- the complete NDA document string -- to `classify_with_span`/`classify_by_keywords`.
 This is **(A) full NDA text**, never (B) retrieved excerpts or (C) pre-matched clauses.
@@ -76,7 +76,7 @@ for Stage A.
 ## 6. Evidence requirement -- can the current implementation satisfy the joint metric?
 
 **Yes, structurally adequate as-is.** Audit of the mechanism
-(`scripts/run_full_rule_baseline_test.py`'s pattern, reused verbatim for E04):
+(`archive/pre_reconstruction/scripts/run_full_rule_baseline_test.py`'s pattern, reused verbatim for E04):
 - For Entailment/Contradiction: the matched phrase's character span is intersected against
   every span in the document's full `doc.spans` list (interval-overlap test); any span whose
   bounds contain or overlap the matched phrase is recorded as a `retrieved_span_indices` entry.
@@ -95,7 +95,7 @@ for Stage A.
   such rather than treated as a gap needing repair.
 
 **No structural repair is proposed.** The mechanism already exists in
-`scripts/run_full_rule_baseline_test.py`'s pattern; E04 Stage B would extract this into a small
+`archive/pre_reconstruction/scripts/run_full_rule_baseline_test.py`'s pattern; E04 Stage B would extract this into a small
 reusable function (`evaluation/rule_scoring.py` or similar) rather than duplicate it inline,
 per the notebooks-vs-pipeline rule -- a code-organization task, not a semantic fix.
 
@@ -214,7 +214,7 @@ touched.
 - `scripts/run_e04_rule_baseline.py` (new -- loads full TRAIN, runs R0, scores, saves results;
   no LLM/API calls).
 - Possibly a small `evaluation/rule_scoring.py` (new -- extracts the span-to-doc.spans overlap
-  mapping from `scripts/run_full_rule_baseline_test.py`'s inline pattern into a reusable
+  mapping from `archive/pre_reconstruction/scripts/run_full_rule_baseline_test.py`'s inline pattern into a reusable
   function, avoiding duplication per the notebooks-vs-pipeline rule).
 - `scripts/analyze_e04_rule_baseline.py` (new -- metrics + failure analysis, mirroring
   `scripts/analyze_e03_prompt_selection.py`'s structure).

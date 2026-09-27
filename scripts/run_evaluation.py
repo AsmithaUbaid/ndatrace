@@ -15,7 +15,7 @@ reported numbers are mechanically reproducible from the repo's own data
 files, not just asserted.
 
 Usage:
-    python scripts/run_evaluation.py --results results/runs/run_T041_final_test_rag_llama3.2_3b.jsonl
+    python scripts/run_evaluation.py --results results/archive/runs/run_T041_final_test_rag_llama3.2_3b.jsonl
     python scripts/run_evaluation.py --results <path> --data-dir data/contractnli
 """
 

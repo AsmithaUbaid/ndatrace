@@ -526,7 +526,7 @@ What was genuinely locked before T041-B and not changed based on its results:
 - Routing: rule-agreement-based ACCEPT/REVIEW (ADR-005), with the decoupled independent signal
   fix already in place (ADR-006)
 - Agent: 5 tools, bounded ReAct loop (ADR-007)
-- Evaluation scripts: `scripts/run_final_test_evaluation.py`
+- Evaluation scripts: `archive/pre_reconstruction/scripts/run_final_test_evaluation.py`
 
 **A real qualification that remains, correctly stated rather than overstated**: T041-B is not a
 pristine first exposure to the test split — T041-A had already scored a 500-case subsample of the
@@ -590,13 +590,13 @@ rate.
      subsample of the same split before T041-B ran (see the Freeze protocol section for why this
      is disclosed rather than treated as invalidating).
   2. **Joint label+evidence correctness was broken in the code that executed both phases.**
-     Fixed and fully backfilled (`scripts/backfill_joint_metric.py --write`, re-run
+     Fixed and fully backfilled (`archive/pre_reconstruction/scripts/backfill_joint_metric.py --write`, re-run
      against all 7 T041 result files — zero LLM/API calls, retrieval is deterministic). All three
      hosted T041-B files (full 2,091-case set) now carry a corrected, trustworthy joint value:
      full-context 0.812 (matching accuracy, as it must for full-context), RAG 0.754, RAG+agent
      0.747. The local-Llama files (T041-A-scale, `sample_size: 500`) are also now corrected: rule
      0.494, full-context 0.492, RAG 0.524, RAG+agent 0.532. **Every one of these corrected values is
-     a post-hoc backfilled metric** (`scripts/backfill_joint_metric.py`, applied after the fact to
+     a post-hoc backfilled metric** (`archive/pre_reconstruction/scripts/backfill_joint_metric.py`, applied after the fact to
      already-saved predictions), not something the original run computed correctly — that provenance
      should always be stated alongside the number, not silently presented as if the run itself got
      it right the first time. Result files: the three hosted files now live in `results/final/`; the

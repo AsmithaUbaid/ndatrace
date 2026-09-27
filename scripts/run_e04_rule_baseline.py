@@ -40,7 +40,7 @@ EXPECTED_DISTRIBUTION = {"Entailment": 3530, "NotMentioned": 2820, "Contradictio
 
 def span_overlaps_gold(span: tuple[int, int], doc_spans: list[tuple[int, int]]) -> list[int]:
     """Same interval-overlap semantics as evaluation.scorer.map_chunks_to_gold_span_indices /
-    scripts/run_full_rule_baseline_test.py -- which doc.spans indices does this char span
+    archive/pre_reconstruction/scripts/run_full_rule_baseline_test.py -- which doc.spans indices does this char span
     (the rule's single matched-phrase location) overlap."""
     start, end = span
     return [idx for idx, (s_start, s_end) in enumerate(doc_spans)

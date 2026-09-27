@@ -56,7 +56,7 @@ sections"), so a pass rate here answers "did we break something we already knew 
 accurate is the system in general." That broader question is answered by the dev-sample and
 test-split experiments in `docs/experiments.md` and `docs/decisions.md`.
 
-**Real execution status (`scripts/run_golden_battery_cases.py`):** these case files
+**Real execution status (`archive/pre_reconstruction/scripts/run_golden_battery_cases.py`):** these case files
 were built by selecting real dev-split documents + gold labels only — the original build scripts
 made zero pipeline calls. The very first real run against the current production pipeline found:
 
@@ -204,7 +204,7 @@ real `doc_id`/`hypothesis_id`); their findings remain documented here rather tha
 - **080 (threshold sweep):** using the `rule_agrees` signal (self-confidence excluded as already
   shown unusable), selective accuracy is monotonically non-decreasing as the threshold rises:
   `[0.88, 0.94, 0.94, 0.94, 0.94, 0.94, 0.94, 0.94, 0.94, 0.94]`. Full curve in
-  `notebooks/06_confidence_abstention.ipynb`'s F06 plot.
+  `archive/pre_reconstruction/notebooks/06_confidence_abstention.ipynb`'s F06 plot.
 - **083 (no false evidence for Not Mentioned):** a code-level guarantee via
   `pipeline/evidence_validator.py`, not a mined live case — empty evidence + `NotMentioned` gives
   `is_valid=True` (expected); non-empty evidence + `NotMentioned` gives `is_valid=False` (expected,

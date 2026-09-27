@@ -109,7 +109,9 @@ Data Validation
 This was not a neat, planned-in-advance sequence — retrieval configuration and prompt version were
 each revised multiple times in response to earlier results on the same dev sample. Full
 chronological ledger: `docs/experiments.md`. Reasoning and status (ADOPTED/REJECTED/SUPERSEDED) per
-decision: `docs/decisions.md`. Corresponding notebooks: `notebooks/` (see `notebooks/README.md`).
+decision: `docs/decisions.md`. Corresponding notebooks: `archive/pre_reconstruction/notebooks/`
+(see `archive/pre_reconstruction/notebooks/README.md`) — pre-reconstruction, development-stage
+work; reconstruction-v2's own notebooks live inside each `experiments/E*/` directory.
 
 ## Key development findings (verified repository values, positive and negative)
 
@@ -156,19 +158,47 @@ system/API): **`docs/evaluation_case_design.md`**.
 
 ## Repository map
 
+What's current (reconstruction-v2) vs. historical is separated by directory, not by convention —
+a reviewer should generally only need **Production**, **Evaluation**, **Experiments**, and
+**Documentation** below; **Historical** exists for provenance/audit, not day-to-day navigation.
+
+**Production:**
+
 | Path | Purpose |
 |---|---|
 | `pipeline/` | Production AI pipeline. `final_review.py` is the final selected path (GPT-5-mini + P0 + FULL + runtime validator); `orchestrator.py`/`agent.py`/retrieval modules are the superseded RAG+agent pipeline, kept for `/history` |
-| `experiments/` | Reconstruction-v2 experiment record (E00–E18), including the final TEST evaluation (E17/E17B) and business/course synthesis (E18) — see `docs/experiment_registry.md` |
-| `prompts/` | Versioned prompt templates — see `prompts/README.md` |
-| `evaluation/` | Metrics, scoring, evaluation harness — reused by pipeline, scripts, and notebooks |
 | `backend/` | FastAPI application — see `docs/api.md` |
 | `frontend/` | Next.js application — see `frontend/README.md` |
-| `notebooks/` | Development-stage experiment notebooks — see `notebooks/README.md` |
-| `scripts/` | Standalone experiment/evaluation/utility scripts (the actual pattern used, not `experiments/configs/`) |
-| `results/` | Append-only experiment results (`runs/*.jsonl`) and comparison charts |
-| `data/` | ContractNLI dataset + golden/regression/robustness case files — see `data/README.md` |
+
+**Evaluation:**
+
+| Path | Purpose |
+|---|---|
+| `evaluation/` | Metrics, scoring, evaluation harness — reused by pipeline, scripts, and experiments |
+| `results/final/reconstruction_v2/` | Canonical final-result summaries (source of truth for the final report/demo) — see `results/final/README.md` |
 | `tests/` | Unit, integration, and data-leakage-prevention tests |
+
+**Experiments (reconstruction-v2, E00–E19):**
+
+| Path | Purpose |
+|---|---|
+| `experiments/E00_dataset_validation/` … `experiments/E18_business_course_synthesis/` | Reconstruction-v2 experiment record, including the final TEST evaluation (E17/E17B) and business/course synthesis (E18) — see `docs/experiment_registry.md` |
+| `prompts/` | Versioned prompt templates (incl. `prompts/reconstruction_v2/`) — see `prompts/README.md` |
+| `scripts/` | Reconstruction-v2 experiment/evaluation/utility scripts still in active use |
+| `data/` | ContractNLI dataset + golden/regression/robustness case files — see `data/README.md` |
+
+**Historical (pre-reconstruction, retained for provenance only):**
+
+| Path | Purpose |
+|---|---|
+| `archive/pre_reconstruction/` | The original T-series notebooks, scripts, and comparison figures — see `archive/pre_reconstruction/README.md` |
+| `results/final/legacy/`, `results/archive/` | Pre-reconstruction result files (T041/AV01-era) |
+| `docs/archive/` | Superseded architecture doc and initial project plan |
+
+**Documentation:**
+
+| Path | Purpose |
+|---|---|
 | `docs/` | Architecture, decisions, evaluation protocol, API, experiment ledger, and archived planning material |
 
 ## Reproduction
