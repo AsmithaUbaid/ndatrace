@@ -1,0 +1,7 @@
+{
+ "pre_run_ledger_usd": 3.1915659499999993,
+ "expected_cost": 0.32163987499999996,
+ "conservative_cost": 0.47494675000000003,
+ "budget_policy": "record-only (user-approved update); no budget breaker",
+ "timestamp": "2026-09-27T02:39:00.214260+00:00"
+}

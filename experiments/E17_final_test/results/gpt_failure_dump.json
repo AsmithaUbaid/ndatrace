@@ -1,0 +1,887 @@
+[
+ {
+  "case_id": "test::8::nda-1",
+  "gold": "Contradiction",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+  "n_quotes": 1,
+  "n_nonsource": 0,
+  "gold_idx": [
+   7
+  ],
+  "pred_idx": [
+   7
+  ],
+  "gold_text": [
+   "1. Disclosure: Recipient agrees not to disclose and the Discloser agrees to let the Recipient have the access to the Confidential Information as identified and reduced in writing or provided verbally or in any other way not reduced in writing at the time of such disclosure of the information."
+  ],
+  "quotes": [
+   "1. Disclosure: Recipient agrees not to disclose and the Discloser agrees to let the Recipient have the access to the Confidential Information as identified and reduced in writing or provided verbally or in any other way not reduced in writing at the time of such disclosure of the information."
+  ],
+  "ctx_chars": 5751,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"1. Disclosure: Recipient agrees not to disclose and the Discloser agrees to let the Recipient have the access to the Confidential Information as identified and reduced in writing or provided verbally or in any other way not reduced in writing at the time of such disclosure of the information.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::18::nda-17",
+  "gold": "Contradiction",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [
+   24,
+   25
+  ],
+  "pred_idx": [
+   24,
+   25,
+   34
+  ],
+  "gold_text": [
+   "I agree that in respect of the Confidential Information received from The Business Partnership I will:",
+   "Treat it as confidential and make no copies thereof not disclose it to any third party without the prior written consent of The Business Partnership and use it solely for the purpose as agreed between parties"
+  ],
+  "quotes": [
+   "I agree that in respect of the Confidential Information received from The Business Partnership I will: Treat it as confidential and make no copies thereof not disclose it to any third party without the prior written consent of The Business Partnership and use it solely for the purpose as agreed between parties",
+   "The Sales Particulars you will receive, and any subsequent commercial information relating to this business, are supplied on the strict understanding that it should be kept confidential and must not be copied or supplied to a third party without the consent of The Business Partnership (TBP)."
+  ],
+  "ctx_chars": 6225,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"I agree that in respect of the Confidential Information received from The Business Partnership I will: Treat it as confidential and make no copies thereof not disclose it to any third party without the prior written consent of The Business Partnership and use it solely for the purpose as agreed between parties\",\n    \"The Sales Particulars you will receive, and any subsequent commercial information relating to this business, are supplied on the strict understanding that it should be kept confidential and must not be copied or supplied to a third party without the consent of The Business Partnership (TBP).\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::23::nda-2",
+  "gold": "Contradiction",
+  "pred": "Contradiction",
+  "label_ok": true,
+  "parse": "strict",
+  "hypothesis": "Confidential Information shall only include technical information.",
+  "n_quotes": 3,
+  "n_nonsource": 0,
+  "gold_idx": [
+   77,
+   78
+  ],
+  "pred_idx": [
+   29,
+   30,
+   31
+  ],
+  "gold_text": [
+   "7.3.1. The obligations of confidentiality, non-disclosure and non-use set forth in this Confidentiality Agreement shall survive the termination or expiration of this Confidentiality Agreement ",
+   "(i) with respect to any Confidential Information that constitutes a trade secret under applicable law, for so long as such item shall continue to constitute a trade secret under applicable law, and "
+  ],
+  "quotes": [
+   "\"Confidential information\" means any information of whatever form relating to the Project or Discloser or any of its Affiliates or Clients, supplied or made available by Discloser or on its behalf to recipient or Recipient Representatives, copies of any such information regardless of whether such information is identified as confidential or not; and information regarding:",
+   "3.5.1. The existence of the Project;",
+   "3.5.2. The identity of the Discloser and the willingness of the Discloser to enter into discussions and/or negotiations regarding the Project;"
+  ],
+  "ctx_chars": 15198,
+  "raw": "{\n  \"label\": \"Contradiction\",\n  \"evidence\": [\n    \"\\\"Confidential information\\\" means any information of whatever form relating to the Project or Discloser or any of its Affiliates or Clients, supplied or made available by Discloser or on its behalf to recipient or Recipient Representatives, copies of any such information regardless of whether such information is identified as confidential or not; and information regarding:\",\n    \"3.5.1. The existence of the Project;\",\n    \"3.5.2. The identity of the Discloser and the willingness of the Discloser to enter into discussions and/or negotiations regarding the Project;\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::2::nda-7",
+  "gold": "Contradiction",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+  "n_quotes": 4,
+  "n_nonsource": 1,
+  "gold_idx": [
+   23
+  ],
+  "pred_idx": [
+   22,
+   23,
+   45
+  ],
+  "gold_text": [
+   "Recipient will not disclose or permit access to Confidential Information to contract workers, consultants or contractors of Recipient or its Affiliates unless authorized by Disclosing Party in writing and on condition that such persons are bound by obligations of confidentiality inuring to the benefit of Disclosing Party and its Affiliates at least as restrictive as these terms and conditions. "
+  ],
+  "quotes": [
+   "Recipient agrees to limit disclosure of Confidential Information to employees and employees of Affiliates having a specific need to know such Confidential Information for the Purpose and in the case of Affiliates only to the extent that such Affiliate is under obligation to hold such information in confidence and is made aware of these terms and conditions.",
+   "Recipient will not disclose or permit access to Confidential Information to contract workers, consultants or contractors of Recipient or its Affiliates unless authorized by Disclosing Party in writing and on condition that such persons are bound by obligations of confidentiality inuring to the benefit of Disclosing Party and its Affiliates at least as restrictive as these terms and conditions.",
+   "Recipient shall be entitled to retain one copy of the Confidential Information with its legal counsel or other appropriate corporate representative to evidence the exchange of information hereunder and in connection with legal or statutory requirements.",
+   "The term \u201cConfidential Information\u201d as used herein means all nonpublic information relating to the Subject Matter that is disclosed by either party, its Affiliates (as defined below), or their agents (where applicable, collectively referred to as the \u201cDisclosing Party\u201d), directly or indirectly, in writing, orally or by inspection of premises or tangible objects to the other party (the \u201cRecipient\") that is: (i) marked confidential or proprietary, or (ii) given the nature of the information or the circumstances surrounding its disclosure, reasonably should be deemed confidential."
+  ],
+  "ctx_chars": 15297,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"Recipient agrees to limit disclosure of Confidential Information to employees and employees of Affiliates having a specific need to know such Confidential Information for the Purpose and in the case of Affiliates only to the extent that such Affiliate is under obligation to hold such information in confidence and is made aware of these terms and conditions.\",\n    \"Recipient will not disclose or permit access to Confidential Information to contract workers, consultants or contractors of Recipient or its Affiliates unless authorized by Disclosing Party in writing and on condition that such persons are bound by obligations of confidentiality inuring to the benefit of Disclosing Party and its Affiliates at least as restrictive as these terms and conditions.\",\n    \"Recipient shall be entitled to retain one copy of the Confidential Information with its legal counsel or other appropriate corporate representative to evidence the exchange of information hereunder and in connection with legal or statutory requirements.\",\n    \"The term \u201cConfidential Information\u201d as used herein means all nonpublic information relating to the Subject Matter that is disclosed by either party, its Affiliates (as defined below), or their agents (where applicable, collectively referred to as the \u201cDisclosing Party\u201d), directly or indirectly, in writing, orally or by inspection of premises or tangible objects to the other party (the \u201cRecipient\\\") that is: (i) marke"
+ },
+ {
+  "case_id": "test::77::nda-20",
+  "gold": "Contradiction",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [
+   30
+  ],
+  "pred_idx": [
+   30,
+   31
+  ],
+  "gold_text": [
+   "9. At the end of the contract the receiving party shall return the confidential information and any possibly extant copies after receipt of a written request, provided that this is technically feasible and does not violate the retention obligations. "
+  ],
+  "quotes": [
+   "At the end of the contract the receiving party shall return the confidential information and any possibly extant copies after receipt of a written request, provided that this is technically feasible and does not violate the retention obligations.",
+   "As an alternative to that, the receiving party can also ensure in writing the destruction of the received documentation if that is technically feasible."
+  ],
+  "ctx_chars": 3244,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"At the end of the contract the receiving party shall return the confidential information and any possibly extant copies after receipt of a written request, provided that this is technically feasible and does not violate the retention obligations.\",\n    \"As an alternative to that, the receiving party can also ensure in writing the destruction of the received documentation if that is technically feasible.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::80::nda-7",
+  "gold": "Contradiction",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [
+   31,
+   32
+  ],
+  "pred_idx": [
+   29,
+   31
+  ],
+  "gold_text": [
+   "Authorized Person agrees that they will not provide or allow access of the information obtained hereunder to any agent, third party, contractor, subcontractor, or any other public agency, unless authorized in writing by KDOL, and then conditioned upon said agent, third party, contractor, subcontractor, or any other public agency agreeing in writing to be bound by the use and confidentiality terms and conditions of this Confidentiality Agreement. ",
+   "A copy of any such agreement shall be available for inspection upon request by the KDOL and will not be subject to disclosure to third parties by anyone other than KDOL."
+  ],
+  "quotes": [
+   "Confidential information provided hereunder, or identifiable information derived therefrom, shall not be disclosed to any individual(s) that is/are not subject to this agreement.",
+   "Authorized Person agrees that they will not provide or allow access of the information obtained hereunder to any agent, third party, contractor, subcontractor, or any other public agency, unless authorized in writing by KDOL, and then conditioned upon said agent, third party, contractor, subcontractor, or any other public agency agreeing in writing to be bound by the use and confidentiality terms and conditions of this Confidentiality Agreement."
+  ],
+  "ctx_chars": 9689,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"Confidential information provided hereunder, or identifiable information derived therefrom, shall not be disclosed to any individual(s) that is/are not subject to this agreement.\",\n    \"Authorized Person agrees that they will not provide or allow access of the information obtained hereunder to any agent, third party, contractor, subcontractor, or any other public agency, unless authorized in writing by KDOL, and then conditioned upon said agent, third party, contractor, subcontractor, or any other public agency agreeing in writing to be bound by the use and confidentiality terms and conditions of this Confidentiality Agreement.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::127::nda-1",
+  "gold": "Contradiction",
+  "pred": "NotMentioned",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+  "n_quotes": 0,
+  "n_nonsource": 0,
+  "gold_idx": [
+   13,
+   14,
+   15
+  ],
+  "pred_idx": [],
+  "gold_text": [
+   "\"Confidential Information\" of a disclosing party (\"Discloser\") means the following, regardless of its form and including copies made by the receiving party (\"Recipient\"), whether the Recipient becomes aware of it before or after the date of this Agreement:",
+   "\uf0b7 all information treated by the Discloser as confidential; and",
+   "\uf0b7 disclosed by the Discloser to the Recipient or of which the Recipient becomes aware, including but not limited to, the information specified in Schedule 1;"
+  ],
+  "quotes": [],
+  "ctx_chars": 5578,
+  "raw": "{\n  \"label\": \"NotMentioned\",\n  \"evidence\": []\n}"
+ },
+ {
+  "case_id": "test::387::nda-7",
+  "gold": "Contradiction",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [
+   19,
+   20,
+   21
+  ],
+  "pred_idx": [
+   19,
+   20,
+   21,
+   28,
+   29,
+   30,
+   31
+  ],
+  "gold_text": [
+   "1.1. For a period of three (3) years from the date of entering in to this Agreement, not to disclosure any Information or Item, in any manner whatsoever, directly or indirectly, whether in whole or in part, without the prior written consent of Disclosing Party, to any individual, firm or entity, excepting solely an individual who ",
+   "(a) is an officer, director or employee of Disclosing Party or of the Recipient and ",
+   "(b) has a clear need to know for purposes directly related to the Matter."
+  ],
+  "quotes": [
+   "1.1. For a period of three (3) years from the date of entering in to this Agreement, not to disclosure any Information or Item, in any manner whatsoever, directly or indirectly, whether in whole or in part, without the prior written consent of Disclosing Party, to any individual, firm or entity, excepting solely an individual who (a) is an officer, director or employee of Disclosing Party or of the Recipient and (b) has a clear need to know for purposes directly related to the Matter.",
+   "3. Non-Disclosure Agreements from Third Parties. If Disclosing Party gives its written consent to Recipient to disclose Information or Items to a third party, Recipient shall require the third party to execute a non-disclosure agreement in form, and substance satisfactory to Disclosing Party. Recipient shall promptly furnish Disclosing Party with a copy of all such non-disclosure agreements."
+  ],
+  "ctx_chars": 8580,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"1.1. For a period of three (3) years from the date of entering in to this Agreement, not to disclosure any Information or Item, in any manner whatsoever, directly or indirectly, whether in whole or in part, without the prior written consent of Disclosing Party, to any individual, firm or entity, excepting solely an individual who (a) is an officer, director or employee of Disclosing Party or of the Recipient and (b) has a clear need to know for purposes directly related to the Matter.\",\n    \"3. Non-Disclosure Agreements from Third Parties. If Disclosing Party gives its written consent to Recipient to disclose Information or Items to a third party, Recipient shall require the third party to execute a non-disclosure agreement in form, and substance satisfactory to Disclosing Party. Recipient shall promptly furnish Disclosing Party with a copy of all such non-disclosure agreements.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::413::nda-7",
+  "gold": "Contradiction",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+  "n_quotes": 1,
+  "n_nonsource": 0,
+  "gold_idx": [
+   11
+  ],
+  "pred_idx": [
+   11
+  ],
+  "gold_text": [
+   "The receiving party shall not disclose Confidential Information to any third party without the prior written approval of the disclosing party. "
+  ],
+  "quotes": [
+   "The receiving party shall not disclose Confidential Information to any third party without the prior written approval of the disclosing party."
+  ],
+  "ctx_chars": 6087,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"The receiving party shall not disclose Confidential Information to any third party without the prior written approval of the disclosing party.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::497::nda-17",
+  "gold": "Contradiction",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [
+   18,
+   19
+  ],
+  "pred_idx": [
+   18,
+   19,
+   21
+  ],
+  "gold_text": [
+   "a. The receiving party shall protect all of the disclosing party's Proprietary Information as confidential information and, except with the prior written consent of the disclosing party or as otherwise specifically provided herein, shall. ",
+   "not disclose, copy or distribute such Proprietary Information to any other individual, corporation or entity for a period of three (3) years from the date of disclosure."
+  ],
+  "quotes": [
+   "The receiving party shall protect all of the disclosing party's Proprietary Information as confidential information and, except with the prior written consent of the disclosing party or as otherwise specifically provided herein, shall. not disclose, copy or distribute such Proprietary Information to any other individual, corporation or entity for a period of three (3) years from the date of disclosure.",
+   "The receiving party shall not disclose all or any part of the disclosing party's Proprietary Information to any affiliates, agents, officers, directors, employees or representatives (collectively, \"Representatives\") of the receiving party except on a need-to-know basis."
+  ],
+  "ctx_chars": 7483,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"The receiving party shall protect all of the disclosing party's Proprietary Information as confidential information and, except with the prior written consent of the disclosing party or as otherwise specifically provided herein, shall. not disclose, copy or distribute such Proprietary Information to any other individual, corporation or entity for a period of three (3) years from the date of disclosure.\",\n    \"The receiving party shall not disclose all or any part of the disclosing party's Proprietary Information to any affiliates, agents, officers, directors, employees or representatives (collectively, \\\"Representatives\\\") of the receiving party except on a need-to-know basis.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::523::nda-19",
+  "gold": "Contradiction",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Some obligations of Agreement may survive termination of Agreement.",
+  "n_quotes": 5,
+  "n_nonsource": 0,
+  "gold_idx": [
+   38,
+   44
+  ],
+  "pred_idx": [
+   23,
+   38,
+   44,
+   54,
+   56,
+   57,
+   58,
+   59,
+   60,
+   61,
+   62,
+   63,
+   64
+  ],
+  "gold_text": [
+   "The terms of this section \u201cUse of Evaluation Materials\u201d shall remain in effect for 2 years from the effective date of this agreement.",
+   "The terms of this section \u201cNon-Disclosure\u201d shall remain in effect for 2 years from the effective date of this agreement."
+  ],
+  "quotes": [
+   "The terms of this section \u201cConfidentiality of Evaluation Materials\u201d shall remain in effect for 2 years from the effective date of this agreement.",
+   "The terms of this section \u201cUse of Evaluation Materials\u201d shall remain in effect for 2 years from the effective date of this agreement.",
+   "The terms of this section \u201cNon-Disclosure\u201d shall remain in effect for 2 years from the effective date of this agreement.",
+   "Without the Company\u2019s prior written consent, neither you nor any of your affiliates will for a period of two years from the date of this agreement directly or indirectly solicit for employment or employ any of the officers or employees of the Company (or any person whose activities are dedicated to the Company).",
+   "You agree that until two years from the date of this agreement, without the prior approval of the Board of Directors of the Company, neither you nor any of your representatives will (i) acquire or make any proposal to acquire any securities or property of the Company, (ii) propose to enter into any merger or business combination involving the Company or purchase a material portion of the assets of the Company, (iii) make or participate in any solicitation of proxies to vote, or seek to advise or influence any person with respect to the voting of any securities of the Company, (iv) form, join or participate in a \u201cgroup\u201d (within the meaning of Section 13(d)(3) of the Securities Exchange Act of 1934) with respect to any voting securities of the Company, (v) otherwise act or seek to control or influence the management, Board of Directors or policies of the Company, (vi) disclose any intention, plan or arrangement inconsistent with the foregoing or (vii) take any action which might require the Company to make a public announcement regarding the possibility of a business combination or merger."
+  ],
+  "ctx_chars": 16383,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"The terms of this section \u201cConfidentiality of Evaluation Materials\u201d shall remain in effect for 2 years from the effective date of this agreement.\",\n    \"The terms of this section \u201cUse of Evaluation Materials\u201d shall remain in effect for 2 years from the effective date of this agreement.\",\n    \"The terms of this section \u201cNon-Disclosure\u201d shall remain in effect for 2 years from the effective date of this agreement.\",\n    \"Without the Company\u2019s prior written consent, neither you nor any of your affiliates will for a period of two years from the date of this agreement directly or indirectly solicit for employment or employ any of the officers or employees of the Company (or any person whose activities are dedicated to the Company).\",\n    \"You agree that until two years from the date of this agreement, without the prior approval of the Board of Directors of the Company, neither you nor any of your representatives will (i) acquire or make any proposal to acquire any securities or property of the Company, (ii) propose to enter into any merger or business combination involving the Company or purchase a material portion of the assets of the Company, (iii) make or participate in any solicitation of proxies to vote, or seek to advise or influence any person with respect to the voting of any securities of the Company, (iv) form, join or participate in a \u201cgroup\u201d (within the meaning of Section 13(d)(3) of the Securities Exchange Act of 1934) wi"
+ },
+ {
+  "case_id": "test::600::nda-2",
+  "gold": "Contradiction",
+  "pred": "Contradiction",
+  "label_ok": true,
+  "parse": "strict",
+  "hypothesis": "Confidential Information shall only include technical information.",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [
+   1
+  ],
+  "pred_idx": [
+   12,
+   15
+  ],
+  "gold_text": [
+   "1. After execution of this agreement and upon receipt of List, Raphael Industries Ltd. (\"Raphael\") will grand ListFusion limited rights (as stated below) to use the furnished names, addresses, telephone numbers and associated information (collectively known as the \"List\"). "
+  ],
+  "quotes": [
+   "Other than the information set out in the data card and agreed to by the parties, ListFusion, its employees, officers and trustees agree not to divulge or disseminate to any person or entity any confidential information about Raphael, including but not limited to personal and financial information, that may arise out of the discharge of their responsibilities as set out herein.",
+   "Any and all such information shall be kept confidential and shall not in any manner be revealed to anyone except as expressly provided herein."
+  ],
+  "ctx_chars": 5048,
+  "raw": "{\n  \"label\": \"Contradiction\",\n  \"evidence\": [\n    \"Other than the information set out in the data card and agreed to by the parties, ListFusion, its employees, officers and trustees agree not to divulge or disseminate to any person or entity any confidential information about Raphael, including but not limited to personal and financial information, that may arise out of the discharge of their responsibilities as set out herein.\",\n    \"Any and all such information shall be kept confidential and shall not in any manner be revealed to anyone except as expressly provided herein.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::565::nda-20",
+  "gold": "Contradiction",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+  "n_quotes": 1,
+  "n_nonsource": 0,
+  "gold_idx": [
+   97,
+   98,
+   99
+  ],
+  "pred_idx": [
+   69,
+   70
+  ],
+  "gold_text": [
+   "At any time after termination of discussions by either Party with respect to the Transaction, upon the request of the Furnishing Party, the Receiving Party shall promptly (and in no event later than five business days after such request) ",
+   "(a) redeliver or cause to be redelivered to the Furnishing Party all copies of all Primary Evaluation Material in the possession or control of the Receiving Party or its Representatives which is in a visual or written format and erase or destroy all copies of all such Primary Evaluation Material which is stored in electronic format, and ",
+   "(b) destroy or cause to be destroyed all Derivative Evaluation Material in the possession or control of the Receiving Party or any of its Representatives. "
+  ],
+  "quotes": [
+   "(g) General. Notwithstanding any other provision of this Agreement, neither Party will be restricted from using the information contained in the Evaluation Material that is retained in the minds of Representatives who have had access to the other Party's Evaluation Material, unless such use shall infringe on any of such Party's patent rights, trademark rights or copyright rights."
+  ],
+  "ctx_chars": 20047,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"(g) General. Notwithstanding any other provision of this Agreement, neither Party will be restricted from using the information contained in the Evaluation Material that is retained in the minds of Representatives who have had access to the other Party's Evaluation Material, unless such use shall infringe on any of such Party's patent rights, trademark rights or copyright rights.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::67::nda-16",
+  "gold": "Entailment",
+  "pred": "NotMentioned",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+  "n_quotes": 0,
+  "n_nonsource": 0,
+  "gold_idx": [
+   26
+  ],
+  "pred_idx": [],
+  "gold_text": [
+   "When the Receiving Party has finished reviewing the information provided by the Disclosing Party and has made a decision as to whether or not to work with the Disclosing Party, Receiving Party shall return all information to the Disclosing Party without retaining any copies."
+  ],
+  "quotes": [],
+  "ctx_chars": 6425,
+  "raw": "{\"label\":\"NotMentioned\",\"evidence\":[]}"
+ },
+ {
+  "case_id": "test::77::nda-12",
+  "gold": "Entailment",
+  "pred": "NotMentioned",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may independently develop information similar to Confidential Information.",
+  "n_quotes": 0,
+  "n_nonsource": 0,
+  "gold_idx": [
+   23,
+   24
+  ],
+  "pred_idx": [],
+  "gold_text": [
+   "6. The confidentiality agreement does not apply to statements of the company Helukabel in its catalogues, datasheets and on the homepage and also not to information which",
+   "a) the receiving party was already aware of or which was developed by the disclosing party itself independent of the disclosure,"
+  ],
+  "quotes": [],
+  "ctx_chars": 3244,
+  "raw": "{\n  \"label\": \"NotMentioned\",\n  \"evidence\": []\n}"
+ },
+ {
+  "case_id": "test::190::nda-15",
+  "gold": "Entailment",
+  "pred": "Contradiction",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [
+   32
+  ],
+  "pred_idx": [
+   6,
+   32
+  ],
+  "gold_text": [
+   "Nothing contained in this Agreement shall be construed as granting or conferring any rights by licence or otherwise in the Information except as provided herein."
+  ],
+  "quotes": [
+   "Each party may use the information received from the other party hereunder and may provide such information to its parent corporation or any other subsidiaries thereof and their respective employees as applicable for their use only in connection with the Business Purpose.",
+   "Nothing contained in this Agreement shall be construed as granting or conferring any rights by licence or otherwise in the Information except as provided herein."
+  ],
+  "ctx_chars": 7685,
+  "raw": "{\n  \"label\": \"Contradiction\",\n  \"evidence\": [\n    \"Each party may use the information received from the other party hereunder and may provide such information to its parent corporation or any other subsidiaries thereof and their respective employees as applicable for their use only in connection with the Business Purpose.\",\n    \"Nothing contained in this Agreement shall be construed as granting or conferring any rights by licence or otherwise in the Information except as provided herein.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::539::nda-19",
+  "gold": "Entailment",
+  "pred": "NotMentioned",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Some obligations of Agreement may survive termination of Agreement.",
+  "n_quotes": 0,
+  "n_nonsource": 0,
+  "gold_idx": [
+   73,
+   74,
+   75,
+   76,
+   77,
+   78,
+   171
+  ],
+  "pred_idx": [],
+  "gold_text": [
+   "Notwithstanding the return to the Company or destruction of Confidential Information pursuant to this Section 7, the Receiving Party and its Representatives will continue to be bound by their confidentiality obligations and other obligations under this Agreement for the term hereof. ",
+   "Notwithstanding the foregoing, ",
+   "(a) the Receiving Party\u2019s legal department and/or outside counsel may keep one copy of the Confidential Information (in electronic or paper form) and, with respect to the Receiving Party\u2019s Representatives who are accounting firms, such firms may keep one copy of the Confidential Information, in each case, if required to comply with applicable law or regulation and ",
+   "(b) the Receiving Party and its Representatives may retain Confidential Information to the extent it is \u201cbacked-up\u201d on its or their (as the case may be) electronic information management and communications systems or servers, is not available to an end user and cannot be expunged without considerable effort; provided, that any such information so retained pursuant to clauses ",
+   "(a) and ",
+   "(b) of this Section 7 shall be held in compliance with the terms of this Agreement for a period of eighteen months from the date hereof.",
+   "Except as otherwise specified herein, the obligations of the parties set forth in this Agreement shall terminate and be of no further force and effect eighteen months from the date hereof."
+  ],
+  "quotes": [],
+  "ctx_chars": 23765,
+  "raw": "{\n  \"label\": \"NotMentioned\",\n  \"evidence\": []\n}"
+ },
+ {
+  "case_id": "test::22::nda-20",
+  "gold": "NotMentioned",
+  "pred": "Contradiction",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   33,
+   34
+  ],
+  "gold_text": [],
+  "quotes": [
+   "Either Party shall, upon 30 days written request by the other Party, return to the other party all Confidential Information which the latter has disclosed to the former, together with all copies or reproductions thereof together with a confirmation in writing that the Confidential Information in computerized form has been destroyed.",
+   "Furthermore, at the request of the Disclosing Party the Receiving Party shall immediately cease to use the Confidential Information for any purposes whatsoever."
+  ],
+  "ctx_chars": 7808,
+  "raw": "{\n  \"label\": \"Contradiction\",\n  \"evidence\": [\n    \"Either Party shall, upon 30 days written request by the other Party, return to the other party all Confidential Information which the latter has disclosed to the former, together with all copies or reproductions thereof together with a confirmation in writing that the Confidential Information in computerized form has been destroyed.\",\n    \"Furthermore, at the request of the Disclosing Party the Receiving Party shall immediately cease to use the Confidential Information for any purposes whatsoever.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::40::nda-3",
+  "gold": "NotMentioned",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Confidential Information may include verbally conveyed information.",
+  "n_quotes": 1,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   12,
+   13,
+   14
+  ],
+  "gold_text": [],
+  "quotes": [
+   "\u201cConfidential Information\u201d means any information disclosed to the Contractor by the CAO or the House, including, but not limited to: (a) security practices, operational information, business plans, customer data, customer lists, customer names, designs, documents, drawings, engineering information, hardware configuration information, processes, products, product plans, research, services, specifications, software, source code and trade secrets; and (b) any other information designated (orally or in writing) as \u201cconfidential,\u201d \u201cproprietary\u201d or of such nature that a reasonable person would understand such information to be confidential to the CAO or the House."
+  ],
+  "ctx_chars": 2892,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"\u201cConfidential Information\u201d means any information disclosed to the Contractor by the CAO or the House, including, but not limited to: (a) security practices, operational information, business plans, customer data, customer lists, customer names, designs, documents, drawings, engineering information, hardware configuration information, processes, products, product plans, research, services, specifications, software, source code and trade secrets; and (b) any other information designated (orally or in writing) as \u201cconfidential,\u201d \u201cproprietary\u201d or of such nature that a reasonable person would understand such information to be confidential to the CAO or the House.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::11::nda-17",
+  "gold": "NotMentioned",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+  "n_quotes": 4,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   13,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   27,
+   48
+  ],
+  "gold_text": [],
+  "quotes": [
+   "The term \u201cConfidential Information\u201d means any and all tangible and intangible information disclosed to Receiver in oral, written, graphic, recorded, photographic, any machine-readable or in any other medium or form relating to the intellectual property, management, operations, products, inventions, suppliers, customers, financials of VIDAR or any present or contemplated project, contract or relationship between VIDAR and Receiver, including without limitation, any and all plans, Intellectual Property (defined below), know-how, computer programs, software (source and object code), algorithms, computer processing systems, techniques, methodologies, formulae, compilations of information, designs, drawings, schematics, analyses, evaluations, formulations, ingredients, samples, processes, machines, prototypes, mock-ups, product performance data, proposals, job notes, reports, records, specifications, manuals, supplier and customer lists and information, licenses, the prices it obtains or has obtained for the licensing of its software products and services, purchase and sales records, marketing information or any other information concerning the business and goodwill of VIDAR and any information which is identified as being of a confidential or proprietary nature or should be considered confidential under the circumstances.",
+   "Receiver shall: (i) hold the Confidential Information in strict confidence; (ii) use the Confidential Information only for the purposes as expressly directed by VIDAR; and (iii) provide such information only to those of its personnel who: (y) have a need to know the same to further VIDAR\u2019s interests; and (z) become a party to and bound by a confidentiality agreement at least as restrictive as this Agreement prior to receiving any such information.",
+   "(c) is disclosed with the prior written approval of VIDAR;",
+   "Upon the request of VIDAR or the termination or expiration of this Confidential Agreement, Receiver shall promptly return to VIDAR all copies of the Confidential Information and obtained by Receiver."
+  ],
+  "ctx_chars": 12207,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"The term \u201cConfidential Information\u201d means any and all tangible and intangible information disclosed to Receiver in oral, written, graphic, recorded, photographic, any machine-readable or in any other medium or form relating to the intellectual property, management, operations, products, inventions, suppliers, customers, financials of VIDAR or any present or contemplated project, contract or relationship between VIDAR and Receiver, including without limitation, any and all plans, Intellectual Property (defined below), know-how, computer programs, software (source and object code), algorithms, computer processing systems, techniques, methodologies, formulae, compilations of information, designs, drawings, schematics, analyses, evaluations, formulations, ingredients, samples, processes, machines, prototypes, mock-ups, product performance data, proposals, job notes, reports, records, specifications, manuals, supplier and customer lists and information, licenses, the prices it obtains or has obtained for the licensing of its software products and services, purchase and sales records, marketing information or any other information concerning the business and goodwill of VIDAR and any information which is identified as being of a confidential or proprietary nature or should be considered confidential under the circumstances.\",\n    \"Receiver shall: (i) hold the Confidential Information in strict confidence; (ii) use the Confidential Inf"
+ },
+ {
+  "case_id": "test::80::nda-15",
+  "gold": "NotMentioned",
+  "pred": "Contradiction",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   3,
+   4,
+   5
+  ],
+  "gold_text": [],
+  "quotes": [
+   "This Confidentiality and Non-Disclosure Agreement is entered into the date and year last appearing below, by and between ___________________ (hereinafter \"Authorized Person\") and KDOL for the purpose of allowing Authorized Person access to confidential information for the purpose of insert a description of the project_.",
+   "Access to any confidential information is specifically conditioned upon compliance with the following:"
+  ],
+  "ctx_chars": 9689,
+  "raw": "{\n  \"label\": \"Contradiction\",\n  \"evidence\": [\n    \"This Confidentiality and Non-Disclosure Agreement is entered into the date and year last appearing below, by and between ___________________ (hereinafter \\\"Authorized Person\\\") and KDOL for the purpose of allowing Authorized Person access to confidential information for the purpose of insert a description of the project_.\",\n    \"Access to any confidential information is specifically conditioned upon compliance with the following:\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::138::nda-16",
+  "gold": "NotMentioned",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+  "n_quotes": 1,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   25
+  ],
+  "gold_text": [],
+  "quotes": [
+   "Immediately upon the written request by the Disclosing Party at any time, the Receiving Party will return to the Disclosing Party all Proprietary Information and all documents or media containing any such Proprietary Information and any and all copies or extracts thereof, save that where such Proprietary Information is a form incapable of return or has been copied or transcribed into another document, it shall be destroyed or erased, as appropriate."
+  ],
+  "ctx_chars": 6143,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"Immediately upon the written request by the Disclosing Party at any time, the Receiving Party will return to the Disclosing Party all Proprietary Information and all documents or media containing any such Proprietary Information and any and all copies or extracts thereof, save that where such Proprietary Information is a form incapable of return or has been copied or transcribed into another document, it shall be destroyed or erased, as appropriate.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::181::nda-1",
+  "gold": "NotMentioned",
+  "pred": "Contradiction",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   14,
+   49
+  ],
+  "gold_text": [],
+  "quotes": [
+   "\u201cConfidential Information\u201d shall mean all information in whatever form, whether imparted orally or in writing or by other medium including all copies of the same which one party hereto discloses to the other pursuant to the Purpose.",
+   "9.4. This Agreement shall apply without limit of time to all Confidential Information disclosed in connection with the Purpose."
+  ],
+  "ctx_chars": 8248,
+  "raw": "{\n  \"label\": \"Contradiction\",\n  \"evidence\": [\n    \"\u201cConfidential Information\u201d shall mean all information in whatever form, whether imparted orally or in writing or by other medium including all copies of the same which one party hereto discloses to the other pursuant to the Purpose.\",\n    \"9.4. This Agreement shall apply without limit of time to all Confidential Information disclosed in connection with the Purpose.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::218::nda-20",
+  "gold": "NotMentioned",
+  "pred": "Contradiction",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   29,
+   30
+  ],
+  "gold_text": [],
+  "quotes": [
+   "All materials, including Confidential Information disclosed by Party One and Party Two under this Agreement shall remain the property of the disclosing party.",
+   "Each party shall, upon the completion of the purpose of this Agreement or request by the other party, return all materials received or obtained under this Agreement, including Confidential Information, and all copies and all documents containing any portion of any Confidential Information."
+  ],
+  "ctx_chars": 9845,
+  "raw": "{\n  \"label\": \"Contradiction\",\n  \"evidence\": [\n    \"All materials, including Confidential Information disclosed by Party One and Party Two under this Agreement shall remain the property of the disclosing party.\",\n    \"Each party shall, upon the completion of the purpose of this Agreement or request by the other party, return all materials received or obtained under this Agreement, including Confidential Information, and all copies and all documents containing any portion of any Confidential Information.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::225::nda-10",
+  "gold": "NotMentioned",
+  "pred": "Contradiction",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+  "n_quotes": 1,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   14,
+   15
+  ],
+  "gold_text": [],
+  "quotes": [
+   "And undertakes not to disclose any of such information to any third party without the prior written permission of the other party except as required by any applicable law or government regulation, and provided that each party may\n    disclose the agreement on a confidential basis to its public accountants, attorneys and financial advisors and/or funders."
+  ],
+  "ctx_chars": 3456,
+  "raw": "{\n  \"label\": \"Contradiction\",\n  \"evidence\": [\n    \"And undertakes not to disclose any of such information to any third party without the prior written permission of the other party except as required by any applicable law or government regulation, and provided that each party may\\n    disclose the agreement on a confidential basis to its public accountants, attorneys and financial advisors and/or funders.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::157::nda-7",
+  "gold": "NotMentioned",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   13,
+   15
+  ],
+  "gold_text": [],
+  "quotes": [
+   "The Receiving Party shall not, without the prior written approval of the Disclosing Party in each instance or unless otherwise expressly permitted in this Agreement, use for its own benefit, publish or otherwise disclose to others, or permit the use by others for their benefit or to the detriment of the Disclosing Party, any of the Confidential Information.",
+   "The Receiving Party may disclose Confidential Information if required by a judicial or governmental request, requirement or order; provided that the Receiving Party will take reasonable steps to give the Disclosing Party sufficient prior notice of such request, requirement or order for the Disclosing Party to contest, limit or protect such disclosure."
+  ],
+  "ctx_chars": 5810,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"The Receiving Party shall not, without the prior written approval of the Disclosing Party in each instance or unless otherwise expressly permitted in this Agreement, use for its own benefit, publish or otherwise disclose to others, or permit the use by others for their benefit or to the detriment of the Disclosing Party, any of the Confidential Information.\",\n    \"The Receiving Party may disclose Confidential Information if required by a judicial or governmental request, requirement or order; provided that the Receiving Party will take reasonable steps to give the Disclosing Party sufficient prior notice of such request, requirement or order for the Disclosing Party to contest, limit or protect such disclosure.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::289::nda-2",
+  "gold": "NotMentioned",
+  "pred": "Contradiction",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Confidential Information shall only include technical information.",
+  "n_quotes": 2,
+  "n_nonsource": 1,
+  "gold_idx": [],
+  "pred_idx": [
+   23
+  ],
+  "gold_text": [],
+  "quotes": [
+   "The parties agree that in order for them to explore opportunities and examine how they might work together to their mutual benefit, it will be necessary and desirable that they disclose con\ufb01dential business information.",
+   "5. Neither party may use the other's Con\ufb01dential Information for any purpose but the Business Purpose stated above."
+  ],
+  "ctx_chars": 4417,
+  "raw": "{\n  \"label\": \"Contradiction\",\n  \"evidence\": [\n    \"The parties agree that in order for them to explore opportunities and examine how they might work together to their mutual benefit, it will be necessary and desirable that they disclose con\ufb01dential business information.\",\n    \"5. Neither party may use the other's Con\ufb01dential Information for any purpose but the Business Purpose stated above.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::387::nda-17",
+  "gold": "NotMentioned",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   47,
+   48
+  ],
+  "gold_text": [],
+  "quotes": [
+   "Recipient shall not alter or delete any markings on any Information or Item restricting its disclosure, use or reproduction or indicating its proprietary or private status.",
+   "Recipient shall include all such markings in all copies of any Information which it makes."
+  ],
+  "ctx_chars": 8580,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"Recipient shall not alter or delete any markings on any Information or Item restricting its disclosure, use or reproduction or indicating its proprietary or private status.\",\n    \"Recipient shall include all such markings in all copies of any Information which it makes.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::395::nda-15",
+  "gold": "NotMentioned",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   74,
+   75,
+   76,
+   83,
+   84,
+   85,
+   86,
+   87
+  ],
+  "gold_text": [],
+  "quotes": [
+   "Seller covenants and agrees that, unless otherwise required by law, from and after the Closing:\n(a) Seller shall cooperate with CompuCom at CompuCom's expense to protect and safeguard all of CompuCom's Confidential Information; and\n(b) Seller shall not, directly or indirectly, use, sell, license, publish, disclose, or otherwise transfer or make available to others any of CompuCom's Confidential Information.",
+   "CompuCom covenants and agrees that unless otherwise required by law, from and after the Closing:\n(a) CompuCom shall cooperate with Seller at Seller's expense to protect and safeguard all of Seller's Confidential Information;\n(b) CompuCom shall not, directly or indirectly, use, sell, license, publish, disclose or otherwise transfer or make available to others any of Seller's Confidential Information; and\n(c) CompuCom shall not solicit or knowingly utilize any of Seller's Confidential Information regarding Seller's Services business from any former employee of Seller."
+  ],
+  "ctx_chars": 18371,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"Seller covenants and agrees that, unless otherwise required by law, from and after the Closing:\\n(a) Seller shall cooperate with CompuCom at CompuCom's expense to protect and safeguard all of CompuCom's Confidential Information; and\\n(b) Seller shall not, directly or indirectly, use, sell, license, publish, disclose, or otherwise transfer or make available to others any of CompuCom's Confidential Information.\",\n    \"CompuCom covenants and agrees that unless otherwise required by law, from and after the Closing:\\n(a) CompuCom shall cooperate with Seller at Seller's expense to protect and safeguard all of Seller's Confidential Information;\\n(b) CompuCom shall not, directly or indirectly, use, sell, license, publish, disclose or otherwise transfer or make available to others any of Seller's Confidential Information; and\\n(c) CompuCom shall not solicit or knowingly utilize any of Seller's Confidential Information regarding Seller's Services business from any former employee of Seller.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::585::nda-19",
+  "gold": "NotMentioned",
+  "pred": "Contradiction",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Some obligations of Agreement may survive termination of Agreement.",
+  "n_quotes": 1,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   36
+  ],
+  "gold_text": [],
+  "quotes": [
+   "Unless sooner terminated by mutual written Agreement of the Parties hereto, this Agreement and the obligations hereunder shall terminate one (1) year from the date hereof."
+  ],
+  "ctx_chars": 10211,
+  "raw": "{\n  \"label\": \"Contradiction\",\n  \"evidence\": [\n    \"Unless sooner terminated by mutual written Agreement of the Parties hereto, this Agreement and the obligations hereunder shall terminate one (1) year from the date hereof.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::521::nda-3",
+  "gold": "NotMentioned",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Confidential Information may include verbally conveyed information.",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   9,
+   61
+  ],
+  "gold_text": [],
+  "quotes": [
+   "(b) \u201cConfidential Information\u201d means all information relating, directly or indirectly, to the Disclosing Party or the business, products, markets, research and development, condition (financial or other), operations, assets, liabilities, results of operations, cash flows or prospects of the Disclosing Party, the business of any customer or partner of the Disclosing Party, any information about or concerning any third party (which information was provided to the Disclosing Party subject to an applicable confidentiality obligation to such third party) and any product offerings, content partners, product pricing, product availability, technical drawings, algorithms, processes, ideas, techniques, formulas, data, schematics, trade secrets, know-how, improvements, inventions (whether patentable or not), marketing plans, forecasts and strategies of the Disclosing Party (in each case, whether prepared by the Disclosing Party, its Representatives or otherwise) which is delivered, disclosed or furnished by or on behalf of the Disclosing Party to the Receiving Party or to its Representatives, before, on or after the date of this Agreement, regardless of the manner in which it is delivered, disclosed or furnished, and will also be deemed to include all notes, analyses, compilations, studies, forecasts, interpretations or other documents prepared by the Receiving Party or its Representatives that contain, reflect or are based upon, in whole or in part, the information delivered, disclosed or furnished to the Receiving Party or its Representatives pursuant to this Agreement.",
+   "In the event that the Receiving Party or any of the Receiving Party\u2019s Representatives are requested or required (by oral questions, interrogatories, requests for information or documents in legal proceedings, subpoena, civil investigative demand or other similar process) to disclose any of the Confidential Information or Discussion Information, the Receiving Party will provide the Disclosing Party with prompt written notice of any such request or requirement so that the Disclosing Party may in its sole discretion seek a protective order or other appropriate remedy and/or waive compliance with the provisions of this Agreement."
+  ],
+  "ctx_chars": 40554,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"(b) \u201cConfidential Information\u201d means all information relating, directly or indirectly, to the Disclosing Party or the business, products, markets, research and development, condition (financial or other), operations, assets, liabilities, results of operations, cash flows or prospects of the Disclosing Party, the business of any customer or partner of the Disclosing Party, any information about or concerning any third party (which information was provided to the Disclosing Party subject to an applicable confidentiality obligation to such third party) and any product offerings, content partners, product pricing, product availability, technical drawings, algorithms, processes, ideas, techniques, formulas, data, schematics, trade secrets, know-how, improvements, inventions (whether patentable or not), marketing plans, forecasts and strategies of the Disclosing Party (in each case, whether prepared by the Disclosing Party, its Representatives or otherwise) which is delivered, disclosed or furnished by or on behalf of the Disclosing Party to the Receiving Party or to its Representatives, before, on or after the date of this Agreement, regardless of the manner in which it is delivered, disclosed or furnished, and will also be deemed to include all notes, analyses, compilations, studies, forecasts, interpretations or other documents prepared by the Receiving Party or its Representatives that contain, reflect or are based upon, in whole "
+ },
+ {
+  "case_id": "test::565::nda-2",
+  "gold": "NotMentioned",
+  "pred": "Contradiction",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Confidential Information shall only include technical information.",
+  "n_quotes": 2,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   9,
+   17
+  ],
+  "gold_text": [],
+  "quotes": [
+   "In the course of such discussions, each Party expects to make available to the other Party and its Representatives (as defined herein) Evaluation Material (as defined herein) concerning the businesses, financial condition, operations, assets, properties, liabilities, and prospects of such Party.",
+   "(iv) the term \"Evaluation Material\" means all proprietary and confidential information concerning the Furnishing Party or any of its subsidiaries or affiliates, whether in verbal, visual, written, electronic or other form, which is made available by the Furnishing Party or any of its Representatives to the Receiving Party or any of its Representatives (\"Primary Evaluation Material\"), together, in each case, with all notes, memoranda, summaries, analyses, studies, compilations and other writings relating thereto or based in whole or in part thereon prepared by the Receiving Party or any of its Representatives (\"Derivative Evaluation Material\")."
+  ],
+  "ctx_chars": 20047,
+  "raw": "{\n  \"label\": \"Contradiction\",\n  \"evidence\": [\n    \"In the course of such discussions, each Party expects to make available to the other Party and its Representatives (as defined herein) Evaluation Material (as defined herein) concerning the businesses, financial condition, operations, assets, properties, liabilities, and prospects of such Party.\",\n    \"(iv) the term \\\"Evaluation Material\\\" means all proprietary and confidential information concerning the Furnishing Party or any of its subsidiaries or affiliates, whether in verbal, visual, written, electronic or other form, which is made available by the Furnishing Party or any of its Representatives to the Receiving Party or any of its Representatives (\\\"Primary Evaluation Material\\\"), together, in each case, with all notes, memoranda, summaries, analyses, studies, compilations and other writings relating thereto or based in whole or in part thereon prepared by the Receiving Party or any of its Representatives (\\\"Derivative Evaluation Material\\\").\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::585::nda-17",
+  "gold": "NotMentioned",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+  "n_quotes": 3,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   13,
+   15,
+   51
+  ],
+  "gold_text": [],
+  "quotes": [
+   "The Receiving Party shall hold confidential and not disclose to any Person, without the prior written consent of the Disclosing Party, all Confidential Information and any information about the Proposed Transaction, or the terms or conditions or any other facts relating thereto, including, without limitation, the fact that discussions are taking place with respect thereto or the status thereof, or the fact that Confidential Information has been made available to the Receiving Party or its Representatives; provided, however, that the Receiving Party may disclose such Confidential Information to its Representatives who are actively and directly participating in its evaluation of the Proposed Transaction or who otherwise need to know the Confidential Information for the purpose of evaluating the Proposed Transaction;",
+   "The Receiving Party shall return or destroy all Confidential Information (including all copies thereof) within thirty (30) days of receipt of a written request.",
+   "In addition, the Receiving Party shall refrain from removing, overprinting or defacing any notices of copyright, trademark, logo or other proprietary identifications or notices of confidentiality, from any originals or copies of the Disclosing Party\u2019s Confidential Information."
+  ],
+  "ctx_chars": 10211,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"The Receiving Party shall hold confidential and not disclose to any Person, without the prior written consent of the Disclosing Party, all Confidential Information and any information about the Proposed Transaction, or the terms or conditions or any other facts relating thereto, including, without limitation, the fact that discussions are taking place with respect thereto or the status thereof, or the fact that Confidential Information has been made available to the Receiving Party or its Representatives; provided, however, that the Receiving Party may disclose such Confidential Information to its Representatives who are actively and directly participating in its evaluation of the Proposed Transaction or who otherwise need to know the Confidential Information for the purpose of evaluating the Proposed Transaction;\",\n    \"The Receiving Party shall return or destroy all Confidential Information (including all copies thereof) within thirty (30) days of receipt of a written request.\",\n    \"In addition, the Receiving Party shall refrain from removing, overprinting or defacing any notices of copyright, trademark, logo or other proprietary identifications or notices of confidentiality, from any originals or copies of the Disclosing Party\u2019s Confidential Information.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::611::nda-10",
+  "gold": "NotMentioned",
+  "pred": "Contradiction",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+  "n_quotes": 1,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   55
+  ],
+  "gold_text": [],
+  "quotes": [
+   "CEDC understands and acknowledges that the Recipient and an affiliate of the Recipient are currently reporting persons with respect to CEDC\u2019s common stock on a Schedule 13D under the provisions of \u00a7\u00a7 240.13d-1(a) and 13d-2(a) of the United States Securities Exchange Act of 1934, among others, and that accordingly the Recipient and its affiliate will have ongoing disclosure obligations thereunder, which shall not be restricted or limited by this Agreement, including that this Agreement shall be disclosed and publicly filed as an amendment to such Schedule 13D."
+  ],
+  "ctx_chars": 22377,
+  "raw": "{\n  \"label\": \"Contradiction\",\n  \"evidence\": [\n    \"CEDC understands and acknowledges that the Recipient and an affiliate of the Recipient are currently reporting persons with respect to CEDC\u2019s common stock on a Schedule 13D under the provisions of \u00a7\u00a7 240.13d-1(a) and 13d-2(a) of the United States Securities Exchange Act of 1934, among others, and that accordingly the Recipient and its affiliate will have ongoing disclosure obligations thereunder, which shall not be restricted or limited by this Agreement, including that this Agreement shall be disclosed and publicly filed as an amendment to such Schedule 13D.\"\n  ]\n}"
+ },
+ {
+  "case_id": "test::600::nda-5",
+  "gold": "NotMentioned",
+  "pred": "Entailment",
+  "label_ok": false,
+  "parse": "strict",
+  "hypothesis": "Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
+  "n_quotes": 4,
+  "n_nonsource": 0,
+  "gold_idx": [],
+  "pred_idx": [
+   3,
+   6,
+   7,
+   12
+  ],
+  "gold_text": [],
+  "quotes": [
+   "ListFusion agrees that this Agreement grants only limited rights to use the List for the sole purpose of loading the List into ListFusion's proprietary database system.",
+   "The List will be stored exclusively on ListFusion's secure servers.",
+   "ListFusion will not use any 3rd party agents, vendors, or other providers to process the List without the written authorization by Raphael.",
+   "Other than the information set out in the data card and agreed to by the parties, ListFusion, its employees, officers and trustees agree not to divulge or disseminate to any person or entity any confidential information about Raphael, including but not limited to personal and financial information, that may arise out of the discharge of their responsibilities as set out herein."
+  ],
+  "ctx_chars": 5048,
+  "raw": "{\n  \"label\": \"Entailment\",\n  \"evidence\": [\n    \"ListFusion agrees that this Agreement grants only limited rights to use the List for the sole purpose of loading the List into ListFusion's proprietary database system.\",\n    \"The List will be stored exclusively on ListFusion's secure servers.\",\n    \"ListFusion will not use any 3rd party agents, vendors, or other providers to process the List without the written authorization by Raphael.\",\n    \"Other than the information set out in the data card and agreed to by the parties, ListFusion, its employees, officers and trustees agree not to divulge or disseminate to any person or entity any confidential information about Raphael, including but not limited to personal and financial information, that may arise out of the discharge of their responsibilities as set out herein.\"\n  ]\n}"
+ }
+]
