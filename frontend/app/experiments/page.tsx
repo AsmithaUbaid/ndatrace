@@ -44,10 +44,11 @@ export default function ExperimentsPage() {
           Experiment register
         </h1>
         <p className="mt-1.5 max-w-2xl text-sm text-zinc-600 dark:text-zinc-400">
-          Every architecture and ablation run in this project (Rule-based &rarr; Full-context &rarr;
-          RAG &rarr; RAG + selective agent), read live from{" "}
+          Every architecture and ablation run in this project&apos;s history (Rule-based &rarr;
+          Full-context &rarr; RAG &rarr; RAG + selective agent), read live from{" "}
           <code className="rounded bg-zinc-200 px-1 py-0.5 text-xs dark:bg-zinc-800">results/runs/</code>{" "}
-          &mdash; not a static export, this reflects the real, current experiment history.
+          &mdash; not a static export, this reflects the real, current experiment history. These are
+          research runs; the final selected architecture and TEST result are summarized above.
         </p>
       </header>
 
@@ -56,6 +57,12 @@ export default function ExperimentsPage() {
           {error}
         </div>
       )}
+
+      <FinalTestComparison />
+
+      <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+        Full experiment log
+      </p>
 
       <input
         type="text"
@@ -132,5 +139,59 @@ export default function ExperimentsPage() {
         </div>
       )}
     </main>
+  );
+}
+
+// Static, cited summary of the final one-shot held-out TEST evaluation
+// (E17/E17B; docs/experiment_registry.md), all three systems on the
+// identical n=2,091 case population. Deliberately NOT fetched from the
+// live experiment log above - it's a fixed historical result, not
+// something that changes as new experiments run.
+const FINAL_TEST_ROWS: { system: string; accuracy: string; macroF1: string; joint: string; contradiction: string; note: string }[] = [
+  { system: "Rule baseline", accuracy: "59.0%", macroF1: "0.479", joint: "50.1%", contradiction: "16.8%", note: "$0 · deterministic keyword rules" },
+  { system: "Local Qwen (ctx16k)", accuracy: "49.9%", macroF1: "0.431", joint: "39.7%", contradiction: "25.5%", note: "$0 API — local compute not monetized" },
+  { system: "GPT-5-mini + P0 + FULL (final)", accuracy: "77.6%", macroF1: "0.727", joint: "74.6%", contradiction: "75.5%", note: "≈$4.23 total for all 2,091 cases" },
+];
+
+function FinalTestComparison() {
+  return (
+    <div className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h2 className="text-sm font-semibold text-zinc-800 dark:text-zinc-100">
+          Final held-out TEST comparison
+        </h2>
+        <span className="text-xs text-zinc-400 dark:text-zinc-500">n = 2,091 TEST cases, identical population for all three</span>
+      </div>
+      <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+        GPT-5-mini + P0 + FULL NDA context is the final selected architecture. RAG and the selective
+        agent were measured, evaluated, and not selected — see the full log below for that history.
+      </p>
+      <div className="mt-3 overflow-x-auto">
+        <table className="w-full min-w-[560px] text-left text-sm">
+          <thead className="border-b border-zinc-200 text-xs uppercase tracking-wide text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+            <tr>
+              <th className="py-1.5 pr-3 font-medium">System</th>
+              <th className="py-1.5 pr-3 font-medium">Accuracy</th>
+              <th className="py-1.5 pr-3 font-medium">Macro-F1</th>
+              <th className="py-1.5 pr-3 font-medium">Joint</th>
+              <th className="py-1.5 pr-3 font-medium">Contradiction recall</th>
+              <th className="py-1.5 font-medium">Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            {FINAL_TEST_ROWS.map((row) => (
+              <tr key={row.system} className="border-b border-zinc-100 last:border-0 dark:border-zinc-800">
+                <td className="py-1.5 pr-3 font-medium text-zinc-800 dark:text-zinc-100">{row.system}</td>
+                <td className="py-1.5 pr-3 text-zinc-700 dark:text-zinc-300">{row.accuracy}</td>
+                <td className="py-1.5 pr-3 text-zinc-700 dark:text-zinc-300">{row.macroF1}</td>
+                <td className="py-1.5 pr-3 text-zinc-700 dark:text-zinc-300">{row.joint}</td>
+                <td className="py-1.5 pr-3 text-zinc-700 dark:text-zinc-300">{row.contradiction}</td>
+                <td className="py-1.5 text-zinc-500 dark:text-zinc-400">{row.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }

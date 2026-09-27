@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { api, ReviewResponse, ReviewSummary } from "@/lib/api";
 import { RequirementCard } from "@/components/RequirementCard";
 
@@ -37,6 +38,11 @@ export default function HistoryPage() {
           Every review submitted through this app, persisted so a past result can be pulled back up
           without re-running the model.
         </p>
+        <p className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-500">
+          These records are from the earlier experimental RAG + selective-agent pipeline (kept for
+          history) and predate the final architecture (GPT-5-mini + P0 + FULL context) used on the
+          current Review page.
+        </p>
       </header>
 
       {error && (
@@ -50,9 +56,9 @@ export default function HistoryPage() {
       {!loading && reviews.length === 0 && !error && (
         <div className="rounded-lg border border-dashed border-zinc-300 bg-white p-8 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400">
           No reviews yet &mdash; run one from the{" "}
-          <a href="/" className="font-medium text-zinc-800 underline dark:text-zinc-200">
+          <Link href="/" className="font-medium text-zinc-800 underline dark:text-zinc-200">
             Review
-          </a>{" "}
+          </Link>{" "}
           page.
         </div>
       )}

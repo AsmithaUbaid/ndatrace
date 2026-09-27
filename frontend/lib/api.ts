@@ -30,6 +30,26 @@ export type ReviewResponse = {
   model: string;
 };
 
+// E19: the final, frozen product path (GPT-5-mini + P0 + FULL NDA context).
+// This is the primary reviewer workflow's response shape - deliberately
+// smaller than the legacy ReviewResponse: no confidence score (the frozen
+// prompt doesn't request one), no agent fields (no agent in the final
+// architecture).
+export type FinalReviewResponse = {
+  label: "Entailment" | "Contradiction" | "NotMentioned" | null;
+  evidence: string[];
+  explanation: string;
+  source_valid: boolean | null;
+  needs_human_review: boolean;
+  review_reason: string | null;
+  model: string;
+  latency_ms: number | null;
+  input_tokens: number | null;
+  output_tokens: number | null;
+  estimated_cost_usd: number | null;
+  trace_id: string;
+};
+
 export type ReviewSummary = {
   review_id: string;
   doc_id: string;
@@ -87,6 +107,11 @@ async function requestMultipart<T>(path: string, formData: FormData): Promise<T>
 
 export const api = {
   listHypotheses: () => request<Hypothesis[]>("/hypotheses"),
+  reviewFinal: (ndaText: string, requirement: string) =>
+    request<FinalReviewResponse>("/api/review", {
+      method: "POST",
+      body: JSON.stringify({ nda_text: ndaText, requirement }),
+    }),
   createReview: (ndaText: string, hypothesisIds?: string[]) =>
     request<ReviewResponse>("/review", {
       method: "POST",

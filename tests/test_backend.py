@@ -215,6 +215,65 @@ def test_oversized_pdf_returns_413(client):
     assert r.status_code == 413
 
 
+# =========================================================================
+# E19: final product endpoint (POST /api/review) - GPT-5-mini + P0 + FULL
+# =========================================================================
+
+def test_final_review_end_to_end_with_mocked_model(client):
+    """No provider call; mocked exactly like every other backend test here."""
+    ok_json = json.dumps({"label": "Entailment", "evidence": ["shall not reverse engineer"]})
+    with patch("pipeline.model_gateway.OpenAI") as mock_openai:
+        mock_openai.return_value.chat.completions.create = MagicMock(return_value=_fake_completion(ok_json))
+        payload = {
+            "nda_text": "Receiving Party shall not reverse engineer any objects embodying Confidential Information.",
+            "requirement": "Receiving Party shall not reverse engineer Confidential Information.",
+        }
+        r = client.post("/api/review", json=payload)
+        assert r.status_code == 200
+        body = r.json()
+        assert body["label"] == "Entailment"
+        assert body["source_valid"] is True
+        assert body["needs_human_review"] is False
+        assert body["model"] == "openai/gpt-5-mini"
+        assert body["trace_id"]
+        assert "confidence" not in body  # no fabricated confidence score
+        assert body["evidence"] == ["shall not reverse engineer"]
+
+
+def test_final_review_flags_non_source_evidence_for_human_review(client):
+    bad_json = json.dumps({"label": "Contradiction", "evidence": ["this quote is not in the document at all"]})
+    with patch("pipeline.model_gateway.OpenAI") as mock_openai:
+        mock_openai.return_value.chat.completions.create = MagicMock(return_value=_fake_completion(bad_json))
+        payload = {"nda_text": "Recipient shall keep information confidential.", "requirement": "Some requirement."}
+        r = client.post("/api/review", json=payload)
+        assert r.status_code == 200
+        body = r.json()
+        assert body["needs_human_review"] is True
+        assert body["source_valid"] is False
+        assert body["review_reason"]
+
+
+def test_final_review_flags_malformed_model_output(client):
+    with patch("pipeline.model_gateway.OpenAI") as mock_openai:
+        mock_openai.return_value.chat.completions.create = MagicMock(return_value=_fake_completion("not json at all"))
+        payload = {"nda_text": "Some NDA text.", "requirement": "Some requirement."}
+        r = client.post("/api/review", json=payload)
+        assert r.status_code == 200
+        body = r.json()
+        assert body["label"] is None
+        assert body["needs_human_review"] is True
+
+
+def test_final_review_rejects_empty_nda(client):
+    r = client.post("/api/review", json={"nda_text": "", "requirement": "x"})
+    assert r.status_code == 422  # pydantic min_length
+
+
+def test_final_review_rejects_empty_requirement(client):
+    r = client.post("/api/review", json={"nda_text": "x", "requirement": ""})
+    assert r.status_code == 422
+
+
 def test_unsupported_format_rejected(client):
     """K06: a non-PDF file (wrong content-type) must be rejected, not
     silently misread as if it were a PDF."""

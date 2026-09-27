@@ -32,44 +32,65 @@ worth knowing up front: the production path makes **two** classifier calls per r
 one, to keep the routing decision independent of the retrieval it's judging — see the
 routing-independence fix in `docs/decisions.md` for why).
 
-## Current status
+## Current status — final selected architecture (reconstruction-v2)
 
-- **Architecture: frozen** (RAG + selective agent — see the final architecture-freeze decision in
-  `docs/decisions.md`) — but frozen on
-  repeatedly-reused development-sample evidence. An independent architecture-validation run (AV01,
-  340 cases from documents never used in any prior tuning decision) has since been completed — see
-  below.
-- **The official ContractNLI test-set evaluation ran in two distinct configurations, not one run
-  at two sample sizes** (found via a forensic timestamp/git review — see
-  `docs/decisions.md` ADR-010): an interim 500-case run under prompt v2, and the full 2,091-case
-  run under the current v6 default with the decoupled routing fix already in place. **The full
-  2,091-case numbers (81.2% / 78.7% / 77.7% accuracy for full-context / RAG / RAG+agent) are
-  already v6 — they are not stale relative to what currently ships.** The remaining caveat: only
-  one of the seven result files (hosted full-context) has a fully verified evidence-correctness
-  metric; the joint-metric values elsewhere are known-broken pending a re-run of the backfill
-  script. See `docs/evaluation_protocol.md`'s "Current evaluation status" for the exact per-file
-  state.
-- **A real, unresolved finding, now stronger than first stated**: on the full 2,091-case test set
-  (already v6, already using the decoupled routing fix), the selective agent's accuracy (77.7%) is
-  measured *below* plain RAG's (78.7%) — the opposite of the development-sample finding that
-  justified including it, and this time it cannot be attributed to a stale prompt or routing
-  configuration. Not statistically significant (p=0.088), and the architecture freeze is not being
-  retroactively reversed over it, but it is disclosed plainly. **An independent architecture-
-  validation run (AV01) found the same pattern on 340 untouched cases**: full-context and RAG were
-  statistically indistinguishable, and the agent introduced nearly twice as many errors (19) as it
-  corrected (10) — a 6.6% correction precision against a 12.5% harm rate. See the agent
-  include/exclude decision in `docs/decisions.md` and `notebooks/07_selective_agent_
-  experiments.ipynb`.
-- **Long-document scalability is an untested design hypothesis**, not a validated result — see
-  `docs/architecture.md`'s proposed (not yet run) stress test.
+This project went through a full **reconstruction** (branch `reconstruction`, experiments E00–E18,
+`docs/experiment_registry.md`) that reran the experimental program end to end under corrected
+discipline (evaluator/validator hardening, a routing-independence fix, and a one-shot final TEST
+evaluation) and is the authoritative, final result. The original pre-reconstruction pipeline
+history below ("Experiment progression", "Key development findings") remains as documented record
+of earlier work and is **not** the final architecture.
+
+**Final selected architecture: `openai/gpt-5-mini` + the frozen `GPT-P0` prompt + FULL NDA context
++ structured JSON output + a runtime evidence-source validator.** No retrieval, no agent, and no
+automated review-routing policy are part of the selected path — all three were built, measured, and
+explicitly **not selected** (see below).
+
+**Final held-out TEST result (n=2,091, all official TEST cases, one-shot):**
+
+| System | Accuracy | Macro-F1 | Joint (label+evidence) | Contradiction recall | Cost |
+|---|---|---|---|---|---|
+| Rule baseline | 59.0% | 0.479 | 50.1% | 16.8% | $0 |
+| Local Qwen (ctx16k) | 49.9% | 0.431 | 39.7% | 25.5% | $0 API (local compute not monetized) |
+| **GPT-5-mini + P0 + FULL (final)** | **77.6%** | **0.727** | **74.6%** | **75.5%** | ≈$4.23 total |
+
+Full detail: `experiments/E17_final_test/`, `experiments/E17B_full_test_completion/`,
+`experiments/E18_business_course_synthesis/`.
+
+- **Why RAG was not selected**: RAG cut input tokens substantially on longer NDAs (up to ~70% on
+  the longest documents) but did not beat full context on the matched dev-sample architecture
+  comparison (E13) — full context is the frozen candidate, RAG is a measured alternative kept for a
+  long-document scalability scenario that was never validated.
+- **Why the agent was not selected**: the tested selective agent (E09–E11) showed a small,
+  statistically inconclusive net effect and added orchestration and cost without a demonstrated
+  benefit; it is not part of the final path.
+- **No selective-review/abstention policy was adopted** (E15): every deterministic routing policy
+  tested either left a large share of failures silently unreviewed or required an unacceptable
+  review workload. The runtime evidence validator remains as a structural source-integrity check
+  only — it flags non-source-grounded evidence, not general uncertainty.
+- **Main residual limitation: "Not Mentioned" over-inference.** NotMentioned recall is 62.7% on the
+  final TEST result, and it is the largest single failure bucket (323 of 531 full-TEST joint
+  failures) — the model too often infers a relationship the NDA doesn't actually address.
+- **Prompt-injection limitation (E16, disclosed, not patched)**: the system is evidence-grounded but
+  **not** prompt-injection-hardened. In a small controlled test (20 matched clean/attack pairs), 4
+  of 11 injection-type attacks succeeded, including two cases where the model's answer flipped to
+  match an instruction embedded in the NDA text. Evidence-source validation does not detect this —
+  it confirms a quote came from the document, not that the document's content is trustworthy.
 
 ## Architecture
 
 Synchronous modular monolith: Python AI pipeline (`pipeline/`) served by a FastAPI backend
-(`backend/`) and a Next.js frontend (`frontend/`). Full current implementation, request flow, and
-open concerns: **`docs/architecture.md`**.
+(`backend/`) and a Next.js frontend (`frontend/`). The live product path is
+`pipeline/final_review.py` → `POST /api/review` (see `backend/app.py`); the earlier RAG + selective
+agent pipeline (`pipeline/orchestrator.py`) is kept only for `/history`'s previously-saved records
+and is not the selected architecture. Full request-flow detail (including the superseded RAG+agent
+path, documented for history): **`docs/architecture.md`**.
 
-## Experiment progression (development / experimentation)
+## Experiment progression (original pre-reconstruction pipeline — historical)
+
+The material in this section and "Key development findings" below describes the **original**
+pipeline history, before the reconstruction described in "Current status" above superseded it as
+the final result. Kept as documented record, not as the current final claim.
 
 ```text
 Data Validation
@@ -137,7 +158,8 @@ system/API): **`docs/evaluation_case_design.md`**.
 
 | Path | Purpose |
 |---|---|
-| `pipeline/` | Production AI pipeline (parser, chunker, embedder, retriever, classifier, confidence, agent, orchestrator) |
+| `pipeline/` | Production AI pipeline. `final_review.py` is the final selected path (GPT-5-mini + P0 + FULL + runtime validator); `orchestrator.py`/`agent.py`/retrieval modules are the superseded RAG+agent pipeline, kept for `/history` |
+| `experiments/` | Reconstruction-v2 experiment record (E00–E18), including the final TEST evaluation (E17/E17B) and business/course synthesis (E18) — see `docs/experiment_registry.md` |
 | `prompts/` | Versioned prompt templates — see `prompts/README.md` |
 | `evaluation/` | Metrics, scoring, evaluation harness — reused by pipeline, scripts, and notebooks |
 | `backend/` | FastAPI application — see `docs/api.md` |
@@ -164,22 +186,28 @@ python -m pytest tests/                # 230 tests, no network/API calls (mocked
 To run the live product (requires an OpenRouter API key in `.env`, copied from `.env.example`):
 
 ```bash
-uvicorn backend.app:app --reload        # backend, http://localhost:8000
+uvicorn backend.app:app --reload            # backend, http://localhost:8000
 cd frontend && npm install && npm run dev   # frontend, http://localhost:3000
 ```
 
+Open `http://localhost:3000`, paste or upload an NDA, pick or type a requirement, and click
+"Review NDA". This calls `POST /api/review` — the final architecture described above — and makes a
+real, billed OpenRouter call per review.
+
 ## Known limitations
 
-- No architecture-validation sample independent of the repeatedly-tuned dev sample exists
-  (`docs/evaluation_protocol.md`).
-- The routing signal that gates the selective agent is weak (AUROC 0.657–0.660).
-- The selective agent's net benefit is unresolved at full test-set scale (see "Current status"
-  above).
-- Exception/carve-out clause reconciliation is a known, disclosed weakness (see the golden-battery
-  finding in `docs/decisions.md`).
-- Long-document scalability (the core argument for RAG over full-context) is untested.
-- The joint label+evidence correctness metric for the official test-set run is fully corrected for
-  only one of seven result files as of this writing (`docs/evaluation_protocol.md`).
+- **"Not Mentioned" over-inference is the main residual weakness** (62.7% recall on the final TEST
+  result; the largest single failure category). See "Current status" above.
+- **The system is evidence-grounded but not prompt-injection-hardened** — see the E16 disclosure
+  above; adversarial NDA content is a known, disclosed limitation, not fixed in this project.
+- **No selective-review/abstention policy was adopted** — the runtime evidence validator is a
+  structural source-integrity check only, not a general uncertainty detector.
+- Exception/carve-out clause reconciliation is a known, disclosed weakness (originally found in the
+  pre-reconstruction golden battery; see `docs/decisions.md`).
+- Long-document scalability (the core argument for RAG over full-context) remains untested — RAG
+  saved tokens on longer documents but was not shown to improve quality.
+- This is a reviewer aid, not legal advice, and not an autonomous approval/rejection system — a
+  human reviewer remains the final authority in every case.
 
 ## License
 

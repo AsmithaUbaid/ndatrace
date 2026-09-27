@@ -50,6 +50,28 @@ class ReviewResponse(BaseModel):
     model: str
 
 
+class FinalReviewRequest(BaseModel):
+    """Request for the final, frozen product pipeline (E19: GPT-5-mini + P0 + FULL context).
+    One NDA, one requirement - the primary reviewer-facing workflow, not the batch/experimental path."""
+    nda_text: str = Field(..., min_length=1, description="Full NDA document text to review.")
+    requirement: str = Field(..., min_length=1, description="Confidentiality requirement to check, in free text.")
+
+
+class FinalReviewResponse(BaseModel):
+    label: str | None
+    evidence: list[str]
+    explanation: str
+    source_valid: bool | None
+    needs_human_review: bool
+    review_reason: str | None
+    model: str
+    latency_ms: float | None
+    input_tokens: int | None
+    output_tokens: int | None
+    estimated_cost_usd: float | None
+    trace_id: str
+
+
 class ReviewSummary(BaseModel):
     """Lightweight row for listing past reviews (GET /results)."""
     review_id: str

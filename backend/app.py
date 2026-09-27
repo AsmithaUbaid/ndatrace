@@ -1,9 +1,14 @@
 """
-NDATrace FastAPI Application (WBS T032).
+NDATrace FastAPI Application.
 
-Serves the frozen production pipeline (pipeline/orchestrator.py,
-T031: RAG + selective agent) over HTTP, plus read access to past live
-reviews (SQLite) and offline experiment records (results/runs/*.jsonl).
+Serves the final frozen product pipeline (pipeline/final_review.py, E19:
+GPT-5-mini + P0 + FULL NDA context) at POST /api/review - the architecture
+that completed the one-shot TEST evaluation (E17/E17B). Also serves the
+earlier RAG + selective agent pipeline (pipeline/orchestrator.py, T031) at
+POST /review for backward compatibility with /history's saved records -
+that architecture is superseded, not the selected final one - plus read
+access to past reviews (SQLite) and offline experiment records
+(results/runs/*.jsonl).
 """
 
 from __future__ import annotations

@@ -1,9 +1,16 @@
 """
-NDATrace API Routes - live requirement review (WBS T032).
+NDATrace API Routes - live requirement review.
 
-POST /review runs the frozen production pipeline (pipeline/orchestrator.py,
-T031: RAG + selective agent) against a submitted NDA document and persists
-the result; GET /review/{review_id} fetches it back.
+POST /api/review is the PRIMARY product path (E19): the final, frozen
+reconstruction-v2 candidate that completed the one-shot TEST evaluation
+(E17/E17B) - openai/gpt-5-mini + GPT-P0 + FULL NDA context + structured
+parsing + runtime evidence-source validation. One NDA, one requirement in,
+one result out. No retrieval, no agent, no routing.
+
+POST /review (WBS T032, kept for /history's existing saved records) runs
+the earlier RAG + selective agent pipeline (pipeline/orchestrator.py,
+T031) - that is a superseded, experimental path, not the selected final
+architecture; it is not called from the main reviewer workflow.
 """
 
 from __future__ import annotations
@@ -15,7 +22,8 @@ from datetime import datetime, timezone
 from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from backend import database
-from backend.models import RequirementResult, ReviewRequest, ReviewResponse
+from backend.models import FinalReviewRequest, FinalReviewResponse, RequirementResult, ReviewRequest, ReviewResponse
+from pipeline.final_review import review_final
 from pipeline.logging_config import get_logger
 from pipeline.model_gateway import ModelError, ModelGateway
 from pipeline.orchestrator import review_document
@@ -24,6 +32,29 @@ from pipeline.pdf_extractor import PdfExtractionError, extract_text_from_pdf
 
 logger = get_logger("api.review")
 router = APIRouter(tags=["review"])
+
+
+@router.post("/api/review", response_model=FinalReviewResponse)
+def create_final_review(request: FinalReviewRequest) -> FinalReviewResponse:
+    """The primary product endpoint (E19). Never logs NDA text - only metadata."""
+    trace_id = str(uuid.uuid4())
+    result = review_final(request.nda_text, request.requirement)
+
+    logger.info("API: final review", extra={
+        "stage": "api_final_review", "trace_id": trace_id, "model": result.model,
+        "label": result.label, "parse_status": result.parse_status, "source_valid": result.source_valid,
+        "needs_human_review": result.needs_human_review, "latency_ms": result.latency_ms,
+        "input_tokens": result.input_tokens, "output_tokens": result.output_tokens,
+        "cost_usd": result.cost_usd, "error": result.error,
+    })
+
+    return FinalReviewResponse(
+        label=result.label, evidence=result.evidence, explanation=result.explanation,
+        source_valid=result.source_valid, needs_human_review=result.needs_human_review,
+        review_reason=result.review_reason, model=result.model, latency_ms=result.latency_ms,
+        input_tokens=result.input_tokens, output_tokens=result.output_tokens,
+        estimated_cost_usd=result.cost_usd, trace_id=trace_id,
+    )
 
 
 @router.post("/review", response_model=ReviewResponse)
