@@ -45,7 +45,6 @@ port; set `NEXT_PUBLIC_API_URL` only to point at a different backend host/port.
 | `components/ResultsSummaryBar.tsx` | Headline + clickable Entailment/Contradiction/NotMentioned count chips |
 | `components/FilterTabs.tsx` | Filter results by label or "needs attention" (low confidence / agent-escalated) |
 | `components/ConfidenceBar.tsx` | Visual confidence indicator |
-| `components/LabelBadge.tsx` | Colored label chip |
 | `components/Checkbox.tsx` | Custom-styled checkbox (requirement selection) |
 | `components/NavBar.tsx` | Top navigation |
 | `lib/api.ts` | Fetch wrappers for every backend endpoint in `../docs/api.md` |

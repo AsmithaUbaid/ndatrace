@@ -231,9 +231,9 @@ def historical_per_case_costs() -> dict:
         "oracle_v1_gemini": per_case("results/archive/runs/run_B04_oracle_google_gemini-2.5-flash-lite.jsonl", "B04 Oracle, Gemini 2.5 Flash Lite, v1 prompt"),
         "oracle_v1_gpt5mini": per_case("results/archive/runs/run_B04_oracle_openai_gpt-5-mini.jsonl", "B04 Oracle, GPT-5 mini, v1 prompt"),
         "rag_v2_gemini": per_case("results/archive/runs/run_T024_rag.jsonl", "T024 RAG, Gemini, v2 prompt"),
-        "full_context_test_gemini": per_case("results/final/run_T041_final_test_full_context_google_gemini-2.5-flash-lite.jsonl", "T041 full-context, Gemini, full 2091-case TEST"),
-        "rag_test_gemini": per_case("results/final/run_T041_final_test_rag_google_gemini-2.5-flash-lite.jsonl", "T041 RAG, Gemini, full 2091-case TEST"),
-        "rag_agent_test_gemini": per_case("results/final/run_T041_final_test_rag_agent_google_gemini-2.5-flash-lite.jsonl", "T041 RAG+agent, Gemini, full 2091-case TEST"),
+        "full_context_test_gemini": per_case("results/final/legacy/run_T041_final_test_full_context_google_gemini-2.5-flash-lite.jsonl", "T041 full-context, Gemini, full 2091-case TEST"),
+        "rag_test_gemini": per_case("results/final/legacy/run_T041_final_test_rag_google_gemini-2.5-flash-lite.jsonl", "T041 RAG, Gemini, full 2091-case TEST"),
+        "rag_agent_test_gemini": per_case("results/final/legacy/run_T041_final_test_rag_agent_google_gemini-2.5-flash-lite.jsonl", "T041 RAG+agent, Gemini, full 2091-case TEST"),
         "note": (
             "GPT-5-mini's real per-case Oracle cost ($0.001033) is ~5x its naive "
             "token-formula estimate (~$0.0002) due to hidden reasoning tokens billed as "
@@ -263,9 +263,9 @@ def local_runtime_measurements() -> dict:
         "local_llama3.2_3b_full_context": mean_latency("results/archive/runs/run_T041_final_test_full_context_llama3.2_3b.jsonl"),
         "local_llama3.2_3b_rag": mean_latency("results/archive/runs/run_T041_final_test_rag_llama3.2_3b.jsonl"),
         "local_llama3.2_3b_rag_agent": mean_latency("results/archive/runs/run_T041_final_test_rag_agent_llama3.2_3b.jsonl"),
-        "hosted_gemini_full_context": mean_latency("results/final/run_T041_final_test_full_context_google_gemini-2.5-flash-lite.jsonl"),
-        "hosted_gemini_rag": mean_latency("results/final/run_T041_final_test_rag_google_gemini-2.5-flash-lite.jsonl"),
-        "hosted_gemini_rag_agent": mean_latency("results/final/run_T041_final_test_rag_agent_google_gemini-2.5-flash-lite.jsonl"),
+        "hosted_gemini_full_context": mean_latency("results/final/legacy/run_T041_final_test_full_context_google_gemini-2.5-flash-lite.jsonl"),
+        "hosted_gemini_rag": mean_latency("results/final/legacy/run_T041_final_test_rag_google_gemini-2.5-flash-lite.jsonl"),
+        "hosted_gemini_rag_agent": mean_latency("results/final/legacy/run_T041_final_test_rag_agent_google_gemini-2.5-flash-lite.jsonl"),
         "note_single_call_measurements_not_used_as_primary": (
             "docs/decisions.md/CLAUDE.md separately record single-call spot checks: local "
             "Ollama ~5.37s, Groq gpt-oss-20b ~0.79s. These are n=1 and NOT used as the "

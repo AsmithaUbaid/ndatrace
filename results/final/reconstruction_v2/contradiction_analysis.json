@@ -1,0 +1,47 @@
+{
+ "_provenance": {
+  "source_experiment": "E17B (full n=220) with E17 n=50 sample as a consistency check",
+  "source_artifact": "experiments/E17B_full_test_completion/results/final_full_test_metrics.json#full_gpt_contradiction_220",
+  "source_commit": "270b006",
+  "measured_or_scenario": "measured",
+  "population": "n=220 (full), n=50 (sample, consistency check only)",
+  "date_generated": "2026-09-27"
+ },
+ "full_n220": {
+  "correct": [
+   166,
+   220
+  ],
+  "recall": 0.7545454545454545,
+  "joint": [
+   158,
+   220
+  ],
+  "C_to_E": 50,
+  "C_to_NM": 4,
+  "invalid": 0
+ },
+ "sample_n50_consistency_check": {
+  "correct": [
+   39,
+   50
+  ],
+  "recall": 0.78,
+  "wilson95": [
+   0.6476,
+   0.8725
+  ],
+  "joint": [
+   37,
+   50
+  ],
+  "joint_wilson95": [
+   0.6045,
+   0.8413
+  ],
+  "C_to_E": 10,
+  "C_to_NM": 1,
+  "invalid": 0
+ },
+ "finding": "38 of 50 evidence-bearing Contradiction misses (full TEST) quoted text overlapping the annotated gold evidence but still predicted the wrong label - interpretation, not evidence-access, was the dominant observed failure mode for the remaining Contradiction errors."
+}

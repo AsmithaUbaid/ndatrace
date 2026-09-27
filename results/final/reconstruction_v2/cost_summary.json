@@ -1,0 +1,16 @@
+{
+ "_provenance": {
+  "source_experiment": "E17 + E17B ledger",
+  "source_artifact": "results/budget/reconstruction_spend_ledger.csv; experiments/E17B_full_test_completion/results/run_E17B_wall.json",
+  "source_commit": "270b006",
+  "measured_or_scenario": "measured (AI cost); scenario (human-review cost, cost-to-serve model)",
+  "population": "n=2091 GPT hosted calls (150 + 1941)",
+  "date_generated": "2026-09-27"
+ },
+ "gpt_total_cost_usd": 4.229955,
+ "gpt_cost_per_case_usd": 0.0020229340028694405,
+ "qwen_api_cost_usd": 0.0,
+ "qwen_note": "local compute/time (7.13h) not monetized",
+ "rule_api_cost_usd": 0.0,
+ "e18_cost_to_serve_scenario_note": "Human-review cost (C_H), volume (V), and fixed cost (F) are explicit SCENARIO variables - see experiments/E18_business_course_synthesis/summary.md sections 7-8b. Not measured."
+}

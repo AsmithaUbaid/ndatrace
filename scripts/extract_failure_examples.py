@@ -35,7 +35,7 @@ from pipeline.parser import parse_contractnli_file
 
 NEGATIVE_CASES_PATH = Path("data/golden/negative_cases.json")
 PIPELINE_VERIFICATION_PATH = Path("data/golden_battery_pipeline_verification.json")
-OUTPUT_PATH = Path("results/final/carveout_examples.md")
+OUTPUT_PATH = Path("results/final/legacy/carveout_examples.md")
 
 # Case IDs tagged with the exception/carve-out pattern (docs/decisions.md ADR-011).
 CARVEOUT_CASE_IDS = {"034", "038", "039", "040"}

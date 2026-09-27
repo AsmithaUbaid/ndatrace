@@ -60,7 +60,7 @@ reading the cited clause, rather than trusting the label alone.
 | RAG | 78.7% | 0.738 | 63.6% (n=220) | 0.754 | $0.000152 |
 | RAG + agent | 77.7% | 0.727 | 60.5% (n=220) | 0.747 | $0.000405 |
 
-Recomputed directly from `results/final/run_T041_final_test_*.jsonl`, not quoted from
+Recomputed directly from `results/final/legacy/run_T041_final_test_*.jsonl`, not quoted from
 memory. Joint label+evidence correctness required a retroactive, zero-cost fix
 (`scripts/backfill_joint_metric.py` — deterministic retrieval recomputation, no new API calls) after
 a bug was found where evidence spans were never recorded for any architecture; all three hosted

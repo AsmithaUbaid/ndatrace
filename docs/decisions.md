@@ -341,7 +341,7 @@ confirmation that the 5-tool set isn't over-provisioned relative to a leaner alt
 independently significant result (same small-sample caveats as above apply).
 
 **Evidence files:** `data/agent_experiment.json`,
-`results/final/run_T041_final_test_rag_google_gemini-2.5-flash-lite.jsonl` vs.
+`results/final/legacy/run_T041_final_test_rag_google_gemini-2.5-flash-lite.jsonl` vs.
 `..._rag_agent_...jsonl`.
 
 ---
@@ -506,7 +506,7 @@ backfilled: rule 0.494, full-context 0.492, RAG 0.524, RAG+agent 0.532. See
 `docs/evaluation_protocol.md`'s "Current evaluation status" for the full per-file state. Result
 files: the three hosted files now live in `results/final/`; local-Llama and the superseded 500-case
 rule file are in `results/archive/runs/` (a later results/ reorganization) — see also
-`results/final/run_T041_final_test_rule_full.jsonl`, a new rule-baseline run against the *full*
+`results/final/legacy/run_T041_final_test_rule_full.jsonl`, a new rule-baseline run against the *full*
 2,091-case test set (accuracy 59.0%, Contradiction recall 16.8%, joint 0.501 — correct from the
 start, no backfill needed), added alongside the hosted three as the fourth "final" T041 result.
 

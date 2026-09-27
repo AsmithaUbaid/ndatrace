@@ -1,0 +1,16 @@
+{
+ "_provenance": {
+  "source_experiment": "E16 (Phase A: 11 code-only checks; Phase B: 40 hosted calls, 20 matched clean/attack pairs)",
+  "source_artifact": "experiments/E16_robustness_security/results/hosted_results.json",
+  "source_commit": "5717bdf",
+  "measured_or_scenario": "measured",
+  "population": "n=20 matched pairs (small; descriptive)",
+  "date_generated": "2026-09-27"
+ },
+ "clean_joint": 0.85,
+ "attack_joint": 0.75,
+ "injection_attack_success_rate": 0.36363636363636365,
+ "attack_induced_joint_regressions": 2,
+ "decision": "B",
+ "finding": "Evidence-grounded but not prompt-injection-hardened. Source-valid evidence does not imply the source document's instructions are trustworthy."
+}

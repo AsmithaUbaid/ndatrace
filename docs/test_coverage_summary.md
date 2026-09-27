@@ -11,8 +11,8 @@ non-single-case aggregate/structural entries removed from Categories 4–7 — s
 
 | Case collection | Size | Executed against current pipeline? | Result | Source |
 |---|---:|---|---|---|
-| Official test set (final, locked) | 2,091 | Yes | Full-context 81.2% acc / RAG 78.7% / RAG+agent 77.7%; Contradiction recall 59.1%/63.6%/60.5% | `results/final/run_T041_final_test_*.jsonl` |
-| Independent validation check | 340 | Yes | Full-context 80.6% acc / RAG 80.3% / RAG+agent 77.6% (statistically indistinguishable FC vs RAG, p=1.000) | `results/final/run_AV01_architecture_validation_*.jsonl` |
+| Official test set (final, locked) | 2,091 | Yes | Full-context 81.2% acc / RAG 78.7% / RAG+agent 77.7%; Contradiction recall 59.1%/63.6%/60.5% | `results/final/legacy/run_T041_final_test_*.jsonl` |
+| Independent validation check | 340 | Yes | Full-context 80.6% acc / RAG 80.3% / RAG+agent 77.6% (statistically indistinguishable FC vs RAG, p=1.000) | `results/final/legacy/run_AV01_architecture_validation_*.jsonl` |
 | Dev sample (reused, adaptive) | 150 | Yes (repeatedly, across every tuning decision) | See `docs/decisions.md` for the full per-decision breakdown — not a single number, by design | `docs/decisions.md`, various `results/runs/*.jsonl` |
 | **Cat. 1 — Benchmark/ordinary** | 30 | Yes | 24/30 = 80.0% | `data/golden_battery_pipeline_verification.json` |
 | **Cat. 2 — Regression/negative** | 15 | Yes | 10/15 = 66.7%; found the 100%-failure exception/carve-out weakness (4/4 cases 034/038/039/040) | `data/golden_battery_pipeline_verification.json`, `docs/decisions.md` ADR-011 |

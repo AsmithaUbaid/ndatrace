@@ -1,0 +1,52 @@
+{
+ "_provenance": {
+  "source_experiment": "E17",
+  "source_artifact": "experiments/E17_final_test/results/final_metrics.json#qwen_full_2091",
+  "source_commit": "3b2167a",
+  "measured_or_scenario": "measured",
+  "population": "n=2091, full official TEST split",
+  "date_generated": "2026-09-27",
+  "note": "API cost = $0; local compute/time (7.13h wall) is NOT monetized in this figure"
+ },
+ "accuracy": 0.49880439980870395,
+ "macro_f1": 0.43090824055346005,
+ "joint": 0.39693926351028214,
+ "recall": {
+  "Entailment": 0.4628099173553719,
+  "Contradiction": 0.2545454545454545,
+  "NotMentioned": 0.5968992248062015
+ },
+ "joint_by_class": {
+  "Entailment": 0.265495867768595,
+  "Contradiction": 0.15454545454545454,
+  "NotMentioned": 0.5968992248062015
+ },
+ "evidence_recall": 0.35269360269360267,
+ "evidence_precision": 0.35934819897084047,
+ "source_valid_quote_rate": 0.7029320987654322,
+ "confusion_rows_gold_cols_pred": {
+  "Entailment": {
+   "Entailment": 448,
+   "Contradiction": 283,
+   "NotMentioned": 234,
+   "invalid": 3
+  },
+  "Contradiction": {
+   "Entailment": 25,
+   "Contradiction": 56,
+   "NotMentioned": 139,
+   "invalid": 0
+  },
+  "NotMentioned": {
+   "Entailment": 222,
+   "Contradiction": 141,
+   "NotMentioned": 539,
+   "invalid": 1
+  }
+ },
+ "parse_counts": {
+  "strict": 1986,
+  "recovered": 101,
+  "invalid": 4
+ }
+}
