@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { api, CostEstimate, Hypothesis, ReviewResponse } from "@/lib/api";
 import { RequirementCard } from "@/components/RequirementCard";
 import { ResultsSummaryBar } from "@/components/ResultsSummaryBar";
+import { LimitationsPanel } from "@/components/LimitationsPanel";
 import { Checkbox } from "@/components/Checkbox";
 import { FilterTabs } from "@/components/FilterTabs";
 import { FilterKey, toVerdict } from "@/lib/verdict";
@@ -176,7 +177,7 @@ export default function ReviewPage() {
         </h1>
         <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
           Paste an NDA and pick the standard confidentiality requirements to check. Each result comes
-          with a label, a confidence score, and the exact evidence text it was based on &mdash; not
+          with a label, a confidence score, and the exact evidence text it was based on, not
           just a verdict.
         </p>
       </header>
@@ -241,7 +242,7 @@ export default function ReviewPage() {
                 <span className="text-sm text-zinc-700 dark:text-zinc-300">
                   {"✓"} {pdfName}{" "}
                   <span className="text-zinc-400 dark:text-zinc-500">
-                    &mdash; click to choose a different file
+                    (click to choose a different file)
                   </span>
                 </span>
               ) : (
@@ -252,7 +253,7 @@ export default function ReviewPage() {
             </div>
             {pdfName && !extractingPdf && (
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Extracted text below &mdash; review or edit it before running the review.
+                Extracted text below. Review or edit it before running the review.
               </p>
             )}
           </div>
@@ -352,9 +353,7 @@ export default function ReviewPage() {
             <span className="text-xs text-zinc-500 dark:text-zinc-400">
               Estimated cost: ~${(costEstimate.avg_cost_per_requirement_usd * selected.size).toFixed(4)} for{" "}
               {selected.size} requirement{selected.size === 1 ? "" : "s"}{" "}
-              <span className="text-zinc-400 dark:text-zinc-500">
-                (measured avg, {costEstimate.source_experiment_id})
-              </span>
+              <span className="text-zinc-400 dark:text-zinc-500">(based on past runs)</span>
             </span>
           )}
         </div>
@@ -422,6 +421,22 @@ export default function ReviewPage() {
           )}
         </section>
       )}
+
+      <section className="flex flex-col gap-3 border-t border-zinc-100 pt-6 dark:border-zinc-800">
+        <details className="rounded-lg border border-zinc-200 bg-white p-4 text-sm dark:border-zinc-800 dark:bg-zinc-900">
+          <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+            How it works
+          </summary>
+          <ol className="mt-2 list-decimal space-y-1 pl-4 text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
+            <li>The NDA is chunked, embedded, and the relevant clauses for each selected requirement are retrieved and reranked.</li>
+            <li>A keyword rule and the language model each classify the requirement; if they disagree, a bounded tool-using agent investigates further before answering.</li>
+            <li>Each result includes the model&apos;s self-reported confidence and whether the agent was escalated.</li>
+            <li>The reviewer checks the evidence and makes the final decision.</li>
+          </ol>
+        </details>
+
+        <LimitationsPanel />
+      </section>
     </main>
   );
 }

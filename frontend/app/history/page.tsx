@@ -55,7 +55,7 @@ export default function HistoryPage() {
 
       {!loading && reviews.length === 0 && !error && (
         <div className="rounded-lg border border-dashed border-zinc-300 bg-white p-8 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400">
-          No reviews yet &mdash; run one from the{" "}
+          No reviews yet. Run one from the{" "}
           <Link href="/" className="font-medium text-zinc-800 underline dark:text-zinc-200">
             Review
           </Link>{" "}
@@ -103,7 +103,7 @@ export default function HistoryPage() {
       {selected && (
         <section className="flex flex-col gap-3">
           <h2 className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-            Review {selected.review_id.slice(0, 8)} &mdash; {selected.results.length} result
+            Review {selected.review_id.slice(0, 8)}: {selected.results.length} result
             {selected.results.length === 1 ? "" : "s"}
           </h2>
           <ul className="flex flex-col gap-3">

@@ -3,7 +3,7 @@ import { FinalReviewResponse } from "@/lib/api";
 import { toVerdict, VERDICT_COLORS, VERDICT_ICONS, VERDICT_TITLES } from "@/lib/verdict";
 
 const NOTMENTIONED_NOTE =
-  "No explicit supporting or contradicting provision was identified in the agreement. This does not mean the NDA definitely omits the requirement — the relevant language may simply not have been found.";
+  "No explicit supporting or contradicting provision was identified in the agreement. This does not mean the NDA definitely omits the requirement; the relevant language may simply not have been found.";
 
 // The final architecture has no calibrated confidence score to show (the
 // frozen prompt returns only {label, evidence}) - this card never invents
@@ -47,7 +47,7 @@ export function ResultCard({ result }: { result: FinalReviewResponse }) {
 
         {result.needs_human_review && (
           <div className="mt-3 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-300">
-            {"⚠"} Human review required{result.review_reason ? ` — ${result.review_reason}` : ""}
+            {"⚠"} Human review required{result.review_reason ? `: ${result.review_reason}` : ""}
           </div>
         )}
 
@@ -72,7 +72,7 @@ export function ResultCard({ result }: { result: FinalReviewResponse }) {
         )}
 
         <div className="mt-4 rounded-md bg-zinc-50 px-3 py-2 text-xs text-zinc-500 dark:bg-zinc-800/60 dark:text-zinc-400">
-          Decision support only — final NDA review remains with the human reviewer.
+          Decision support only. Final NDA review remains with the human reviewer.
         </div>
 
         <button

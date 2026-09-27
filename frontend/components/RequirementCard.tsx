@@ -23,7 +23,7 @@ export function RequirementCard({ r }: { r: RequirementResult }) {
             Could not get a result for this requirement: {r.error}
           </p>
           <p className="mt-1 text-xs text-amber-700 dark:text-amber-500">
-            The other requirements in this review completed normally — only this one failed.
+            The other requirements in this review completed normally; only this one failed.
           </p>
         </div>
       </li>
@@ -68,7 +68,7 @@ export function RequirementCard({ r }: { r: RequirementResult }) {
 
         {lowConfidence && (
           <p className="mt-2 text-xs font-medium text-amber-700 dark:text-amber-400">
-            {"⚠"} Low confidence — consider manual review
+            {"⚠"} Low confidence, consider manual review
           </p>
         )}
 

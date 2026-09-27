@@ -5,7 +5,7 @@ const ITEMS = [
   "Final approval or rejection remains with a human.",
   "The model can misinterpret clauses even when relevant evidence is present.",
   "“Not Mentioned” results are a known weaker area of the current system.",
-  "The current system is evidence-grounded but not prompt-injection-hardened — adversarial document content is a known limitation.",
+  "The current system is evidence-grounded but not prompt-injection-hardened; adversarial document content is a known limitation.",
   "Uploaded enterprise NDAs would require appropriate privacy and access controls in a real deployment.",
 ];
 

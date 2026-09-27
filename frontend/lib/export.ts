@@ -3,7 +3,7 @@ import { toVerdict, VERDICT_TITLES } from "./verdict";
 
 export function reviewToText(review: ReviewResponse): string {
   const lines: string[] = [];
-  lines.push("NDATrace — NDA Requirement Review");
+  lines.push("NDATrace - NDA Requirement Review");
   lines.push(`Generated: ${new Date(review.created_at).toLocaleString()}`);
   lines.push(`Model: ${review.model}`);
   lines.push(

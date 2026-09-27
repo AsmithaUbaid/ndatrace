@@ -1,17 +1,14 @@
 @import "tailwindcss";
 
 /*
- * Light/dark theme is controlled ENTIRELY by Tailwind utility classes
- * (bg-zinc-50 dark:bg-zinc-950, etc.) applied directly on <body> and each
- * component, never by a plain CSS rule here. Tailwind v4 compiles utility
- * classes into a lower-priority CSS cascade layer than plain unlayered
- * author rules - a body{background/color} declaration in this file would
- * silently beat every Tailwind color utility regardless of specificity,
- * which is exactly what happened before this fix (dark background, dark
- * text, near-zero contrast, unrelated to which theme was intended).
- * Keep this file free of color rules; add new colors as dark: variants
- * on the elements themselves instead.
+ * Force light theme everywhere, regardless of OS/browser preference.
+ * By default Tailwind v4's `dark:` variant activates on
+ * `prefers-color-scheme: dark`; redefining it to require an explicit
+ * `.dark` ancestor class (which nothing in this app ever adds) makes every
+ * `dark:` utility permanently inert without having to strip `dark:`
+ * classes out of every component.
  */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
@@ -19,6 +16,5 @@
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  color-scheme: light dark;
+  color-scheme: light;
 }

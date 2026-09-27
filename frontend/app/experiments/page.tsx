@@ -33,12 +33,12 @@ export default function ExperimentsPage() {
         <p className="mt-1.5 max-w-2xl text-sm text-zinc-600 dark:text-zinc-400">
           Rule, local Qwen, and GPT-5-mini + P0 + FULL NDA context (the final selected
           architecture) measured on the identical n=2,091 official ContractNLI TEST population
-          (E17/E17B) — read live from{" "}
+          (E17/E17B), read live from{" "}
           <code className="rounded bg-zinc-200 px-1 py-0.5 text-xs dark:bg-zinc-800">
             results/final/reconstruction_v2/
           </code>
           , never recomputed. RAG and a selective agent were evaluated during reconstruction-v2
-          and not selected — see <code className="rounded bg-zinc-200 px-1 py-0.5 text-xs dark:bg-zinc-800">docs/architecture.md</code>.
+          and not selected; see <code className="rounded bg-zinc-200 px-1 py-0.5 text-xs dark:bg-zinc-800">docs/architecture.md</code>.
         </p>
       </header>
 
