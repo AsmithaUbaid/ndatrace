@@ -1,0 +1,102 @@
+{
+  "config": {
+    "chunking": {
+      "chunk_method": "clause",
+      "chunk_size": 256,
+      "chunk_overlap": 50
+    },
+    "candidate_pool_size": 20,
+    "final_top_k": 5,
+    "fusion": "reciprocal_rank_fusion (RRF, k=60)",
+    "bm25": "rank_bm25.BM25Okapi (pipeline/sparse_retriever.py)",
+    "dense_embedding": "BAAI/bge-base-en-v1.5",
+    "reranker": "cross-encoder/ms-marco-MiniLM-L-12-v2 (hybrid_plus_rerank arm only)"
+  },
+  "n_documents": 423,
+  "n_cases": 4371,
+  "hybrid_plain": {
+    "metrics": {
+      "n_cases": 4371,
+      "overall": {
+        "evidence_recall_at_k": 0.9210791693118386,
+        "evidence_precision": 0.053976212526263556,
+        "mrr": 0.33866335659853236
+      },
+      "entailment": {
+        "n": 3530,
+        "evidence_recall_at_k": 0.9242154548316024,
+        "evidence_precision": 0.05474203099574154,
+        "mrr": 0.34264521036718926
+      },
+      "contradiction": {
+        "n": 841,
+        "evidence_recall_at_k": 0.9079149744429172,
+        "evidence_precision": 0.05076177828457906,
+        "mrr": 0.3219499870345002
+      },
+      "miss_count": 199
+    },
+    "context_size": {
+      "mean_chunks": 4.887211164493251,
+      "mean_chars": 5480.077099061999,
+      "mean_tokens": 1027.1413864104325,
+      "median_tokens": 1037,
+      "p90_tokens": 1172,
+      "max_tokens": 1658
+    }
+  },
+  "hybrid_plus_rerank": {
+    "metrics": {
+      "n_cases": 4371,
+      "overall": {
+        "evidence_recall_at_k": 0.9220904340327807,
+        "evidence_precision": 0.05348252237834311,
+        "mrr": 0.37644346691883934
+      },
+      "entailment": {
+        "n": 3530,
+        "evidence_recall_at_k": 0.9179605647735956,
+        "evidence_precision": 0.05373552666914161,
+        "mrr": 0.377388700717588
+      },
+      "contradiction": {
+        "n": 841,
+        "evidence_recall_at_k": 0.9394250814583751,
+        "evidence_precision": 0.05242056619936809,
+        "mrr": 0.37247595763278085
+      },
+      "miss_count": 190
+    },
+    "context_size": {
+      "mean_chunks": 4.887211164493251,
+      "mean_chars": 5459.835506749027,
+      "mean_tokens": 1022.8540379775795,
+      "median_tokens": 1034,
+      "p90_tokens": 1167,
+      "max_tokens": 1649
+    }
+  },
+  "latency_ms": {
+    "bm25_candidate_generation": {
+      "mean": 0.15832126255438425,
+      "median": 0.134957954287529,
+      "p90": 0.20783301442861557
+    },
+    "dense_candidate_generation": {
+      "mean": 1.281623797447727,
+      "median": 0.042041996493935585,
+      "p90": 0.06441702134907246
+    },
+    "rrf_fusion": {
+      "mean": 0.03712646305446861,
+      "median": 0.03179209306836128,
+      "p90": 0.05466700531542301
+    },
+    "cross_encoder_reranking": {
+      "mean": 126.73737184362739,
+      "median": 104.75724982097745,
+      "p90": 229.4488330371678
+    }
+  },
+  "experiment_wall_seconds_this_run": 562.2390205420088
+}

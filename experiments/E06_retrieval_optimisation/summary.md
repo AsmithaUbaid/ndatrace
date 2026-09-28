@@ -7,6 +7,45 @@ lexical-vs-dense-under-reranking control) — the third one **reversed the candi
 choice**: `retrieval_v1` is frozen as **BM25 + reranker**, not dense + reranker, because the two
 tied almost exactly and BM25 is simpler.
 
+## Addendum: hybrid RRF (the missing arm), 2026-09-28
+
+A retrieval-architecture audit (notebook: `notebooks/NDATrace_Complete_Technical_Tour.ipynb`'s
+"Retrieval architecture: lexical, semantic, hybrid, or reranked?" section) found that hybrid
+retrieval (BM25 + dense fused via Reciprocal Rank Fusion) — the fourth architecture the original
+scope called for alongside lexical/dense/reranked — was never run under reconstruction-v2's
+protocol, only hypothesised from pre-reconstruction (A1) work under a different chunking/
+population. `scripts/run_e06_hybrid_retrieval.py` fills that one gap, reusing the identical
+4,371-case population, clause_256 chunking, hypothesis-only query, and scorer as every other E06
+run — no rerun of anything that already existed.
+
+**Two arms, both fused from BM25 top-20 + dense(BGE) top-20 candidate pools:**
+
+| Arm | Recall@5 | Contradiction Recall@5 | MRR@5 | Precision@5 |
+|---|---:|---:|---:|---:|
+| Hybrid RRF (plain, no rerank) | 92.11% | 90.79% | 0.3387 | 5.40% |
+| Hybrid RRF + cross-encoder rerank | 92.21% | 93.94% | 0.3764 | 5.35% |
+
+**Result: hybrid does not beat the frozen BM25+reranker config.** Pre-rerank, hybrid fusion is a
+real, measurable improvement over either single candidate generator (92.11% recall / 0.339 MRR
+vs. BM25's 90.48%/0.322 and dense-BGE's 88.44%/0.310) — consistent with R4's earlier finding that
+candidate-generation choice matters *before* reranking exists in the pipeline. Once reranking is
+applied, all three candidate generators (BM25, dense-BGE, hybrid) converge to the same ceiling —
+Recall@5 ~92.2%, Contradiction Recall@5 tied at 93.94%, MRR@5 within 0.0001 of each other. A
+paired case-by-case comparison against the frozen BM25+reranker config (all 4,371 cases) found
+agreement on 4,370 of 4,371 — the two arms disagree on exactly one case, which BM25+rerank
+solves and hybrid does not (exact binomial p=1.0, no evidence of a real difference; zero
+disagreements on the 841-case Contradiction subset).
+
+**Decision: no change to the frozen `retrieval_v1` config.** Hybrid RRF earns real complexity
+(building and querying two indices plus a fusion step) only in the pre-reranking case this
+production pipeline doesn't actually run — the same "candidate-generation choice barely matters
+once a reranker is in the pipeline" finding this file already reached for dense vs. BM25 (see
+the Result summary table above), now confirmed a third way.
+
+Files: `scripts/run_e06_hybrid_retrieval.py`,
+`experiments/E06_retrieval_optimisation/results/run_E06_hybrid_rrf.json` and
+`run_E06_hybrid_rrf_cases.jsonl`.
+
 ## Result summary
 
 | Stage | Winner | Key numbers |

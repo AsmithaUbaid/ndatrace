@@ -1,11 +1,8 @@
 import { FinalReviewResponse } from "@/lib/api";
+import { NOT_MENTIONED_MESSAGE } from "@/lib/evidenceDisplay";
 import { EvidenceSection } from "@/components/EvidenceSection";
 import { ReviewMetadata } from "@/components/ReviewMetadata";
-import { retrievalTier } from "@/lib/retrievalPresentation";
 import { toVerdict, VERDICT_COLORS, VERDICT_ICONS, VERDICT_TITLES } from "@/lib/verdict";
-
-const NOTMENTIONED_NOTE =
-  "No explicit supporting or contradicting provision was identified.";
 
 // The final architecture has no calibrated confidence score to show (the
 // frozen prompt returns only {label, evidence}) - this card never invents
@@ -32,9 +29,6 @@ export function ResultCard({ result }: { result: FinalReviewResponse }) {
 
   const verdict = toVerdict(result.label);
   const colors = VERDICT_COLORS[verdict];
-  const topChunk = result.retrieved_chunks.find((chunk) => chunk.rank === 1) ?? result.retrieved_chunks[0];
-  const topMatch = retrievalTier(topChunk?.reranker_score ?? null);
-  const showNotMentionedNote = result.label === "NotMentioned" && topMatch.label === "Low";
 
   return (
     <div className="result-card" data-verdict={verdict}>
@@ -55,7 +49,7 @@ export function ResultCard({ result }: { result: FinalReviewResponse }) {
         )}
 
         <p className="mt-4 text-sm leading-6 text-[#4b5563]">
-          {showNotMentionedNote ? NOTMENTIONED_NOTE : result.explanation}
+          {result.label === "NotMentioned" ? NOT_MENTIONED_MESSAGE : result.explanation}
         </p>
 
         <ReviewMetadata

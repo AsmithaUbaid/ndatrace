@@ -1,5 +1,5 @@
 import { RequirementResult } from "@/lib/api";
-import { retrievalTier } from "@/lib/retrievalPresentation";
+import { NOT_MENTIONED_MESSAGE } from "@/lib/evidenceDisplay";
 import { isLowConfidence, toVerdict, VERDICT_COLORS, VERDICT_ICONS, VERDICT_TITLES } from "@/lib/verdict";
 import { EvidenceSection } from "@/components/EvidenceSection";
 import { ReviewMetadata } from "@/components/ReviewMetadata";
@@ -34,8 +34,6 @@ export function RequirementCard({ r }: { r: RequirementResult }) {
   const colors = VERDICT_COLORS[verdict];
   const lowConfidence = isLowConfidence(r);
   const confidencePercent = r.confidence == null ? null : Math.round(r.confidence * 100);
-  const topChunk = r.retrieved_chunks.find((chunk) => chunk.rank === 1) ?? r.retrieved_chunks[0];
-  const topMatch = retrievalTier(topChunk?.reranker_score ?? null);
 
   return (
     <li
@@ -93,13 +91,9 @@ export function RequirementCard({ r }: { r: RequirementResult }) {
           </p>
         )}
 
-        {r.explanation && (
-          <p className="mt-4 text-sm leading-6 text-[#4b5563]">{r.explanation}</p>
-        )}
-
-        {r.label === "NotMentioned" && topMatch.label === "Low" && (
-          <p className="mt-3 rounded-lg border border-slate-200 bg-slate-50/80 px-3 py-2 text-xs leading-5 text-slate-600">
-            No explicit supporting or contradicting provision was identified.
+        {(r.explanation || r.label === "NotMentioned") && (
+          <p className="mt-4 text-sm leading-6 text-[#4b5563]">
+            {r.label === "NotMentioned" ? NOT_MENTIONED_MESSAGE : r.explanation}
           </p>
         )}
 

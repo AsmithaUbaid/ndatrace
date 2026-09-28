@@ -7,6 +7,9 @@ export type EvidenceDisplay =
   | { kind: "no-evidence" }
   | { kind: "quotes"; quotes: string[] };
 
+export const NOT_MENTIONED_MESSAGE =
+  "No explicit supporting or contradicting provision was identified.";
+
 export function selectEvidenceDisplay(
   label: string,
   evidence: string[],
