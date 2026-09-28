@@ -62,6 +62,9 @@ export function ResultCard({ result }: { result: FinalReviewResponse }) {
           costUsd={result.estimated_cost_usd}
           latencyMs={result.latency_ms}
           retrievedChunks={result.retrieved_chunks}
+          label={result.label}
+          evidence={result.evidence}
+          sourceValid={result.source_valid}
         />
 
         <EvidenceSection

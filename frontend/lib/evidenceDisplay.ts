@@ -17,3 +17,9 @@ export function selectEvidenceDisplay(
   if (evidence.length === 0) return { kind: "no-evidence" };
   return { kind: "quotes", quotes: evidence };
 }
+
+// Number of validated evidence *quotes* shown to the reviewer - distinct
+// from retrieved-chunk count, which is a separate, secondary concept.
+export function evidenceQuoteCount(display: EvidenceDisplay): number {
+  return display.kind === "quotes" ? display.quotes.length : 0;
+}

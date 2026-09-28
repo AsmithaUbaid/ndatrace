@@ -579,7 +579,7 @@ rate.
   test on T041-B: b=87, c=65, p=0.088 — not significant, but the point estimate favors plain RAG.
   **Because T041-B already uses the current shipped prompt and routing configuration, this cannot
   be explained away as "it was still running the old v2/circular-routing setup" — it wasn't.** An
-  independent architecture-validation run (AV01, `data/architecture_validation_manifest.json`) has
+  independent architecture-validation run (AV01, `archive/legacy_experiments/AV01/architecture_validation_manifest.json`) has
   since produced the same qualitative finding on untouched data — see `docs/decisions.md` ADR-009's
   update and the AV01 analysis for the full breakdown.
 - Official test evaluation: **run, in two distinct configurations (T041-A and T041-B — see the

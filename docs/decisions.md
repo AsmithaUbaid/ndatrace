@@ -1,10 +1,16 @@
 # Architecture & Experiment Decision Log
 
-This is the authoritative decision log for NDATrace, extracted from the project's working
-Claude Code operating manual (`CLAUDE.md`, which is *not* part of this git repository — it lives
-one directory above it as a local Claude Code config file and was never pushed to GitHub). Several
-code comments and docs in this repository reference "CLAUDE.md's Decisions Log" — those references
-mean **this file**.
+This is the historical decision log for NDATrace's pre-reconstruction (T-series) work, extracted
+from the project's working Claude Code operating manual (`CLAUDE.md`, which is *not* part of this
+git repository — it lives one directory above it as a local Claude Code config file and was never
+pushed to GitHub). Several code comments and docs in this repository reference "CLAUDE.md's
+Decisions Log" — those references mean **this file**.
+
+**This file is historical evidence only, not the current architecture decision.** Every ADR below
+is independently re-derived under reconstruction-v2's E-series experiments; see
+`docs/architecture_decisions/INDEX.md` for the current, authoritative status of each decision
+(including ADR-012, the reconstruction-v2 freeze, which supersedes ADR-009 below) and for which
+E-series experiment re-derives each one.
 
 Each entry follows: Context → Options considered → Evidence → Decision → Consequences/Revisit
 condition. Nothing here is invented — every number traces to a result file under `results/runs/`

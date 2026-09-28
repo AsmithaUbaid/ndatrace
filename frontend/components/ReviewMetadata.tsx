@@ -1,5 +1,6 @@
 import { RetrievedChunk } from "@/lib/api";
 import { retrievalTier } from "@/lib/retrievalPresentation";
+import { evidenceQuoteCount, selectEvidenceDisplay } from "@/lib/evidenceDisplay";
 
 const METRIC_TONES = {
   cost: "border-violet-200/80 bg-violet-50/70 text-violet-950",
@@ -9,18 +10,26 @@ const METRIC_TONES = {
   amber: "border-amber-200/80 bg-amber-50/70 text-amber-950",
 } as const;
 
+const RETRIEVAL_MATCH_TOOLTIP = "Cross-encoder retrieval relevance score; not prediction confidence.";
+
 export function ReviewMetadata({
   costUsd,
   latencyMs,
   retrievedChunks,
+  label,
+  evidence,
+  sourceValid,
 }: {
   costUsd: number | null;
   latencyMs: number | null;
   retrievedChunks: RetrievedChunk[];
+  label: string;
+  evidence: string[];
+  sourceValid: boolean | null;
 }) {
   const topChunk = retrievedChunks.find((chunk) => chunk.rank === 1) ?? retrievedChunks[0];
-  const topMatch = retrievalTier(topChunk?.reranker_score ?? null);
-  const chunkCount = retrievedChunks.length;
+  const retrievalMatch = retrievalTier(topChunk?.reranker_score ?? null);
+  const quoteCount = evidenceQuoteCount(selectEvidenceDisplay(label, evidence, sourceValid));
 
   return (
     <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4" aria-label="Review metadata">
@@ -36,14 +45,15 @@ export function ReviewMetadata({
       />
       <MetricChip
         label="Evidence"
-        value={`${chunkCount} ${chunkCount === 1 ? "chunk" : "chunks"}`}
+        value={`${quoteCount} ${quoteCount === 1 ? "quote" : "quotes"}`}
         tone="blue"
       />
       <MetricChip
-        label="Top match"
-        value={topMatch.label}
-        tone={topMatch.tone}
-        title={`${topMatch.detail}. Presentation-only tier; not model confidence.`}
+        label="Retrieval match"
+        value={retrievalMatch.label}
+        subvalue={topChunk ? `Score ${topChunk.reranker_score.toFixed(3)}` : undefined}
+        tone={retrievalMatch.tone}
+        title={`${retrievalMatch.detail}. ${RETRIEVAL_MATCH_TOOLTIP}`}
       />
     </div>
   );
@@ -52,11 +62,13 @@ export function ReviewMetadata({
 function MetricChip({
   label,
   value,
+  subvalue,
   tone,
   title,
 }: {
   label: string;
   value: string;
+  subvalue?: string;
   tone: keyof typeof METRIC_TONES;
   title?: string;
 }) {
@@ -67,7 +79,9 @@ function MetricChip({
     >
       <span className="block text-[9px] font-bold uppercase tracking-[0.13em] opacity-55">{label}</span>
       <span className="mt-0.5 block truncate text-xs font-semibold tabular-nums sm:text-[13px]">{value}</span>
+      {subvalue && (
+        <span className="block truncate text-[10px] font-medium tabular-nums opacity-70">{subvalue}</span>
+      )}
     </div>
   );
 }
-

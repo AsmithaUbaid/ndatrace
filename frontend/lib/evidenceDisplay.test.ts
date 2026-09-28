@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { selectEvidenceDisplay } from "./evidenceDisplay.ts";
+import { evidenceQuoteCount, selectEvidenceDisplay } from "./evidenceDisplay.ts";
 
 const RETRIEVED_CHUNK_TEXT =
   "This Non-Disclosure Agreement is entered into between Acme Corp... " +
@@ -40,4 +40,15 @@ test("multiple evidence quotes are kept separate, not concatenated", () => {
 test("no evidence returned is reported as such, not left blank or backfilled from retrieval", () => {
   const display = selectEvidenceDisplay("Entailment", [], true);
   assert.deepEqual(display, { kind: "no-evidence" });
+});
+
+test("evidenceQuoteCount counts quotes, not chunks, and is 0 for every non-quote state", () => {
+  assert.equal(evidenceQuoteCount(selectEvidenceDisplay("NotMentioned", [], null)), 0);
+  assert.equal(evidenceQuoteCount(selectEvidenceDisplay("Contradiction", [VALIDATED_QUOTE], false)), 0);
+  assert.equal(evidenceQuoteCount(selectEvidenceDisplay("Entailment", [], true)), 0);
+  assert.equal(evidenceQuoteCount(selectEvidenceDisplay("Entailment", [VALIDATED_QUOTE], true)), 1);
+  assert.equal(
+    evidenceQuoteCount(selectEvidenceDisplay("Entailment", ["First clause.", "Second clause."], true)),
+    2,
+  );
 });

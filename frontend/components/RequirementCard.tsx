@@ -107,6 +107,9 @@ export function RequirementCard({ r }: { r: RequirementResult }) {
           costUsd={r.cost_usd}
           latencyMs={r.latency_ms}
           retrievedChunks={r.retrieved_chunks}
+          label={r.label}
+          evidence={r.evidence}
+          sourceValid={r.source_valid}
         />
 
         <EvidenceSection
