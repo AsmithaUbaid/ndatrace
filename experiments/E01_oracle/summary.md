@@ -377,7 +377,7 @@ files touched).
    `ollama pull qwen2.5:7b-instruct` (~4.7GB), which itself is not inference and doesn't spend
    API budget, but does take real time/disk and should happen only after Stage B is approved.
 3. **Thermal risk on repeated local runs**: a full local run previously overheated the dev
-   laptop once (docs/decisions.md, C02 history) — worth monitoring during Stage B, especially
+   laptop once (T-series historical C02 incident) — worth monitoring during Stage B, especially
    if both local models run back-to-back.
 4. **`pipeline/model_gateway.py`'s own `PRICING_PER_MILLION` table is a separate source from
    `configs/pricing/*.yaml`** (E00B) — both currently agree on Gemini/GPT-5-mini numbers, but

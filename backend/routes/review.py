@@ -21,6 +21,8 @@ from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from backend import database
 from backend.models import FinalReviewRequest, FinalReviewResponse, RequirementResult, ReviewRequest, ReviewResponse
+from backend.rate_limit import ConcurrencyLimitExceeded, RateLimitExceeded, check_rate_limit, concurrency_guard
+from pipeline.cost_guard import CostCeilingExceeded, check_batch_budget, check_budget
 from pipeline.final_review import MODEL as FINAL_REVIEW_MODEL
 from pipeline.final_review import MODEL_MAX_RETRIES, MODEL_TIMEOUT_SECONDS, review_final, review_final_document
 from pipeline.logging_config import get_logger
@@ -32,6 +34,19 @@ logger = get_logger("api.review")
 router = APIRouter(tags=["review"])
 
 
+def _enforce_traffic_guards(requirement_text_for_cost_estimate: str) -> None:
+    """E22 LLM10 remediation: rate limit -> concurrency -> budget, in that order, all
+    BEFORE any retrieval/model work. Raises HTTPException(429/402) if any guard trips."""
+    try:
+        check_rate_limit()
+    except RateLimitExceeded as e:
+        raise HTTPException(status_code=429, detail=f"Rate limit exceeded: {e}") from e
+    try:
+        check_budget(requirement_text_for_cost_estimate)
+    except CostCeilingExceeded as e:
+        raise HTTPException(status_code=402, detail=str(e)) from e
+
+
 @router.post("/api/review", response_model=FinalReviewResponse)
 def create_final_review(request: FinalReviewRequest) -> FinalReviewResponse:
     """Single-requirement frozen RAG endpoint. Never logs NDA text - only metadata."""
@@ -39,6 +54,8 @@ def create_final_review(request: FinalReviewRequest) -> FinalReviewResponse:
     # missing-configuration error is caught before the request proceeds,
     # distinct from a runtime provider failure mid-request - which
     # review_final() already handles itself by returning needs_human_review.
+    _enforce_traffic_guards(request.requirement)
+
     try:
         gateway = ModelGateway(
             model=FINAL_REVIEW_MODEL,
@@ -49,7 +66,11 @@ def create_final_review(request: FinalReviewRequest) -> FinalReviewResponse:
         raise HTTPException(status_code=503, detail="Review service is not configured.") from e
 
     trace_id = str(uuid.uuid4())
-    result = review_final(request.nda_text, request.requirement, gateway=gateway)
+    try:
+        with concurrency_guard():
+            result = review_final(request.nda_text, request.requirement, gateway=gateway)
+    except ConcurrencyLimitExceeded as e:
+        raise HTTPException(status_code=429, detail=f"Too many concurrent requests: {e}") from e
 
     logger.info("API: final review", extra={
         "stage": "api_final_review", "trace_id": trace_id, "model": result.model,
@@ -57,6 +78,7 @@ def create_final_review(request: FinalReviewRequest) -> FinalReviewResponse:
         "needs_human_review": result.needs_human_review, "latency_ms": result.latency_ms,
         "input_tokens": result.input_tokens, "output_tokens": result.output_tokens,
         "cost_usd": result.cost_usd, "error": result.error,
+        "security_review_required": result.security_review_required, "security_flags": result.security_flags,
     })
 
     return FinalReviewResponse(
@@ -67,6 +89,7 @@ def create_final_review(request: FinalReviewRequest) -> FinalReviewResponse:
         estimated_cost_usd=result.cost_usd, trace_id=trace_id,
         sources=[asdict(source) for source in result.sources],
         retrieved_chunks=[asdict(chunk) for chunk in result.retrieved_chunks],
+        security_review_required=result.security_review_required, security_flags=result.security_flags,
     )
 
 
@@ -82,6 +105,15 @@ def create_review(request: ReviewRequest) -> ReviewResponse:
         selected = {hid: entry["hypothesis"] for hid, entry in all_hypotheses.items()}
 
     try:
+        check_rate_limit()
+    except RateLimitExceeded as e:
+        raise HTTPException(status_code=429, detail=f"Rate limit exceeded: {e}") from e
+    try:
+        check_batch_budget(list(selected.values()))
+    except CostCeilingExceeded as e:
+        raise HTTPException(status_code=402, detail=str(e)) from e
+
+    try:
         gateway = ModelGateway(
             model=FINAL_REVIEW_MODEL,
             max_retries=MODEL_MAX_RETRIES,
@@ -93,7 +125,11 @@ def create_review(request: ReviewRequest) -> ReviewResponse:
     review_id = str(uuid.uuid4())
     doc_id = review_id[:8]
     start = time.time()
-    results_by_id = review_final_document(request.nda_text, selected, gateway)
+    try:
+        with concurrency_guard():
+            results_by_id = review_final_document(request.nda_text, selected, gateway)
+    except ConcurrencyLimitExceeded as e:
+        raise HTTPException(status_code=429, detail=f"Too many concurrent requests: {e}") from e
     duration_ms = (time.time() - start) * 1000
 
     total_cost = sum(r.cost_usd or 0.0 for r in results_by_id.values())
@@ -119,6 +155,8 @@ def create_review(request: ReviewRequest) -> ReviewResponse:
             "cost_usd": result.cost_usd or 0.0,
             "latency_ms": result.latency_ms or 0.0,
             "error": result.error,
+            "security_review_required": result.security_review_required,
+            "security_flags": result.security_flags,
         }
         for hypothesis_id, result in results_by_id.items()
     ]

@@ -3,8 +3,8 @@
 This describes the interactive prototype runtime, verified directly against
 `pipeline/frozen_rag.py`, `pipeline/final_review.py`, and `backend/routes/review.py`. Both the
 single-requirement endpoint (`POST /api/review`) and the batch UI endpoint (`POST /review`) use the
-same frozen E20 RAG pipeline. For benchmark conclusions and rejected alternatives, see
-`docs/architecture_decisions/INDEX.md` and `docs/decisions.md`.
+same frozen E20 RAG pipeline. For quality-reference conclusions and rejected alternatives, see
+`docs/architecture_decisions/INDEX.md`.
 
 ## 1. Request flow (`POST /api/review`, `backend/routes/review.py`)
 
@@ -33,20 +33,21 @@ agent, routing policy, rule boost, or silent FULL fallback. GPT-P0 requests only
 `{label, evidence}`; there is no model-reported confidence, so none is fabricated. The batch API
 retains its historical confidence field as `null` with `confidence_available: false`.
 
-## 2. Product runtime decision versus benchmark result
+## 2. Product runtime decision versus the quality-reference result
 
 NDATrace's interactive prototype uses the frozen top-5 RAG pipeline because it offers a
 bounded-context architecture, lower input-token usage, and clause-level retrieval suitable for
 interactive NDA review.
 
-FULL-context GPT remains the strongest measured benchmark configuration on ContractNLI TEST,
-achieving higher Joint evidence-grounded correctness. Therefore the prototype runtime choice is
-an engineering/productization decision, not a claim that RAG achieved higher benchmark quality.
+FULL-context GPT remains the strongest measured quality-reference configuration on the ContractNLI
+evaluation dataset's TEST split, achieving higher Joint evidence-grounded correctness. Therefore
+the prototype runtime choice is an engineering/productization decision, not a claim that RAG
+achieved higher quality.
 
-- **Full-context is the strongest measured benchmark configuration.** On the full 2,091-case official
+- **Full-context is the strongest measured quality-reference configuration.** On the full 2,091-case official
   ContractNLI TEST set, GPT-5-mini + P0 + FULL scored accuracy 77.6%, macro-F1 0.727, joint
-  label+evidence correctness 74.6%, Contradiction recall 75.5% (n=2,091; see `docs/decisions.md`
-  ADR entries for E17/E17B).
+  label+evidence correctness 74.6%, Contradiction recall 75.5% (n=2,091; see
+  `docs/experiment_registry.md`'s E17/E17B rows).
 - **RAG is the interactive prototype runtime.** On the matched development-sample
   comparison (E13), retrieval reduced input tokens substantially but did not demonstrate a quality
   advantage over full context. **E20 repeated this as a same-population, all-2,091-TEST-case
@@ -54,7 +55,7 @@ an engineering/productization decision, not a claim that RAG achieved higher ben
   indistinguishable from FULL (76.8% vs 77.6%, McNemar p=0.217), but FULL's Joint (evidence-
   grounded) success was significantly higher (74.6% vs 72.5%, p=0.0047) — a real, not noise-level,
   gap. RAG cut input tokens 50.4% and API cost 16.8% on the same run. It is the
-  **benchmark**-losing but **production-oriented** runtime: bounded context cost regardless of
+  **quality-reference-losing but production-oriented** runtime: bounded context cost regardless of
   document length, and reusable per-document retrieval indexing across the 17 requirement checks —
   a scaling argument this dataset (median 1,836 / max 7,861 TEST tokens) is too short to itself
   validate against real 50–100 page contracts. Full record: ADR-012,
@@ -69,17 +70,17 @@ an engineering/productization decision, not a claim that RAG achieved higher ben
   an NDA.
 - **The system is evidence-grounded but not prompt-injection-hardened.** The evidence validator
   confirms a quoted string came from the source document; it does not confirm the document's
-  content is trustworthy. A disclosed, unpatched injection limitation is recorded in
-  `docs/decisions.md`.
+  content is trustworthy. A disclosed injection limitation is recorded in
+  `docs/experiment_registry.md`'s E16 and E21 rows.
 
 ## 3. Final held-out TEST metrics (n=2,091, one-shot, official TEST split)
 
 | System | Accuracy | Macro-F1 | Joint (label+evidence) | Contradiction recall |
 |---|---:|---:|---:|---:|
-| **GPT-5-mini + P0 + FULL (benchmark best)** | **77.6%** | **0.727** | **74.6%** | **75.5%** |
+| **GPT-5-mini + P0 + FULL (quality reference)** | **77.6%** | **0.727** | **74.6%** | **75.5%** |
 
 Full breakdown, comparators (rule baseline, local Qwen), and provenance: `results/final/README.md`,
-`docs/experiment_registry.md` (E17/E17B), `docs/decisions.md`.
+`docs/experiment_registry.md` (E17/E17B).
 
 A same-population RAG comparator (frozen `retrieval_v1` top-5, identical model/prompt/evaluator)
 was also run on the full TEST split (E20) for a paired statistical comparison — FULL's Joint

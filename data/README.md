@@ -3,10 +3,11 @@
 ## ContractNLI Dataset
 
 - **Source:** https://stanfordnlp.github.io/contract-nli/
-- **License:** CC BY-SA 4.0
-- **Size:** 607 NDAs with 17 confidentiality hypotheses each. Splits: dev (used for all development
-  experiments), test (2,091 examples — 123 documents × 17 hypotheses — reserved for the final
-  locked evaluation only, see `../docs/evaluation_protocol.md`).
+- **License:** CC BY 4.0 (no ShareAlike clause — see `data/contractnli/LICENSE`)
+- **Size:** 607 NDAs with 17 confidentiality hypotheses each, 10,319 document-hypothesis examples
+  total. Splits: dev (used for all development experiments), test (2,091 examples — 123 documents
+  × 17 hypotheses — reserved for the final locked evaluation only, see
+  `../docs/evaluation_protocol.md`).
 - **Download:** Run `bash scripts/download_data.sh`
 - **Location:** `data/contractnli/` (`dev.json`, `test.json`, `train.json`)
 
@@ -21,7 +22,7 @@ regression test cases" set that predates the current, larger case collection):
 |---|---|---|
 | `golden_cases.json` | 30 | Benchmark/regression — ordinary cases |
 | `negative_cases.json` | 15 | Regression — wrong-behaviour-catching |
-| `injection_cases.json` | 11 | Robustness — prompt injection (grew from 10 to 11 after a real vulnerability was found in production use, see `../docs/decisions.md` ADR-004) |
+| `injection_cases.json` | 11 | Robustness — prompt injection (grew from 10 to 11 after a real vulnerability was found in production use, see `../docs/architecture_decisions/INDEX.md` ADR-004) |
 | `llm_behaviour_cases.json` | 10 | LLM output-quality behaviour |
 | `agent_cases.json` | 10 | Selective-agent behaviour |
 | `confidence_cases.json` | 5 | Confidence/abstention calibration |
@@ -49,6 +50,6 @@ enforce dev/test separation.
 
 Everything else under `data/` (`*.json` files not in `golden/`, e.g. `agent_experiment.json`,
 `retrieval_experiment_results.json`, `performance_results.json`) is a saved output of a specific
-experiment or audit script, referenced by name from `docs/decisions.md` and `docs/experiments.md`
-alongside the script that produced it. `data/contractnli/README.md` documents the raw dataset
+experiment or audit script (pre-reconstruction, T-series) alongside the script that produced it.
+`data/contractnli/README.md` documents the raw dataset
 files themselves.

@@ -29,7 +29,8 @@ GPT-specific prompt, no P3, no new instructions.
 | Structured JSON mode (`response_format`) | **Available but will NOT be used** | see section 7 |
 
 **Critical, historically-confirmed cost behavior**: GPT-5 mini bills hidden reasoning tokens as
-output tokens (found independently during T009, `docs/decisions.md`, and restated in this
+output tokens (found independently during T009, `docs/architecture_decisions/INDEX.md`'s ADR-001,
+and restated in this
 model's own pricing file). Real E01 Oracle data (300 real calls, this reconstruction-v2
 lineage) shows output tokens ranging **43-1,118**, mean **149.9**, median **124.0** — a long
 right tail. A2's task (full 3-way classification from ~5 retrieved chunks) is structurally

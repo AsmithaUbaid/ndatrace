@@ -11,7 +11,7 @@ from. If a number here ever looks wrong, trust the source artifact, not this fil
   the strongest *measured benchmark* configuration on the official TEST set, **RAG** (GPT-5-mini +
   P0 + retrieved top-5) is the **retained interactive prototype/runtime** architecture actually
   served by the product, and the **selective agent was tested and rejected** (small, statistically
-  inconclusive effect — see `docs/decisions.md`). FULL is a benchmark ceiling, not the served
+  inconclusive effect — see `docs/experiment_registry.md`'s E09/E11 rows). FULL is a benchmark ceiling, not the served
   architecture.
 - **`legacy/`** — retained only for historical provenance (the pre-reconstruction T041/AV01
   pipeline run described in the top-level `README.md`'s "Experiment progression (original

@@ -8,8 +8,8 @@ calls — pure deterministic keyword matching over full NDA text (not retrieval_
 excerpts — A0 is intentionally a separate, cheaper architecture, per the reconstruction brief).
 
 Historical exposure disclosure: this exact rule_baseline.py code has previously been evaluated
-on the full official DEV split (B02, docs/experiments.md) and the full official TEST split
-(T041) in the T-series pre-reconstruction project. No rule modification happens here — this
+on the full official DEV split (B02) and the full official TEST split (T041) in the T-series
+pre-reconstruction project. No rule modification happens here — this
 run is a reconstruction-v2 CHARACTERIZATION of a pre-existing, unchanged baseline on TRAIN, not
 a claim that A0 was developed blind to DEV/TEST.
 
@@ -39,9 +39,9 @@ EXPECTED_DISTRIBUTION = {"Entailment": 3530, "NotMentioned": 2820, "Contradictio
 
 
 def span_overlaps_gold(span: tuple[int, int], doc_spans: list[tuple[int, int]]) -> list[int]:
-    """Same interval-overlap semantics as evaluation.scorer.map_chunks_to_gold_span_indices /
-    archive/pre_reconstruction/scripts/run_full_rule_baseline_test.py -- which doc.spans indices does this char span
-    (the rule's single matched-phrase location) overlap."""
+    """Same interval-overlap semantics as evaluation.scorer.map_chunks_to_gold_span_indices --
+    which doc.spans indices does this char span (the rule's single matched-phrase
+    location) overlap."""
     start, end = span
     return [idx for idx, (s_start, s_end) in enumerate(doc_spans)
             if min(s_end, end) > max(s_start, start)]

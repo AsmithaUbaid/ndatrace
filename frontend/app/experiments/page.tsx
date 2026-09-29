@@ -6,7 +6,7 @@ type ComparisonRow = {
   contradictionRecall: string;
   inputTokens: string;
   apiCost: string;
-  emphasis: "neutral" | "benchmark" | "runtime";
+  emphasis: "neutral" | "reference" | "runtime";
   strongest: Array<"accuracy" | "joint" | "contradictionRecall" | "inputTokens" | "apiCost">;
 };
 
@@ -36,13 +36,13 @@ const comparisonRows: ComparisonRow[] = [
   },
   {
     system: "GPT-5-mini FULL",
-    role: "Benchmark winner",
+    role: "Quality reference",
     accuracy: "77.6%",
     joint: "74.6%",
     contradictionRecall: "75.5%",
     inputTokens: "2,279",
     apiCost: "$0.00202",
-    emphasis: "benchmark",
+    emphasis: "reference",
     strongest: ["accuracy", "joint"],
   },
   {
@@ -60,7 +60,7 @@ const comparisonRows: ComparisonRow[] = [
 
 const rowClasses: Record<ComparisonRow["emphasis"], string> = {
   neutral: "bg-white hover:bg-zinc-50/80",
-  benchmark:
+  reference:
     "bg-sky-50/55 shadow-[inset_3px_0_0_#38bdf8] hover:bg-sky-50/90",
   runtime:
     "bg-amber-50/60 shadow-[inset_3px_0_0_#f59e0b] hover:bg-amber-50/95",
@@ -68,7 +68,7 @@ const rowClasses: Record<ComparisonRow["emphasis"], string> = {
 
 const roleClasses: Record<ComparisonRow["emphasis"], string> = {
   neutral: "border-zinc-200 bg-white text-zinc-600 shadow-sm",
-  benchmark: "border-sky-200 bg-sky-100/75 text-sky-800 shadow-sm",
+  reference: "border-sky-200 bg-sky-100/75 text-sky-800 shadow-sm",
   runtime: "border-amber-200 bg-amber-100/75 text-amber-900 shadow-sm",
 };
 
@@ -107,8 +107,8 @@ export default function ExperimentsPage() {
           </h1>
           <p className="mt-4 max-w-4xl text-sm leading-6 text-zinc-600 sm:text-[15px] sm:leading-7">
             Four systems were evaluated across the same NDA-review task. The rule and Qwen systems
-            provide deterministic/local baselines, GPT-5-mini FULL achieved the strongest benchmark
-            Joint result, and GPT-5-mini RAG top-5 is the selected prototype runtime.
+            provide deterministic/local baselines, GPT-5-mini FULL achieved the strongest measured
+            Joint result (quality reference), and GPT-5-mini RAG top-5 is the selected prototype runtime.
           </p>
         </div>
       </header>
@@ -121,7 +121,7 @@ export default function ExperimentsPage() {
           </div>
           <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-500" aria-label="Row highlights">
             <span className="inline-flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-sky-400" /> Benchmark
+              <span className="h-2 w-2 rounded-full bg-sky-400" /> Quality reference
             </span>
             <span className="inline-flex items-center gap-1.5">
               <span className="h-2 w-2 rounded-full bg-amber-400" /> Prototype
@@ -204,7 +204,7 @@ export default function ExperimentsPage() {
             clipRule="evenodd"
           />
         </svg>
-        <p>FULL is the benchmark winner; RAG is the production-oriented prototype architecture.</p>
+        <p>FULL is the quality reference; RAG is the production-oriented prototype architecture.</p>
       </div>
     </main>
   );

@@ -12,7 +12,7 @@ from evaluation import evidence_matching as EM  # noqa: E402
 from pipeline.evidence_validator import validate_evidence  # noqa: E402
 from pipeline.rule_baseline import classify_by_keywords  # noqa: E402
 from pipeline.parser import parse_contractnli_file  # noqa: E402
-from scripts.run_oracle_experiment import stratified_sample  # noqa: E402
+from evaluation.oracle import stratified_sample  # noqa: E402
 
 E13 = REPO / "experiments/E13_gpt_context_architecture"
 OUT = REPO / "experiments/E15_review_routing/results"

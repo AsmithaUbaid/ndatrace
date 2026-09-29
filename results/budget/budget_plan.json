@@ -140,7 +140,7 @@
   "reconstruction_v2_spend_ledger": {
     "path": "results/budget/reconstruction_spend_ledger.csv",
     "status": "READY -- append-only, currently empty (no reconstruction-v2 hosted call has been made yet)",
-    "current_total_usd": 0.0,
+    "current_total_usd": 11.56523795000004,
     "write_function": "evaluation.budget.record_spend(experiment_id, provider, model, input_tokens, output_tokens, cost_usd, run_id) -- call after every real successful hosted call, starting with E01",
     "read_function": "evaluation.budget.reconstruction_spend_so_far() -- sums cost_usd across every recorded row"
   },

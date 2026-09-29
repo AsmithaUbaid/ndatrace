@@ -79,8 +79,8 @@ def test_list_e20_architecture_comparison_includes_final_rag(client):
     r = client.get("/experiments/e20")
     assert r.status_code == 200
     rows = {row["architecture_status"]: row for row in r.json()}
-    assert set(rows) == {"benchmark", "final"}
-    assert rows["benchmark"]["system"] == "gpt5mini_p0_full"
+    assert set(rows) == {"quality_reference", "final"}
+    assert rows["quality_reference"]["system"] == "gpt5mini_p0_full"
     assert rows["final"]["system"] == "gpt5mini_p0_rag_top5"
     assert rows["final"]["n"] == 2091
     assert rows["final"]["accuracy"] == pytest.approx(0.7675753228120517)

@@ -26,6 +26,7 @@ from evaluation.structured_output import parse_structured_output
 from pipeline.evidence_text import locate_quote
 from pipeline.evidence_validator import validate_evidence
 from pipeline.frozen_rag import FrozenRagRetriever, RetrievedChunk, join_context
+from pipeline.injection_guard import detect_suspicious_instructions
 from pipeline.model_gateway import ModelError, ModelGateway
 
 MODEL = "openai/gpt-5-mini"
@@ -58,6 +59,13 @@ class FinalReviewResult:
     error: str | None = None
     retrieved_chunks: list[RetrievedChunk] = field(default_factory=list)
     sources: list[RetrievedChunk] = field(default_factory=list)
+    # E22 LLM01 remediation (pipeline/injection_guard.py): set when the retrieved
+    # context contains instruction-override / fake-role-marker / response-format-
+    # hijacking text. Does NOT block the model call or alter the label - it fails
+    # CLOSED to human review, since evidence validation alone can't catch a
+    # malicious instruction that is genuinely present in the source document.
+    security_review_required: bool = False
+    security_flags: list[str] = field(default_factory=list)
 
 
 def _failure(reason: str, *, error: str, model: str = MODEL) -> FinalReviewResult:
@@ -111,22 +119,37 @@ def review_final(
     context = join_context(retrieved)
     user_prompt = USER_TEMPLATE.format(hypothesis_text=hypothesis_text, context_text=context)
 
+    # E22 LLM01 remediation: scan the exact context the model is about to see.
+    # Deliberately BEFORE the model call, not after - the flag applies regardless
+    # of what the model does with it, so it can't be defeated by the model
+    # happening to answer normally despite the suspicious text being present.
+    security_flags = detect_suspicious_instructions(context)
+
+    def _flagged(result: FinalReviewResult) -> FinalReviewResult:
+        if security_flags:
+            result.security_review_required = True
+            result.security_flags = security_flags
+            result.needs_human_review = True
+            note = "Potential instruction-like content detected in NDA text; automated decision quarantined for human review."
+            result.review_reason = f"{result.review_reason}; {note}" if result.review_reason else note
+        return result
+
     try:
         r = gw.complete(system_prompt=system_prompt, user_prompt=user_prompt, temperature=0.0)
     except ModelError as e:
         result = _failure(f"Model provider error: {e}", error=str(e))
         result.retrieved_chunks = retrieved
-        return result
+        return _flagged(result)
 
     p = parse_structured_output(r.content)
     if p.parse_status == "invalid" or p.predicted_label is None:
-        return FinalReviewResult(
+        return _flagged(FinalReviewResult(
             label=None, parse_status=p.parse_status, needs_human_review=True,
             review_reason="The model's response could not be parsed into a valid classification.",
             input_tokens=r.tokens_in, output_tokens=r.tokens_out, latency_ms=r.latency_ms, cost_usd=r.cost_usd,
             model=MODEL, error=p.error_type,
             retrieved_chunks=retrieved,
-        )
+        ))
 
     # Validate against the exact bounded context shown to the model, not the
     # full NDA. A quote outside the retrieved top five must never pass.
@@ -138,13 +161,13 @@ def review_final(
     elif not ev.label_evidence_consistent:
         reason = "The evidence returned is inconsistent with the predicted label."
 
-    return FinalReviewResult(
+    return _flagged(FinalReviewResult(
         label=p.predicted_label, evidence=p.evidence, explanation=_EXPLANATION.get(p.predicted_label, ""),
         source_valid=ev.all_verbatim, needs_human_review=needs_review, review_reason=reason,
         parse_status=p.parse_status, input_tokens=r.tokens_in, output_tokens=r.tokens_out,
         latency_ms=r.latency_ms, cost_usd=r.cost_usd, model=MODEL,
         retrieved_chunks=retrieved, sources=_source_chunks(p.evidence, retrieved),
-    )
+    ))
 
 
 def review_final_document(

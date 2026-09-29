@@ -1,7 +1,7 @@
 # Pricing configs
 
 One file per provider/model, verified against the provider's live pricing page before use —
-**never trust a remembered or historical price.** `docs/decisions.md`'s ADR-001 already found
+**never trust a remembered or historical price.** `docs/architecture_decisions/INDEX.md`'s ADR-001 already found
 hosted pricing drifted mid-project once; treat every price as stale until re-checked on the
 day it's used.
 

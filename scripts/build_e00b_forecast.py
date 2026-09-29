@@ -85,8 +85,10 @@ def build_pricing_table() -> list[dict]:
 # =========================================================================
 
 def build_token_estimates() -> dict:
-    system_prompt = (REPO / "prompts/classify_v6.txt").read_text()
-    system_tokens = toks(system_prompt)
+    # prompts/classify_v6.txt was deleted in the 2026-09-29 legacy prompt cleanup (see
+    # prompts/README.md) - its token count was frozen first, see
+    # experiments/E00B_budget_forecast/inputs/README.md.
+    system_tokens = _load_historical_inputs()["system_prompt_tokens"]["value"]
 
     with open(REPO / "data/contractnli/train.json") as f:
         train = json.load(f)
@@ -218,22 +220,32 @@ def compact_vs_verbose_comparison(token_estimates: dict) -> dict:
 #    inflation that a naive token formula misses entirely).
 # =========================================================================
 
+HISTORICAL_INPUTS_PATH = REPO / "experiments/E00B_budget_forecast/inputs/historical_cost_inputs.json"
+
+
+def _load_historical_inputs() -> dict:
+    with open(HISTORICAL_INPUTS_PATH) as f:
+        return json.load(f)
+
+
 def historical_per_case_costs() -> dict:
-    def per_case(path, label):
-        lines = [l for l in open(REPO / path) if l.strip()]
-        d = json.loads(lines[-1])
-        n = d["metrics"]["total_cases"]
-        cost = d["metrics"]["total_cost_usd"]
-        return {"label": label, "n_cases": n, "total_cost_usd": cost,
-                "usd_per_case": round(cost / n, 7) if n else None}
+    # Legacy results/archive/runs/ and results/final/legacy/ (9 raw JSONL files) were
+    # deleted in the 2026-09-29 cleanup pass; the specific frozen numbers this function
+    # used were extracted first -- see experiments/E00B_budget_forecast/inputs/README.md.
+    frozen = _load_historical_inputs()["per_case"]
+
+    def per_case(key, label):
+        v = frozen[key]
+        return {"label": label, "n_cases": v["n_cases"], "total_cost_usd": v["total_cost_usd"],
+                "usd_per_case": v["usd_per_case"]}
 
     return {
-        "oracle_v1_gemini": per_case("results/archive/runs/run_B04_oracle_google_gemini-2.5-flash-lite.jsonl", "B04 Oracle, Gemini 2.5 Flash Lite, v1 prompt"),
-        "oracle_v1_gpt5mini": per_case("results/archive/runs/run_B04_oracle_openai_gpt-5-mini.jsonl", "B04 Oracle, GPT-5 mini, v1 prompt"),
-        "rag_v2_gemini": per_case("results/archive/runs/run_T024_rag.jsonl", "T024 RAG, Gemini, v2 prompt"),
-        "full_context_test_gemini": per_case("results/final/legacy/run_T041_final_test_full_context_google_gemini-2.5-flash-lite.jsonl", "T041 full-context, Gemini, full 2091-case TEST"),
-        "rag_test_gemini": per_case("results/final/legacy/run_T041_final_test_rag_google_gemini-2.5-flash-lite.jsonl", "T041 RAG, Gemini, full 2091-case TEST"),
-        "rag_agent_test_gemini": per_case("results/final/legacy/run_T041_final_test_rag_agent_google_gemini-2.5-flash-lite.jsonl", "T041 RAG+agent, Gemini, full 2091-case TEST"),
+        "oracle_v1_gemini": per_case("oracle_v1_gemini", "B04 Oracle, Gemini 2.5 Flash Lite, v1 prompt"),
+        "oracle_v1_gpt5mini": per_case("oracle_v1_gpt5mini", "B04 Oracle, GPT-5 mini, v1 prompt"),
+        "rag_v2_gemini": per_case("rag_v2_gemini", "T024 RAG, Gemini, v2 prompt"),
+        "full_context_test_gemini": per_case("full_context_test_gemini", "T041 full-context, Gemini, full 2091-case TEST"),
+        "rag_test_gemini": per_case("rag_test_gemini", "T041 RAG, Gemini, full 2091-case TEST"),
+        "rag_agent_test_gemini": per_case("rag_agent_test_gemini", "T041 RAG+agent, Gemini, full 2091-case TEST"),
         "note": (
             "GPT-5-mini's real per-case Oracle cost ($0.001033) is ~5x its naive "
             "token-formula estimate (~$0.0002) due to hidden reasoning tokens billed as "
@@ -252,20 +264,21 @@ def historical_per_case_costs() -> dict:
 # =========================================================================
 
 def local_runtime_measurements() -> dict:
-    def mean_latency(path):
-        lines = [l for l in open(REPO / path) if l.strip()]
-        d = json.loads(lines[-1])
-        preds = d["predictions"]
-        lat = [p["cost_latency"]["latency_ms"] for p in preds if p.get("cost_latency")]
-        return {"n": len(lat), "mean_latency_ms": round(statistics.mean(lat), 1) if lat else None}
+    # Same deletion as historical_per_case_costs() above -- frozen means only, see
+    # experiments/E00B_budget_forecast/inputs/README.md.
+    frozen = _load_historical_inputs()["latency"]
+
+    def mean_latency(key):
+        v = frozen[key]
+        return {"n": v["n"], "mean_latency_ms": v["mean_latency_ms"]}
 
     return {
-        "local_llama3.2_3b_full_context": mean_latency("results/archive/runs/run_T041_final_test_full_context_llama3.2_3b.jsonl"),
-        "local_llama3.2_3b_rag": mean_latency("results/archive/runs/run_T041_final_test_rag_llama3.2_3b.jsonl"),
-        "local_llama3.2_3b_rag_agent": mean_latency("results/archive/runs/run_T041_final_test_rag_agent_llama3.2_3b.jsonl"),
-        "hosted_gemini_full_context": mean_latency("results/final/legacy/run_T041_final_test_full_context_google_gemini-2.5-flash-lite.jsonl"),
-        "hosted_gemini_rag": mean_latency("results/final/legacy/run_T041_final_test_rag_google_gemini-2.5-flash-lite.jsonl"),
-        "hosted_gemini_rag_agent": mean_latency("results/final/legacy/run_T041_final_test_rag_agent_google_gemini-2.5-flash-lite.jsonl"),
+        "local_llama3.2_3b_full_context": mean_latency("local_llama3.2_3b_full_context"),
+        "local_llama3.2_3b_rag": mean_latency("local_llama3.2_3b_rag"),
+        "local_llama3.2_3b_rag_agent": mean_latency("local_llama3.2_3b_rag_agent"),
+        "hosted_gemini_full_context": mean_latency("hosted_gemini_full_context"),
+        "hosted_gemini_rag": mean_latency("hosted_gemini_rag"),
+        "hosted_gemini_rag_agent": mean_latency("hosted_gemini_rag_agent"),
         "note_single_call_measurements_not_used_as_primary": (
             "docs/decisions.md/CLAUDE.md separately record single-call spot checks: local "
             "Ollama ~5.37s, Groq gpt-oss-20b ~0.79s. These are n=1 and NOT used as the "

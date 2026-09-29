@@ -31,8 +31,8 @@ RRF_K = 60  # standard constant from the original RRF paper (Cormack et al. 2009
 # silently fragmented BM25's vocabulary. Fixed here even though hybrid
 # BM25+dense retrieval isn't the adopted production path (Decisions Log:
 # "no measured benefit over dense+rerank") - it's still real, reachable code
-# (archive/pre_reconstruction/scripts/run_full_retrieval_comparison.py exercises it) and shouldn't ship
-# with a known correctness bug just because it lost the architecture bake-off.
+# and shouldn't ship with a known correctness bug just because it lost the
+# architecture bake-off.
 _WORD_RE = re.compile(r"[a-z0-9]+")
 
 

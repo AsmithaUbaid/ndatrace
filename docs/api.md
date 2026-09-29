@@ -162,12 +162,12 @@ experiment log). **File:** `backend/routes/experiments.py`.
 ```
 
 Three rows are returned: `rule`, `qwen_ctx16k` (local, free), and `gpt5mini_p0_full` (the strongest
-measured benchmark configuration).
+measured quality-reference configuration).
 
 ### `GET /experiments/e20`
 
 Returns the frozen, same-population E20 comparison used by the architecture page. The two rows are
-`gpt5mini_p0_full` (`architecture_status: "benchmark"`) and
+`gpt5mini_p0_full` (`architecture_status: "quality_reference"`) and
 `gpt5mini_p0_rag_top5` (`architecture_status: "final"`). Metrics are read from
 `experiments/E20_final_rag_test/results/E20_final_report.json` and are never recomputed by the API.
 
@@ -320,7 +320,7 @@ reviewer remains the final authority in every case.
 - CORS is currently permissive (`allow_origins=["*"]`) — acceptable for local demo use only. Running
   this against real confidential NDAs would require appropriate access and privacy controls (auth,
   restricted CORS, log redaction review) that are **not implemented** in this project (see the root
-  `README.md`'s "Do Not Build" list — no SSO/RBAC/multi-tenancy is in scope).
+  `README.md`'s explicit non-goals — no SSO/RBAC/multi-tenancy is in scope).
 
 ## Local example
 

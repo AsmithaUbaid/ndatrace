@@ -32,7 +32,7 @@ gpt_config_audit:
   published_output_price_per_million: 2.00
   no_free_tier: true  # confirmed in the pricing file -- effective assumption equals published rate
   reasoning_token_note: >
-    CRITICAL, historically confirmed (T009, docs/decisions.md, and this pricing file's own
+    CRITICAL, historically confirmed (T009, docs/architecture_decisions/INDEX.md's ADR-001, and this pricing file's own
     note): GPT-5 mini bills HIDDEN reasoning tokens as output tokens. Real E01 Oracle data (300
     calls, this reconstruction-v2 lineage, not historical T-series) shows output tokens ranging
     43-1118 with mean 149.9/median 124.0 -- a long right tail consistent with occasional heavy

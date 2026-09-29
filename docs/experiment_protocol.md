@@ -2,7 +2,8 @@
 
 Governance rules for every experiment run under the reconstruction-v2 lineage (`E00` onward,
 see `docs/experiment_registry.md`). These apply going forward; they do not retroactively
-re-grade the historical T-series experiments (`docs/decisions.md`, `docs/experiments.md`).
+re-grade the historical T-series experiments (`docs/architecture_decisions/INDEX.md`'s historical
+ADR table).
 
 ## Rules
 
@@ -107,8 +108,8 @@ config-driven experiments — reconstruction-v2 experiments should call the same
 
 ## Relationship to historical work
 
-The T-series experiments already in this repo (`docs/decisions.md`, `docs/experiments.md`,
-`results/archive/runs/run_T*.jsonl`, `results/final/legacy/run_T041_*.jsonl`) are **historical evidence**,
+The T-series experiments already in this repo (`results/archive/runs/run_T*.jsonl`,
+`results/final/legacy/run_T041_*.jsonl`) are **historical evidence**,
 preserved as-is. They are not held to this protocol retroactively, and reconstruction-v2
 experiments must not silently inherit their conclusions (see `docs/project_contract.md` §16
 and the reconstruction ADR index at `docs/architecture_decisions/INDEX.md`).

@@ -1,0 +1,20 @@
+{
+  "note": "LLM10 checklist. Each entry names a control this runtime SHOULD have and how it is checked (static config read, or a safe deterministic local call with no hosted model involved). No hosted calls are made for LLM10 - the actual results (control present / absent) are computed by scripts/run_e21_owasp.py and written to results/deterministic_results.json and results/static_results.json under the llm10 key, not fabricated here.",
+  "checks": [
+    {"id": "R01", "control": "PDF upload size cap", "check": "grep backend/routes/review.py for MAX_PDF_SIZE_BYTES and its 413 response"},
+    {"id": "R02", "control": "raw NDA text request max length", "check": "inspect backend/models.py FinalReviewRequest/ReviewRequest for a max_length constraint on nda_text"},
+    {"id": "R03", "control": "requirement text max length", "check": "inspect backend/models.py for a max_length constraint on requirement/hypothesis fields"},
+    {"id": "R04", "control": "batch size limit (custom hypothesis_ids list)", "check": "inspect backend/routes/review.py create_review for any cap on len(request.hypothesis_ids)"},
+    {"id": "R05", "control": "all-17-requirements review path cost/time bound", "check": "inspect create_review: cost/time is the sum of 17 sequential model calls with no aggregate cap"},
+    {"id": "R06", "control": "provider retry count", "check": "pipeline/model_gateway.py MAX_RETRIES / settings.max_retries and pipeline/final_review.py MODEL_MAX_RETRIES"},
+    {"id": "R07", "control": "request timeout", "check": "settings.request_timeout_seconds and pipeline/final_review.py MODEL_TIMEOUT_SECONDS"},
+    {"id": "R08", "control": "model output max tokens", "check": "grep pipeline/model_gateway.py ModelGateway.complete for a max_tokens parameter on the chat completion call"},
+    {"id": "R09", "control": "API rate limiting (requests per IP/key)", "check": "grep backend/app.py and backend/routes for any rate-limit middleware or dependency"},
+    {"id": "R10", "control": "concurrent request control / queueing", "check": "grep backend for a semaphore, queue, or max-concurrency setting around review endpoints"},
+    {"id": "R11", "control": "per-request cost ceiling enforced in the live runtime", "check": "grep pipeline/final_review.py and backend/routes/review.py for any check against settings.max_budget_usd before/after a call"},
+    {"id": "R12", "control": "session/day cost ceiling enforced in the live runtime", "check": "grep backend/ and pipeline/ for any cumulative-spend tracking gating new requests (distinct from the offline results/budget/ ledger used by experiment scripts)"},
+    {"id": "R13", "control": "repeated identical batch calls (no de-dup/caching at the API layer)", "check": "inspect create_review/create_final_review for response caching or a de-dup guard on identical (nda_text, requirement) pairs"},
+    {"id": "R14", "control": "extremely long NDA text handling", "check": "safe local test: run pipeline.chunker.clause_aware_chunk and pipeline.frozen_rag.FrozenRagRetriever on a synthetic ~500,000-character NDA; confirm it completes and returns a bounded top-5, no hosted call"},
+    {"id": "R15", "control": "repeated duplicate clauses handling", "check": "safe local test: run FrozenRagRetriever on an NDA where the genuine clause is duplicated 50x; confirm retrieval still completes and returns exactly top_k=5 chunks"}
+  ]
+}

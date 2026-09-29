@@ -143,14 +143,20 @@ def test_one_hypothesis_failure_does_not_lose_the_others(client, monkeypatch):
         assert results["nda-5"]["error"] is not None  # the one that failed is flagged, not silently dropped
 
 
+def test_pipeline_agent_module_does_not_exist():
+    """The legacy 5-tool agent (pipeline/agent.py) was deleted 2026-09-29 - a stronger,
+    still-valid version of the old 'patch pipeline.agent.run_agent and assert it's never
+    called' regression check, since the module can no longer be imported at all."""
+    with pytest.raises(ModuleNotFoundError):
+        import pipeline.agent  # noqa: F401
+
+
 def test_review_never_invokes_agent_or_routing(client):
     contradiction_json = json.dumps({
         "label": "Contradiction", "confidence": 0.6,
         "evidence": ["reverse engineer"], "explanation": "test",
     })
-    with patch("pipeline.model_gateway.OpenAI") as mock_openai, patch(
-        "pipeline.agent.run_agent", side_effect=AssertionError("agent must not run")
-    ):
+    with patch("pipeline.model_gateway.OpenAI") as mock_openai:
         completion = MagicMock(return_value=_fake_completion(contradiction_json))
         mock_openai.return_value.chat.completions.create = completion
         payload = {

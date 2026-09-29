@@ -135,7 +135,7 @@ heuristic on the retrieved context text, flagging *candidates* for manual review
 confirmed reading of every one of the 43 cases. It is offered as a real, observed signal (the
 keyword literally co-occurs with the failure in 43/46 cases), not a forced categorization, per
 the instruction to use only evidence-supported categories. This pattern independently echoes
-the T-series historical finding (`docs/decisions.md`'s "Golden battery Categories 1-2" entry):
+the T-series historical finding (`docs/architecture_decisions/INDEX.md`'s ADR-011, "Golden battery Categories 1-2"):
 Contradiction established via a narrow exception/carve-out clause against an apparent general
 rule is a real, recurring weakness, not unique to one model version or prompt.
 
@@ -161,7 +161,8 @@ after the fact. Full frozen artifact: `configs/prompts/classification/classifica
 **What was rejected and why**: P1 and P2 both regressed Contradiction Recall and Macro-F1
 monotonically, with the regression driven by a consistent, identifiable mechanism (increasing
 default-to-NotMentioned bias on Contradiction cases) rather than random noise — this mirrors
-the T-series historical prompt-tuning lineage (`docs/decisions.md`, v3/v4 entries: "engineering
+the T-series historical prompt-tuning lineage (`docs/architecture_decisions/INDEX.md`'s ADR-004,
+v3/v4 entries: "engineering
 the prompt's decision *structure* ... tends to cost real accuracy," and specifically hurts
 Contradiction, the label with the fewest examples). Independent confirmation of a known pattern
 under a different model (qwen2.5:7b-instruct vs. the T-series' hosted models) and a different

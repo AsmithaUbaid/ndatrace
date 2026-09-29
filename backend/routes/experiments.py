@@ -76,7 +76,7 @@ def list_e20_architecture_comparison() -> list[FinalTestResult]:
     comparison = report["full_vs_rag_same_population"]
     rows: list[FinalTestResult] = []
     for key, system, status in (
-        ("FULL", "gpt5mini_p0_full", "benchmark"),
+        ("FULL", "gpt5mini_p0_full", "quality_reference"),
         ("RAG", "gpt5mini_p0_rag_top5", "final"),
     ):
         metrics = comparison[key]

@@ -84,7 +84,7 @@ Role structure:
   benchmark under the reconstruction-v2 protocol," never as "blind" or "perfectly unseen." A code
   defect discovered after a TEST run gets documented, fixed, and the prior run marked **INVALID**
   — never silently replaced (§20; already demonstrated once historically, see the T041
-  joint-metric bug in `docs/decisions.md` ADR-010).
+  joint-metric bug in `docs/architecture_decisions/INDEX.md` ADR-010).
 
 ## 4. Manifests — conceptual structure only, sizes not yet chosen
 
@@ -215,7 +215,7 @@ it relied on, as span/clause IDs, not merely "the answer is somewhere in what th
 - **A3 (agentic RAG):** the final selected evidence span ID(s) after investigation — the agent's
   concluding evidence set, not every span any tool happened to touch along the way.
 
-**Rejected, this revision:** the historical convention (`docs/decisions.md` ADR-010's joint-metric
+**Rejected, this revision:** the historical convention (`docs/architecture_decisions/INDEX.md` ADR-010's joint-metric
 backfill) that full-context's evidence = "all span indices in the document," on the reasoning that
 seeing everything means nothing can be missed. That conflates *access* to evidence with
 *identification* of evidence, and makes A1's joint score collapse to plain label accuracy by
@@ -415,7 +415,7 @@ to any of these based on a TEST result.
 
 A code defect discovered after a TEST run is documented, fixed, and the prior run is marked
 **INVALID** in place — never silently deleted or replaced. This is not a new invention: the
-historical T041 joint-metric bug (`docs/decisions.md` ADR-010) already followed exactly this
+historical T041 joint-metric bug (`docs/architecture_decisions/INDEX.md` ADR-010) already followed exactly this
 pattern (bug documented, code fixed, all affected result files backfilled and the original record
 kept alongside the corrected one) — this section formalizes that precedent as a forward rule.
 
@@ -486,7 +486,7 @@ in Part 1 above. Preserved as disclosure per `docs/data_contamination_register.m
 | 150-case dev sample (seed=42) | Stratified sample of `dev.json` | Oracle, model selection, RAG e2e, prompt tuning (v1–v6), confidence/abstention, agent experiments | **Yes, repeatedly reused** — see the warning below |
 | Golden regression battery (`data/golden/golden_cases.json`, `negative_cases.json`, 45 cases) | Hand-picked `dev.json` documents | Catches known behavioural regressions after a change (e.g. a prompt version) | Yes — these exist to be run after every change, by design |
 | Robustness/system cases (`data/golden/injection_cases.json`, `llm_behaviour_cases.json`, `agent_cases.json`, `confidence_cases.json`, `evidence_quality_cases.json`, `logging_security_cases.json`) | Synthetic or hand-picked `dev.json` cases | Tests system *behaviour* (injection resistance, error isolation, log hygiene), not benchmark accuracy | Yes — same reasoning as regression cases |
-| Architecture-validation set | — | An independent sample, untouched by any tuning decision, used once to confirm the frozen architecture choice before the final test run | **Does not currently exist.** Every architecture comparison in `docs/decisions.md` (ADR-007, ADR-008, ADR-009) was run on the same 150-case dev sample used for every earlier tuning decision. This is a real, open gap — see "What's missing" below. |
+| Architecture-validation set | — | An independent sample, untouched by any tuning decision, used once to confirm the frozen architecture choice before the final test run | **Does not currently exist.** Every architecture comparison in `docs/architecture_decisions/INDEX.md` (ADR-007, ADR-008, ADR-009) was run on the same 150-case dev sample used for every earlier tuning decision. This is a real, open gap — see "What's missing" below. |
 | Official test split (`data/contractnli/test.json`, 2,091 cases) | ContractNLI's own test partition | The final, locked evaluation (T041), run once after architecture freeze | **No — never tune on this.** Any change made after looking at a test-set result invalidates the freeze. |
 
 ### What's missing: an architecture-validation set
@@ -502,7 +502,7 @@ development evidence, and the test-set run (T041) is the first genuinely indepen
 ## Freeze protocol
 
 **T041 is not one run at two sample sizes — it is two distinct configurations, corrected and named
-here after a forensic timestamp/git-history review (`docs/decisions.md` ADR-010):**
+here after a forensic timestamp/git-history review (`docs/architecture_decisions/INDEX.md` ADR-010):**
 
 - **T041-A** (interim, 500-case stratified subsample, run first): model
   `google/gemini-2.5-flash-lite` / local Llama, **prompt v2** / `agent_step_v1.txt`, and for RAG+agent
@@ -544,7 +544,7 @@ observed before T041-B's numbers were produced, and that should be disclosed, no
 | Contradiction recall (+ 95% Wilson CI) | Recall on the Contradiction class alone, with a confidence interval given the small class size (~11% of labels) | Headline risk metric — added after instructor feedback flagged that the earlier averaged "risk-sensitive recall" hid Contradiction-specific weakness |
 | Risk-sensitive recall | (recall_Contradiction + recall_NotMentioned) / 2 | Superseded as the headline risk metric by Contradiction recall alone; still recorded |
 | Evidence Recall@K / Precision / MRR | Retrieval-only metrics: does the retrieved set contain the gold span, how much of it is relevant, how high does it rank | Retrieval configuration decisions (ADR-002) |
-| Joint label+evidence correctness | Label is correct AND the retrieved/available spans overlap the gold evidence span | The metric this project's rubric weighs most heavily. **Was silently broken for the entire T041 run until it was found and fixed — see `docs/decisions.md` ADR-010.** |
+| Joint label+evidence correctness | Label is correct AND the retrieved/available spans overlap the gold evidence span | The metric this project's rubric weighs most heavily. **Was silently broken for the entire T041 run until it was found and fixed — see `docs/architecture_decisions/INDEX.md` ADR-010.** |
 | Cost (USD), latency (ms) | Real measured API cost and wall-clock latency per case | Architecture/model tradeoff discussion |
 | AUROC (confidence/routing signal) | Discriminative power of a candidate routing signal for correct vs. incorrect predictions | Confidence/abstention design (ADR-005) |
 | McNemar's exact test | Paired significance test for two classifiers on the same cases | Agent include/exclude decision (ADR-007); do not report a small-sample accuracy delta without it |
@@ -575,12 +575,12 @@ rate.
   real, unresolved finding, and now a stronger one than first stated**: on T041-B (the full
   2,091-case hosted test set, already v6 + decoupled routing — see the Freeze protocol section
   above), the selective agent's accuracy (77.7%) is *below* plain RAG's (78.7%), reversing the
-  dev-sample finding that justified including the agent (`docs/decisions.md` ADR-007). McNemar's
+  dev-sample finding that justified including the agent (`docs/architecture_decisions/INDEX.md` ADR-007). McNemar's
   test on T041-B: b=87, c=65, p=0.088 — not significant, but the point estimate favors plain RAG.
   **Because T041-B already uses the current shipped prompt and routing configuration, this cannot
   be explained away as "it was still running the old v2/circular-routing setup" — it wasn't.** An
   independent architecture-validation run (AV01, `archive/legacy_experiments/AV01/architecture_validation_manifest.json`) has
-  since produced the same qualitative finding on untouched data — see `docs/decisions.md` ADR-009's
+  since produced the same qualitative finding on untouched data — see `docs/architecture_decisions/INDEX.md` ADR-009's
   update and the AV01 analysis for the full breakdown.
 - Official test evaluation: **run, in two distinct configurations (T041-A and T041-B — see the
   Freeze protocol section above), not one run at two sample sizes.** T041-B (full 2,091 cases,

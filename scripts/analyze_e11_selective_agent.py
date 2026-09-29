@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+ #!/usr/bin/env python3
 """
 E11 (reconstruction-v2) -- A3 (selective agent) analysis, evaluator-side only. Mirrors
 scripts/analyze_e08b_stronger_model.py's classification/evidence/joint metric methodology exactly

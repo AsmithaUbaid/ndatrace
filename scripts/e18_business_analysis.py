@@ -5,7 +5,6 @@ from __future__ import annotations
 import json, statistics as st, sys
 from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent; sys.path.insert(0, str(REPO))
-import tiktoken
 from evaluation.metrics import joint_label_evidence_correctness  # noqa: F401  (not reused directly; frozen semantics referenced in report)
 
 OUT = REPO / "experiments/E18_business_course_synthesis/results"
@@ -25,8 +24,8 @@ def majority_baseline():
 
 # ---------------------------------------------------------------- 2. agent token economics: B (base/static tokens per turn), D (accumulated tokens per turn)
 def agent_token_economics():
-    enc = tiktoken.get_encoding("cl100k_base")
-    agent_prompt_tokens = len(enc.encode(open(REPO / "prompts/agent_step_v1_3tools.txt").read()))
+    agent_prompt_tokens = 510  # cl100k_base token count of prompts/agent_step_v1_3tools.txt (frozen
+    # here: the file was deleted in the 2026-09-29 legacy prompt cleanup, see prompts/README.md)
     e08b = json.load(open(REPO / "experiments/E08B_stronger_model_diagnostic/results/run_E08B_A2_gpt5mini_train.json")) if (REPO / "experiments/E08B_stronger_model_diagnostic/results/run_E08B_A2_gpt5mini_train.json").exists() else None
     baseline_ctx_tokens = 1476  # E10 config.yaml baseline_observed_mean_latency reference case / E08B measured baseline input tokens (representative single trace, agent_traces.jsonl)
     B = agent_prompt_tokens + baseline_ctx_tokens  # repeated per turn: the fixed agent-control prompt + the original top-5 RAG context, resent every step

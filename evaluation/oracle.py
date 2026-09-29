@@ -25,6 +25,7 @@ number as if all three labels were equally hard to reach from the rendered input
 from __future__ import annotations
 
 import json
+import random
 from dataclasses import dataclass
 from typing import Any
 
@@ -151,6 +152,30 @@ def build_result_record(
         "error_type": error_type,
         "error_message": error_message,
     }
+
+
+def stratified_sample(dataset, sample_size: int, seed: int) -> list:
+    """Sample (doc, annotation) pairs proportional to the real label distribution.
+
+    Moved here from the deleted legacy scripts/run_oracle_experiment.py (2026-09-29 cleanup)
+    - several current scripts (e15_routing_stage_a.py, e15_freeze_validation.py,
+    build_e13_manifest.py, e16_build_hosted_fixtures.py) reuse this exact sampling to
+    reconstruct the same 150-case dev sample used throughout the project's Oracle/RAG/agent
+    experiments (seed=42), for exclusion or comparison purposes.
+    """
+    all_cases = dataset.all_cases()
+    by_label: dict[str, list] = {"Entailment": [], "Contradiction": [], "NotMentioned": []}
+    for doc, ann in all_cases:
+        by_label[ann.label].append((doc, ann))
+
+    total = len(all_cases)
+    rng = random.Random(seed)
+    sampled = []
+    for label, cases in by_label.items():
+        n = round(sample_size * len(cases) / total)
+        sampled.extend(rng.sample(cases, min(n, len(cases))))
+    rng.shuffle(sampled)
+    return sampled
 
 
 def demo() -> None:

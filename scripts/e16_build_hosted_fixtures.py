@@ -7,7 +7,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent; sys.path.insert(0, str(REPO))
 import tiktoken
 from pipeline.parser import parse_contractnli_file
-from scripts.run_oracle_experiment import stratified_sample
+from evaluation.oracle import stratified_sample
 
 OUT = REPO / "experiments/E16_robustness_security"; SEED = 1600
 dev = json.load(open(REPO / "data/contractnli/dev.json")); DOCS = {d["id"]: d for d in dev["documents"]}; HYP = {k: v["hypothesis"] for k, v in dev["labels"].items()}

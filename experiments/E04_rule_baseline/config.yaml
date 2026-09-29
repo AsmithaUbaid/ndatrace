@@ -39,9 +39,9 @@ rule_baseline_code:
   historical_dev_test_exposure: >
     DISCLOSED, not hidden (see summary.md's contamination section for full detail). This exact
     code has been (1) evaluated on the full official DEV split (1,037 cases, B02, accuracy
-    59.9%/macro-F1 0.493, docs/experiments.md), (2) evaluated on DEV's 614-case Entailment/
+    59.9%/macro-F1 0.493), (2) evaluated on DEV's 614-case Entailment/
     Contradiction evidence-comparison pool, and (3) evaluated on the full official TEST split
-    (2,091 cases and a 500-case subsample, T041). No historical record (docs/decisions.md) shows
+    (2,091 cases and a 500-case subsample, T041). No historical record shows
     the keyword lists being iteratively revised after seeing DEV/TEST accuracy -- it reads as a
     single hand-authored build referencing ContractNLI's split-invariant 17 hypothesis
     DEFINITION text, not document-level DEV/TEST content or outcome-driven tuning. This is a

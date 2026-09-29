@@ -1,0 +1,36 @@
+{
+  "upgraded": {
+    "python-dotenv": "1.0.1 -> 1.2.2",
+    "python-multipart": "0.0.20 -> 0.0.22"
+  },
+  "not_upgraded_reason": {
+    "starlette": "FastAPI version-pinned compatibility risk",
+    "pytest": "major version bump (8->9), plugin compatibility risk",
+    "transformers": "major version bump (4->5), sentence-transformers compatibility risk"
+  },
+  "cve_count_before": 38,
+  "cve_count_after": 34,
+  "packages_still_vulnerable": [
+    {
+      "name": "python-multipart",
+      "version": "0.0.22",
+      "vuln_count": 10
+    },
+    {
+      "name": "pytest",
+      "version": "8.3.4",
+      "vuln_count": 2
+    },
+    {
+      "name": "starlette",
+      "version": "0.41.3",
+      "vuln_count": 14
+    },
+    {
+      "name": "transformers",
+      "version": "4.57.6",
+      "vuln_count": 8
+    }
+  ],
+  "outcome": "PARTIAL"
+}

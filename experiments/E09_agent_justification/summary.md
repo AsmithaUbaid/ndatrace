@@ -34,7 +34,7 @@ count, not inferred.
 
 Audited `pipeline/agent.py`, `pipeline/agent_tools.py`, `pipeline/confidence.py`,
 `prompts/agent_step_v1.txt`/`agent_step_v2.txt`, `data/agent_experiment.json`, and
-`docs/decisions.md`'s ADR-005 through ADR-009. Full inventory in `config.yaml`'s
+`docs/architecture_decisions/INDEX.md`'s ADR-005 through ADR-009. Full inventory in `config.yaml`'s
 `historical_agent_audit` block; summary:
 
 | Component | Read-only? | Reusable? | Key risk |

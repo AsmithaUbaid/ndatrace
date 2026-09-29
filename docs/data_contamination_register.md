@@ -80,5 +80,5 @@ disqualifies **historical outcomes** from influencing new decisions (§5's stand
 > ever touched again.
 
 This does not invalidate the historical T041 numbers as evidence of what that specific pipeline
-did — they remain valid, disclosed history (`docs/decisions.md` ADR-010). It only prevents them
+did — they remain valid, disclosed history (`docs/architecture_decisions/INDEX.md` ADR-010). It only prevents them
 from silently shaping reconstruction-v2's choices.

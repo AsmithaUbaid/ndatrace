@@ -1,8 +1,9 @@
 # Prompt configs (reconstruction-v2 naming convention)
 
-Existing prompt text is not rewritten or moved yet — it stays at `prompts/*.txt`
-(`classify_v1.txt`…`classify_v6.txt`, `agent_step_v1.txt`, `agent_step_v2.txt`; see
-`prompts/README.md` for the historical version lineage).
+Existing prompt text is not rewritten or moved yet — it stays at `prompts/*.txt`.
+The historical `classify_v1.txt`-`classify_v6.txt`/`agent_step_v1*.txt`/`agent_step_v2.txt`
+lineage this note originally pointed at was removed in the 2026-09-29 legacy cleanup pass —
+see `prompts/README.md` for what's live now and the decision history.
 
 Going forward, reconstruction-v2 prompt versions get a structured file under
 `configs/prompts/classification/` or `configs/prompts/agent/`, named:

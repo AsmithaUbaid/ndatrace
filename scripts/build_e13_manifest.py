@@ -12,7 +12,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
-from scripts.run_oracle_experiment import stratified_sample  # noqa: E402
+from evaluation.oracle import stratified_sample  # noqa: E402
 from pipeline.parser import parse_contractnli_file  # noqa: E402
 
 SEED = 1400  # fresh: prior seeds 42, 99, 123, 300, 500, 700, 900, 1100, 1200, 1300

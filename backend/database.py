@@ -88,6 +88,9 @@ def init_db() -> None:
             "review_reason": "TEXT",
             "sources_json": "TEXT NOT NULL DEFAULT '[]'",
             "retrieved_chunks_json": "TEXT NOT NULL DEFAULT '[]'",
+            # E22 LLM01 remediation.
+            "security_review_required": "INTEGER NOT NULL DEFAULT 0",
+            "security_flags_json": "TEXT NOT NULL DEFAULT '[]'",
         }
         for name, definition in additions.items():
             if name not in existing:
@@ -106,7 +109,8 @@ def save_review(review_id: str, doc_id: str, created_at: str, model: str,
             "INSERT INTO review_items (review_id, hypothesis_id, hypothesis_text, label, confidence, "
             "confidence_available, explanation, evidence_json, source_valid, needs_human_review, "
             "review_reason, sources_json, retrieved_chunks_json, agent_used, agent_steps, cost_usd, "
-            "latency_ms, error) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "latency_ms, error, security_review_required, security_flags_json) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
                 (
                     review_id, it["hypothesis_id"], it["hypothesis_text"], it.get("label") or "",
@@ -117,6 +121,7 @@ def save_review(review_id: str, doc_id: str, created_at: str, model: str,
                     json.dumps(it.get("sources", [])), json.dumps(it.get("retrieved_chunks", [])),
                     int(it.get("agent_used", False)), it.get("agent_steps", 0),
                     it["cost_usd"], it["latency_ms"], it.get("error"),
+                    int(it.get("security_review_required", False)), json.dumps(it.get("security_flags", [])),
                 )
                 for it in items
             ],
@@ -148,6 +153,8 @@ def get_review(review_id: str) -> dict | None:
                 "sources": json.loads(row["sources_json"]),
                 "retrieved_chunks": json.loads(row["retrieved_chunks_json"]),
                 "agent_used": bool(row["agent_used"]),
+                "security_review_required": bool(row["security_review_required"]),
+                "security_flags": json.loads(row["security_flags_json"]),
             }
             for row in item_rows
         ],

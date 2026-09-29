@@ -4,7 +4,7 @@ Distinguishes historical ADRs (already-run T-series work) from reconstruction-v2
 (independently re-derived under `docs/experiment_registry.md`'s E-series). No historical ADR
 is rewritten here.
 
-## Historical ADRs (all in `docs/decisions.md`, unmodified)
+## Historical ADRs (pre-reconstruction; original evidence archived, not carried forward as a live doc)
 
 | ADR | Title | Status for reconstruction-v2 |
 |---|---|---|

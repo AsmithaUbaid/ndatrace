@@ -14,6 +14,6 @@ and in the retrieval-building code paths of E07/E08/E12A/E12B/E12C, not as a sta
 this directory. Note as a known gap, not a "not yet run" placeholder.
 
 The pre-reconstruction retrieval config (sentence chunking → mpnet → retrieve-20 → rerank L-12 →
-top-7 → RRF rule-fusion, `docs/decisions.md`'s retrieval ADR) is unrelated prior evidence from the
+top-7 → RRF rule-fusion, `docs/architecture_decisions/INDEX.md`'s ADR-002) is unrelated prior evidence from the
 earlier pipeline — not reconstruction-v2's config, and not superseded by it (they're independent
 lineages).

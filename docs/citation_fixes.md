@@ -4,8 +4,8 @@ Precision issues to fix before/while drafting the final report. Items 1–3 are 
 citation-precision issues flagged in instructor feedback on the Week 3 Problem Statement
 (`PE6201_Project_Problem_Statement_Asmitha.pdf`); items 4–5 were updated after reconstruction-v2
 completed, since the model/architecture identity they describe changed. These are report-writing
-fixes, not code changes. See `docs/decisions.md`'s Decisions Log ("Instructor feedback... Gap 3")
-for items 1–3's original context.
+fixes, not code changes — items 1–3's original context is the instructor's Week 3 feedback on the
+Problem Statement's citation precision.
 
 ## 1. Workload/staff-hours figure — label as vendor research
 
@@ -64,8 +64,8 @@ total cost of the full n=2,091 final TEST run (**≈$4.23 total, ≈$0.0020/case
 `results/final/reconstruction_v2/gpt_full_test_metrics.json`'s `ops` block, and
 `experiments/E18_business_course_synthesis/` for the full cost-to-serve business analysis). Gemini
 pricing may still be cited as historical context for the pre-reconstruction pipeline (see
-`docs/decisions.md`'s ADR-001), but must be clearly labeled as such, not as the current reference
-point.
+`docs/architecture_decisions/INDEX.md`'s ADR-001), but must be clearly labeled as such, not as the
+current reference point.
 
 ## 5. Local/hosted comparison — cite Qwen, not Llama/Groq
 
@@ -80,5 +80,4 @@ via Ollama)**, run on the full n=2,091 official TEST set: accuracy 49.9%, macro-
 39.7%, Contradiction recall 25.5%, $0 API cost (local compute/wall-time not monetized — see
 `results/final/reconstruction_v2/qwen_full_test_metrics.json`). The final report's hosted-vs-local
 section should cite Qwen as the local comparator, not Llama or Groq's `gpt-oss-20b` — those remain
-accurate as pre-reconstruction historical record (`docs/decisions.md`'s instructor-feedback ADR
-entry) but are not part of the final result.
+accurate as pre-reconstruction historical record but are not part of the final result.

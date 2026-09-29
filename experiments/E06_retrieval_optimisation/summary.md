@@ -180,7 +180,7 @@ corrections reflected in the Stage B results above) and executed.
 `data/full_retrieval_comparison.json`, `data/top_k_sweep.json`, `data/pool_size_sweep.json`,
 `data/rule_boosted_retrieval.json`, `data/parent_child_retrieval.json`,
 `data/overlapping_chunks_comparison.json`, `data/stronger_reranker_comparison.json` — all
-T-series (historical), summarized in `docs/decisions.md`'s retrieval ADR (10 rounds).
+T-series (historical), summarized in `docs/architecture_decisions/INDEX.md`'s ADR-002 (retrieval, 10 rounds).
 
 **Which historical findings are used only as hypotheses (never inherited as a decision)**:
 sentence chunking as the historical winner; mpnet vs. BGE vs. MiniLM "barely differs once

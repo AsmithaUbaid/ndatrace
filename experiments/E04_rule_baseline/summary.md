@@ -21,7 +21,7 @@ optimisation (E06 is already frozen and untouched here) and not prompt selection
 | **Decision priority** | negative match -> Contradiction; else positive match -> Entailment; else -> NotMentioned | Unchanged since B02 | Yes | NotMentioned is a pure default fallback -- structurally the "easy" label here too, same caveat as Oracle's NotMentioned (E01) |
 | **Negation logic** | None generic -- negation is baked into literal pre-composed phrases (e.g. `"shall not solicit"` as its own full string), not detected algorithmically | Unchanged since B02 | Yes, with caveat: this means novel negation phrasings not in the literal list are invisible to the rule, by design (deliberately crude, per the module's own docstring) | No leakage risk; a genuine coverage gap, expected for a "cheap" baseline |
 | **Contradiction-specific patterns** | None beyond the same per-hypothesis negative-phrase list -- no exception/carve-out handling, no cross-clause reasoning | Unchanged since B02 | Yes | Directly relevant: E03 already found 43/46 of Qwen's non-retrieval-limited Contradiction failures co-occurred with an exception/carve-out indicator (`experiments/E03_prompt_selection/summary.md`) -- the rule baseline has *zero* mechanism for this at all, so its Contradiction recall is expected to be weak for the same underlying reason, independent of any LLM |
-| **Evidence output** | `classify_with_span` returns the character span of the *first* matching phrase (not the whole clause), mapped to overlapping `doc.spans` indices for scoring (`archive/pre_reconstruction/scripts/run_full_rule_baseline_test.py`'s pattern) | Added after B02's original run specifically to support Evidence Recall/Precision/MRR comparison against semantic retrieval (`docs/experiments.md`) | Yes -- see section 6, sufficient for the joint metric | None identified -- see section 6 |
+| **Evidence output** | `classify_with_span` returns the character span of the *first* matching phrase (not the whole clause), mapped to overlapping `doc.spans` indices for scoring (`archive/pre_reconstruction/scripts/run_full_rule_baseline_test.py`'s pattern) | Added after B02's original run specifically to support Evidence Recall/Precision/MRR comparison against semantic retrieval (T-series historical) | Yes -- see section 6, sufficient for the joint metric | None identified -- see section 6 |
 | **Confidence / fallback logic** | None in the module itself -- callers (harness/`Prediction`) stamp a flat `confidence=1.0` regardless of match; no abstention | Unchanged since B02 | N/A for E04 (confidence/abstention is a separate reconstruction-v2 phase, not E04's scope) | None |
 
 **Historical rule experiments found**: exactly one build (B02, WBS T014). No ADR or dated
@@ -108,14 +108,15 @@ stale count from a comment). DEV and TEST are not touched anywhere in E04.
 **Historical exposure, disclosed plainly (not hidden or silently resolved)**: the *exact same
 code and keyword lists* proposed for R0 have already been:
 1. Evaluated on the full official **DEV** split (1,037 cases) as experiment B02, with accuracy
-   59.9% / macro-F1 0.493 reported as a headline number in `docs/experiments.md`.
+   59.9% / macro-F1 0.493 reported as a headline number in the T-series historical ledger
+   (pre-reconstruction, not carried forward).
 2. Evaluated on DEV's 614-case Entailment/Contradiction subset for the evidence-quality
-   comparison against semantic retrieval (`docs/experiments.md`'s evidence-recall row).
+   comparison against semantic retrieval (T-series historical evidence-recall row).
 3. Evaluated on the full official **TEST** split (2,091 cases, plus an earlier 500-case
    subsample) as part of T041's final architecture comparison.
 
-**Is this outcome-driven tuning, or just visibility?** No historical record (`docs/decisions.md`,
-`docs/experiments.md`) shows the keyword lists being revised after seeing DEV or TEST accuracy
+**Is this outcome-driven tuning, or just visibility?** No historical record shows the keyword
+lists being revised after seeing DEV or TEST accuracy
 -- there is no "rule v2" the way prompts went through v1-v6. The module's own docstring states
 the keywords were written against ContractNLI's 17 canonical hypothesis *definition* texts
 (split-invariant metadata, identical across TRAIN/DEV/TEST), not against DEV/TEST document
@@ -138,7 +139,7 @@ resolved unilaterally, with two options:
   definitions themselves haven't changed, but with a clean, defensible chain of custody.
 
 No decision is made here -- **recommendation is Option A** (the exposure is disclosed and low-
-severity, and reconstruction-v2's `docs/decisions.md`/`experiment_registry.md` pattern already
+severity, and reconstruction-v2's own `docs/experiment_registry.md` pattern already
 handles "known historical exposure, no outcome-chasing evidence" as an acceptable disclosed
 caveat elsewhere), but this is exactly the kind of threshold-of-rigor call the brief's own
 Stage A/Stage B gate exists to let the user make explicitly rather than have it decided

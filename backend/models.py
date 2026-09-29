@@ -13,8 +13,18 @@ class HypothesisInfo(BaseModel):
     hypothesis_text: str
 
 
+# E22 LLM10 remediation: the ContractNLI dataset's real observed max NDA
+# length is 54,571 chars (train+dev+test); NDA_TEXT_MAX_LENGTH gives ~3x
+# headroom above that for real-world variance while still bounding
+# pathological/DoS-scale input before it reaches parsing/chunking/indexing.
+# REQUIREMENT_MAX_LENGTH gives ~12x headroom over the longest of the 17
+# fixed hypothesis texts (162 chars) for free-text custom requirements.
+NDA_TEXT_MAX_LENGTH = 150_000
+REQUIREMENT_MAX_LENGTH = 2_000
+
+
 class ReviewRequest(BaseModel):
-    nda_text: str = Field(..., min_length=1, description="Full NDA document text to review.")
+    nda_text: str = Field(..., min_length=1, max_length=NDA_TEXT_MAX_LENGTH, description="Full NDA document text to review.")
     hypothesis_ids: list[str] | None = Field(
         default=None,
         description="Subset of the 17 standard requirement IDs to check (e.g. ['nda-1', 'nda-11']). "
@@ -52,6 +62,9 @@ class RequirementResult(BaseModel):
     cost_usd: float
     latency_ms: float
     error: str | None = None
+    # E22 LLM01 remediation: see pipeline/final_review.py's injection_guard wiring.
+    security_review_required: bool = False
+    security_flags: list[str] = Field(default_factory=list)
 
 
 class ReviewResponse(BaseModel):
@@ -66,8 +79,8 @@ class ReviewResponse(BaseModel):
 
 class FinalReviewRequest(BaseModel):
     """One NDA and one requirement for the frozen top-5 RAG product path."""
-    nda_text: str = Field(..., min_length=1, description="Full NDA document text to review.")
-    requirement: str = Field(..., min_length=1, description="Confidentiality requirement to check, in free text.")
+    nda_text: str = Field(..., min_length=1, max_length=NDA_TEXT_MAX_LENGTH, description="Full NDA document text to review.")
+    requirement: str = Field(..., min_length=1, max_length=REQUIREMENT_MAX_LENGTH, description="Confidentiality requirement to check, in free text.")
 
 
 class FinalReviewResponse(BaseModel):
@@ -85,6 +98,9 @@ class FinalReviewResponse(BaseModel):
     trace_id: str
     sources: list[RetrievedChunkMetadata] = Field(default_factory=list)
     retrieved_chunks: list[RetrievedChunkMetadata] = Field(default_factory=list)
+    # E22 LLM01 remediation.
+    security_review_required: bool = False
+    security_flags: list[str] = Field(default_factory=list)
 
 
 class ReviewSummary(BaseModel):
