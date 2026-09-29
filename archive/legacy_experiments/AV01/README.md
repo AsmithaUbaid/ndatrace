@@ -14,12 +14,12 @@ golden cases, and `test.json`.
 ## Where its result files live
 
 The AV01 *result* JSONL files (`run_AV01_architecture_validation_{full_context,rag,rag_agent}.jsonl`)
-were **not** moved — they remain in `results/runs/` and `results/final/legacy/`, because
-`backend/routes/experiments.py`'s `GET /cost-estimate` endpoint globs `results/runs/*.jsonl` at
-request time (see that file's module docstring). Removing them would require updating that route
-first, which is a separate, deliberate code change, not an archive move. In practice the endpoint
-always selects the larger-sample T041 file over AV01's (2,091 cases vs. 340), so AV01's file is
-present but never actually selected.
+lived in both `results/runs/` and `results/final/legacy/` (byte-identical copies) while
+`backend/routes/experiments.py`'s `GET /cost-estimate` endpoint globbed `results/runs/*.jsonl` at
+request time. That endpoint was removed in the final submission cleanup (it was dead in the current
+product UI — the frontend never called it), so `results/runs/`'s copies were deleted as pure
+duplicates rather than moved (`results/final/legacy/` still holds the canonical copy, since
+`scripts/build_e00b_forecast.py` reads it directly by that path).
 
 Only the **manifest** (`architecture_validation_manifest.json`, the list of sampled document/case
 IDs used to build the AV01 run) has been consolidated here, since nothing reads it at runtime —

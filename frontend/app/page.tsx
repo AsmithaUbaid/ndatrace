@@ -23,6 +23,14 @@ Upon termination of this Agreement, Receiving Party shall return or destroy all 
 type Stage = "idle" | "loading-hypotheses" | "ready" | "reviewing" | "done" | "error";
 type InputMode = "paste" | "pdf";
 
+const REVIEW_ACTIVITY_STAGES = [
+  "Retrieving relevant clauses",
+  "Reranking evidence",
+  "Classifying requirement",
+  "Validating evidence",
+  "Preparing reviewer result",
+] as const;
+
 export default function ReviewPage() {
   const [hypotheses, setHypotheses] = useState<Hypothesis[]>([]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -37,6 +45,7 @@ export default function ReviewPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [filter, setFilter] = useState<FilterKey>("all");
   const [copied, setCopied] = useState(false);
+  const [reviewActivityIndex, setReviewActivityIndex] = useState(0);
 
   const DRAFT_KEY = "ndatrace_nda_draft";
 
@@ -85,6 +94,16 @@ export default function ReviewPage() {
       });
   }, []);
 
+  useEffect(() => {
+    if (stage !== "reviewing") return;
+
+    const interval = window.setInterval(() => {
+      setReviewActivityIndex((current) => (current + 1) % REVIEW_ACTIVITY_STAGES.length);
+    }, 2200);
+
+    return () => window.clearInterval(interval);
+  }, [stage]);
+
   const allSelected = useMemo(
     () => hypotheses.length > 0 && selected.size === hypotheses.length,
     [hypotheses, selected]
@@ -114,6 +133,7 @@ export default function ReviewPage() {
   }
 
   async function handleSubmit() {
+    setReviewActivityIndex(0);
     setStage("reviewing");
     setError(null);
     setResult(null);
@@ -352,9 +372,29 @@ export default function ReviewPage() {
             <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/40 border-t-white dark:border-zinc-900/30 dark:border-t-zinc-900" />
           )}
           {stage === "reviewing"
-            ? "Reviewing… this calls the real model, usually a few seconds per requirement"
+            ? "Reviewing selected requirements…"
             : "Run review"}
         </button>
+        {stage === "reviewing" && (
+          <div
+            className="rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            <div className="flex items-center gap-2.5">
+              <span
+                aria-hidden="true"
+                className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-zinc-500 dark:bg-zinc-400"
+              />
+              <p className="text-sm font-medium text-zinc-800 dark:text-zinc-100">
+                {REVIEW_ACTIVITY_STAGES[reviewActivityIndex]}
+              </p>
+            </div>
+            <p className="mt-1 pl-[18px] text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+              Status is approximate while the review is processed.
+            </p>
+          </div>
+        )}
         {stage === "error" && result === null && error && (
           <p className="text-xs text-red-600 dark:text-red-400">{error}</p>
         )}

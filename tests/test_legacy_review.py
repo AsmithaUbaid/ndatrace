@@ -1,8 +1,4 @@
-"""Tests for the batch/history API backed by the frozen product RAG path.
-
-GET /cost-estimate remains a historical read-only endpoint but is no longer
-shown in the current UI because its source run used the rejected agent path.
-"""
+"""Tests for the batch/history API backed by the frozen product RAG path."""
 
 from __future__ import annotations
 
@@ -45,15 +41,6 @@ def _fake_completion(content: str, tokens_in: int = 100, tokens_out: int = 20):
         choices=[SimpleNamespace(message=SimpleNamespace(content=content))],
         usage=SimpleNamespace(prompt_tokens=tokens_in, completion_tokens=tokens_out),
     )
-
-
-def test_cost_estimate_reflects_real_rag_agent_data(client):
-    r = client.get("/cost-estimate")
-    assert r.status_code == 200
-    body = r.json()
-    assert body["avg_cost_per_requirement_usd"] > 0
-    assert "rag_agent" in body["source_experiment_id"].lower()
-    assert body["source_sample_size"] > 0
 
 
 def test_results_empty_before_any_review(client):

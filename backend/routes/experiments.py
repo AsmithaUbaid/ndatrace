@@ -1,6 +1,5 @@
 """
-NDATrace API Routes - reconstruction-v2 final TEST comparison, plus the
-restored legacy cost-estimate endpoint.
+NDATrace API Routes - reconstruction-v2 final TEST comparison.
 
 GET /experiments reads results/final/reconstruction_v2/full_test_comparison.csv
 - the canonical, already-computed Rule/Qwen/GPT comparison on the identical
@@ -8,9 +7,6 @@ n=2,091 official TEST population (E17/E17B). Never recomputes a metric.
 
 GET /experiments/e20 reads the frozen E20 report and returns the matched
 FULL-versus-RAG comparison used for the final product architecture decision.
-
-GET /cost-estimate reads historical RAG+agent results/runs/*.jsonl records.
-The current product UI does not display this rejected architecture's estimate.
 """
 
 from __future__ import annotations
@@ -19,9 +15,9 @@ import csv
 import json
 from pathlib import Path
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
-from backend.models import CostEstimate, FinalTestResult
+from backend.models import FinalTestResult
 from pipeline.config import settings
 
 router = APIRouter(tags=["experiments"])
@@ -101,54 +97,3 @@ def list_e20_architecture_comparison() -> list[FinalTestResult]:
             architecture_status=status,
         ))
     return rows
-
-
-def _runs_dir() -> Path:
-    return settings.results_path / "runs"
-
-
-def _iter_run_records():
-    # Legacy results/runs/*.jsonl records (Section 19 schema) - excludes
-    # checkpoint_*.jsonl (in-progress harness state). Yields only the LAST
-    # line per file (append-only convention).
-    if not _runs_dir().exists():
-        return
-    for path in sorted(_runs_dir().glob("*.jsonl")):
-        if path.name.startswith("checkpoint_"):
-            continue
-        with open(path, "r", encoding="utf-8") as f:
-            lines = [line.strip() for line in f if line.strip()]
-        if not lines:
-            continue
-        try:
-            yield json.loads(lines[-1])
-        except json.JSONDecodeError:
-            continue
-
-
-@router.get("/cost-estimate", response_model=CostEstimate)
-def get_cost_estimate() -> CostEstimate:
-    """
-    Historical measured average cost per requirement for the rejected
-    RAG+agent architecture. Prefers the largest available sample.
-    """
-    candidates = [
-        rec for rec in _iter_run_records()
-        if "rag_agent" in rec.get("config", {}).get("experiment_id", "").lower()
-        and rec.get("config", {}).get("sample_size")
-    ]
-    if not candidates:
-        raise HTTPException(status_code=404, detail="No rag_agent experiment record found to estimate cost from")
-
-    best = max(candidates, key=lambda rec: rec["config"]["sample_size"])
-    sample_size = best["config"]["sample_size"]
-    total_cost = sum(
-        (p.get("cost_latency", {}) or {}).get("cost_usd", 0.0) or 0.0
-        for p in best.get("predictions", [])
-    )
-    return CostEstimate(
-        avg_cost_per_requirement_usd=total_cost / sample_size,
-        source_experiment_id=best["config"]["experiment_id"],
-        source_sample_size=sample_size,
-        model=best["config"].get("model", ""),
-    )

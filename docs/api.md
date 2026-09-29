@@ -262,28 +262,6 @@ does not write to this store). **File:** `backend/routes/results.py`.
 ]
 ```
 
-### `GET /cost-estimate`
-
-Historical measured average cost per requirement for the rejected RAG+agent architecture, computed
-from the `rag_agent` experiment record with the largest `sample_size` in `results/runs/*.jsonl`.
-Retained for research provenance but no longer displayed by the product UI. **File:**
-`backend/routes/experiments.py`.
-
-**Response 200:**
-```json
-{
-  "avg_cost_per_requirement_usd": 0.000395,
-  "source_experiment_id": "string",
-  "source_sample_size": 2091,
-  "model": "string"
-}
-```
-
-**Error responses:**
-- `404` — no `rag_agent` experiment record exists to estimate cost from.
-
----
-
 ## Shared / read-only endpoints
 
 ### `GET /health`

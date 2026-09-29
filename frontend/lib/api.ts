@@ -58,13 +58,6 @@ export type ReviewSummary = {
   model: string;
 };
 
-export type CostEstimate = {
-  avg_cost_per_requirement_usd: number;
-  source_experiment_id: string;
-  source_sample_size: number;
-  model: string;
-};
-
 // Frozen product path (GPT-5-mini + P0 + retrieved top-5 context).
 // No confidence score (the frozen prompt doesn't request one), no agent
 // fields (no agent in the final architecture).
@@ -149,5 +142,4 @@ export const api = {
     }),
   getReview: (reviewId: string) => request<ReviewResponse>(`/review/${reviewId}`),
   listResults: () => request<ReviewSummary[]>("/results"),
-  getCostEstimate: () => request<CostEstimate>("/cost-estimate"),
 };

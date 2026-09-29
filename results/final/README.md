@@ -6,12 +6,22 @@ from. If a number here ever looks wrong, trust the source artifact, not this fil
 
 ## Structure
 
-- **`reconstruction_v2/`** — the canonical source for the final report/demo. These summaries
-  describe the current, selected architecture (GPT-5-mini + P0 + FULL, `docs/architecture.md`).
+- **`reconstruction_v2/`** — the canonical source for the final report/demo (`docs/architecture.md`).
+  Final story: **Rule** is the zero-cost baseline, **FULL** (GPT-5-mini + P0, whole document) is
+  the strongest *measured benchmark* configuration on the official TEST set, **RAG** (GPT-5-mini +
+  P0 + retrieved top-5) is the **retained interactive prototype/runtime** architecture actually
+  served by the product, and the **selective agent was tested and rejected** (small, statistically
+  inconclusive effect — see `docs/decisions.md`). FULL is a benchmark ceiling, not the served
+  architecture.
 - **`legacy/`** — retained only for historical provenance (the pre-reconstruction T041/AV01
   pipeline run described in the top-level `README.md`'s "Experiment progression (original
   pre-reconstruction pipeline — historical)" section). Not part of the reconstruction-v2 final
-  result.
+  result. **Kept in place, not moved to `archive/`**: `scripts/build_e00b_forecast.py` (part of the
+  live E00B budget-forecast reproduction) reads these files directly by this path, and several
+  `docs/*.md` files cite it — moving it would break reproducibility for a change that only saves a
+  few MB of already-duplicated data. The one exact duplicate of this directory, `results/runs/`,
+  was removed since nothing in the current runtime reads it (see `docs/api.md`'s removed
+  `GET /cost-estimate` section).
 - In both cases, **the original experiment directories under `experiments/` remain the
   authoritative raw sources** — these are convenience summaries and must never replace the raw
   experimental evidence they were generated from.

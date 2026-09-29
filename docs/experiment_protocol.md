@@ -108,7 +108,7 @@ config-driven experiments — reconstruction-v2 experiments should call the same
 ## Relationship to historical work
 
 The T-series experiments already in this repo (`docs/decisions.md`, `docs/experiments.md`,
-`results/runs/run_T*.jsonl`, `results/final/legacy/run_T041_*.jsonl`) are **historical evidence**,
+`results/archive/runs/run_T*.jsonl`, `results/final/legacy/run_T041_*.jsonl`) are **historical evidence**,
 preserved as-is. They are not held to this protocol retroactively, and reconstruction-v2
 experiments must not silently inherit their conclusions (see `docs/project_contract.md` §16
 and the reconstruction ADR index at `docs/architecture_decisions/INDEX.md`).

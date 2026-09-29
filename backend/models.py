@@ -97,14 +97,6 @@ class ReviewSummary(BaseModel):
     model: str
 
 
-class CostEstimate(BaseModel):
-    """Historical RAG+agent cost record; retained for research provenance."""
-    avg_cost_per_requirement_usd: float
-    source_experiment_id: str
-    source_sample_size: int
-    model: str
-
-
 class FinalTestResult(BaseModel):
     """One row of the reconstruction-v2 final held-out TEST comparison
     (E17/E17B), read directly from
