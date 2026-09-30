@@ -8,11 +8,19 @@ drift apart. Not part of the shipped app - a one-off report build.
 """
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "reports/NDATrace_Final_Report.html"
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--output", type=Path, default=ROOT / "reports/NDATrace_Final_Report.html")
+parser.add_argument("--force", action="store_true", help="allow replacing an existing output file")
+args = parser.parse_args()
+OUT = args.output.resolve()
+if OUT.exists() and not args.force:
+    raise SystemExit(f"Refusing to overwrite existing report: {OUT}. Use --output or pass --force intentionally.")
+OUT.parent.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------
 # 1. Load verified numbers directly from primary artifacts

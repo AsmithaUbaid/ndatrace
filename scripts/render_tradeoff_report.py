@@ -4,12 +4,21 @@
 from __future__ import annotations
 
 import html
+import argparse
 import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "reports/NDATrace_Final_Tradeoff_Report.md"
 TARGET = SOURCE.with_suffix(".html")
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--output", type=Path, default=TARGET)
+parser.add_argument("--force", action="store_true", help="allow replacing an existing output file")
+args = parser.parse_args()
+TARGET = args.output.resolve()
+if TARGET.exists() and not args.force:
+    raise SystemExit(f"Refusing to overwrite existing report: {TARGET}. Use --output or pass --force intentionally.")
+TARGET.parent.mkdir(parents=True, exist_ok=True)
 
 
 def inline(text: str) -> str:

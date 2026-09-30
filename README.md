@@ -4,7 +4,7 @@ NDATrace helps legal reviewers compare confidentiality requirements with an NDA 
 
 `Python` · `FastAPI` · `Next.js` · `GPT-5-mini` · `ContractNLI` · `Human-in-the-loop`
 
-**Final project report:** [reports/NDATrace_Final_Report.md](reports/NDATrace_Final_Report.md) ([PDF](reports/NDATrace_Final_Report.pdf)). Earlier drafts (`NDATrace_Final_Report.html` at the repo root, `reports/NDATrace_Evidence_Report.*`, `reports/NDATrace_Final_Tradeoff_Report.*`) are superseded by this one.
+**Current report draft:** [reports/NDATrace_Final_Report.md](reports/NDATrace_Final_Report.md) ([PDF](reports/NDATrace_Final_Report.pdf), [HTML](reports/NDATrace_Final_Report.html)). A newer uncommitted HTML version found during branch consolidation is preserved separately as [reports/NDATrace_Business_Technical_Tradeoff_Draft.html](reports/NDATrace_Business_Technical_Tradeoff_Draft.html). The report remains a draft; repository stabilization did not rewrite it.
 
 ## 1. What it does
 
@@ -153,31 +153,50 @@ API cost is not total workflow cost: failed Joint cases still require human hand
 - A human remains the final authority.
 
 
-## 11. Quick start
+## 11. Prerequisites and installation
 
-### Backend
+- Python 3.12 (verified with 3.12.14).
+- Node.js 20.9 or newer (the Next.js requirement; verified here with Node 26.9.0) and npm.
+- Internet access for the public ContractNLI dataset and first-time Hugging Face model downloads.
+- An OpenRouter API key only for intentional, billed review calls. Startup, tests, and saved-result reproduction do not require one.
+
+From a fresh clone of `main`:
 
 ```bash
 git clone https://github.com/AsmithaUbaid/ndatrace.git
 cd ndatrace
-git switch reconstruction
 
-python3 -m venv .venv
+python3.12 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 bash scripts/download_data.sh
 cp .env.example .env
 python scripts/verify_environment.py
+
+cd frontend
+npm ci
+cd ..
+```
+
+The live RAG path uses the public `cross-encoder/ms-marco-MiniLM-L-12-v2` reranker. Dense-retrieval research tests also use `sentence-transformers/all-mpnet-base-v2`. They download into the standard Hugging Face cache on first use; prefetch both deliberately with `python scripts/download_models.py`. Model weights and caches are not tracked.
+
+`.env.example` contains safe placeholders. Set `OPENROUTER_API_KEY` only when a billed call is intended, and choose `MAX_BUDGET_USD` for your own local run. Use `python scripts/verify_environment.py --require-api-key` before a live call.
+
+## 12. Run the application
+
+### Backend
+
+```bash
+source .venv/bin/activate
 uvicorn backend.app:app --reload
 ```
 
-The live runtime uses `openai/gpt-5-mini`. Set `OPENROUTER_API_KEY` in `.env` only when intentionally running a billed review. The API is served at `http://localhost:8000`.
+The API is served at `http://localhost:8000`; `GET /health` and documentation are available without a model key. Review endpoints return a clear service-configuration error until a real key is set. SQLite initializes automatically at `DATABASE_URL` (default `ndatrace.db`, ignored by Git).
 
 ### Frontend
 
 ```bash
 cd frontend
-npm install
 npm run dev
 ```
 
@@ -186,6 +205,7 @@ Open `http://localhost:3000`.
 ### Tests
 
 ```bash
+source .venv/bin/activate
 pytest
 
 cd frontend
@@ -195,9 +215,9 @@ npm test
 npm run build
 ```
 
-Standard automated tests mock model calls and make **zero paid hosted calls**.
+Standard automated tests make **zero paid hosted calls**. Some retrieval tests load the two public Hugging Face models named above, so prefetch them before testing offline. If Turbopack cannot create a local worker in a restricted sandbox, the supported fallback `npx next build --webpack` performs the same production build check.
 
-## 12. Repository map
+## 13. Repository map
 
 ```text
 pipeline/      Frozen RAG runtime, retrieval, parsing, and validation
@@ -205,13 +225,43 @@ backend/       FastAPI endpoints and persisted review history
 frontend/      Next.js reviewer interface and Project Story
 evaluation/    Metrics, evaluators, schemas, and harnesses
 experiments/   Frozen E00–E22 protocols, outputs, and analyses
+data/          Public-dataset instructions and tracked regression fixtures
+results/       Canonical cross-experiment result tables
+scripts/       Setup, offline analysis, experiment, and report utilities
 docs/          Architecture, evaluation protocol, ADRs, and registry
 tests/         Unit, integration, robustness, and leakage checks
+reports/       Current report draft plus preserved earlier versions
 ```
 
-Historical artifacts are retained for reproducibility but do not define the live runtime.
+Historical T-series materials are archived and retained as evidence; the active reconstruction-v2 program is E00–E22. ADR-001 through ADR-011 are historical. ADR-012 is the current reconstruction-v2 benchmark/product decision.
 
-## 13. Reproduce the project
+## 14. Reproduce saved research results
+
+Downloading ContractNLI is required because its license permits redistribution by source but the raw split files are intentionally not tracked. The following commands are offline with respect to hosted LLMs: they recompute metrics from tracked predictions and the downloaded public dataset. They may rewrite their tracked summary files deterministically, so `git diff --exit-code` is the integrity check.
+
+```bash
+source .venv/bin/activate
+bash scripts/download_data.sh
+
+python experiments/E04B_majority_baseline/run_majority_baseline.py
+python scripts/e17_analyze_final_test.py --metrics
+python scripts/e17b_merge_and_analyze.py
+python scripts/analyze_e20_rag_test.py
+python scripts/analyze_e11_selective_agent.py
+python scripts/analyze_e15_validation.py
+python scripts/e18_business_analysis.py
+
+git diff --exit-code -- \
+  experiments/E04B_majority_baseline \
+  experiments/E11_selective_agent_evaluation/results \
+  experiments/E15_review_routing/results \
+  experiments/E17_final_test/results \
+  experiments/E17B_full_test_completion/results \
+  experiments/E18_business_course_synthesis/results \
+  experiments/E20_final_rag_test/results
+```
+
+This reproduces scoring and cost calculations from saved predictions; it does **not** rerun the paid inference that created those predictions. Live experiment runners remain available for provenance but must not be invoked casually.
 
 - [Smallest working slice](experiments/E00_smallest_slice/README.md) — one input through retrieval, one model call, parsing, validation, and reviewer output.
 - [Technical Tour notebook](notebooks/NDATrace_Complete_Technical_Tour.ipynb) — executable walkthrough using saved artifacts by default.
@@ -223,6 +273,17 @@ Historical artifacts are retained for reproducibility but do not define the live
 
 The Technical Tour defaults to saved outputs and zero hosted calls. Enable any live demonstration only deliberately and with a configured provider key.
 
-## 14. Project context
+Report renderers refuse to overwrite an existing artifact by default. Use a new path such as `python scripts/render_final_report_html.py --output /tmp/ndatrace-report.html`; `--force` is required to replace a named report intentionally.
+
+## 15. Known prototype limitations
+
+- No authentication or authorization; saved evidence/history is local plaintext SQLite.
+- Permissive development CORS and in-process rate/concurrency controls are not production infrastructure.
+- Prompt-injection detection is partial, and model output can still be wrong despite source-valid evidence.
+- ContractNLI is public benchmark data, not evidence of performance on confidential enterprise NDAs or long contracts.
+- Provider availability, provider pricing, the external dataset URL, and public model downloads are external dependencies.
+- Use only public or synthetic NDA text in this prototype. It is not approved for confidential production documents.
+
+## 16. Project context
 
 NDATrace was developed for NTU PE6201 Emerging AI Technologies using the [ContractNLI](https://stanfordnlp.github.io/contract-nli/) dataset. It is an evidence-grounded reviewer-assist prototype, not legal advice or a production approval system.

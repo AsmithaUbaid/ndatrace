@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""One-off renderer: reports/NDATrace_Final_Report.md -> reports/NDATrace_Final_Report.pdf.
+"""One-off renderer: reports/NDATrace_Final_Report.md -> a PDF.
 
-Not part of the shipped app - reportlab/markdown are dev-only deps for this single
-deliverable, not added to requirements.txt.
+Not part of the shipped app. Refuses to replace an existing report unless
+``--force`` is supplied explicitly.
 """
 from __future__ import annotations
 
+import argparse
 import re
 from pathlib import Path
 
@@ -93,8 +94,16 @@ def build_story(markdown: str) -> list:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, default=TARGET)
+    parser.add_argument("--force", action="store_true", help="allow replacing an existing output file")
+    args = parser.parse_args()
+    output = args.output.resolve()
+    if output.exists() and not args.force:
+        raise SystemExit(f"Refusing to overwrite existing report: {output}. Use --output or pass --force intentionally.")
+    output.parent.mkdir(parents=True, exist_ok=True)
     doc = SimpleDocTemplate(
-        str(TARGET), pagesize=LETTER,
+        str(output), pagesize=LETTER,
         topMargin=0.85 * inch, bottomMargin=0.85 * inch,
         leftMargin=0.8 * inch, rightMargin=0.8 * inch,
         title="NDATrace — Evidence-Grounded NDA Requirement Review",
@@ -102,7 +111,7 @@ def main() -> None:
     )
     story = build_story(SOURCE.read_text(encoding="utf-8"))
     doc.build(story)
-    print(f"Wrote {TARGET}")
+    print(f"Wrote {output}")
 
 
 if __name__ == "__main__":

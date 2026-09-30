@@ -39,7 +39,7 @@ class Settings(BaseSettings):
     # pre-reconstruction default (see docs/decisions.md ADR-001, historical) -
     # the reconstruction-v2 architecture (docs/architecture_decisions/INDEX.md,
     # docs/experiment_registry.md's E01 row) selected openai/gpt-5-mini as the
-    # frozen production model (FULL-context GPT-5-mini + P0 prompt).
+    # frozen product model (top-5 RAG context + GPT-5-mini + P0 prompt).
     default_model: str = Field(
         default="openai/gpt-5-mini",
         description="Default LLM model identifier (production runtime model)",
@@ -111,9 +111,9 @@ class Settings(BaseSettings):
     database_url: str = Field(default="sqlite:///ndatrace.db")
 
     # --- Budget Safety ---
-    # Verified via OpenRouter /auth/key on 2026-09-22: real remaining balance
-    # is $6.99 (key limit $10.00, already used $3.01). See data/budget_plan.json.
-    max_budget_usd: float = Field(default=6.99, ge=0.0)
+    # Prototype-local cumulative spend ceiling for reviews recorded in SQLite.
+    # This must not encode a developer's historical provider-account balance.
+    max_budget_usd: float = Field(default=1.0, ge=0.0)
     warn_budget_pct: int = Field(default=80, ge=0, le=100)
 
     @property
