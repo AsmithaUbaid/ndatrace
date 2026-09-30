@@ -4,6 +4,8 @@ NDATrace API Pydantic request/response schemas (WBS T032).
 
 from __future__ import annotations
 
+from typing import Literal
+
 from pydantic import BaseModel, Field
 
 
@@ -43,6 +45,7 @@ class RetrievedChunkMetadata(BaseModel):
 
 
 class RequirementResult(BaseModel):
+    id: int | None = None  # review_items.id - required to record a decision on this item
     hypothesis_id: str
     hypothesis_text: str
     label: str | None
@@ -65,6 +68,18 @@ class RequirementResult(BaseModel):
     # E22 LLM01 remediation: see pipeline/final_review.py's injection_guard wiring.
     security_review_required: bool = False
     security_flags: list[str] = Field(default_factory=list)
+    # Human-oversight authority to intervene (backend/database.py review_decisions).
+    # None until a reviewer records one; the AI's own output never sets these.
+    decision: Literal["approved", "overridden", "rejected"] | None = None
+    decision_note: str | None = None
+    decision_reviewer: str | None = None
+    decided_at: str | None = None
+
+
+class DecisionRequest(BaseModel):
+    decision: Literal["approved", "overridden", "rejected"]
+    note: str | None = Field(default=None, max_length=2000)
+    reviewer: str | None = Field(default=None, max_length=200)
 
 
 class ReviewResponse(BaseModel):

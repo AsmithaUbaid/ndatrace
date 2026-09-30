@@ -1,10 +1,114 @@
-import { RequirementResult } from "@/lib/api";
+import { useState } from "react";
+import { RequirementResult, ReviewDecision } from "@/lib/api";
 import { NOT_MENTIONED_MESSAGE } from "@/lib/evidenceDisplay";
 import { isLowConfidence, toVerdict, VERDICT_COLORS, VERDICT_ICONS, VERDICT_TITLES } from "@/lib/verdict";
 import { EvidenceSection } from "@/components/EvidenceSection";
 import { ReviewMetadata } from "@/components/ReviewMetadata";
 
-export function RequirementCard({ r }: { r: RequirementResult }) {
+const DECISION_LABELS: Record<ReviewDecision, string> = {
+  approved: "Approved",
+  overridden: "Overridden",
+  rejected: "Rejected",
+};
+
+// The AI's classification is never final on its own - this is the reviewer's
+// recorded authority to intervene, persisted server-side (backend/database.py
+// review_decisions), separate from and not implied by needs_human_review.
+function DecisionControls({
+  r,
+  onDecide,
+}: {
+  r: RequirementResult;
+  onDecide: (itemId: number, decision: ReviewDecision, note?: string) => Promise<void>;
+}) {
+  const [note, setNote] = useState("");
+  const [showNote, setShowNote] = useState(false);
+  const [pending, setPending] = useState<ReviewDecision | null>(null);
+  const [failed, setFailed] = useState(false);
+
+  if (r.id == null) return null; // not yet persisted (e.g. single-requirement /api/review path)
+
+  async function decide(decision: ReviewDecision) {
+    setPending(decision);
+    setFailed(false);
+    try {
+      await onDecide(r.id as number, decision, note.trim() || undefined);
+      setNote("");
+      setShowNote(false);
+    } catch {
+      setFailed(true);
+    } finally {
+      setPending(null);
+    }
+  }
+
+  return (
+    <div className="mt-4 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+      {r.decision ? (
+        <div className="rounded-md border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+          <span className="font-semibold">Reviewer decision: {DECISION_LABELS[r.decision]}</span>
+          {r.decision_note && <p className="mt-1 leading-5">{r.decision_note}</p>}
+          <p className="mt-1 text-[11px] text-zinc-400 dark:text-zinc-500">
+            You can still change this decision below.
+          </p>
+        </div>
+      ) : (
+        <p className="mb-2 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+          Human decision required before acting on this result.
+        </p>
+      )}
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          onClick={() => decide("approved")}
+          disabled={pending !== null}
+          className="rounded-md border border-emerald-300 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 disabled:opacity-50 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300"
+        >
+          {pending === "approved" ? "Saving…" : "Approve"}
+        </button>
+        <button
+          onClick={() => decide("overridden")}
+          disabled={pending !== null}
+          className="rounded-md border border-amber-300 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-800 hover:bg-amber-100 disabled:opacity-50 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-300"
+        >
+          {pending === "overridden" ? "Saving…" : "Override"}
+        </button>
+        <button
+          onClick={() => decide("rejected")}
+          disabled={pending !== null}
+          className="rounded-md border border-rose-300 bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-800 hover:bg-rose-100 disabled:opacity-50 dark:border-rose-800 dark:bg-rose-950/40 dark:text-rose-300"
+        >
+          {pending === "rejected" ? "Saving…" : "Reject"}
+        </button>
+        <button
+          onClick={() => setShowNote((v) => !v)}
+          className="text-xs font-medium text-zinc-500 underline underline-offset-2 hover:text-zinc-700 dark:text-zinc-400"
+        >
+          {showNote ? "Hide note" : "Add note"}
+        </button>
+      </div>
+      {showNote && (
+        <textarea
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder="Why? (optional, recorded with the decision)"
+          rows={2}
+          className="mt-2 w-full rounded-md border border-zinc-200 px-2 py-1.5 text-xs text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200"
+        />
+      )}
+      {failed && (
+        <p className="mt-1 text-xs font-medium text-rose-600">Could not save decision. Try again.</p>
+      )}
+    </div>
+  );
+}
+
+export function RequirementCard({
+  r,
+  onDecide,
+}: {
+  r: RequirementResult;
+  onDecide?: (itemId: number, decision: ReviewDecision, note?: string) => Promise<void>;
+}) {
   if (r.error || !r.label) {
     return (
       <li className="overflow-hidden rounded-lg border border-amber-300 bg-amber-50 shadow-sm dark:border-amber-800 dark:bg-amber-950/40">
@@ -119,6 +223,8 @@ export function RequirementCard({ r }: { r: RequirementResult }) {
           sourceValid={r.source_valid}
           retrievedChunks={r.retrieved_chunks}
         />
+
+        {onDecide && <DecisionControls r={r} onDecide={onDecide} />}
       </div>
     </li>
   );

@@ -20,7 +20,14 @@ from datetime import datetime, timezone
 from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from backend import database
-from backend.models import FinalReviewRequest, FinalReviewResponse, RequirementResult, ReviewRequest, ReviewResponse
+from backend.models import (
+    DecisionRequest,
+    FinalReviewRequest,
+    FinalReviewResponse,
+    RequirementResult,
+    ReviewRequest,
+    ReviewResponse,
+)
 from backend.rate_limit import ConcurrencyLimitExceeded, RateLimitExceeded, check_rate_limit, concurrency_guard
 from pipeline.cost_guard import CostCeilingExceeded, check_batch_budget, check_budget
 from pipeline.final_review import MODEL as FINAL_REVIEW_MODEL
@@ -167,9 +174,12 @@ def create_review(request: ReviewRequest) -> ReviewResponse:
         "cost_usd": total_cost, "latency_ms": round(duration_ms, 1), "model": gateway.model,
     })
 
+    # Re-read from the DB rather than the in-memory `items` so the response carries each
+    # item's assigned id (needed by the client to record a reviewer decision on it).
+    saved = database.get_review(review_id)
     return ReviewResponse(
         review_id=review_id, doc_id=doc_id, created_at=created_at,
-        results=[RequirementResult(**it) for it in items],
+        results=[RequirementResult(**it) for it in saved["items"]],
         total_cost_usd=total_cost, total_latency_ms=total_latency, model=gateway.model,
     )
 
@@ -186,6 +196,33 @@ def get_review(review_id: str) -> ReviewResponse:
         total_cost_usd=review["total_cost_usd"], total_latency_ms=review["total_latency_ms"],
         model=review["model"],
     )
+
+
+@router.post("/review/{review_id}/items/{item_id}/decision", response_model=RequirementResult)
+def record_review_decision(review_id: str, item_id: int, request: DecisionRequest) -> RequirementResult:
+    """Persist a human reviewer's decision on one requirement result - the implemented
+    form of 'authority to intervene': the AI never auto-approves or auto-rejects, and this
+    is the only write path that records what a human actually decided. Append-only per
+    item (see database.record_decision); returns the item with its now-latest decision."""
+    review = database.get_review(review_id)
+    if review is None:
+        raise HTTPException(status_code=404, detail=f"Review not found: {review_id}")
+    if not any(it["id"] == item_id for it in review["items"]):
+        raise HTTPException(status_code=404, detail=f"No item {item_id} in review {review_id}")
+
+    try:
+        database.record_decision(item_id, request.decision, request.note, request.reviewer)
+    except KeyError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
+
+    logger.info("API: reviewer decision recorded", extra={
+        "stage": "api_review_decision", "review_id": review_id, "item_id": item_id,
+        "decision": request.decision,
+    })
+
+    updated = database.get_review(review_id)
+    item = next(it for it in updated["items"] if it["id"] == item_id)
+    return RequirementResult(**item)
 
 
 MAX_PDF_SIZE_BYTES = 10 * 1024 * 1024  # 10MB - real NDAs are a few pages; this is a generous cap

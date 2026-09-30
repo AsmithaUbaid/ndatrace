@@ -23,7 +23,9 @@ current state.
 
 ## ADR-001 — Model choice: `google/gemini-2.5-flash-lite`
 
-**Status:** Accepted (supersedes an earlier choice of `openai/gpt-5-mini`)
+**Status:** Historical only — superseded by ADR-012 (`docs/architecture_decisions/INDEX.md`), which
+reinstates `openai/gpt-5-mini` as the reconstruction-v2 shipped model. Accepted at the time
+(supersedes an earlier choice of `openai/gpt-5-mini`), but not the current decision.
 
 **Context:** The Oracle experiment (B04, 150-case stratified dev sample) confirmed GPT-5 mini
 clears the "model reasons well" bar (96.7% accuracy given gold evidence), so no model was a known

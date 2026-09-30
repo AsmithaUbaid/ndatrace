@@ -19,7 +19,10 @@ export type RetrievedChunk = {
 // Batch adapter for the same frozen product RAG path used by /api/review.
 // Compatibility agent fields remain in saved historical responses, but the
 // current runtime never invokes an agent and P0 supplies no confidence.
+export type ReviewDecision = "approved" | "overridden" | "rejected";
+
 export type RequirementResult = {
+  id: number | null; // review_items.id - required to record a decision on this item
   hypothesis_id: string;
   hypothesis_text: string;
   label: "Entailment" | "Contradiction" | "NotMentioned" | null;
@@ -39,6 +42,11 @@ export type RequirementResult = {
   cost_usd: number;
   latency_ms: number;
   error: string | null;
+  // Human-oversight authority to intervene: null until a reviewer records one.
+  decision: ReviewDecision | null;
+  decision_note: string | null;
+  decision_reviewer: string | null;
+  decided_at: string | null;
 };
 
 export type ReviewResponse = {
@@ -146,4 +154,9 @@ export const api = {
     }),
   getReview: (reviewId: string) => request<ReviewResponse>(`/review/${reviewId}`),
   listResults: () => request<ReviewSummary[]>("/results"),
+  recordDecision: (reviewId: string, itemId: number, decision: ReviewDecision, note?: string, reviewer?: string) =>
+    request<RequirementResult>(`/review/${reviewId}/items/${itemId}/decision`, {
+      method: "POST",
+      body: JSON.stringify({ decision, note: note || null, reviewer: reviewer || null }),
+    }),
 };

@@ -73,6 +73,10 @@ class Settings(BaseSettings):
 
     # --- Retrieval ---
     default_top_k: int = Field(default=5, ge=1)
+    # chunk_size/chunk_overlap are NOT read by the frozen production chunker
+    # (pipeline/frozen_rag.py hardcodes CHUNK_SIZE=256, no overlap, via
+    # pipeline/chunker.py's clause_aware_chunk()). Kept only for scripts/run_e06_retrieval.py's
+    # CLI defaults and reproducibility of the E06 retrieval-optimisation sweep.
     chunk_size: int = Field(default=512, ge=64)
     chunk_overlap: int = Field(default=50, ge=0)
 

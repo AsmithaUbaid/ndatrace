@@ -4,6 +4,8 @@ NDATrace helps legal reviewers compare confidentiality requirements with an NDA 
 
 `Python` · `FastAPI` · `Next.js` · `GPT-5-mini` · `ContractNLI` · `Human-in-the-loop`
 
+**Final project report:** [reports/NDATrace_Final_Report.md](reports/NDATrace_Final_Report.md) ([PDF](reports/NDATrace_Final_Report.pdf)). Earlier drafts (`NDATrace_Final_Report.html` at the repo root, `reports/NDATrace_Evidence_Report.*`, `reports/NDATrace_Final_Tradeoff_Report.*`) are superseded by this one.
+
 ## 1. What it does
 
 ```text
@@ -54,7 +56,7 @@ This is an engineering trade-off, not a claim that RAG outperformed FULL on over
 
 ```mermaid
 flowchart LR
-    A[NDA + requirement] --> B[Clause-aware chunks<br/>256 tokens / 50 overlap]
+    A[NDA + requirement] --> B[Clause-aware chunks<br/>256 tokens, no overlap]
     B --> C[BM25<br/>top-20]
     C --> D[Cross-encoder<br/>reranking]
     D --> E[Top-5 clauses]
@@ -75,7 +77,7 @@ flowchart LR
 
 | Setting | Frozen value |
 | --- | --- |
-| Chunking | Clause-aware, 256 tokens, 50-token overlap |
+| Chunking | Clause-aware, 256 tokens, no token overlap (boundaries follow clause breaks) |
 | Candidate generation | BM25 top-20 |
 | Reranker | `cross-encoder/ms-marco-MiniLM-L-12-v2` |
 | Model context | Top-5 reranked clauses |
@@ -139,7 +141,7 @@ The modeled workflow uses:
 C_total = C_AI + (1 - p_joint) × C_human
 ```
 
-API cost is not total workflow cost: failed Joint cases still require human handling. All business figures are **MODELED scenarios**, not realized production savings. Assumptions and sensitivity analysis are documented in [E18](experiments/E18_cost_to_serve/summary.md).
+API cost is not total workflow cost: failed Joint cases still require human handling. All business figures are **MODELED scenarios**, not realized production savings. Assumptions and sensitivity analysis are documented in [E18](experiments/E18_business_course_synthesis/summary.md).
 
 ## 10. Limitations
 
@@ -149,6 +151,7 @@ API cost is not total workflow cost: failed Joint cases still require human hand
 - Prompt-injection detection remains incomplete.
 - The system cannot grant autonomous legal approval.
 - A human remains the final authority.
+
 
 ## 11. Quick start
 

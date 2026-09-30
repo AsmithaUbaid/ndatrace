@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { api, Hypothesis, ReviewResponse } from "@/lib/api";
+import { api, Hypothesis, ReviewDecision, ReviewResponse } from "@/lib/api";
 import { RequirementCard } from "@/components/RequirementCard";
 import { ResultsSummaryBar } from "@/components/ResultsSummaryBar";
 import { LimitationsPanel } from "@/components/LimitationsPanel";
@@ -23,14 +23,6 @@ Upon termination of this Agreement, Receiving Party shall return or destroy all 
 type Stage = "idle" | "loading-hypotheses" | "ready" | "reviewing" | "done" | "error";
 type InputMode = "paste" | "pdf";
 
-const REVIEW_ACTIVITY_STAGES = [
-  "Retrieving relevant clauses",
-  "Reranking evidence",
-  "Classifying requirement",
-  "Validating evidence",
-  "Preparing reviewer result",
-] as const;
-
 export default function ReviewPage() {
   const [hypotheses, setHypotheses] = useState<Hypothesis[]>([]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -45,7 +37,6 @@ export default function ReviewPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [filter, setFilter] = useState<FilterKey>("all");
   const [copied, setCopied] = useState(false);
-  const [reviewActivityIndex, setReviewActivityIndex] = useState(0);
 
   const DRAFT_KEY = "ndatrace_nda_draft";
 
@@ -94,16 +85,6 @@ export default function ReviewPage() {
       });
   }, []);
 
-  useEffect(() => {
-    if (stage !== "reviewing") return;
-
-    const interval = window.setInterval(() => {
-      setReviewActivityIndex((current) => (current + 1) % REVIEW_ACTIVITY_STAGES.length);
-    }, 2200);
-
-    return () => window.clearInterval(interval);
-  }, [stage]);
-
   const allSelected = useMemo(
     () => hypotheses.length > 0 && selected.size === hypotheses.length,
     [hypotheses, selected]
@@ -133,7 +114,6 @@ export default function ReviewPage() {
   }
 
   async function handleSubmit() {
-    setReviewActivityIndex(0);
     setStage("reviewing");
     setError(null);
     setResult(null);
@@ -170,6 +150,15 @@ export default function ReviewPage() {
     downloadFile(reviewToJson(result), `ndatrace-review-${result.doc_id}.json`, "application/json");
   }
 
+  async function handleDecide(itemId: number, decision: ReviewDecision, note?: string) {
+    if (!result) return;
+    const updated = await api.recordDecision(result.review_id, itemId, decision, note);
+    setResult({
+      ...result,
+      results: result.results.map((r) => (r.id === itemId ? updated : r)),
+    });
+  }
+
   const filteredResults = useMemo(() => {
     if (!result) return [];
     if (filter === "all") return result.results;
@@ -191,6 +180,12 @@ export default function ReviewPage() {
         <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-600">Review confidentiality requirements against the source agreement.</p>
         <div className="mt-6 grid overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50/70 sm:grid-cols-3">{[["01","Provide NDA"],["02","Choose requirements"],["03","Review results"]].map(([n,label])=><div key={n} className="flex items-center gap-3 border-b border-zinc-200 px-4 py-3 last:border-0 sm:border-b-0 sm:border-r sm:last:border-r-0"><span className="font-mono text-xs font-bold text-zinc-400">{n}</span><span className="text-sm font-medium text-zinc-800">{label}</span></div>)}</div></div>
       </header>
+
+      <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-800 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-300">
+        This is an academic prototype with no authentication or access control. Use sample or
+        synthetic agreements (e.g. the pre-filled example below) — do not paste real confidential
+        documents.
+      </p>
 
       {stage === "error" && !result && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
@@ -384,11 +379,12 @@ export default function ReviewPage() {
                 className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-zinc-500 dark:bg-zinc-400"
               />
               <p className="text-sm font-medium text-zinc-800 dark:text-zinc-100">
-                {REVIEW_ACTIVITY_STAGES[reviewActivityIndex]}
+                Reviewing against the retrieval + classification pipeline…
               </p>
             </div>
             <p className="mt-1 pl-[18px] text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
-              Status is approximate while the review is processed.
+              Retrieval, reranking, and classification run per requirement; this can take a few
+              seconds to over a minute for a full batch.
             </p>
           </div>
         )}
@@ -438,7 +434,7 @@ export default function ReviewPage() {
           ) : (
             <ul className="flex flex-col gap-3">
               {filteredResults.map((r) => (
-                <RequirementCard key={r.hypothesis_id} r={r} />
+                <RequirementCard key={r.hypothesis_id} r={r} onDecide={handleDecide} />
               ))}
             </ul>
           )}

@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 import sqlite3
 from contextlib import contextmanager
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterator
 
@@ -51,6 +52,22 @@ CREATE TABLE IF NOT EXISTS review_items (
 );
 
 CREATE INDEX IF NOT EXISTS idx_review_items_review_id ON review_items(review_id);
+
+-- Reviewer decisions (human-oversight authority to intervene). Append-only: a
+-- reviewer may record more than one decision for the same item (e.g. change
+-- their mind after re-reading the evidence); get_review() below returns only
+-- the latest per item, but nothing is ever overwritten or deleted, so the
+-- full decision history stays auditable in this table.
+CREATE TABLE IF NOT EXISTS review_decisions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    review_item_id INTEGER NOT NULL REFERENCES review_items(id),
+    decision TEXT NOT NULL CHECK (decision IN ('approved', 'overridden', 'rejected')),
+    note TEXT,
+    reviewer TEXT,
+    decided_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_review_decisions_item ON review_decisions(review_item_id);
 """
 
 
@@ -128,6 +145,37 @@ def save_review(review_id: str, doc_id: str, created_at: str, model: str,
         )
 
 
+def record_decision(review_item_id: int, decision: str, note: str | None, reviewer: str | None) -> dict:
+    """Record a human reviewer's decision (approve/override/reject) on one review item.
+    This is the persisted form of the reviewer's authority to intervene - distinct from
+    needs_human_review, which only flags that a case warrants a look."""
+    decided_at = datetime.now(timezone.utc).isoformat()
+    with get_connection() as conn:
+        exists = conn.execute(
+            "SELECT 1 FROM review_items WHERE id = ?", (review_item_id,)
+        ).fetchone()
+        if exists is None:
+            raise KeyError(f"No review item with id={review_item_id}")
+        conn.execute(
+            "INSERT INTO review_decisions (review_item_id, decision, note, reviewer, decided_at) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (review_item_id, decision, note, reviewer, decided_at),
+        )
+    return {"review_item_id": review_item_id, "decision": decision, "note": note,
+            "reviewer": reviewer, "decided_at": decided_at}
+
+
+def _latest_decisions(conn: sqlite3.Connection, review_id: str) -> dict[int, dict]:
+    rows = conn.execute(
+        "SELECT d.* FROM review_decisions d "
+        "JOIN review_items i ON i.id = d.review_item_id "
+        "WHERE i.review_id = ? "
+        "AND d.id = (SELECT MAX(id) FROM review_decisions WHERE review_item_id = d.review_item_id)",
+        (review_id,),
+    ).fetchall()
+    return {row["review_item_id"]: dict(row) for row in rows}
+
+
 def get_review(review_id: str) -> dict | None:
     with get_connection() as conn:
         review_row = conn.execute(
@@ -138,6 +186,7 @@ def get_review(review_id: str) -> dict | None:
         item_rows = conn.execute(
             "SELECT * FROM review_items WHERE review_id = ? ORDER BY id", (review_id,)
         ).fetchall()
+        decisions = _latest_decisions(conn, review_id)
 
     return {
         **dict(review_row),
@@ -155,6 +204,10 @@ def get_review(review_id: str) -> dict | None:
                 "agent_used": bool(row["agent_used"]),
                 "security_review_required": bool(row["security_review_required"]),
                 "security_flags": json.loads(row["security_flags_json"]),
+                "decision": (decisions.get(row["id"]) or {}).get("decision"),
+                "decision_note": (decisions.get(row["id"]) or {}).get("note"),
+                "decision_reviewer": (decisions.get(row["id"]) or {}).get("reviewer"),
+                "decided_at": (decisions.get(row["id"]) or {}).get("decided_at"),
             }
             for row in item_rows
         ],

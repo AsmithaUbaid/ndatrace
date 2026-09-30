@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { api, ReviewResponse, ReviewSummary } from "@/lib/api";
+import { api, ReviewDecision, ReviewResponse, ReviewSummary } from "@/lib/api";
 import { RequirementCard } from "@/components/RequirementCard";
 
 export default function HistoryPage() {
@@ -26,6 +26,15 @@ export default function HistoryPage() {
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not load review.");
     }
+  }
+
+  async function handleDecide(itemId: number, decision: ReviewDecision, note?: string) {
+    if (!selected) return;
+    const updated = await api.recordDecision(selected.review_id, itemId, decision, note);
+    setSelected({
+      ...selected,
+      results: selected.results.map((r) => (r.id === itemId ? updated : r)),
+    });
   }
 
   return (
@@ -104,7 +113,7 @@ export default function HistoryPage() {
           </h2></div>
           <ul className="flex flex-col gap-3">
             {selected.results.map((r) => (
-              <RequirementCard key={r.hypothesis_id} r={r} />
+              <RequirementCard key={r.hypothesis_id} r={r} onDecide={handleDecide} />
             ))}
           </ul>
         </section>

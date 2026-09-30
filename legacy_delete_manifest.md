@@ -1,8 +1,13 @@
-# Legacy Delete Manifest (Phase 1 — nothing deleted yet)
+# Legacy Delete Manifest (completed 2026-09-29)
 
-Generated from a repo-wide dependency sweep. Nothing in this repo has been deleted, moved, or
-committed. This file is the input to Phase 2 (migration) and Phase 3 (deletion), which require
-explicit go-ahead before proceeding — see the two flagged judgment calls at the bottom.
+Generated from a repo-wide dependency sweep. **This plan has been executed**: every row marked
+`DELETE` below was removed in commit `b8d2c90` ("Cleaning the repo", 2026-09-29), and every row
+marked `KEEP`/`HOLD` is still present in the working tree (verified). Kept as a historical record of
+what was removed and why — not a live to-do list. The three judgment calls at the bottom are also
+resolved (see the note after each): the Case Explorer was rebuilt to use only reconstruction-v2 data
+(no legacy substitution), `docs/decisions.md`/`docs/experiments.md` were kept with explicit
+historical-only framing rather than deleted, and "benchmark" terminology was renamed out of the
+primary user-facing docs.
 
 | Path | Why legacy | Current dependency? | Migration required? | Final action |
 |---|---|---|---|---|
@@ -42,4 +47,17 @@ Repo-wide sweep found **zero** current-facing hits for: "Gemini selected/active"
 
 **#3 — "benchmark" rename scope.** The term is currently the load-bearing word distinguishing "FULL = strongest measured configuration" from "RAG = served runtime" across ~35+ sites including a TypeScript type union and status-styling map. Renaming it means touching README.md, docs/summary.md, docs/architecture.md, three frontend files (including a shared `Status` type consumed elsewhere), a generated JSON file, and its Python generator — consistently, everywhere, in one pass, or the FULL/RAG distinction becomes internally inconsistent mid-rename.
 
-I'd rather confirm scope on these three before touching anything, given the no-commit/no-archive constraint means there's no safety net beyond git's last commit. Want me to proceed with all three as scoped above, or adjust any of them first?
+**Resolution (verified 2026-09-30):**
+- **#1 Case Explorer** — resolved without legacy substitution. `scripts/build_project_presentation_data.py`
+  joins only reconstruction-v2 per-case files (Rule=E04/E17, FULL=E17/E17B, RAG=E20); the disjoint
+  E11 agent population (TRAIN n=150) has no per-case match, so the Agent column is left unpopulated
+  with an honest "No matched reconstruction result available" label rather than backfilled from T041.
+  `build_e00b_forecast.py` was switched to a frozen extract at
+  `experiments/E00B_budget_forecast/inputs/` (see that folder's README) instead of the deleted
+  `results/archive/runs/` paths.
+- **#2 docs/decisions.md / docs/experiments.md** — kept (not deleted), each opens with an explicit
+  "historical evidence only, not the current decision" banner pointing to
+  `docs/architecture_decisions/INDEX.md` for the live reconstruction-v2 ADRs.
+- **#3 "benchmark" rename** — done in the primary user-facing surfaces (README.md, docs/summary.md,
+  docs/architecture.md, frontend). It remains in a handful of internal/technical docs
+  (`docs/experiment_registry.md`, `docs/evaluation_protocol.md`, etc.) where it is not user-facing.

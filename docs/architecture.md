@@ -13,7 +13,8 @@ NDA + requirement
         |
 input validation
         |
-clause-aware chunking (256 tokens; frozen overlap config 50)
+clause-aware chunking (256 tokens; chunk boundaries follow clause breaks, no token overlap —
+the `chunk_overlap=50` setting exists in config but is not read by the frozen chunker)
         |
 BM25 top-20 -> ms-marco-MiniLM-L-12-v2 rerank -> top-5 context
         |

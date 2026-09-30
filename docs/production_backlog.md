@@ -7,14 +7,26 @@ Current evidence referenced below: `experiments/E00B_budget_forecast/` (budget, 
 
 ## Human review override/approval API
 
-**Gap:** `backend/routes/review.py` has `POST /review`, `GET /review/{id}`, `/extract-pdf`,
-`/hypotheses` — no endpoint exists for a reviewer to record an override, approval, or
-rejection. The product promise (`docs/project_contract.md` §10, AUTHORITY) commits to this;
-the backend doesn't yet expose it.
+**Status: implemented (2026-09-30).** `POST /review/{review_id}/items/{item_id}/decision`
+(`backend/routes/review.py`) now lets a reviewer record `approved`/`overridden`/`rejected`,
+with an optional note and reviewer name, persisted append-only in the new `review_decisions`
+table (`backend/database.py`). `GET /review/{review_id}` returns each item's latest decision.
+The frontend (`RequirementCard.tsx`'s `DecisionControls`, wired from `app/page.tsx` and
+`app/history/page.tsx`) surfaces Approve/Override/Reject buttons with a note field on every
+persisted review item, and shows the recorded decision (with the option to change it) once one
+exists. This is the persisted form of the product promise (`docs/project_contract.md` §10,
+AUTHORITY) — the AI never auto-approves or auto-rejects (unchanged, was already true), and now
+what the human actually decided is written down, not just implied.
 
-**Status:** deferred by explicit instruction. Do not implement until productionisation phase.
+**Verified:** `tests/test_review_decisions.py` (3 tests, isolated sqlite db) + a live curl
+round-trip against the running dev backend (seed review created via `database.save_review`,
+`POST .../decision`, confirmed via `GET /review/{id}`, then the seed data removed). Not verified
+through an actual browser click-through — no browser tool was available in the session that
+implemented this; `npx tsc --noEmit` and `next build` both pass, and the existing
+`tests/test_backend.py` suite (13 tests) is unaffected.
 
-**Clarification:** the human reviewer is the final authority as a **product/governance rule** -- this is implemented today (the system never auto-approves or auto-rejects an NDA; every result is presented for a human to confirm or overrule, see `docs/architecture.md` §2). What is **not** implemented is **persisting** that reviewer decision as an explicit backend action/record (override, approval, rejection) -- there is no reviewer decision-write API. Do not describe one as existing.
+**Not done:** no reviewer authentication exists, so `reviewer` is a free-text field the caller
+supplies (or omits) — fine for a single-user academic demo, not for a multi-reviewer deployment.
 
 ## Terminology: "abstain" vs. "route to human review"
 
