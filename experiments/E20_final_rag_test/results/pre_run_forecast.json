@@ -1,0 +1,73 @@
+{
+  "checks": {
+    "test_sha256": true,
+    "source_manifest_sha256": true,
+    "gpt_p0_sha1": true,
+    "test_documents_123": true,
+    "test_hypotheses_17": true,
+    "source_cases_2091": true,
+    "source_unique_case_ids_2091": true,
+    "full_cartesian_population": true
+  },
+  "label_counts_scorer_side_only": {
+    "Entailment": 968,
+    "Contradiction": 220,
+    "NotMentioned": 903
+  },
+  "config_sha256": "97afd5c771c3e7d5694b993cc03b69bdaf6afb8354b34201881bc939d3e9f2ad",
+  "artifact_hashes": {
+    "config_json_sha256": "efec2724b1b858932e138f12902f9d77ee43eded77ecf3459534fcaaf54f8dba",
+    "model_facing_manifest_sha256": "215dbec5bacb50ff3a94dc72b7d728a47f1d25bbebc31d52a545c430ffcaffae",
+    "gold_scorer_manifest_sha256": "e2eab61db1c52026765a33d0bd7463d280c272b6983459d541eef408f7c05681"
+  },
+  "length_bands": {
+    "short_le_full_nda_tokens": 1465,
+    "medium_le_full_nda_tokens": 2326,
+    "counts": {
+      "short": 714,
+      "medium": 697,
+      "long": 680
+    }
+  },
+  "request_input_tokens": {
+    "cl100k_uncalibrated": {
+      "mean": 1140.560019129603,
+      "median": 1167,
+      "p90": 1295,
+      "p95": 1333,
+      "max": 1785
+    },
+    "calibration_ratio_from_E13_actual_rag": 0.9929959777731278,
+    "calibrated": {
+      "mean": 1132.5715114045374,
+      "median": 1158.82630606124,
+      "p90": 1285.9297912162006,
+      "p95": 1323.6636383715793,
+      "max": 1772.497820325033
+    },
+    "calibrated_total": 2368207.030346888
+  },
+  "output_token_basis_E13_actual_rag": {
+    "n": 150,
+    "mean": 726.64,
+    "p90": 1236,
+    "max": 2152
+  },
+  "cost_forecast_usd": {
+    "prices": {
+      "input_per_million": 0.25,
+      "output_per_million": 2.0
+    },
+    "expected": 3.630860237586722,
+    "conservative_all_cases_at_p90_input_and_output": 5.8411717983582685,
+    "hard_incremental_run_budget": 6.0,
+    "reserve": 0.75
+  },
+  "runtime_forecast": {
+    "basis": "E13 actual top-5 RAG latency, same model/prompt/context architecture",
+    "mean_call_seconds": 7.700836822774727,
+    "p90_call_seconds": 12.869780416949652,
+    "expected_wall_minutes_at_concurrency_5": 53.674832654739845,
+    "p90_wall_minutes_at_concurrency_5": 89.70236950613908
+  }
+}

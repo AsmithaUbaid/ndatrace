@@ -1,0 +1,33 @@
+{
+ "_provenance": {
+  "source_experiment": "E15 (Stage A on E13 FULL n=150, fresh validation on DEV_ROUTING_v1 n=138)",
+  "source_artifact": "experiments/E15_review_routing/results/validation_results.json",
+  "source_commit": "dcdee80",
+  "measured_or_scenario": "measured",
+  "population": "n=138 fresh DEV validation (principal view)",
+  "date_generated": "2026-09-27"
+ },
+ "policies": {
+  "R0": {
+   "raw_review_rate": 0.0,
+   "failure_capture": 0.0,
+   "residual_joint_error": 0.2898550724637681
+  },
+  "R1": {
+   "raw_review_rate": 0.043478260869565216,
+   "failure_capture": 0.125,
+   "residual_joint_error": 0.26515151515151514
+  },
+  "R2": {
+   "raw_review_rate": 0.21014492753623187,
+   "failure_capture": 0.375,
+   "residual_joint_error": 0.22935779816513763
+  },
+  "R3": {
+   "raw_review_rate": 0.5144927536231884,
+   "failure_capture": 0.825,
+   "residual_joint_error": 0.1044776119402985
+  }
+ },
+ "outcome": "C - no effective selective routing adopted; provisional targets (review<=40%, residual<10%) not met by any tested policy"
+}

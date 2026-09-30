@@ -1,0 +1,155 @@
+{
+ "E13": {
+  "v1": {
+   "net_joint": -3,
+   "guards_fail": {
+    "contradiction_ge3_below": false,
+    "macro_f1_below_0.03": false,
+    "evidence_recall_below_3pp": true,
+    "evidence_precision_below_3pp": true
+   },
+   "outcome": "B",
+   "evidence_recall_delta_pp": -6.000000000000005,
+   "evidence_precision_delta_pp": -4.160887656033285
+  },
+  "v2": {
+   "net_joint": -6,
+   "guards_fail": {
+    "contradiction_ge3_below": false,
+    "macro_f1_below_0.03": false,
+    "evidence_recall_below_3pp": true,
+    "evidence_precision_below_3pp": true
+   },
+   "outcome": "B",
+   "evidence_recall_delta_pp": -9.000000000000007,
+   "evidence_precision_delta_pp": -7.018030513176143
+  },
+  "stored_outcome": "B - FULL MATERIALLY BETTER",
+  "v1_reproduces_stored_outcome": true,
+  "decision_changes_under_v2": false,
+  "FULL": {
+   "joint_v1": 116,
+   "joint_v2": 120,
+   "evidence_recall_v1": 0.9,
+   "evidence_recall_v2": 0.93,
+   "evidence_precision_v1": 0.8571428571428571,
+   "evidence_precision_v2": 0.8857142857142857
+  },
+  "RAG": {
+   "joint_v1": 113,
+   "joint_v2": 114,
+   "evidence_recall_v1": 0.84,
+   "evidence_recall_v2": 0.84,
+   "evidence_precision_v1": 0.8155339805825242,
+   "evidence_precision_v2": 0.8155339805825242
+  }
+ },
+ "E12B": {
+  "gpt_p1": {
+   "stored_status": "NO BENEFIT",
+   "v1_net": -2,
+   "v2_net": -3,
+   "v1_status_recomputed": "NO BENEFIT",
+   "v2_status": "NO BENEFIT",
+   "evidence_recall_delta_pp_v1_v2": [
+    0.0,
+    -1.0000000000000009
+   ],
+   "evidence_precision_delta_pp_v1_v2": [
+    -2.3355925993771676,
+    -3.3339439457776066
+   ]
+  },
+  "gpt_p2": {
+   "stored_status": "HARMFUL",
+   "v1_net": -8,
+   "v2_net": -9,
+   "v1_status_recomputed": "HARMFUL",
+   "v2_status": "HARMFUL",
+   "evidence_recall_delta_pp_v1_v2": [
+    0.0,
+    -1.0000000000000009
+   ],
+   "evidence_precision_delta_pp_v1_v2": [
+    -3.820568140956482,
+    -4.836389787846096
+   ]
+  },
+  "gpt_p3": {
+   "stored_status": "NEAR-TIE",
+   "v1_net": 8,
+   "v2_net": 6,
+   "v1_status_recomputed": "NEAR-TIE",
+   "v2_status": "NEAR-TIE",
+   "evidence_recall_delta_pp_v1_v2": [
+    7.000000000000006,
+    5.000000000000004
+   ],
+   "evidence_precision_delta_pp_v1_v2": [
+    5.937266616878267,
+    3.995519044062734
+   ]
+  }
+ },
+ "E12C": {
+  "v1": {
+   "net": -3,
+   "er": -0.020000000000000018,
+   "ep": -0.03820382038203818,
+   "band": "NO CONFIRMATION",
+   "evidence_guards_fail": [
+    false,
+    true
+   ]
+  },
+  "v2": {
+   "net": -2,
+   "er": -0.010000000000000009,
+   "ep": -0.02830283028302827,
+   "band": "NO CONFIRMATION",
+   "evidence_guards_fail": [
+    false,
+    false
+   ]
+  },
+  "E12B_delta_v1_v2": [
+   8,
+   6
+  ],
+  "E12C_delta_v1_v2": [
+   -3,
+   -2
+  ],
+  "pooled_joint_P0_P3_of_300": {
+   "v1": [
+    242,
+    247
+   ],
+   "v2": [
+    244,
+    248
+   ]
+  },
+  "manifest_direction_reversal_v2": true,
+  "final_decision_KEEP_P0_unchanged": true
+ },
+ "E11": {
+  "v1": {
+   "a2_success": 111,
+   "a3_success": 111,
+   "net_joint": 0,
+   "joint_fail_to_success": 1,
+   "joint_success_to_fail": 1,
+   "mcnemar_p": 1.0
+  },
+  "v2": {
+   "a2_success": 113,
+   "a3_success": 113,
+   "net_joint": 0,
+   "joint_fail_to_success": 1,
+   "joint_success_to_fail": 1,
+   "mcnemar_p": 1.0
+  },
+  "e11_decision_C_rests_on": "net joint exactly zero (one recovery cancelled by one regression), no tools exercised"
+ }
+}

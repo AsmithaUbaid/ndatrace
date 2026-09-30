@@ -1,0 +1,1297 @@
+{
+  "manifest_id": "TRAIN_GPT_PROMPT_v1",
+  "purpose": "E12B GPT-specific prompt selection; document-disjoint from TRAIN_PROMPT_v1, TRAIN_ARCH_v1 and TRAIN_ORACLE_v1",
+  "source_split": "train",
+  "seed": 1200,
+  "target_per_class": 50,
+  "max_cases_per_doc_per_class": 2,
+  "sampling_algorithm": "Identical to TRAIN_PROMPT_v1/TRAIN_ARCH_v1 except the candidate pool is restricted to documents used by NONE of the three prior manifests (document-level exclusion, by construction). Per class: sort untouched doc ids, shuffle with random.Random(1200), take <=2 cases/doc until 50. Sorted by (class, doc, hyp). Performance-agnostic: no model output, difficulty, or evidence property is read.",
+  "total_cases": 150,
+  "per_class_case_counts": {
+    "Contradiction": 50,
+    "Entailment": 50,
+    "NotMentioned": 50
+  },
+  "total_unique_documents": 74,
+  "selected_document_ids": [
+    87,
+    91,
+    101,
+    104,
+    111,
+    118,
+    120,
+    123,
+    139,
+    147,
+    156,
+    176,
+    180,
+    183,
+    191,
+    192,
+    196,
+    201,
+    219,
+    223,
+    229,
+    238,
+    246,
+    254,
+    255,
+    258,
+    259,
+    272,
+    277,
+    291,
+    298,
+    303,
+    308,
+    309,
+    324,
+    325,
+    335,
+    340,
+    355,
+    368,
+    374,
+    386,
+    397,
+    404,
+    409,
+    415,
+    422,
+    427,
+    434,
+    436,
+    437,
+    441,
+    442,
+    443,
+    448,
+    450,
+    459,
+    460,
+    475,
+    489,
+    499,
+    512,
+    524,
+    562,
+    572,
+    578,
+    581,
+    604,
+    608,
+    613,
+    614,
+    615,
+    616,
+    621
+  ],
+  "verified_document_disjoint_from_TRAIN_PROMPT_v1": true,
+  "verified_document_disjoint_from_TRAIN_ARCH_v1": true,
+  "verified_document_disjoint_from_TRAIN_ORACLE_v1": true,
+  "cases": [
+    {
+      "case_id": "train::87::nda-7",
+      "split": "train",
+      "document_id": 87,
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::91::nda-17",
+      "split": "train",
+      "document_id": 91,
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::91::nda-2",
+      "split": "train",
+      "document_id": 91,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::101::nda-2",
+      "split": "train",
+      "document_id": 101,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::101::nda-20",
+      "split": "train",
+      "document_id": 101,
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::111::nda-2",
+      "split": "train",
+      "document_id": 111,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::111::nda-20",
+      "split": "train",
+      "document_id": 111,
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::118::nda-2",
+      "split": "train",
+      "document_id": 118,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::118::nda-7",
+      "split": "train",
+      "document_id": 118,
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::139::nda-2",
+      "split": "train",
+      "document_id": 139,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::176::nda-20",
+      "split": "train",
+      "document_id": 176,
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::176::nda-7",
+      "split": "train",
+      "document_id": 176,
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::183::nda-1",
+      "split": "train",
+      "document_id": 183,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::183::nda-2",
+      "split": "train",
+      "document_id": 183,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::192::nda-1",
+      "split": "train",
+      "document_id": 192,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::192::nda-2",
+      "split": "train",
+      "document_id": 192,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::219::nda-16",
+      "split": "train",
+      "document_id": 219,
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::219::nda-7",
+      "split": "train",
+      "document_id": 219,
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::229::nda-2",
+      "split": "train",
+      "document_id": 229,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::238::nda-20",
+      "split": "train",
+      "document_id": 238,
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::246::nda-2",
+      "split": "train",
+      "document_id": 246,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::259::nda-17",
+      "split": "train",
+      "document_id": 259,
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::298::nda-1",
+      "split": "train",
+      "document_id": 298,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::298::nda-2",
+      "split": "train",
+      "document_id": 298,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::309::nda-2",
+      "split": "train",
+      "document_id": 309,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::309::nda-20",
+      "split": "train",
+      "document_id": 309,
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::368::nda-2",
+      "split": "train",
+      "document_id": 368,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::386::nda-20",
+      "split": "train",
+      "document_id": 386,
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::386::nda-7",
+      "split": "train",
+      "document_id": 386,
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::404::nda-1",
+      "split": "train",
+      "document_id": 404,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::404::nda-2",
+      "split": "train",
+      "document_id": 404,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::422::nda-2",
+      "split": "train",
+      "document_id": 422,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::422::nda-20",
+      "split": "train",
+      "document_id": 422,
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::427::nda-1",
+      "split": "train",
+      "document_id": 427,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::427::nda-2",
+      "split": "train",
+      "document_id": 427,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::441::nda-20",
+      "split": "train",
+      "document_id": 441,
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::443::nda-2",
+      "split": "train",
+      "document_id": 443,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::443::nda-20",
+      "split": "train",
+      "document_id": 443,
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::459::nda-2",
+      "split": "train",
+      "document_id": 459,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::459::nda-20",
+      "split": "train",
+      "document_id": 459,
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::460::nda-2",
+      "split": "train",
+      "document_id": 460,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::460::nda-7",
+      "split": "train",
+      "document_id": 460,
+      "hypothesis_id": "nda-7",
+      "hypothesis_text": "Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::475::nda-17",
+      "split": "train",
+      "document_id": 475,
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::475::nda-2",
+      "split": "train",
+      "document_id": 475,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::499::nda-2",
+      "split": "train",
+      "document_id": 499,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::524::nda-2",
+      "split": "train",
+      "document_id": 524,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::524::nda-20",
+      "split": "train",
+      "document_id": 524,
+      "hypothesis_id": "nda-20",
+      "hypothesis_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::578::nda-2",
+      "split": "train",
+      "document_id": 578,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::614::nda-2",
+      "split": "train",
+      "document_id": 614,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::615::nda-2",
+      "split": "train",
+      "document_id": 615,
+      "hypothesis_id": "nda-2",
+      "hypothesis_text": "Confidential Information shall only include technical information.",
+      "gold_label": "Contradiction"
+    },
+    {
+      "case_id": "train::120::nda-12",
+      "split": "train",
+      "document_id": 120,
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::120::nda-13",
+      "split": "train",
+      "document_id": 120,
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::147::nda-10",
+      "split": "train",
+      "document_id": 147,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::147::nda-15",
+      "split": "train",
+      "document_id": 147,
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::183::nda-12",
+      "split": "train",
+      "document_id": 183,
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::183::nda-13",
+      "split": "train",
+      "document_id": 183,
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::191::nda-13",
+      "split": "train",
+      "document_id": 191,
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::191::nda-15",
+      "split": "train",
+      "document_id": 191,
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::196::nda-10",
+      "split": "train",
+      "document_id": 196,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::196::nda-12",
+      "split": "train",
+      "document_id": 196,
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::254::nda-11",
+      "split": "train",
+      "document_id": 254,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::254::nda-12",
+      "split": "train",
+      "document_id": 254,
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::255::nda-15",
+      "split": "train",
+      "document_id": 255,
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::255::nda-16",
+      "split": "train",
+      "document_id": 255,
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::272::nda-1",
+      "split": "train",
+      "document_id": 272,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::272::nda-12",
+      "split": "train",
+      "document_id": 272,
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::303::nda-10",
+      "split": "train",
+      "document_id": 303,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::303::nda-12",
+      "split": "train",
+      "document_id": 303,
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::309::nda-10",
+      "split": "train",
+      "document_id": 309,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::309::nda-13",
+      "split": "train",
+      "document_id": 309,
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::324::nda-12",
+      "split": "train",
+      "document_id": 324,
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::324::nda-13",
+      "split": "train",
+      "document_id": 324,
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::325::nda-10",
+      "split": "train",
+      "document_id": 325,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::325::nda-12",
+      "split": "train",
+      "document_id": 325,
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::335::nda-1",
+      "split": "train",
+      "document_id": 335,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::335::nda-10",
+      "split": "train",
+      "document_id": 335,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::340::nda-1",
+      "split": "train",
+      "document_id": 340,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::340::nda-10",
+      "split": "train",
+      "document_id": 340,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::355::nda-10",
+      "split": "train",
+      "document_id": 355,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::355::nda-12",
+      "split": "train",
+      "document_id": 355,
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::409::nda-10",
+      "split": "train",
+      "document_id": 409,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::409::nda-12",
+      "split": "train",
+      "document_id": 409,
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::434::nda-13",
+      "split": "train",
+      "document_id": 434,
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::434::nda-15",
+      "split": "train",
+      "document_id": 434,
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::442::nda-1",
+      "split": "train",
+      "document_id": 442,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::442::nda-12",
+      "split": "train",
+      "document_id": 442,
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::448::nda-1",
+      "split": "train",
+      "document_id": 448,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::448::nda-12",
+      "split": "train",
+      "document_id": 448,
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::450::nda-11",
+      "split": "train",
+      "document_id": 450,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::450::nda-13",
+      "split": "train",
+      "document_id": 450,
+      "hypothesis_id": "nda-13",
+      "hypothesis_text": "Receiving Party may acquire information similar to Confidential Information from a third party.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::562::nda-10",
+      "split": "train",
+      "document_id": 562,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::562::nda-11",
+      "split": "train",
+      "document_id": 562,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::572::nda-10",
+      "split": "train",
+      "document_id": 572,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::572::nda-11",
+      "split": "train",
+      "document_id": 572,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::581::nda-10",
+      "split": "train",
+      "document_id": 581,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::581::nda-12",
+      "split": "train",
+      "document_id": 581,
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::604::nda-10",
+      "split": "train",
+      "document_id": 604,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::604::nda-11",
+      "split": "train",
+      "document_id": 604,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::613::nda-11",
+      "split": "train",
+      "document_id": 613,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::613::nda-15",
+      "split": "train",
+      "document_id": 613,
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "Entailment"
+    },
+    {
+      "case_id": "train::104::nda-1",
+      "split": "train",
+      "document_id": 104,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::104::nda-10",
+      "split": "train",
+      "document_id": 104,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::118::nda-10",
+      "split": "train",
+      "document_id": 118,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::118::nda-11",
+      "split": "train",
+      "document_id": 118,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::123::nda-1",
+      "split": "train",
+      "document_id": 123,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::123::nda-10",
+      "split": "train",
+      "document_id": 123,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::156::nda-1",
+      "split": "train",
+      "document_id": 156,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::156::nda-12",
+      "split": "train",
+      "document_id": 156,
+      "hypothesis_id": "nda-12",
+      "hypothesis_text": "Receiving Party may independently develop information similar to Confidential Information.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::180::nda-1",
+      "split": "train",
+      "document_id": 180,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::180::nda-10",
+      "split": "train",
+      "document_id": 180,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::201::nda-1",
+      "split": "train",
+      "document_id": 201,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::201::nda-10",
+      "split": "train",
+      "document_id": 201,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::223::nda-17",
+      "split": "train",
+      "document_id": 223,
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::223::nda-18",
+      "split": "train",
+      "document_id": 223,
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::255::nda-10",
+      "split": "train",
+      "document_id": 255,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::255::nda-11",
+      "split": "train",
+      "document_id": 255,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::258::nda-10",
+      "split": "train",
+      "document_id": 258,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::258::nda-11",
+      "split": "train",
+      "document_id": 258,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::277::nda-1",
+      "split": "train",
+      "document_id": 277,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::277::nda-10",
+      "split": "train",
+      "document_id": 277,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::291::nda-10",
+      "split": "train",
+      "document_id": 291,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::291::nda-11",
+      "split": "train",
+      "document_id": 291,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::308::nda-10",
+      "split": "train",
+      "document_id": 308,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::308::nda-11",
+      "split": "train",
+      "document_id": 308,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::374::nda-1",
+      "split": "train",
+      "document_id": 374,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::374::nda-11",
+      "split": "train",
+      "document_id": 374,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::397::nda-1",
+      "split": "train",
+      "document_id": 397,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::397::nda-10",
+      "split": "train",
+      "document_id": 397,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::415::nda-1",
+      "split": "train",
+      "document_id": 415,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::415::nda-11",
+      "split": "train",
+      "document_id": 415,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::436::nda-11",
+      "split": "train",
+      "document_id": 436,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::436::nda-15",
+      "split": "train",
+      "document_id": 436,
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::437::nda-1",
+      "split": "train",
+      "document_id": 437,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::437::nda-10",
+      "split": "train",
+      "document_id": 437,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::489::nda-1",
+      "split": "train",
+      "document_id": 489,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::489::nda-10",
+      "split": "train",
+      "document_id": 489,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::512::nda-1",
+      "split": "train",
+      "document_id": 512,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::512::nda-10",
+      "split": "train",
+      "document_id": 512,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::562::nda-15",
+      "split": "train",
+      "document_id": 562,
+      "hypothesis_id": "nda-15",
+      "hypothesis_text": "Agreement shall not grant Receiving Party any right to Confidential Information.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::562::nda-3",
+      "split": "train",
+      "document_id": 562,
+      "hypothesis_id": "nda-3",
+      "hypothesis_text": "Confidential Information may include verbally conveyed information.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::578::nda-1",
+      "split": "train",
+      "document_id": 578,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::578::nda-11",
+      "split": "train",
+      "document_id": 578,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::608::nda-11",
+      "split": "train",
+      "document_id": 608,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::608::nda-16",
+      "split": "train",
+      "document_id": 608,
+      "hypothesis_id": "nda-16",
+      "hypothesis_text": "Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::613::nda-1",
+      "split": "train",
+      "document_id": 613,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::613::nda-10",
+      "split": "train",
+      "document_id": 613,
+      "hypothesis_id": "nda-10",
+      "hypothesis_text": "Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::616::nda-1",
+      "split": "train",
+      "document_id": 616,
+      "hypothesis_id": "nda-1",
+      "hypothesis_text": "All Confidential Information shall be expressly identified by the Disclosing Party.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::616::nda-17",
+      "split": "train",
+      "document_id": 616,
+      "hypothesis_id": "nda-17",
+      "hypothesis_text": "Receiving Party may create a copy of some Confidential Information in some circumstances.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::621::nda-11",
+      "split": "train",
+      "document_id": 621,
+      "hypothesis_id": "nda-11",
+      "hypothesis_text": "Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.",
+      "gold_label": "NotMentioned"
+    },
+    {
+      "case_id": "train::621::nda-18",
+      "split": "train",
+      "document_id": 621,
+      "hypothesis_id": "nda-18",
+      "hypothesis_text": "Receiving Party shall not solicit some of Disclosing Party's representatives.",
+      "gold_label": "NotMentioned"
+    }
+  ]
+}

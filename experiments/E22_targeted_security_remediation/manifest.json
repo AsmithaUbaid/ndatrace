@@ -1,0 +1,24 @@
+{
+  "experiment_id": "E22_targeted_security_remediation",
+  "baseline": "experiments/E21_owasp_llm_top10 (immutable; not modified by this experiment)",
+  "generated_at": "2026-09-29T11:18:05.537689+00:00",
+  "git_branch": "reconstruction",
+  "git_sha": "6f7b65625bb2ea6c892ae6ac0260765673605d21",
+  "controls_added": {
+    "LLM01": "pipeline/injection_guard.py (deterministic regex detector) wired into pipeline/final_review.py: sets security_review_required/needs_human_review, does not change P0, does not block the model call.",
+    "LLM10": [
+      "backend/models.py: NDA_TEXT_MAX_LENGTH, REQUIREMENT_MAX_LENGTH on request schemas",
+      "pipeline/cost_guard.py: per-request cost ceiling + settings.max_budget_usd enforcement against cumulative SQLite-recorded spend",
+      "backend/rate_limit.py: in-process concurrency cap + sliding-window rate limit"
+    ],
+    "LLM03_optional": "python-dotenv 1.0.1->1.2.2, python-multipart 0.0.20->0.0.22 (low-risk patch/minor bumps only; starlette/pytest/transformers NOT upgraded, real compatibility risk)",
+    "LLM02_optional": "NOT implemented this pass -- see test_plan.md rationale; retained PARTIAL"
+  },
+  "hosted_hard_ceiling_usd_this_experiment": 0.1,
+  "budget_check": {
+    "checked": true,
+    "limit_usd": 10,
+    "usage_usd": 9.176334589,
+    "remaining_usd": 0.8236654110000003
+  }
+}

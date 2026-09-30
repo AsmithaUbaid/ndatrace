@@ -1,0 +1,1184 @@
+{
+  "manifest_id": "DEV_ARCH_v1_GOLD",
+  "note": "Scorer-side only. Never pass to a model.",
+  "cases": [
+    {
+      "case_id": "dev::19::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        13
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::20::nda-1",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        16
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::20::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        15,
+        16
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::28::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        25
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::32::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        9,
+        10
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::35::nda-1",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        23,
+        24
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::35::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        23,
+        25
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::37::nda-1",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        16,
+        20
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::37::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        16,
+        17,
+        19,
+        20,
+        21,
+        22
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::44::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        5
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::44::nda-7",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        9,
+        10
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::45::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        5,
+        8
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::45::nda-7",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        11
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::54::nda-17",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        30
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::54::nda-7",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        24
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::56::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        13,
+        20
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::63::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        9
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::69::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        11,
+        12
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::70::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        2
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::73::nda-1",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        19
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::73::nda-17",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        37,
+        40
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::75::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        3,
+        36
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::75::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        13
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::81::nda-1",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        4,
+        5,
+        6,
+        8
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::82::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        5,
+        12
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::152::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        6
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::205::nda-16",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        60,
+        61,
+        62,
+        63,
+        64
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::405::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        12
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::411::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        17
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::411::nda-5",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        17
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::435::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::435::nda-4",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        19,
+        20
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::440::nda-1",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::440::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        30,
+        31
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::478::nda-1",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        11
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::478::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        7
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::482::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        6
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::486::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        9
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::507::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        4
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::507::nda-20",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        19
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::547::nda-1",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        8
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::547::nda-16",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        33,
+        34,
+        35
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::563::nda-1",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        12,
+        13
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::563::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        12,
+        13,
+        14,
+        15
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::575::nda-17",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        21,
+        25
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::575::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        9
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::590::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        6
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::605::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        8
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::610::nda-2",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        10
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::610::nda-4",
+      "gold_label": "Contradiction",
+      "gold_span_indices": [
+        19,
+        46
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::7::nda-1",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        24
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::7::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        30,
+        32
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::13::nda-1",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        90,
+        93,
+        94
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::13::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        93,
+        95,
+        101
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::15::nda-1",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        11
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::15::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        20,
+        22
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::16::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        19,
+        23
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::16::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        19,
+        22
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::17::nda-16",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        42
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::17::nda-17",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        26
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::20::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        17,
+        21
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::20::nda-15",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        34
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::33::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        76
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::33::nda-15",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        54
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::35::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        23
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::35::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        66,
+        70
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::37::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        16,
+        23,
+        27
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::37::nda-19",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        98
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::39::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        26,
+        29
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::39::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        26,
+        28
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::45::nda-1",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        8,
+        9
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::45::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        30
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::56::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        27,
+        32
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::56::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        27,
+        28
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::63::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        16,
+        20
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::63::nda-15",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        28,
+        29
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::70::nda-16",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        26
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::70::nda-19",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        27
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::71::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        13
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::71::nda-4",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        9
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::72::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        29,
+        32
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::72::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        29,
+        32
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::73::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        27,
+        30
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::73::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        27,
+        29
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::79::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        10,
+        15
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::79::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        10,
+        13
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::152::nda-1",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        6
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::152::nda-11",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        17
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::405::nda-1",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        14
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::405::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        35
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::456::nda-15",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        3,
+        4
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::456::nda-19",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        2
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::547::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        21
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::547::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        15,
+        17
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::595::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        14,
+        29,
+        30
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::595::nda-13",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        23,
+        25
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::598::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        13
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::598::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        4,
+        8
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::610::nda-10",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        26
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::610::nda-12",
+      "gold_label": "Entailment",
+      "gold_span_indices": [
+        12,
+        18,
+        42,
+        43
+      ],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::9::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::9::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::13::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::13::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::14::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::14::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::17::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::17::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::19::nda-13",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::19::nda-16",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::27::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::27::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::32::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::32::nda-17",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::44::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::44::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::45::nda-16",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::45::nda-17",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::64::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::64::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::70::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::70::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::82::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::82::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::205::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::205::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::398::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::398::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::411::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::411::nda-12",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::435::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::435::nda-16",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::456::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::456::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::478::nda-10",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::478::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::507::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::507::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::547::nda-15",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::547::nda-17",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::563::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::563::nda-16",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::595::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::595::nda-12",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::598::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::598::nda-16",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::605::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::605::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::610::nda-1",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    },
+    {
+      "case_id": "dev::610::nda-11",
+      "gold_label": "NotMentioned",
+      "gold_span_indices": [],
+      "gold_label_matches_manifest": true
+    }
+  ]
+}

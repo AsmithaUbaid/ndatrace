@@ -1,0 +1,116 @@
+{
+  "status": "PRE_RUN_FROZEN_AWAITING_APPROVAL",
+  "v2_hosted_calls_made": 0,
+  "git_commit": "7802b528c13bb67fd80d66e26bf42a9a3c8f640b",
+  "branch": "reconstruction",
+  "research_question": "Was the prior agent NO-GO partly caused by a weak controller prompt that allowed FINAL too easily without inspecting additional document context?",
+  "population": {
+    "split": "TRAIN",
+    "n": 150,
+    "manifest": "experiments/E05_full_context/TRAIN_ARCH_v1.json",
+    "manifest_sha1": "3a5491ab0de1c101b8d1043ff4dffa21029a58f6",
+    "test_allowed": false
+  },
+  "arms": {
+    "A_BASE_RAG": "reuse existing frozen outputs; zero new calls",
+    "B_AGENT_PROMPT_V1": "reuse prior full-agent raw traces; zero new calls",
+    "C_AGENT_PROMPT_V2": "one new resumable full-agent execution for each of 150 cases after approval"
+  },
+  "frozen_rag": {
+    "model": "openai/gpt-5-mini",
+    "provider": "openrouter",
+    "temperature": 0.0,
+    "base_prompt": "prompts/reconstruction_v2/gpt_p0.txt",
+    "base_prompt_sha1": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
+    "retrieval_artifact": "experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1.json",
+    "retrieval_artifact_sha1": "af5b07ebff19f596375cfdea6f25530d4511c903",
+    "retrieval": "clause_256 -> BM25 top-20 -> cross-encoder/ms-marco-MiniLM-L-12-v2 -> top-5"
+  },
+  "experimental_variable": {
+    "only_variable": "agent controller prompt",
+    "v1_prompt": "experiments/E11_selective_agent_evaluation/addendum_agent_prompt_ablation/prompt_v1.txt",
+    "v1_prompt_sha1": "30781d7cac504c7887f2ae0dc63c1564f5430df9",
+    "v1_is_byte_identical_to_historical_prompt": true,
+    "v2_prompt": "experiments/E11_selective_agent_evaluation/addendum_agent_prompt_ablation/prompt_v2.txt",
+    "v2_prompt_sha1": "d3c059dca56300825c788c6653c3752470fe74ed",
+    "freeze_rule": "V2 may not change after approval or during the 150-case run"
+  },
+  "frozen_agent": {
+    "controller": "pipeline/agent_v2.py",
+    "controller_sha1_at_freeze": "6f7290f9402ced36da83723c9880c59b50a89041",
+    "tools": "pipeline/agent_tools_v2.py",
+    "tools_sha1": "f44ac1f35bbdbf65d266d70914b683a312e42130",
+    "tool_actions": [
+      "FOLLOW_CROSS_REFERENCE",
+      "GET_MORE_CANDIDATES"
+    ],
+    "max_agent_steps": 3,
+    "max_tool_calls": 2,
+    "max_identical_call_repeats": 1,
+    "max_added_context_chars": 8000,
+    "max_total_model_calls_per_case_including_reused_base": 4,
+    "max_wall_clock_seconds": 60,
+    "max_estimated_agent_cost_usd_per_case": 0.01,
+    "fallback": "return frozen base-RAG label/evidence unchanged",
+    "force_agent": true,
+    "max_retries": 1,
+    "request_timeout_seconds": 30
+  },
+  "scoring": {
+    "evaluator": "evidence_evaluator_v2",
+    "evaluator_implementation": "evaluation/evidence_matching.py",
+    "evaluator_sha1": "bf637b7d96d29a1119cc76fb6ac31d31ab08ca4a",
+    "tau_evidence": 0.5,
+    "runtime_evidence_validator": "runtime_evidence_validator_v2",
+    "validator_implementation": "pipeline/evidence_validator.py",
+    "validator_sha1": "ee851648e3b07f9c447bdeb565e572b28ec4e0c8"
+  },
+  "v1_reuse": {
+    "raw_traces": "experiments/E11_selective_agent_evaluation/addendum_selective_vs_full_agent/results/raw_agent_traces.jsonl",
+    "raw_traces_sha1": "d16019efd4300b4330f738d66bc4b426d9261c14",
+    "metrics": "experiments/E11_selective_agent_evaluation/addendum_selective_vs_full_agent/results/arm_metrics.json",
+    "metrics_sha1": "4d1603e34e963742916adaef1dde3c4f4b4709a1",
+    "cases": 150,
+    "hosted_calls": 152,
+    "cost_usd": 0.22720225
+  },
+  "forecast": {
+    "tokenizer": "cl100k_base; deterministic planning estimate, API usage is authoritative after execution",
+    "v1_prompt_tokens": 379,
+    "v2_prompt_tokens": 800,
+    "v2_first_turn_input_tokens": {
+      "total": 275835,
+      "mean": 1838.9,
+      "median": 1855.0,
+      "p90": 1991,
+      "max": 2463
+    },
+    "new_agent_case_executions": 150,
+    "adaptive_hosted_model_calls": {
+      "minimum": 150,
+      "point_estimate": 300,
+      "hard_structural_maximum": 450,
+      "why_not_one_exact_count": "the frozen loop makes the number of later calls depend on V2 tool actions; fixing an exact call count would change the treatment"
+    },
+    "pricing_usd_per_million_tokens": {
+      "input": 0.25,
+      "output": 2.0
+    },
+    "cost_scenarios_usd": {
+      "minimum_one_step_using_v1_observed_mean_output": 0.24028440789473687,
+      "point_estimate_one_tool_then_final_using_v1_observed_mean_output": 0.5180688157894737,
+      "conservative_three_steps_using_1000_added_input_tokens_per_later_turn_and_observed_A2_max_output": 1.99247625
+    },
+    "hard_run_cost_ceiling_usd": 3.0,
+    "preflight_required_balance_usd_including_reserve": 3.25,
+    "provider_balance": "refresh immediately after approval and before the first V2 hosted call"
+  },
+  "execution_method": {
+    "production_file_changes": false,
+    "prompt_selection": "the experiment-only runner will temporarily point pipeline.agent_v2.CONTROL_PROMPT_PATH to frozen prompt_v2.txt inside its own process",
+    "resume": "append one completed case trace at a time; never rerun completed cases",
+    "gold_in_runner": false,
+    "partial_outcome_tuning": false,
+    "routing_experiment": false
+  }
+}

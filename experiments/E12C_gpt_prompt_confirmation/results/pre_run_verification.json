@@ -1,0 +1,24 @@
+{
+  "checks": {
+    "manifest_seed_1200_150": true,
+    "context_same_ids_order": true,
+    "context_top5": true,
+    "context_no_gold_leakage": true,
+    "prompt_full_hashes_match_frozen": true,
+    "ledger_approx_1_7637": true,
+    "no_existing_e12c_ledger_rows": true,
+    "e12b_ledger_rows_present_600": true,
+    "no_existing_e12c_outputs": true,
+    "budget_gate_pass": true
+  },
+  "pre_run_ledger_usd": 1.7636799499999993,
+  "gate_reason": "OK: projected total $2.5488 <= allowed $3.7500 (planning budget $5.00 - reserve $1.25)",
+  "gate_arithmetic": 3.7987799499999992,
+  "max_concurrency": 5,
+  "timeout_seconds": 60,
+  "arm_order": [
+    "gpt_p0",
+    "gpt_p3"
+  ],
+  "timestamp": "2026-09-26T17:44:04.764849+00:00"
+}

@@ -1,0 +1,57 @@
+{
+ "_provenance": {
+  "source_experiment": "E17 (n=150 balanced sample) + E17B (remaining n=1,941)",
+  "source_artifact": "experiments/E17B_full_test_completion/results/final_full_test_metrics.json#full_gpt_2091",
+  "source_commit": "3b2167a (E17) + 270b006 (E17B)",
+  "measured_or_scenario": "measured",
+  "population": "n=2091, full official TEST split",
+  "date_generated": "2026-09-27"
+ },
+ "accuracy": 0.776183644189383,
+ "macro_f1": 0.7270249699156156,
+ "joint": 0.7460545193687231,
+ "recall": {
+  "Entailment": 0.9204545454545454,
+  "Contradiction": 0.7545454545454545,
+  "NotMentioned": 0.6267995570321152
+ },
+ "joint_by_class": {
+  "Entailment": 0.8646694214876033,
+  "Contradiction": 0.7181818181818181,
+  "NotMentioned": 0.6256921373200443
+ },
+ "evidence_recall": 0.9326599326599326,
+ "evidence_precision": 0.7471341874578556,
+ "source_valid_quote_rate": 0.980385288966725,
+ "confusion_rows_gold_cols_pred": {
+  "Entailment": {
+   "Entailment": 891,
+   "Contradiction": 42,
+   "NotMentioned": 35,
+   "invalid": 0
+  },
+  "Contradiction": {
+   "Entailment": 50,
+   "Contradiction": 166,
+   "NotMentioned": 4,
+   "invalid": 0
+  },
+  "NotMentioned": {
+   "Entailment": 190,
+   "Contradiction": 143,
+   "NotMentioned": 566,
+   "invalid": 4
+  }
+ },
+ "parse_counts": {
+  "strict": 2087,
+  "invalid": 4
+ },
+ "ops": {
+  "input_tokens_mean": 2279.1087685673215,
+  "output_tokens_mean": 728.5170100622904,
+  "latency_ms_mean": 7311.559343926415,
+  "total_cost_usd": 4.229955,
+  "cost_per_case": 0.0020229340028694405
+ }
+}

@@ -1,0 +1,55 @@
+{
+  "arms": {
+    "gpt_p1": {
+      "spend_usd": 0.2635749999999999,
+      "wall_seconds": 228.41291229100898,
+      "rate_limit_like_errors": 0,
+      "stopped": null,
+      "failed_calls": 0,
+      "verify": {
+        "records_150": true,
+        "no_duplicates": true,
+        "all_case_ids_present": true,
+        "all_successful": true,
+        "prompt_hash_ok": true,
+        "run_id_ok": true
+      }
+    },
+    "gpt_p2": {
+      "spend_usd": 0.28801949999999993,
+      "wall_seconds": 237.61332141701132,
+      "rate_limit_like_errors": 0,
+      "stopped": null,
+      "failed_calls": 0,
+      "verify": {
+        "records_150": true,
+        "no_duplicates": true,
+        "all_case_ids_present": true,
+        "all_successful": true,
+        "prompt_hash_ok": true,
+        "run_id_ok": true
+      }
+    },
+    "gpt_p3": {
+      "spend_usd": 0.2509,
+      "wall_seconds": 216.05335145804565,
+      "rate_limit_like_errors": 0,
+      "stopped": null,
+      "failed_calls": 0,
+      "verify": {
+        "records_150": true,
+        "no_duplicates": true,
+        "all_case_ids_present": true,
+        "all_successful": true,
+        "prompt_hash_ok": true,
+        "run_id_ok": true
+      }
+    }
+  },
+  "total_wall_seconds": 682.1204075410496,
+  "total_spend_usd": 0.8024944999999998,
+  "pre_resume_ledger_usd": 0.9611854499999999,
+  "post_run_ledger_usd": 1.7636799499999993,
+  "max_concurrency": 5,
+  "completed": true
+}

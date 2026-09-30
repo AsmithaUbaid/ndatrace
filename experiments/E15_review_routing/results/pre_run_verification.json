@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "manifest_frozen_138": true,
+    "full_ids_same_order": true,
+    "full_context_is_complete_dev_doc": true,
+    "no_truth_in_model_facing": true,
+    "prompt_is_gpt_p0": true,
+    "ledger_approx_2_8044": true,
+    "no_existing_e15_outputs": true,
+    "no_existing_e15_ledger_rows": true,
+    "budget_gate_pass": true
+  },
+  "pre_run_ledger_usd": 2.80439895,
+  "gate_arithmetic": 4.51259895,
+  "max_concurrency": 5,
+  "timeout_seconds": 60,
+  "timestamp": "2026-09-26T18:58:29.467243+00:00"
+}

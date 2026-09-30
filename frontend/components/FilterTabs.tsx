@@ -10,10 +10,10 @@ const TABS: { key: FilterKey; label: string }[] = [
 ];
 
 export function countForFilter(results: RequirementResult[], key: FilterKey): number {
-  const counted = results.filter((r) => !r.error);
+  const counted = results.filter((r) => !r.error && r.label != null);
   if (key === "all") return counted.length;
   if (key === "needs-attention") return counted.filter(needsAttention).length;
-  return counted.filter((r) => toVerdict(r.label) === (key as Verdict)).length;
+  return counted.filter((r) => toVerdict(r.label!) === (key as Verdict)).length;
 }
 
 export function FilterTabs({

@@ -1,0 +1,17 @@
+{
+  "mode": "dry_run",
+  "input": {
+    "nda_text": "This Mutual Non-Disclosure Agreement is entered into by and between Acme Corp and Beta LLC.\n\n1. Definition of Confidential Information. \"Confidential Information\" means any non-public technical, business, or financial information disclosed by either party, whether in written, oral, or electronic form.\n\n2. Obligations of Receiving Party. The Receiving Party shall hold and maintain the Confidential Information in strict confidence and shall not disclose the Confidential Information to any third party without the prior written consent of the Disclosing Party.\n\n3. Term. This Agreement shall remain in effect for a period of three (3) years from the Effective Date.\n\n4. Governing Law. This Agreement shall be governed by the laws of the State of Delaware.",
+    "hypothesis_text": "Receiving Party shall not disclose the Confidential Information to third parties."
+  },
+  "label": "Entailment",
+  "evidence": [
+    "shall not disclose the Confidential Information to any third party without the prior written consent of the Disclosing Party."
+  ],
+  "explanation": "The quoted clause(s) above support this requirement.",
+  "source_valid": true,
+  "needs_human_review": false,
+  "review_reason": null,
+  "model": "openai/gpt-5-mini",
+  "success": true
+}

@@ -1,0 +1,17 @@
+{
+ "pre_run_commit": null,
+ "test_json_sha256": "460267b56052a2dc5aead98eb35eadef9e6734d5723d37b4a9790e410f812387",
+ "e17_hosted_manifest_sha256": "a1cc8f53bb4d41c7e1c66862241cbe2892000eef9d6d27a41b7a37e072eb709a",
+ "e17b_manifest_sha256": "7eef3e7741f9db632b7c15196b996829b19971fd6fe01fec1d2e69f9bcb56cf4",
+ "e17b_request_sha256": "5a2c54e42d8adc3360d25ffeca72b2e1f7998c2b2a9c57aebe237ecfb3098214",
+ "all_test": 2091,
+ "e17_hosted": 150,
+ "e17b_remainder": 1941,
+ "remainder_labels": {
+  "Contradiction": 170,
+  "NotMentioned": 853,
+  "Entailment": 918
+ },
+ "intersection_empty": true,
+ "union_equals_all_test": true
+}

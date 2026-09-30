@@ -1,0 +1,18 @@
+{
+  "experiment_id": "E04B_majority_baseline",
+  "role": "TRIVIAL BASELINE \u2014 not an architecture rung",
+  "split": "official ContractNLI TEST",
+  "n": 2091,
+  "label_distribution": {
+    "NotMentioned": 903,
+    "Entailment": 968,
+    "Contradiction": 220
+  },
+  "predicted_label": "Entailment",
+  "accuracy": 0.46293639406982307,
+  "macro_f1": 0.2109621880788929,
+  "contradiction_recall": 0.0,
+  "joint": 0.0,
+  "joint_note": "Joint is valid and zero: every Entailment prediction has empty evidence, while every non-Entailment label is wrong.",
+  "hosted_calls": 0
+}

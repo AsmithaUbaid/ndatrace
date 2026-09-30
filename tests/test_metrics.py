@@ -11,6 +11,7 @@ from __future__ import annotations
 import pytest
 
 from evaluation.metrics import (
+    _match_predictions_to_golds,
     abstention_effectiveness,
     abstention_rate,
     agent_recovery_rate,
@@ -28,6 +29,7 @@ from evaluation.metrics import (
     mcnemar_test,
     mean_reciprocal_rank,
     per_class_metrics,
+    recall_with_ci,
     risk_sensitive_recall,
     selective_accuracy,
     unsafe_non_abstention_rate,
@@ -36,19 +38,19 @@ from evaluation.metrics import (
 from evaluation.schemas import CostLatencyRecord, GoldCase, Label, Prediction
 
 
-def gold(doc_id, hyp_id, label, spans=None):
+def gold(doc_id, hyp_id, label, spans=None, split=""):
     return GoldCase(
         doc_id=doc_id, hypothesis_id=hyp_id, gold_label=Label(label),
-        gold_span_indices=spans or [],
+        gold_span_indices=spans or [], split=split,
     )
 
 
 def pred(doc_id, hyp_id, label, spans=None, abstained=False, agent_used=False,
-         cost_usd=0.0, latency_ms=0.0):
+         cost_usd=0.0, latency_ms=0.0, split=""):
     return Prediction(
         doc_id=doc_id, hypothesis_id=hyp_id, predicted_label=Label(label),
         retrieved_span_indices=spans or [], abstained=abstained,
-        agent_used=agent_used,
+        agent_used=agent_used, split=split,
         cost_latency=CostLatencyRecord(latency_ms=latency_ms, cost_usd=cost_usd),
     )
 
@@ -62,6 +64,44 @@ BALANCED_GOLDS = [
     gold("d2", "h2", "Contradiction", [6, 7]),
     gold("d2", "h3", "NotMentioned"),
 ]
+
+
+# =========================================================================
+# Case-ID matching / split qualification (reconstruction-v2)
+# =========================================================================
+
+def test_match_legacy_records_without_split_still_match():
+    """Historical records never set split (default '') -- must match exactly as before."""
+    golds = [gold("d1", "h1", "Entailment", [0])]
+    preds = [pred("d1", "h1", "Entailment", [0])]
+    matched = _match_predictions_to_golds(preds, golds)
+    assert len(matched) == 1
+
+
+def test_match_same_split_qualified_records_match():
+    golds = [gold("d1", "h1", "Entailment", [0], split="train")]
+    preds = [pred("d1", "h1", "Entailment", [0], split="train")]
+    matched = _match_predictions_to_golds(preds, golds)
+    assert len(matched) == 1
+
+
+def test_match_different_splits_with_colliding_doc_id_do_not_match():
+    """The whole point of split-qualification: a doc_id collision across two different splits
+    must not be silently matched as the same case."""
+    golds = [gold("d1", "h1", "Entailment", [0], split="train")]
+    preds = [pred("d1", "h1", "Contradiction", [0], split="dev")]  # same doc_id, different split
+    matched = _match_predictions_to_golds(preds, golds)
+    assert matched == []
+
+
+def test_match_split_qualified_does_not_cross_match_legacy_blank():
+    """A record with split explicitly set does not silently match a legacy record that left
+    split blank, even with the same doc_id/hypothesis_id -- the two are treated as distinct
+    case identities on purpose, not merged."""
+    golds = [gold("d1", "h1", "Entailment", [0], split="train")]
+    preds = [pred("d1", "h1", "Entailment", [0], split="")]
+    matched = _match_predictions_to_golds(preds, golds)
+    assert matched == []
 
 
 # =========================================================================
@@ -180,6 +220,13 @@ def test_evidence_recall_at_k_excludes_not_mentioned():
     assert evidence_recall_at_k(preds, golds) == pytest.approx(1.0)
 
 
+def test_evidence_recall_at_k_no_hit():
+    """Gold evidence exists but retrieval found none of it — recall must be 0, not skipped."""
+    golds = [gold("d", "h1", "Entailment", [0, 1])]
+    preds = [pred("d", "h1", "Entailment", [5, 6])]  # zero overlap with gold {0, 1}
+    assert evidence_recall_at_k(preds, golds) == pytest.approx(0.0)
+
+
 def test_evidence_precision():
     golds = [gold("d", "h1", "Entailment", [0, 1])]
     preds = [pred("d", "h1", "Entailment", [0, 1, 2, 3])]  # 2 of 4 retrieved are gold
@@ -190,6 +237,13 @@ def test_mean_reciprocal_rank():
     golds = [gold("d", "h1", "Entailment", [5])]
     preds = [pred("d", "h1", "Entailment", [1, 2, 5])]  # gold found at rank 3
     assert mean_reciprocal_rank(preds, golds) == pytest.approx(1 / 3)
+
+
+def test_mean_reciprocal_rank_no_hit():
+    """Gold evidence never appears in the retrieved list — reciprocal rank is 0, not undefined."""
+    golds = [gold("d", "h1", "Entailment", [5])]
+    preds = [pred("d", "h1", "Entailment", [1, 2, 3])]
+    assert mean_reciprocal_rank(preds, golds) == pytest.approx(0.0)
 
 
 # =========================================================================
@@ -223,6 +277,40 @@ def test_joint_correctness_passes_at_tau_boundary():
     golds = [gold("d", "h1", "Entailment", [0, 1])]
     preds = [pred("d", "h1", "Entailment", [0])]  # recall exactly 0.5
     assert joint_label_evidence_correctness(preds, golds, tau_evidence=0.5) == 1.0
+
+
+def test_joint_correctness_not_mentioned_empty_evidence_passes():
+    """Correct NotMentioned + no evidence claimed -> joint PASS (E00 sanity case, reconstruction-v2)."""
+    golds = [gold("d", "h1", "NotMentioned")]
+    preds = [pred("d", "h1", "NotMentioned", spans=[])]
+    assert joint_label_evidence_correctness(preds, golds) == 1.0
+
+
+def test_joint_correctness_not_mentioned_fabricated_evidence_fails():
+    """Correct NotMentioned label but evidence was still returned/claimed -> joint FAIL.
+    ContractNLI provides zero gold evidence for NotMentioned by definition, so any claimed
+    evidence here is fabricated, not grounded (E00 sanity case, reconstruction-v2 correction —
+    previously any correct-NotMentioned label passed regardless of claimed evidence)."""
+    golds = [gold("d", "h1", "NotMentioned")]
+    preds = [pred("d", "h1", "NotMentioned", spans=[3])]  # fabricated/spurious citation
+    assert joint_label_evidence_correctness(preds, golds) == 0.0
+
+
+def test_joint_correctness_majority_rule_multi_span():
+    """tau_evidence=0.5 acts as a majority-of-gold-spans rule: 2 of 3 covered passes, 1 of 3 fails."""
+    golds = [gold("d", "h1", "Entailment", [0, 1, 2])]
+    preds_majority = [pred("d", "h1", "Entailment", [0, 1])]
+    preds_minority = [pred("d", "h1", "Entailment", [0])]
+    assert joint_label_evidence_correctness(preds_majority, golds) == 1.0
+    assert joint_label_evidence_correctness(preds_minority, golds) == 0.0
+
+
+def test_joint_correctness_wrong_label_correct_evidence():
+    """Wrong label always fails the joint metric, even with perfect evidence retrieval
+    (E00 sanity case 3: wrong label + correct evidence -> FAIL)."""
+    golds = [gold("d", "h1", "Contradiction", [0, 1])]
+    preds = [pred("d", "h1", "Entailment", [0, 1])]  # evidence spans match gold exactly
+    assert joint_label_evidence_correctness(preds, golds) == 0.0
 
 
 def test_joint_correctness_abstained_is_never_correct():
@@ -398,6 +486,26 @@ def test_contradiction_recall_with_ci_ignores_other_classes():
     result = contradiction_recall_with_ci(preds, golds)
     assert result["n"] == 0
     assert result["recall"] == 0.0
+
+
+def test_recall_with_ci_is_generic_across_classes():
+    """recall_with_ci() works for any class, not just Contradiction (reconstruction-v2:
+    a generic function replaces the need for a bespoke not_mentioned_recall_with_ci())."""
+    golds = [
+        gold("d1", "h1", "NotMentioned"), gold("d1", "h2", "NotMentioned"),
+        gold("d1", "h3", "Entailment"),
+    ]
+    preds = [
+        pred("d1", "h1", "NotMentioned"), pred("d1", "h2", "Entailment"),  # 1/2 NM correct
+        pred("d1", "h3", "Entailment"),
+    ]
+    result = recall_with_ci(Label.NOT_MENTIONED, preds, golds)
+    assert result["n"] == 2
+    assert result["correct"] == 1
+    assert result["recall"] == pytest.approx(0.5)
+
+    # contradiction_recall_with_ci must be exactly recall_with_ci(Label.CONTRADICTION, ...)
+    assert contradiction_recall_with_ci(preds, golds) == recall_with_ci(Label.CONTRADICTION, preds, golds)
 
 
 def test_contradiction_recall_with_ci_excludes_abstained_cases():

@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { api, CostEstimate, Hypothesis, ReviewResponse } from "@/lib/api";
+import { api, Hypothesis, ReviewDecision, ReviewResponse } from "@/lib/api";
 import { RequirementCard } from "@/components/RequirementCard";
 import { ResultsSummaryBar } from "@/components/ResultsSummaryBar";
+import { LimitationsPanel } from "@/components/LimitationsPanel";
 import { Checkbox } from "@/components/Checkbox";
 import { FilterTabs } from "@/components/FilterTabs";
 import { FilterKey, toVerdict } from "@/lib/verdict";
@@ -34,27 +35,23 @@ export default function ReviewPage() {
   const [pdfName, setPdfName] = useState<string | null>(null);
   const [extractingPdf, setExtractingPdf] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [costEstimate, setCostEstimate] = useState<CostEstimate | null>(null);
   const [filter, setFilter] = useState<FilterKey>("all");
   const [copied, setCopied] = useState(false);
 
   const DRAFT_KEY = "ndatrace_nda_draft";
 
   useEffect(() => {
-    api.getCostEstimate().then(setCostEstimate).catch(() => {
-      // Non-critical - if no rag_agent experiment record exists yet, just
-      // skip showing the estimate rather than blocking the review flow.
-    });
-  }, []);
-
-  useEffect(() => {
     // Per-viewer convenience only - restores a draft if the tab was closed
     // or refreshed mid-edit. Never assumed to be present; wrapped in
     // try/catch since localStorage can throw (private browsing, blocked
-    // site data) and this must never break the page if it does.
+    // site data) and this must never break the page if it does. One-time
+    // hydration from an external store (not React state), so the
+    // set-state-in-effect lint rule doesn't apply the way it would for
+    // syncing two pieces of React state.
     try {
       const saved = window.localStorage.getItem(DRAFT_KEY);
       if (saved && saved !== SAMPLE_NDA) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setNdaText(saved);
         setDraftRestored(true);
       }
@@ -96,7 +93,7 @@ export default function ReviewPage() {
   function toggle(id: string) {
     setSelected((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) next.delete(id); else next.add(id);
       return next;
     });
   }
@@ -128,7 +125,7 @@ export default function ReviewPage() {
       // Auto-switch to Contradictions if any exist, since that's the
       // highest-risk class - otherwise show everything.
       const hasContradiction = response.results.some(
-        (r) => !r.error && toVerdict(r.label) === "contradiction"
+        (r) => !r.error && r.label != null && toVerdict(r.label) === "contradiction"
       );
       setFilter(hasContradiction ? "contradiction" : "all");
     } catch (e) {
@@ -153,29 +150,42 @@ export default function ReviewPage() {
     downloadFile(reviewToJson(result), `ndatrace-review-${result.doc_id}.json`, "application/json");
   }
 
+  async function handleDecide(itemId: number, decision: ReviewDecision, note?: string) {
+    if (!result) return;
+    const updated = await api.recordDecision(result.review_id, itemId, decision, note);
+    setResult({
+      ...result,
+      results: result.results.map((r) => (r.id === itemId ? updated : r)),
+    });
+  }
+
   const filteredResults = useMemo(() => {
     if (!result) return [];
     if (filter === "all") return result.results;
     if (filter === "needs-attention") {
       return result.results.filter(
-        (r) => !r.error && (toVerdict(r.label) === "contradiction" || r.confidence < 0.5)
+        (r) => !r.error && r.label != null && (
+          toVerdict(r.label) === "contradiction" || r.needs_human_review
+        )
       );
     }
-    return result.results.filter((r) => !r.error && toVerdict(r.label) === filter);
+    return result.results.filter((r) => !r.error && r.label != null && toVerdict(r.label) === filter);
   }, [result, filter]);
 
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-10 px-4 py-10 sm:px-6">
-      <header>
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Review an NDA
-        </h1>
-        <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-          Paste an NDA and pick the standard confidentiality requirements to check. Each result comes
-          with a label, a confidence score, and the exact evidence text it was based on &mdash; not
-          just a verdict.
-        </p>
+    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-4 py-10 sm:px-6">
+      <header className="relative overflow-hidden rounded-3xl border border-zinc-200 bg-white px-6 py-8 shadow-[0_18px_50px_-36px_rgba(24,24,27,0.45)] sm:px-8">
+        <div aria-hidden className="absolute -right-20 -top-24 h-56 w-56 rounded-full bg-sky-100/70 blur-3xl" />
+        <div className="relative"><p className="text-[11px] font-bold uppercase tracking-[0.16em] text-sky-700">NDATrace</p><h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl">Evidence-grounded NDA review</h1>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-600">Review confidentiality requirements against the source agreement.</p>
+        <div className="mt-6 grid overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50/70 sm:grid-cols-3">{[["01","Provide NDA"],["02","Choose requirements"],["03","Review results"]].map(([n,label])=><div key={n} className="flex items-center gap-3 border-b border-zinc-200 px-4 py-3 last:border-0 sm:border-b-0 sm:border-r sm:last:border-r-0"><span className="font-mono text-xs font-bold text-zinc-400">{n}</span><span className="text-sm font-medium text-zinc-800">{label}</span></div>)}</div></div>
       </header>
+
+      <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-800 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-300">
+        This is an academic prototype with no authentication or access control. Use sample or
+        synthetic agreements (e.g. the pre-filled example below) — do not paste real confidential
+        documents.
+      </p>
 
       {stage === "error" && !result && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
@@ -219,7 +229,7 @@ export default function ReviewPage() {
           <div className="flex flex-col gap-2">
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-zinc-300 bg-white px-4 py-6 text-center shadow-sm hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-zinc-500"
+              className="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-2xl border border-dashed border-sky-300 bg-sky-50/40 px-4 py-8 text-center hover:border-sky-500 hover:bg-sky-50"
             >
               <input
                 ref={fileInputRef}
@@ -237,18 +247,18 @@ export default function ReviewPage() {
                 <span className="text-sm text-zinc-700 dark:text-zinc-300">
                   {"✓"} {pdfName}{" "}
                   <span className="text-zinc-400 dark:text-zinc-500">
-                    &mdash; click to choose a different file
+                    (click to choose a different file)
                   </span>
                 </span>
               ) : (
                 <span className="text-sm text-zinc-500 dark:text-zinc-400">
-                  Click to choose a PDF, or drop one here
+                  Choose a PDF
                 </span>
               )}
             </div>
             {pdfName && !extractingPdf && (
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Extracted text below &mdash; review or edit it before running the review.
+                Extracted text below. Review or edit it before running the review.
               </p>
             )}
           </div>
@@ -260,7 +270,7 @@ export default function ReviewPage() {
           </div>
         )}
 
-        <div className="overflow-hidden rounded-lg border border-zinc-300 bg-white shadow-sm focus-within:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus-within:border-zinc-400">
+        <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm focus-within:border-sky-400 focus-within:ring-2 focus-within:ring-sky-100">
           <textarea
             id="nda-text"
             className="min-h-[200px] w-full resize-y border-0 p-3 font-mono text-sm text-zinc-900 focus:outline-none dark:text-zinc-100"
@@ -315,7 +325,7 @@ export default function ReviewPage() {
             {allSelected ? "Clear all" : "Select all"}
           </button>
         </div>
-        <div className="grid max-h-64 grid-cols-1 gap-1.5 overflow-y-auto rounded-lg border border-zinc-200 bg-white p-2.5 shadow-sm sm:grid-cols-2 dark:border-zinc-700 dark:bg-zinc-900">
+        <div className="grid max-h-64 grid-cols-1 gap-1.5 overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-3 shadow-sm sm:grid-cols-2">
           {stage === "loading-hypotheses" && (
             <p className="col-span-2 p-2 text-sm text-zinc-400 dark:text-zinc-500">
               Loading requirements&hellip;
@@ -342,30 +352,42 @@ export default function ReviewPage() {
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 text-[11px] font-semibold text-white dark:bg-zinc-100 dark:text-zinc-900">
               3
             </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Run the review</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Review results</span>
           </div>
-          {costEstimate && selected.size > 0 && (
-            <span className="text-xs text-zinc-500 dark:text-zinc-400">
-              Estimated cost: ~${(costEstimate.avg_cost_per_requirement_usd * selected.size).toFixed(4)} for{" "}
-              {selected.size} requirement{selected.size === 1 ? "" : "s"}{" "}
-              <span className="text-zinc-400 dark:text-zinc-500">
-                (measured avg, {costEstimate.source_experiment_id})
-              </span>
-            </span>
-          )}
         </div>
         <button
           onClick={handleSubmit}
           disabled={stage === "reviewing" || ndaText.trim().length === 0 || selected.size === 0}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-zinc-900 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:bg-zinc-300 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300 dark:disabled:bg-zinc-700 dark:disabled:text-zinc-400"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-zinc-900 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:bg-zinc-300"
         >
           {stage === "reviewing" && (
             <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/40 border-t-white dark:border-zinc-900/30 dark:border-t-zinc-900" />
           )}
           {stage === "reviewing"
-            ? "Reviewing… this calls the real model, usually a few seconds per requirement"
+            ? "Reviewing selected requirements…"
             : "Run review"}
         </button>
+        {stage === "reviewing" && (
+          <div
+            className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 shadow-sm"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            <div className="flex items-center gap-2.5">
+              <span
+                aria-hidden="true"
+                className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-zinc-500 dark:bg-zinc-400"
+              />
+              <p className="text-sm font-medium text-zinc-800 dark:text-zinc-100">
+                Reviewing against the retrieval + classification pipeline…
+              </p>
+            </div>
+            <p className="mt-1 pl-[18px] text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+              Retrieval, reranking, and classification run per requirement; this can take a few
+              seconds to over a minute for a full batch.
+            </p>
+          </div>
+        )}
         {stage === "error" && result === null && error && (
           <p className="text-xs text-red-600 dark:text-red-400">{error}</p>
         )}
@@ -412,12 +434,28 @@ export default function ReviewPage() {
           ) : (
             <ul className="flex flex-col gap-3">
               {filteredResults.map((r) => (
-                <RequirementCard key={r.hypothesis_id} r={r} />
+                <RequirementCard key={r.hypothesis_id} r={r} onDecide={handleDecide} />
               ))}
             </ul>
           )}
         </section>
       )}
+
+      <section className="flex flex-col gap-3 border-t border-zinc-100 pt-6 dark:border-zinc-800">
+        <details className="rounded-lg border border-zinc-200 bg-white p-4 text-sm dark:border-zinc-800 dark:bg-zinc-900">
+          <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+            How it works
+          </summary>
+          <ol className="mt-2 list-decimal space-y-1 pl-4 text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
+            <li>The NDA is split into clauses and the most relevant clauses for each selected requirement are retrieved and reranked.</li>
+            <li>The five highest-ranked clauses are reviewed by the classifier using the frozen product prompt.</li>
+            <li>Every returned evidence quote is checked against the retrieved source text.</li>
+            <li>The reviewer checks the evidence and makes the final decision.</li>
+          </ol>
+        </details>
+
+        <LimitationsPanel />
+      </section>
     </main>
   );
 }

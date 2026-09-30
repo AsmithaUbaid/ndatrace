@@ -1,0 +1,89 @@
+experiment_id: E12C_gpt_prompt_confirmation
+status: STAGE_B_COMPLETE  # outcome B: P3 NOT CONFIRMED, keep P0; not committed
+question: "Does GPT-P3 reproduce its directional advantage over P0 on a fresh, document-disjoint TRAIN confirmation manifest?"
+nature: >
+  CONFIRMATION / replication, NOT another prompt-optimisation round. Exactly two prompts (GPT-P0, GPT-P3),
+  byte-identical to E12B (hashes below). No P1, no P2, no new/edited prompts. E12C is the LAST prompt-selection
+  experiment; no third confirmation manifest will be run.
+context_from_E12B: >
+  E12B outcome B (near-tie): P3 +8 net joint cases vs P0 (122 vs 114 of 150), one short of the +9 adoption bar; accuracy,
+  Macro-F1, evidence recall/precision up; Contradiction Recall unchanged; cost/latency neutral. All CIs included zero.
+
+frozen:
+  retrieval: retrieval_v1
+  final_k: 5
+  model: openai/gpt-5-mini
+  provider: openrouter
+  temperature: 0.0
+  request_timeout_seconds: 60  # both arms
+  output_schema: unchanged (inherited label-vs-evidence quirk preserved in both arms, as in E12B)
+  parser: evaluation.structured_output.parse_structured_output  # unchanged
+  evidence_validator: pipeline.evidence_validator.validate_evidence  # unchanged
+  scorer: scripts/analyze_e08b_stronger_model.py helpers (unchanged; same as E12B)
+  user_template: "Requirement: {hypothesis_text}\n\nRetrieved NDA excerpts: {context_text}"
+  only_variable: system prompt (P0 vs P3)
+
+prompts:
+  gpt_p0: {file: prompts/reconstruction_v2/gpt_p0.txt, sha1: 3fcc7c95cf1287c292e403f12b307c9d912278ce}
+  gpt_p3: {file: prompts/reconstruction_v2/gpt_p3.txt, sha1: d2bca31164c2db9ea9995fb769977e3e2c0a6496}
+  verified_identical_to_E12B_records: true  # sha1 in every E12B P0/P3 record equals these
+
+manifest:
+  id: TRAIN_GPT_PROMPT_CONFIRM_v1
+  path: experiments/E12C_gpt_prompt_confirmation/TRAIN_GPT_PROMPT_CONFIRM_v1.json
+  seed: 1300  # unused by any prior manifest (42, 99, 123, 300, 500, 700, 1200), bootstrap (900) or the discarded E12B draft (1100)
+  n: 150
+  per_class: {Entailment: 50, Contradiction: 50, NotMentioned: 50}
+  unique_documents: 67
+  document_disjoint_from: [TRAIN_PROMPT_v1, TRAIN_ARCH_v1, TRAIN_ORACLE_v1, TRAIN_GPT_PROMPT_v1]  # union 301 docs; untouched 122 before selection
+  selection: deterministic, performance-agnostic, no hard-case enrichment (same algorithm as prior manifests)
+  inspection: results/manifest_inspection.json
+  context_artifact: experiments/E12C_gpt_prompt_confirmation/TRAIN_GPT_PROMPT_CONFIRM_v1_RETRIEVED_retrieval_v1.json  # one artifact, both arms
+  gold_side_file: TRAIN_GPT_PROMPT_CONFIRM_v1_RETRIEVED_retrieval_v1_GOLD.json
+
+execution:
+  arm_order: [gpt_p0, gpt_p3]  # sequential arms, never simultaneous
+  max_concurrency_within_arm: 5
+  circuit_breaker: "5 consecutive failed calls -> stop scheduling, let in-flight finish, preserve, report; no auto-resume"
+  no_interim_quality_analysis_between_arms: true
+  no_rerun_of_surprising_cases: true
+  ledger_run_ids: [e12c_gpt_p0, e12c_gpt_p3]
+  note: "total arm wall-clock is concurrency-dependent; compare per-call latency only"
+
+confirmation_rule:  # FROZEN BEFORE ANY CALL. Not another +9 contest: replication of DIRECTION on new documents.
+  confirm_P3_requires_all:
+    1_contradiction_guard: "P3 Contradiction correct is NOT >=3 of 50 (>=6pp) below P0"
+    2_positive_net_joint: "P3 net joint-success gain over P0 > 0"
+    3_macro_f1: "P3 Macro-F1 not materially worse than P0 (materially = drop > 0.03)"
+    4_evidence_quality: "P3 evidence recall AND evidence precision not materially worse than P0 (materially = drop > 3pp)"
+    5_direction_consistent_with_E12B: "P3 joint > P0 joint on E12C"
+  bands:  # interpretation bands only; never a reason to create new prompts
+    STRONG_CONFIRMATION: "all five hold AND net joint >= +5 cases"
+    WEAK_CONFIRMATION: "all five hold AND net joint +1 to +4 cases"
+    NO_CONFIRMATION: "net joint <= 0, OR Contradiction guard fails, OR material Macro-F1/evidence degradation"
+  final_decision:
+    A_P3_CONFIRMED: >
+      STRONG confirmation, OR WEAK confirmation whose POOLED (E12B+E12C) stratified paired-bootstrap 95% CI for the joint delta excludes zero;
+      AND pooled Contradiction not >=6pp below P0 -> freeze classification_prompt_gpt_v1 = P3 (separately from classification_prompt_v1; NOT a final architecture)
+    B_P3_NOT_CONFIRMED: "NO confirmation (no benefit, direction reverses, or a guard fails) -> keep P0"
+    C_P3_WEAKLY_CONFIRMED_PREFER_P0: "WEAK confirmation and pooled CI includes zero -> prefer the simpler P0 (combined evidence not clear)"
+  no_third_confirmation: true
+
+analysis_plan:
+  standalone_E12C: [accuracy, macro_f1, entailment_recall, contradiction_recall, notmentioned_recall, evidence_recall, evidence_precision, source_valid_rate, joint_overall, joint_by_class, parse, tokens, latency, cost, confusion_matrices]
+  paired: [classification_and_joint_transitions_with_discordant_ids, exact_mcnemar_classification, exact_mcnemar_joint, "10000 paired bootstrap (seed 900): accuracy, macro_f1, contradiction_recall, joint deltas"]
+  combined_E12B_E12C:
+    reported_separately_first: "E12B / E12C / combined tables with manifest identity always visible; a between-manifest reversal is reported explicitly and never averaged away"
+    pooled_descriptive: [total_P0_joint, total_P3_joint, net, accuracy, macro_f1, contradiction_recall, evidence_recall, evidence_precision]
+    pooled_inference: "stratified paired bootstrap (resample cases within each manifest, 10000 draws, seed 900) preserving manifest identity"
+  emphasis: effect sizes and transitions first; statistics are supporting evidence
+  noise: "E12A/E12B showed non-zero hosted-model run-to-run variability; E12C tests replication on NEW documents; no case is re-run"
+
+budget:
+  ledger_read_from_file: true
+  planning_usd: 5.00
+  reserve_usd: 1.25
+  gate: "ledger + conservative E12C spend + reserve <= planning"
+  forecast: results/pre_run_forecast.json
+  result: PASS
+model_calls_stage_a: NONE

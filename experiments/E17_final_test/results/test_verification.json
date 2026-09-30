@@ -1,0 +1,29 @@
+{
+ "documents": 123,
+ "cases": 2091,
+ "labels": {
+  "Contradiction": 220,
+  "NotMentioned": 903,
+  "Entailment": 968
+ },
+ "expected_documents": 123,
+ "expected_cases": 2091,
+ "expected_labels": {
+  "Entailment": 968,
+  "Contradiction": 220,
+  "NotMentioned": 903
+ },
+ "matches_expected": true,
+ "test_json_sha256": "460267b56052a2dc5aead98eb35eadef9e6734d5723d37b4a9790e410f812387",
+ "unique_case_ids": true,
+ "first_test_access_utc": "2026-09-26T19:23:43.857037+00:00",
+ "commit_at_first_access": "5717bdf9153b633ab3758dba79f3174853ca3447",
+ "manifest_sha256": "a1cc8f53bb4d41c7e1c66862241cbe2892000eef9d6d27a41b7a37e072eb709a",
+ "manifest_label_counts": {
+  "Contradiction": 50,
+  "Entailment": 50,
+  "NotMentioned": 50
+ },
+ "manifest_unique_documents": 88,
+ "all_cases_manifest_sha256": "8a2f13af814951a5af682ab5acfb79ecd8a2a644f14e1bc7944a364bd5dd6be4"
+}

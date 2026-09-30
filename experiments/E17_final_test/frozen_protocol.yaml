@@ -1,0 +1,51 @@
+experiment_id: E17_final_test
+status: EXECUTED (Stage B complete) - protocol unchanged; see summary.md
+frozen_at_commit_base: 5717bdf9153b633ab3758dba79f3174853ca3447   # E17 Stage A artifacts are uncommitted on top of this
+first_reconstruction_v2_test_access_utc: "2026-09-26T19:23:43.857037+00:00"   # scripts/e17_build_test_manifest.py (structure/labels only; no predictions)
+test_split: {documents: 123, cases: 2091, labels: {Entailment: 968, Contradiction: 220, NotMentioned: 903}, verified: true, test_json_sha256: 460267b56052a2dc5aead98eb35eadef9e6734d5723d37b4a9790e410f812387}
+candidate_hosted:
+  model: openai/gpt-5-mini (openrouter), temperature 0.0, timeout 60s, concurrency 5
+  prompt: prompts/reconstruction_v2/gpt_p0.txt (GPT-P0 = classification_prompt_v1 + evidence line), sha1 3fcc7c95cf1287c292e403f12b307c9d912278ce
+  architecture: FULL NDA context; user template "Requirement: {hypothesis_text}\n\nNDA context: {context_text}"
+  parser: evaluation.structured_output.parse_structured_output (frozen)
+  evidence_validator: runtime evidence validator v2 (pipeline/evidence_validator.py, RUNTIME_EVIDENCE_VALIDATOR_V2)
+  scoring: evidence_evaluator_v2 (evaluation/evidence_matching.py), tau_evidence 0.5
+  routing: NONE (E15 outcome C). R1 may be reported as a structural integrity flag only; not used in primary metrics. R3 not applied.
+hosted_manifest: {id: TEST_HOSTED_v1, seed: 1600, n: 150, per_label: 50, unique_documents: 88, sha256: a1cc8f53bb4d41c7e1c66862241cbe2892000eef9d6d27a41b7a37e072eb709a, permanent: true, no_resampling: true}
+hosted_requests_sha256: a7c2d76985479b001cb73fc102b2c808f5a4d44ab301a6327a88f01ac1bfbd4b
+full_test_comparators:
+  rule_baseline: {cases: 2091, keywords_frozen: true, no_api_cost: true}
+  local_qwen: {model: "qwen2.5:7b-instruct-ctx16k", cases: 2091, system_prompt: "same GPT-P0 bytes (sha1 3fcc7c95)", user_template: "same shared template as GPT ('NDA context:')", temperature: 0.0, timeout: 60s, parser: same, evaluator: evaluator_v2, validator: v2,
+                compatibility_note: "Historical E05 Qwen runs used the header 'Full NDA text:'; E17 uses the GPT header 'NDA context:' so both models receive byte-identical requests. Qwen is NOT retuned. Ollama num_ctx=16384 is baked into the Modelfile.", context_check: "all 2,091 requests fit (max 8,073 prompt tokens + 1,024 output reserve = 9,097 < 16,384); no truncation"}
+execution_order: [freeze all manifests/configs (this stage), rule baseline on all 2091, local Qwen on all 2091, hosted GPT on TEST_HOSTED_v1]
+blindness: "GPT settings and manifest are already frozen before rule/Qwen results exist; no rule/Qwen result may alter GPT settings, manifest, prompt, evaluator, validator, parser, routing, or thresholds."
+failure_policy:
+  hosted: "run all 150 once; concurrency 5; timeout 60s; no individual reruns, no manual repairs; malformed/unparseable outputs count as failures under the frozen parser/evaluator; provider outage (5 consecutive failures) -> stop scheduling, preserve partial output, report; budget interruption -> stop scheduling only if continuing would breach $5 or the $1.25 reserve; never stop because results look bad; never choose which remaining cases to run"
+  qwen: "runs all 2091 sequentially (Ollama); per-case timeout 60s; failed/timed-out/unparseable cases counted as failures, not rerun or dropped; runtime interruption -> preserve partial results, report; resumption only by continuing the same frozen case order"
+  rule: "deterministic; no failures expected"
+  technical_failure_on_a_sampled_case: "preserved and scored under the frozen policy; the manifest is never resampled"
+metrics:
+  primary: [joint label+evidence success, Contradiction recall, macro-F1]
+  secondary: [accuracy, Entailment recall, NotMentioned recall, evidence recall, evidence precision, strict parse rate, source-valid evidence rate]
+  operational: [input tokens, output tokens, latency, cost]
+  hosted_views:
+    A_raw_balanced: "direct metrics on the 150 balanced cases (accuracy, macro-F1, class recalls, evidence recall/precision, joint, joint by class)"
+    B_test_prevalence_standardized: "estimates, NOT measured full-TEST GPT metrics. w_E=968/2091, w_C=220/2091, w_NM=903/2091. Std_metric = sum_c w_c * (class-conditional rate on the 50 sampled cases of class c). Applied to accuracy and joint success (class-conditional recall / joint rate)."
+  contradiction_reporting: "hosted: correct/50, recall, joint/50, C->E, C->NM, Wilson 95%; full Qwen/rule: all 220 Contradictions"
+uncertainty: {class_level: "Wilson 95% for recall and joint-success rate (per class)", balanced_aggregate: "stratified bootstrap (10,000, seed 1700) over the 150 cases, or binomial where a simple proportion", prevalence_standardized_aggregate: "stratified bootstrap preserving class identity (10,000 resamples within each class of 50, recombined with TEST weights)"}
+failure_analysis: "after metrics are frozen; analysis-only buckets (reasoning error, missed provision, exception/carve-out failure, NotMentioned over-inference, evidence-selection failure, formatting/source-validation issue, malformed output, unclear); no new rules"
+budget:
+  plan: 5.00
+  reserve: 1.25
+  ledger_at_preflight: 3.19156595
+  gpt_expected_cost: 0.3216
+  gpt_conservative_cost: 0.4749
+  hard_gate: "ledger + conservative hosted + 1.25 <= 5.00 -> 4.9165 PASS (headroom $0.0835); no reserve use; sample not reduced; model not switched"
+  monitoring: "cumulative actual spend during the run; expected mean per call $0.002144 (conservative $0.003166)"
+limitations_carried_forward:
+  E16: "Candidate is 'evidence-grounded but not prompt-injection-hardened.' Hosted E16: 20 matched clean/attack pairs; 4/11 injection-type pairs showed attack success (2 label hijacks: instruction-only document, fake [SYSTEM] text; 2 output-format requests honored); 2 clean-correct->attack-wrong regressions; no code execution, no data leakage, no malformed output; evidence stayed source-grounded, but source-grounding does not imply instruction trustworthiness (validator cannot detect malicious text that is genuinely in the NDA). GPT-P0 has no injection-resistance instruction; no patch before TEST."
+  E15: "No selective routing adopted (outcome C). R3 not applied; no abstention claim."
+  comparators: "Rule baseline and local Qwen are contextual comparators on all 2,091 cases (measured full-population); hosted GPT is a balanced n=150 estimate. They are not production candidates by virtue of covering all 2,091."
+one_shot: "TEST is one-shot: no prompt/architecture/evaluator/validator/routing/sample changes after the first TEST result; discovered issues are documented, not fixed and rerun."
+
+budget_policy_update_stage_b: "User-approved: the $5/$1.25-reserve ceiling no longer stops the hosted run; spend recorded only (actual $0.3264; final ledger $3.51797)."

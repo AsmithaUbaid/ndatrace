@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Verify that all dependencies are installed and the environment is ready."""
+"""Verify local dependencies and optionally require hosted-model credentials."""
 
+import argparse
 import sys
 
 def check_imports():
@@ -8,7 +9,7 @@ def check_imports():
     required = [
         "fastapi", "uvicorn", "pydantic", "openai", "tiktoken",
         "sentence_transformers", "faiss", "numpy", "pandas",
-        "sqlalchemy", "httpx", "dotenv", "tqdm", "rich",
+        "httpx", "dotenv", "tqdm", "rich",
     ]
     missing = []
     for pkg in required:
@@ -26,10 +27,10 @@ def check_imports():
 
 
 def check_env():
-    """Check that .env file exists."""
+    """Check whether an optional local .env file exists."""
     from pathlib import Path
     if not Path(".env").exists():
-        print("WARN: .env file not found. Copy .env.example to .env and add your API key.")
+        print("WARN: .env file not found; safe defaults will be used.")
         return False
     print("OK: .env file found.")
     return True
@@ -49,20 +50,29 @@ def check_api_key():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--require-api-key",
+        action="store_true",
+        help="fail unless a non-placeholder OPENROUTER_API_KEY is configured",
+    )
+    args = parser.parse_args()
+
     print("=" * 50)
     print("NDATrace Environment Verification")
     print("=" * 50)
     print()
 
-    results = [
-        check_imports(),
-        check_env(),
-        check_api_key(),
-    ]
+    imports_ok = check_imports()
+    check_env()
+    api_key_ok = check_api_key()
 
     print()
-    if all(results):
-        print("All checks passed! Ready to go.")
+    if imports_ok and (api_key_ok or not args.require_api_key):
+        if api_key_ok:
+            print("All checks passed! Hosted review calls are enabled.")
+        else:
+            print("Offline/startup checks passed. Hosted review calls remain disabled.")
     else:
-        print("Some checks failed. See warnings above.")
+        print("Required checks failed. See messages above.")
         sys.exit(1)

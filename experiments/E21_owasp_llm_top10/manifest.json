@@ -1,0 +1,56 @@
+{
+  "experiment_id": "E21_owasp_llm_top10",
+  "frozen_at": "2026-09-29T10:41:04.012473+00:00",
+  "git_branch": "reconstruction",
+  "git_sha": "6f7b65625bb2ea6c892ae6ac0260765673605d21",
+  "git_dirty": true,
+  "runtime_under_test": "pipeline.final_review.review_final (POST /api/review, POST /review) -- the RAG path, NOT E16's FULL-context arm and NOT pipeline/agent.py or pipeline/agent_v2.py (never invoked by the API, see LLM06)",
+  "model": "openai/gpt-5-mini",
+  "prompt_path": "prompts/reconstruction_v2/gpt_p0.txt",
+  "prompt_sha1": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
+  "retrieval_hyperparameters": {
+    "chunk_method": "clause_aware_chunk",
+    "chunk_size": 256,
+    "chunk_overlap_config": 50,
+    "candidate_pool_bm25_top_k": 20,
+    "reranker_model": "cross-encoder/ms-marco-MiniLM-L-12-v2",
+    "final_top_k": 5,
+    "temperature": 0.0
+  },
+  "model_call_config": {
+    "max_retries": 1,
+    "timeout_seconds": 60,
+    "max_tokens_param_set": false
+  },
+  "parser": "evaluation.structured_output.parse_structured_output (no explicit version constant in code)",
+  "evidence_validator": "pipeline.evidence_validator.CURRENT_RUNTIME_EVIDENCE_VALIDATOR (v2)",
+  "backend_request_limits": {
+    "pdf_upload_max_bytes": 10485760,
+    "nda_text_max_length": null,
+    "requirement_max_length": null,
+    "rate_limiting": null,
+    "auth": null,
+    "cors": "allow_origins=['*'] (backend/app.py)"
+  },
+  "agent_status": {
+    "invoked_by_final_runtime": false,
+    "note": "backend/routes/review.py hardcodes agent_used=False/agent_steps=0 on every response; pipeline/agent.py and pipeline/agent_v2.py exist but are not imported by backend/ at all (grep-verified)",
+    "agent_v2_hard_limits": {
+      "max_agent_steps": 3,
+      "max_tool_calls": 2,
+      "max_identical_call_repeats": 1,
+      "max_cumulative_added_context_chars": 8000,
+      "max_wall_clock_seconds": 60,
+      "max_estimated_agent_cost_usd": 0.01,
+      "tools_are_read_only": true,
+      "deterministic_fallback": "falls back to the A2 (non-agent) classification on any limit hit"
+    }
+  },
+  "budget_check": {
+    "checked": true,
+    "limit_usd": 10,
+    "usage_usd": 9.145859839,
+    "remaining_usd": 0.8541401610000001
+  },
+  "hosted_hard_ceiling_usd_this_experiment": 0.3
+}

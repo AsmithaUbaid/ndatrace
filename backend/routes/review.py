@@ -1,29 +1,103 @@
 """
-NDATrace API Routes - live requirement review (WBS T032).
+NDATrace API Routes - live requirement review.
 
-POST /review runs the frozen production pipeline (pipeline/orchestrator.py,
-T031: RAG + selective agent) against a submitted NDA document and persists
-the result; GET /review/{review_id} fetches it back.
+POST /api/review is the single-requirement frozen E20 top-5 RAG product
+path: BM25 top-20, L-12 cross-encoder reranking, GPT-5-mini + GPT-P0 over
+the top five clauses, structured parsing, and source validation.
+
+POST /review is the batch/history adapter used by the interactive UI. It
+uses the same frozen RAG path and reuses one document index across selected
+requirements. Neither endpoint invokes an agent or routing policy.
 """
 
 from __future__ import annotations
 
 import time
 import uuid
+from dataclasses import asdict
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from backend import database
-from backend.models import RequirementResult, ReviewRequest, ReviewResponse
+from backend.models import (
+    DecisionRequest,
+    FinalReviewRequest,
+    FinalReviewResponse,
+    RequirementResult,
+    ReviewRequest,
+    ReviewResponse,
+)
+from backend.rate_limit import ConcurrencyLimitExceeded, RateLimitExceeded, check_rate_limit, concurrency_guard
+from pipeline.cost_guard import CostCeilingExceeded, check_batch_budget, check_budget
+from pipeline.final_review import MODEL as FINAL_REVIEW_MODEL
+from pipeline.final_review import MODEL_MAX_RETRIES, MODEL_TIMEOUT_SECONDS, review_final, review_final_document
 from pipeline.logging_config import get_logger
 from pipeline.model_gateway import ModelError, ModelGateway
-from pipeline.orchestrator import review_document
 from pipeline.parser import load_hypotheses
 from pipeline.pdf_extractor import PdfExtractionError, extract_text_from_pdf
 
 logger = get_logger("api.review")
 router = APIRouter(tags=["review"])
+
+
+def _enforce_traffic_guards(requirement_text_for_cost_estimate: str) -> None:
+    """E22 LLM10 remediation: rate limit -> concurrency -> budget, in that order, all
+    BEFORE any retrieval/model work. Raises HTTPException(429/402) if any guard trips."""
+    try:
+        check_rate_limit()
+    except RateLimitExceeded as e:
+        raise HTTPException(status_code=429, detail=f"Rate limit exceeded: {e}") from e
+    try:
+        check_budget(requirement_text_for_cost_estimate)
+    except CostCeilingExceeded as e:
+        raise HTTPException(status_code=402, detail=str(e)) from e
+
+
+@router.post("/api/review", response_model=FinalReviewResponse)
+def create_final_review(request: FinalReviewRequest) -> FinalReviewResponse:
+    """Single-requirement frozen RAG endpoint. Never logs NDA text - only metadata."""
+    # Constructed here (not left to review_final()'s own default) so a
+    # missing-configuration error is caught before the request proceeds,
+    # distinct from a runtime provider failure mid-request - which
+    # review_final() already handles itself by returning needs_human_review.
+    _enforce_traffic_guards(request.requirement)
+
+    try:
+        gateway = ModelGateway(
+            model=FINAL_REVIEW_MODEL,
+            max_retries=MODEL_MAX_RETRIES,
+            timeout_seconds=MODEL_TIMEOUT_SECONDS,
+        )
+    except ModelError as e:
+        raise HTTPException(status_code=503, detail="Review service is not configured.") from e
+
+    trace_id = str(uuid.uuid4())
+    try:
+        with concurrency_guard():
+            result = review_final(request.nda_text, request.requirement, gateway=gateway)
+    except ConcurrencyLimitExceeded as e:
+        raise HTTPException(status_code=429, detail=f"Too many concurrent requests: {e}") from e
+
+    logger.info("API: final review", extra={
+        "stage": "api_final_review", "trace_id": trace_id, "model": result.model,
+        "label": result.label, "parse_status": result.parse_status, "source_valid": result.source_valid,
+        "needs_human_review": result.needs_human_review, "latency_ms": result.latency_ms,
+        "input_tokens": result.input_tokens, "output_tokens": result.output_tokens,
+        "cost_usd": result.cost_usd, "error": result.error,
+        "security_review_required": result.security_review_required, "security_flags": result.security_flags,
+    })
+
+    return FinalReviewResponse(
+        label=result.label, evidence=result.evidence, explanation=result.explanation,
+        source_valid=result.source_valid, needs_human_review=result.needs_human_review,
+        review_reason=result.review_reason, model=result.model, latency_ms=result.latency_ms,
+        input_tokens=result.input_tokens, output_tokens=result.output_tokens,
+        estimated_cost_usd=result.cost_usd, trace_id=trace_id,
+        sources=[asdict(source) for source in result.sources],
+        retrieved_chunks=[asdict(chunk) for chunk in result.retrieved_chunks],
+        security_review_required=result.security_review_required, security_flags=result.security_flags,
+    )
 
 
 @router.post("/review", response_model=ReviewResponse)
@@ -38,7 +112,20 @@ def create_review(request: ReviewRequest) -> ReviewResponse:
         selected = {hid: entry["hypothesis"] for hid, entry in all_hypotheses.items()}
 
     try:
-        gateway = ModelGateway()
+        check_rate_limit()
+    except RateLimitExceeded as e:
+        raise HTTPException(status_code=429, detail=f"Rate limit exceeded: {e}") from e
+    try:
+        check_batch_budget(list(selected.values()))
+    except CostCeilingExceeded as e:
+        raise HTTPException(status_code=402, detail=str(e)) from e
+
+    try:
+        gateway = ModelGateway(
+            model=FINAL_REVIEW_MODEL,
+            max_retries=MODEL_MAX_RETRIES,
+            timeout_seconds=MODEL_TIMEOUT_SECONDS,
+        )
     except ModelError as e:
         raise HTTPException(status_code=503, detail=f"Model gateway unavailable: {e}") from e
 
@@ -46,38 +133,53 @@ def create_review(request: ReviewRequest) -> ReviewResponse:
     doc_id = review_id[:8]
     start = time.time()
     try:
-        results = review_document(request.nda_text, selected, gateway, doc_id=doc_id)
-    except ModelError as e:
-        # review_document() isolates per-hypothesis ModelErrors internally
-        # (eval case 095) - reaching here means every attempt failed before
-        # any hypothesis could even be processed (e.g. the provider is down
-        # entirely), not a partial failure.
-        raise HTTPException(status_code=503, detail=f"Model provider unavailable after retries: {e}") from e
+        with concurrency_guard():
+            results_by_id = review_final_document(request.nda_text, selected, gateway)
+    except ConcurrencyLimitExceeded as e:
+        raise HTTPException(status_code=429, detail=f"Too many concurrent requests: {e}") from e
     duration_ms = (time.time() - start) * 1000
 
-    total_cost = sum(r.cost_usd for r in results)
-    total_latency = sum(r.latency_ms for r in results)
+    total_cost = sum(r.cost_usd or 0.0 for r in results_by_id.values())
+    total_latency = sum(r.latency_ms or 0.0 for r in results_by_id.values())
     created_at = datetime.now(timezone.utc).isoformat()
 
     items = [
         {
-            "hypothesis_id": r.hypothesis_id, "hypothesis_text": r.hypothesis_text, "label": r.label,
-            "confidence": r.confidence, "explanation": r.explanation, "evidence": r.evidence,
-            "agent_used": r.agent_used, "agent_steps": r.agent_steps, "cost_usd": r.cost_usd,
-            "latency_ms": r.latency_ms, "error": r.error,
+            "hypothesis_id": hypothesis_id,
+            "hypothesis_text": selected[hypothesis_id],
+            "label": result.label,
+            "confidence": None,
+            "confidence_available": False,
+            "explanation": result.explanation,
+            "evidence": result.evidence,
+            "source_valid": result.source_valid,
+            "needs_human_review": result.needs_human_review,
+            "review_reason": result.review_reason,
+            "sources": [asdict(source) for source in result.sources],
+            "retrieved_chunks": [asdict(chunk) for chunk in result.retrieved_chunks],
+            "agent_used": False,
+            "agent_steps": 0,
+            "cost_usd": result.cost_usd or 0.0,
+            "latency_ms": result.latency_ms or 0.0,
+            "error": result.error,
+            "security_review_required": result.security_review_required,
+            "security_flags": result.security_flags,
         }
-        for r in results
+        for hypothesis_id, result in results_by_id.items()
     ]
     database.save_review(review_id, doc_id, created_at, gateway.model, total_cost, total_latency, items)
 
     logger.info("API: review created", extra={
-        "stage": "api_review", "doc_id": doc_id, "num_requirements": len(results),
+        "stage": "api_review", "doc_id": doc_id, "num_requirements": len(items),
         "cost_usd": total_cost, "latency_ms": round(duration_ms, 1), "model": gateway.model,
     })
 
+    # Re-read from the DB rather than the in-memory `items` so the response carries each
+    # item's assigned id (needed by the client to record a reviewer decision on it).
+    saved = database.get_review(review_id)
     return ReviewResponse(
         review_id=review_id, doc_id=doc_id, created_at=created_at,
-        results=[RequirementResult(**it) for it in items],
+        results=[RequirementResult(**it) for it in saved["items"]],
         total_cost_usd=total_cost, total_latency_ms=total_latency, model=gateway.model,
     )
 
@@ -94,6 +196,33 @@ def get_review(review_id: str) -> ReviewResponse:
         total_cost_usd=review["total_cost_usd"], total_latency_ms=review["total_latency_ms"],
         model=review["model"],
     )
+
+
+@router.post("/review/{review_id}/items/{item_id}/decision", response_model=RequirementResult)
+def record_review_decision(review_id: str, item_id: int, request: DecisionRequest) -> RequirementResult:
+    """Persist a human reviewer's decision on one requirement result - the implemented
+    form of 'authority to intervene': the AI never auto-approves or auto-rejects, and this
+    is the only write path that records what a human actually decided. Append-only per
+    item (see database.record_decision); returns the item with its now-latest decision."""
+    review = database.get_review(review_id)
+    if review is None:
+        raise HTTPException(status_code=404, detail=f"Review not found: {review_id}")
+    if not any(it["id"] == item_id for it in review["items"]):
+        raise HTTPException(status_code=404, detail=f"No item {item_id} in review {review_id}")
+
+    try:
+        database.record_decision(item_id, request.decision, request.note, request.reviewer)
+    except KeyError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
+
+    logger.info("API: reviewer decision recorded", extra={
+        "stage": "api_review_decision", "review_id": review_id, "item_id": item_id,
+        "decision": request.decision,
+    })
+
+    updated = database.get_review(review_id)
+    item = next(it for it in updated["items"] if it["id"] == item_id)
+    return RequirementResult(**item)
 
 
 MAX_PDF_SIZE_BYTES = 10 * 1024 * 1024  # 10MB - real NDAs are a few pages; this is a generous cap

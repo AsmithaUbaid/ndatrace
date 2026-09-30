@@ -1,0 +1,51 @@
+{
+ "_provenance": {
+  "source_experiment": "E17",
+  "source_artifact": "experiments/E17_final_test/results/final_metrics.json#rule_full_2091",
+  "source_commit": "3b2167a",
+  "measured_or_scenario": "measured",
+  "population": "n=2091, full official TEST split",
+  "date_generated": "2026-09-27"
+ },
+ "accuracy": 0.5901482544237207,
+ "macro_f1": 0.47930265224634533,
+ "joint": 0.5007173601147776,
+ "recall": {
+  "Entailment": 0.3925619834710744,
+  "Contradiction": 0.16818181818181818,
+  "NotMentioned": 0.9047619047619048
+ },
+ "confusion_rows_gold_cols_pred": {
+  "Entailment": {
+   "Entailment": 380,
+   "Contradiction": 44,
+   "NotMentioned": 544,
+   "invalid": 0
+  },
+  "Contradiction": {
+   "Entailment": 25,
+   "Contradiction": 37,
+   "NotMentioned": 158,
+   "invalid": 0
+  },
+  "NotMentioned": {
+   "Entailment": 78,
+   "Contradiction": 8,
+   "NotMentioned": 817,
+   "invalid": 0
+  }
+ },
+ "rule_behavior": {
+  "predicted_label_counts": {
+   "NotMentioned": 1519,
+   "Entailment": 483,
+   "Contradiction": 89
+  },
+  "no_match_default_NM": 1519,
+  "default_NM_rate": 0.7264466762314682,
+  "cases_with_rule": 2091,
+  "latency_total_s": 0.17916362499818206,
+  "lowercase_offset_mismatch_docs": 0,
+  "api_cost_usd": 0.0
+ }
+}

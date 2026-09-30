@@ -1,0 +1,13 @@
+{
+ "request_tokens": {
+  "n": 1941,
+  "mean": 2274.208655332303,
+  "median": 1956.0,
+  "p90": 4209.0,
+  "p95": 4769.0,
+  "max": 7932.0
+ },
+ "context_limit": 400000,
+ "max_plus_output_reserve": 10932.0,
+ "cases_exceeding_limit": 0
+}

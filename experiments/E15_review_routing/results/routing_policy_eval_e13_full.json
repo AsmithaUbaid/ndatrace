@@ -1,0 +1,830 @@
+{
+ "n": 150,
+ "joint_success": 120,
+ "label_correct": 125,
+ "policies": {
+  "R0": {
+   "joint": {
+    "policy": "R0",
+    "failure_def": "joint_ok",
+    "n": 150,
+    "review": 0,
+    "review_rate": 0.0,
+    "auto": 150,
+    "automation_coverage": 1.0,
+    "confusion": {
+     "failure_review": 0,
+     "failure_auto": 30,
+     "success_review": 0,
+     "success_auto": 120
+    },
+    "error_capture": 0.0,
+    "routing_precision": null,
+    "false_review_rate": 0.0,
+    "residual_error_rate": 0.2,
+    "selective_success": 0.8,
+    "total_failures": 30
+   },
+   "classification": {
+    "policy": "R0",
+    "failure_def": "label_ok",
+    "n": 150,
+    "review": 0,
+    "review_rate": 0.0,
+    "auto": 150,
+    "automation_coverage": 1.0,
+    "confusion": {
+     "failure_review": 0,
+     "failure_auto": 25,
+     "success_review": 0,
+     "success_auto": 125
+    },
+    "error_capture": 0.0,
+    "routing_precision": null,
+    "false_review_rate": 0.0,
+    "residual_error_rate": 0.16666666666666666,
+    "selective_success": 0.8333333333333334,
+    "total_failures": 25
+   },
+   "review_rate_by_predicted_label": {
+    "Entailment": 0.0,
+    "Contradiction": 0.0,
+    "NotMentioned": 0.0
+   },
+   "review_rate_by_gold_class": {
+    "Entailment": 0.0,
+    "Contradiction": 0.0,
+    "NotMentioned": 0.0
+   },
+   "descriptive_dev_prevalence_review_rate": 0.0,
+   "reviews_per_100_balanced": 0.0,
+   "reviews_per_100_dev_prevalence": 0.0,
+   "reviews_per_1000_balanced": 0.0,
+   "reviews_per_1000_dev_prevalence": 0.0,
+   "reviews_per_8000_balanced": 0.0,
+   "reviews_per_8000_dev_prevalence": 0.0,
+   "contradiction": {
+    "true_C_joint_failures": 11,
+    "routed": 0,
+    "capture_rate": 0.0,
+    "correct_C_unnecessarily_reviewed": 0,
+    "n_correct_C": 39,
+    "residual_automated_C_failures": 11,
+    "predicted_C_cases": 49,
+    "predicted_C_wrong_joint_(any gold)_routed": 0,
+    "predicted_C_wrong_joint_(any gold)": 10
+   }
+  },
+  "R1": {
+   "joint": {
+    "policy": "R1",
+    "failure_def": "joint_ok",
+    "n": 150,
+    "review": 4,
+    "review_rate": 0.02666666666666667,
+    "auto": 146,
+    "automation_coverage": 0.9733333333333334,
+    "confusion": {
+     "failure_review": 2,
+     "failure_auto": 28,
+     "success_review": 2,
+     "success_auto": 118
+    },
+    "error_capture": 0.06666666666666667,
+    "routing_precision": 0.5,
+    "false_review_rate": 0.016666666666666666,
+    "residual_error_rate": 0.1917808219178082,
+    "selective_success": 0.8082191780821918,
+    "total_failures": 30
+   },
+   "classification": {
+    "policy": "R1",
+    "failure_def": "label_ok",
+    "n": 150,
+    "review": 4,
+    "review_rate": 0.02666666666666667,
+    "auto": 146,
+    "automation_coverage": 0.9733333333333334,
+    "confusion": {
+     "failure_review": 1,
+     "failure_auto": 24,
+     "success_review": 3,
+     "success_auto": 122
+    },
+    "error_capture": 0.04,
+    "routing_precision": 0.25,
+    "false_review_rate": 0.024,
+    "residual_error_rate": 0.1643835616438356,
+    "selective_success": 0.8356164383561644,
+    "total_failures": 25
+   },
+   "review_rate_by_predicted_label": {
+    "Entailment": 0.05357142857142857,
+    "Contradiction": 0.02040816326530612,
+    "NotMentioned": 0.0
+   },
+   "review_rate_by_gold_class": {
+    "Entailment": 0.04,
+    "Contradiction": 0.02,
+    "NotMentioned": 0.02
+   },
+   "descriptive_dev_prevalence_review_rate": 0.030009643201542913,
+   "reviews_per_100_balanced": 2.7,
+   "reviews_per_100_dev_prevalence": 3.0,
+   "reviews_per_1000_balanced": 26.7,
+   "reviews_per_1000_dev_prevalence": 30.0,
+   "reviews_per_8000_balanced": 213.3,
+   "reviews_per_8000_dev_prevalence": 240.1,
+   "contradiction": {
+    "true_C_joint_failures": 11,
+    "routed": 0,
+    "capture_rate": 0.0,
+    "correct_C_unnecessarily_reviewed": 1,
+    "n_correct_C": 39,
+    "residual_automated_C_failures": 11,
+    "predicted_C_cases": 49,
+    "predicted_C_wrong_joint_(any gold)_routed": 0,
+    "predicted_C_wrong_joint_(any gold)": 10
+   }
+  },
+  "R2": {
+   "joint": {
+    "policy": "R2",
+    "failure_def": "joint_ok",
+    "n": 150,
+    "review": 52,
+    "review_rate": 0.3466666666666667,
+    "auto": 98,
+    "automation_coverage": 0.6533333333333333,
+    "confusion": {
+     "failure_review": 12,
+     "failure_auto": 18,
+     "success_review": 40,
+     "success_auto": 80
+    },
+    "error_capture": 0.4,
+    "routing_precision": 0.23076923076923078,
+    "false_review_rate": 0.3333333333333333,
+    "residual_error_rate": 0.1836734693877551,
+    "selective_success": 0.8163265306122449,
+    "total_failures": 30
+   },
+   "classification": {
+    "policy": "R2",
+    "failure_def": "label_ok",
+    "n": 150,
+    "review": 52,
+    "review_rate": 0.3466666666666667,
+    "auto": 98,
+    "automation_coverage": 0.6533333333333333,
+    "confusion": {
+     "failure_review": 8,
+     "failure_auto": 17,
+     "success_review": 44,
+     "success_auto": 81
+    },
+    "error_capture": 0.32,
+    "routing_precision": 0.15384615384615385,
+    "false_review_rate": 0.352,
+    "residual_error_rate": 0.17346938775510204,
+    "selective_success": 0.826530612244898,
+    "total_failures": 25
+   },
+   "review_rate_by_predicted_label": {
+    "Entailment": 0.05357142857142857,
+    "Contradiction": 1.0,
+    "NotMentioned": 0.0
+   },
+   "review_rate_by_gold_class": {
+    "Entailment": 0.1,
+    "Contradiction": 0.84,
+    "NotMentioned": 0.1
+   },
+   "descriptive_dev_prevalence_review_rate": 0.1677917068466731,
+   "reviews_per_100_balanced": 34.7,
+   "reviews_per_100_dev_prevalence": 16.8,
+   "reviews_per_1000_balanced": 346.7,
+   "reviews_per_1000_dev_prevalence": 167.8,
+   "reviews_per_8000_balanced": 2773.3,
+   "reviews_per_8000_dev_prevalence": 1342.3,
+   "contradiction": {
+    "true_C_joint_failures": 11,
+    "routed": 3,
+    "capture_rate": 0.2727272727272727,
+    "correct_C_unnecessarily_reviewed": 39,
+    "n_correct_C": 39,
+    "residual_automated_C_failures": 8,
+    "predicted_C_cases": 49,
+    "predicted_C_wrong_joint_(any gold)_routed": 10,
+    "predicted_C_wrong_joint_(any gold)": 10
+   }
+  },
+  "R3": {
+   "joint": {
+    "policy": "R3",
+    "failure_def": "joint_ok",
+    "n": 150,
+    "review": 86,
+    "review_rate": 0.5733333333333334,
+    "auto": 64,
+    "automation_coverage": 0.4266666666666667,
+    "confusion": {
+     "failure_review": 27,
+     "failure_auto": 3,
+     "success_review": 59,
+     "success_auto": 61
+    },
+    "error_capture": 0.9,
+    "routing_precision": 0.313953488372093,
+    "false_review_rate": 0.49166666666666664,
+    "residual_error_rate": 0.046875,
+    "selective_success": 0.953125,
+    "total_failures": 30
+   },
+   "classification": {
+    "policy": "R3",
+    "failure_def": "label_ok",
+    "n": 150,
+    "review": 86,
+    "review_rate": 0.5733333333333334,
+    "auto": 64,
+    "automation_coverage": 0.4266666666666667,
+    "confusion": {
+     "failure_review": 23,
+     "failure_auto": 2,
+     "success_review": 63,
+     "success_auto": 62
+    },
+    "error_capture": 0.92,
+    "routing_precision": 0.26744186046511625,
+    "false_review_rate": 0.504,
+    "residual_error_rate": 0.03125,
+    "selective_success": 0.96875,
+    "total_failures": 25
+   },
+   "review_rate_by_predicted_label": {
+    "Entailment": 0.7142857142857143,
+    "Contradiction": 0.8163265306122449,
+    "NotMentioned": 0.13333333333333333
+   },
+   "review_rate_by_gold_class": {
+    "Entailment": 0.66,
+    "Contradiction": 0.8,
+    "NotMentioned": 0.26
+   },
+   "descriptive_dev_prevalence_review_rate": 0.509662487945998,
+   "reviews_per_100_balanced": 57.3,
+   "reviews_per_100_dev_prevalence": 51.0,
+   "reviews_per_1000_balanced": 573.3,
+   "reviews_per_1000_dev_prevalence": 509.7,
+   "reviews_per_8000_balanced": 4586.7,
+   "reviews_per_8000_dev_prevalence": 4077.3,
+   "contradiction": {
+    "true_C_joint_failures": 11,
+    "routed": 10,
+    "capture_rate": 0.9090909090909091,
+    "correct_C_unnecessarily_reviewed": 30,
+    "n_correct_C": 39,
+    "residual_automated_C_failures": 1,
+    "predicted_C_cases": 49,
+    "predicted_C_wrong_joint_(any gold)_routed": 10,
+    "predicted_C_wrong_joint_(any gold)": 10
+   }
+  }
+ },
+ "signals": {
+  "available": [
+   "context_chars",
+   "error",
+   "evidence_chars",
+   "label",
+   "label_evidence_consistent",
+   "latency_ms",
+   "n_duplicate_quotes",
+   "n_hallucinated_v2",
+   "n_quotes",
+   "output_tokens",
+   "parse_status",
+   "retries",
+   "rule_label",
+   "unusable",
+   "input_tokens",
+   "retry_count",
+   "cost_usd"
+  ],
+  "not_available": [
+   "confidence/probability (GPT-P0 schema is {label,evidence} only)",
+   "logprobs (not requested/recorded)",
+   "retrieval scores (FULL context has no retrieval)",
+   "timeouts/provider errors: fields exist (error_type, retry_count) but are all None/0 in E13 FULL (150/150 strict parse, 0 errors, 0 retries)"
+  ],
+  "forbidden_gold_only": [
+   "gold_label",
+   "gold_span_indices / gold evidence",
+   "joint_success / label correctness",
+   "gold-derived retrieval rank",
+   "E13 manual error categories",
+   "TEST behaviour"
+  ],
+  "signal_value_counts": {
+   "parse_status": {
+    "strict": 150
+   },
+   "unusable": 0,
+   "hallucinated_v2>0": 4,
+   "NM_with_evidence": 0,
+   "EC_without_evidence": 0,
+   "duplicate_quotes>0": 0,
+   "pred_label_counts": {
+    "Contradiction": 49,
+    "Entailment": 56,
+    "NotMentioned": 45
+   }
+  }
+ },
+ "pareto": {
+  "points_(reviews,failures_captured)": {
+   "R0": [
+    0,
+    0
+   ],
+   "R1": [
+    4,
+    2
+   ],
+   "R2": [
+    52,
+    12
+   ],
+   "R3": [
+    86,
+    27
+   ]
+  },
+  "dominated_by": {
+   "R0": [],
+   "R1": [],
+   "R2": [],
+   "R3": []
+  }
+ },
+ "failure_buckets": {
+  "contradiction_missed_or_misread (C->E/NM)": {
+   "n": 8,
+   "R0": 0,
+   "R1": 0,
+   "R2": 0,
+   "R3": 7,
+   "examples": [
+    "dev::54::nda-17 (gold Contradiction pred Entailment)",
+    "dev::44::nda-7 (gold Contradiction pred Entailment)",
+    "dev::75::nda-20 (gold Contradiction pred Entailment)"
+   ]
+  },
+  "label_correct_evidence_invalid_or_nonoverlapping": {
+   "n": 5,
+   "R0": 0,
+   "R1": 1,
+   "R2": 4,
+   "R3": 4,
+   "examples": [
+    "dev::81::nda-1 (gold Contradiction pred Contradiction)",
+    "dev::440::nda-1 (gold Contradiction pred Contradiction)",
+    "dev::547::nda-16 (gold Contradiction pred Contradiction)"
+   ]
+  },
+  "entailment_predicted_Contradiction": {
+   "n": 3,
+   "R0": 0,
+   "R1": 0,
+   "R2": 3,
+   "R3": 3,
+   "examples": [
+    "dev::15::nda-1 (gold Entailment pred Contradiction)",
+    "dev::33::nda-15 (gold Entailment pred Contradiction)",
+    "dev::405::nda-1 (gold Entailment pred Contradiction)"
+   ]
+  },
+  "entailment_predicted_NotMentioned": {
+   "n": 4,
+   "R0": 0,
+   "R1": 0,
+   "R2": 0,
+   "R3": 3,
+   "examples": [
+    "dev::33::nda-10 (gold Entailment pred NotMentioned)",
+    "dev::152::nda-1 (gold Entailment pred NotMentioned)",
+    "dev::456::nda-15 (gold Entailment pred NotMentioned)"
+   ]
+  },
+  "over_inference (gold NotMentioned, predicted E/C)": {
+   "n": 10,
+   "R0": 0,
+   "R1": 1,
+   "R2": 5,
+   "R3": 10,
+   "examples": [
+    "dev::19::nda-16 (gold NotMentioned pred Entailment)",
+    "dev::32::nda-17 (gold NotMentioned pred Entailment)",
+    "dev::45::nda-16 (gold NotMentioned pred Entailment)"
+   ]
+  }
+ },
+ "failure_detail": [
+  {
+   "case_id": "dev::54::nda-17",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "label_ok": false,
+   "n_quotes": 2,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::44::nda-7",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "label_ok": false,
+   "n_quotes": 1,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::81::nda-1",
+   "gold": "Contradiction",
+   "pred": "Contradiction",
+   "label_ok": true,
+   "n_quotes": 2,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::75::nda-20",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "label_ok": false,
+   "n_quotes": 2,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::205::nda-16",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "label_ok": false,
+   "n_quotes": 1,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::73::nda-17",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "label_ok": false,
+   "n_quotes": 2,
+   "hallucinated": 0,
+   "rule_label": "Contradiction",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::440::nda-1",
+   "gold": "Contradiction",
+   "pred": "Contradiction",
+   "label_ok": true,
+   "n_quotes": 1,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::547::nda-1",
+   "gold": "Contradiction",
+   "pred": "NotMentioned",
+   "label_ok": false,
+   "n_quotes": 0,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": false
+  },
+  {
+   "case_id": "dev::547::nda-16",
+   "gold": "Contradiction",
+   "pred": "Contradiction",
+   "label_ok": true,
+   "n_quotes": 1,
+   "hallucinated": 0,
+   "rule_label": "Entailment",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::575::nda-17",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "label_ok": false,
+   "n_quotes": 2,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::610::nda-4",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "label_ok": false,
+   "n_quotes": 3,
+   "hallucinated": 0,
+   "rule_label": "Contradiction",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::15::nda-1",
+   "gold": "Entailment",
+   "pred": "Contradiction",
+   "label_ok": false,
+   "n_quotes": 2,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::15::nda-12",
+   "gold": "Entailment",
+   "pred": "Entailment",
+   "label_ok": true,
+   "n_quotes": 1,
+   "hallucinated": 1,
+   "rule_label": "Entailment",
+   "R0": false,
+   "R1": true,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::33::nda-10",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "label_ok": false,
+   "n_quotes": 0,
+   "hallucinated": 0,
+   "rule_label": "Entailment",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::33::nda-15",
+   "gold": "Entailment",
+   "pred": "Contradiction",
+   "label_ok": false,
+   "n_quotes": 1,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::152::nda-1",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "label_ok": false,
+   "n_quotes": 0,
+   "hallucinated": 0,
+   "rule_label": "Entailment",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::405::nda-1",
+   "gold": "Entailment",
+   "pred": "Contradiction",
+   "label_ok": false,
+   "n_quotes": 2,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::456::nda-15",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "label_ok": false,
+   "n_quotes": 0,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": false
+  },
+  {
+   "case_id": "dev::595::nda-10",
+   "gold": "Entailment",
+   "pred": "Entailment",
+   "label_ok": true,
+   "n_quotes": 1,
+   "hallucinated": 0,
+   "rule_label": "Entailment",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": false
+  },
+  {
+   "case_id": "dev::598::nda-10",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "label_ok": false,
+   "n_quotes": 0,
+   "hallucinated": 0,
+   "rule_label": "Entailment",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::19::nda-16",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "label_ok": false,
+   "n_quotes": 1,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::32::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "label_ok": false,
+   "n_quotes": 2,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::45::nda-16",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "label_ok": false,
+   "n_quotes": 2,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::44::nda-1",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "label_ok": false,
+   "n_quotes": 2,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::45::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "label_ok": false,
+   "n_quotes": 3,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::64::nda-10",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "label_ok": false,
+   "n_quotes": 3,
+   "hallucinated": 1,
+   "rule_label": "Entailment",
+   "R0": false,
+   "R1": true,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::507::nda-1",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "label_ok": false,
+   "n_quotes": 2,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::547::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "label_ok": false,
+   "n_quotes": 2,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::563::nda-16",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "label_ok": false,
+   "n_quotes": 2,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::595::nda-1",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "label_ok": false,
+   "n_quotes": 2,
+   "hallucinated": 0,
+   "rule_label": "NotMentioned",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  }
+ ],
+ "rule_baseline_agreement_note": {
+  "rule_agrees_rate": 0.44,
+  "joint_success_when_agree": 0.9242424242424242,
+  "joint_success_when_disagree": 0.7023809523809523
+ }
+}

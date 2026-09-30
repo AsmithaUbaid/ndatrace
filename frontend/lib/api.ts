@@ -6,18 +6,47 @@ export type Hypothesis = {
   hypothesis_text: string;
 };
 
+export type RetrievedChunk = {
+  chunk_id: number;
+  rank: number;
+  start_char: number;
+  end_char: number;
+  bm25_score: number;
+  reranker_score: number;
+  text: string;
+};
+
+// Batch adapter for the same frozen product RAG path used by /api/review.
+// Compatibility agent fields remain in saved historical responses, but the
+// current runtime never invokes an agent and P0 supplies no confidence.
+export type ReviewDecision = "approved" | "overridden" | "rejected";
+
 export type RequirementResult = {
+  id: number | null; // review_items.id - required to record a decision on this item
   hypothesis_id: string;
   hypothesis_text: string;
-  label: "Entailment" | "Contradiction" | "NotMentioned";
-  confidence: number;
+  label: "Entailment" | "Contradiction" | "NotMentioned" | null;
+  confidence: number | null;
+  confidence_available: boolean;
   explanation: string;
   evidence: string[];
+  source_valid: boolean | null;
+  needs_human_review: boolean;
+  review_reason: string | null;
+  security_review_required: boolean;
+  security_flags: string[];
+  sources: RetrievedChunk[];
+  retrieved_chunks: RetrievedChunk[];
   agent_used: boolean;
   agent_steps: number;
   cost_usd: number;
   latency_ms: number;
   error: string | null;
+  // Human-oversight authority to intervene: null until a reviewer records one.
+  decision: ReviewDecision | null;
+  decision_note: string | null;
+  decision_reviewer: string | null;
+  decided_at: string | null;
 };
 
 export type ReviewResponse = {
@@ -39,27 +68,46 @@ export type ReviewSummary = {
   model: string;
 };
 
-export type CostEstimate = {
-  avg_cost_per_requirement_usd: number;
-  source_experiment_id: string;
-  source_sample_size: number;
+// Frozen product path (GPT-5-mini + P0 + retrieved top-5 context).
+// No confidence score (the frozen prompt doesn't request one), no agent
+// fields (no agent in the final architecture).
+export type FinalReviewResponse = {
+  label: "Entailment" | "Contradiction" | "NotMentioned" | null;
+  evidence: string[];
+  explanation: string;
+  source_valid: boolean | null;
+  needs_human_review: boolean;
+  review_reason: string | null;
+  security_review_required: boolean;
+  security_flags: string[];
   model: string;
+  latency_ms: number | null;
+  input_tokens: number | null;
+  output_tokens: number | null;
+  estimated_cost_usd: number | null;
+  trace_id: string;
+  sources: RetrievedChunk[];
+  retrieved_chunks: RetrievedChunk[];
 };
 
-export type ExperimentSummary = {
-  experiment_id: string;
-  experiment_name: string;
-  model: string;
-  split: string | null;
-  sample_size: number | null;
-  accuracy: number | null;
-  macro_f1: number | null;
-  contradiction_recall: number | null;
-  contradiction_recall_ci_low: number | null;
-  contradiction_recall_ci_high: number | null;
-  joint_label_evidence_correctness: number | null;
-  total_cost_usd: number | null;
-  timestamp: string | null;
+// One row of the reconstruction-v2 final held-out TEST comparison
+// (E17/E17B), read server-side from
+// results/final/reconstruction_v2/full_test_comparison.csv - never
+// recomputed client-side.
+export type FinalTestResult = {
+  system: string;
+  n: number;
+  accuracy: number;
+  macro_f1: number;
+  joint: number;
+  entailment_recall: number;
+  contradiction_recall: number;
+  notmentioned_recall: number;
+  evidence_recall: number | null;
+  evidence_precision: number | null;
+  source_valid_quote_rate: number | null;
+  api_cost_usd: number;
+  architecture_status: "benchmark" | "final" | null;
 };
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -87,6 +135,18 @@ async function requestMultipart<T>(path: string, formData: FormData): Promise<T>
 
 export const api = {
   listHypotheses: () => request<Hypothesis[]>("/hypotheses"),
+  reviewFinal: (ndaText: string, requirement: string) =>
+    request<FinalReviewResponse>("/api/review", {
+      method: "POST",
+      body: JSON.stringify({ nda_text: ndaText, requirement }),
+    }),
+  listFinalTestComparison: () => request<FinalTestResult[]>("/experiments/e20"),
+  extractPdf: (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    return requestMultipart<{ text: string }>("/extract-pdf", formData);
+  },
+  // Batch/history adapter for the frozen product RAG path.
   createReview: (ndaText: string, hypothesisIds?: string[]) =>
     request<ReviewResponse>("/review", {
       method: "POST",
@@ -94,11 +154,9 @@ export const api = {
     }),
   getReview: (reviewId: string) => request<ReviewResponse>(`/review/${reviewId}`),
   listResults: () => request<ReviewSummary[]>("/results"),
-  listExperiments: () => request<ExperimentSummary[]>("/experiments"),
-  getCostEstimate: () => request<CostEstimate>("/cost-estimate"),
-  extractPdf: (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    return requestMultipart<{ text: string }>("/extract-pdf", formData);
-  },
+  recordDecision: (reviewId: string, itemId: number, decision: ReviewDecision, note?: string, reviewer?: string) =>
+    request<RequirementResult>(`/review/${reviewId}/items/${itemId}/decision`, {
+      method: "POST",
+      body: JSON.stringify({ decision, note: note || null, reviewer: reviewer || null }),
+    }),
 };

@@ -1,0 +1,48 @@
+{
+  "run_id": "R0_matched_clause256",
+  "config": {
+    "method": "bm25",
+    "chunk_method": "clause",
+    "chunk_size": 256,
+    "chunk_overlap": 50,
+    "embedding_model": null,
+    "top_k": 5
+  },
+  "n_documents": 423,
+  "n_cases": 4371,
+  "metrics": {
+    "n_cases": 4371,
+    "overall": {
+      "evidence_recall_at_k": 0.9048335183716099,
+      "evidence_precision": 0.05059377112308546,
+      "mrr": 0.32216890584549884
+    },
+    "entailment": {
+      "n": 3530,
+      "evidence_recall_at_k": 0.9120503394936822,
+      "evidence_precision": 0.05179281054258429,
+      "mrr": 0.33316386420829797
+    },
+    "contradiction": {
+      "n": 841,
+      "evidence_recall_at_k": 0.874541748382414,
+      "evidence_precision": 0.04556094216847198,
+      "mrr": 0.2760188428007015
+    },
+    "miss_count": 253
+  },
+  "context_size": {
+    "mean_chunks": 4.887211164493251,
+    "mean_chars": 5517.4639670555935,
+    "mean_tokens": 1037.7641272020132,
+    "median_tokens": 1051,
+    "p90_tokens": 1176,
+    "max_tokens": 1694
+  },
+  "latency_ms": {
+    "mean": 0.08063090403076986,
+    "median": 0.07754203397780657,
+    "p90": 0.1120840897783637
+  },
+  "total_build_and_query_seconds": 1.9987589169759303
+}

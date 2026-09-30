@@ -1,0 +1,19 @@
+provider: "openrouter"
+model: "google/gemini-2.5-flash-lite"
+published_input_price_per_million: 0.10
+published_output_price_per_million: 0.40
+published_cached_input_price_per_million: null
+account_tier: "pay-as-you-go"
+effective_cost_assumption_input_per_million: 0.10
+effective_cost_assumption_output_per_million: 0.40
+effective_cost_assumption_note: "No free tier for this model via OpenRouter -- effective assumption equals the published rate."
+reasoning_token_notes_if_applicable: null
+date_checked: "2026-09-26"
+source_note: "OpenRouter model page (openrouter.ai/google/gemini-2.5-flash-lite), verified via web search this phase. Matches pipeline/model_gateway.py's historical PRICING_PER_MILLION entry exactly."
+lifecycle:
+  status: "provider-specific -- NOT a blanket retirement, corrected this pass"
+  backend_used_by_ndatrace: "OpenRouter's generic chat-completions endpoint (pipeline/model_gateway.py, base_url=settings.openrouter_base_url), with NO provider pinned in code."
+  ndatrace_risk_detail: "OpenRouter serves google/gemini-2.5-flash-lite via 2 backend providers with automatic failover: Google Vertex AI and Google AI Studio (confirmed via web search 2026-09-26). Since NDATrace's OpenRouter calls never pin a provider, any given call could be routed through either backend."
+  google_ai_studio_gemini_developer_api: "Per Google's own Gemini API documentation, gemini-2.5-flash-lite is stable, NOT deprecated, with no announced shutdown date (checked 2026-09-26)."
+  google_cloud_vertex_ai: "Google Cloud separately lists Gemini 2.5 Flash-Lite retirement on Vertex AI as 2026-10-16 (~3 weeks from today, checked 2026-09-26)."
+  conclusion: "The 2026-10-16 retirement applies to the Vertex AI backend specifically, not to Gemini 2.5 Flash-Lite universally. Because NDATrace's OpenRouter calls are unpinned and could fail over to Vertex AI, there is a real but NOT CERTAIN risk that some fraction of future hosted calls hit the retiring backend after 2026-10-16 -- this is a materially different (weaker, more precise) claim than 'Gemini 2.5 Flash Lite retires 2026-10-16' stated as a blanket fact. Mitigation available if desired: pin OpenRouter's provider routing to google-ai-studio only (OpenRouter provider routing controls), which is not decided or built here."

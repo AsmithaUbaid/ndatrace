@@ -1,0 +1,916 @@
+{
+ "manifest_id": "TEST_HOSTED_v1",
+ "status": "FROZEN - permanent; never resampled",
+ "seed": 1600,
+ "sampling": "random.Random(seed).sample(sorted(cases of label by (doc,hyp)), 50) for E, C, NM in that order; no performance/difficulty/length/hypothesis-family criteria",
+ "n": 150,
+ "label_counts": {
+  "Contradiction": 50,
+  "Entailment": 50,
+  "NotMentioned": 50
+ },
+ "unique_documents": 88,
+ "test_json_sha256": "460267b56052a2dc5aead98eb35eadef9e6734d5723d37b4a9790e410f812387",
+ "cases": [
+  {
+   "case_id": "test::1::nda-2",
+   "document_id": 1,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::2::nda-2",
+   "document_id": 2,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::2::nda-7",
+   "document_id": 2,
+   "hypothesis_id": "nda-7",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::6::nda-2",
+   "document_id": 6,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::8::nda-1",
+   "document_id": 8,
+   "hypothesis_id": "nda-1",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::18::nda-17",
+   "document_id": 18,
+   "hypothesis_id": "nda-17",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::23::nda-2",
+   "document_id": 23,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::36::nda-2",
+   "document_id": 36,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::41::nda-2",
+   "document_id": 41,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::48::nda-2",
+   "document_id": 48,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::55::nda-3",
+   "document_id": 55,
+   "hypothesis_id": "nda-3",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::67::nda-2",
+   "document_id": 67,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::67::nda-7",
+   "document_id": 67,
+   "hypothesis_id": "nda-7",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::77::nda-20",
+   "document_id": 77,
+   "hypothesis_id": "nda-20",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::80::nda-7",
+   "document_id": 80,
+   "hypothesis_id": "nda-7",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::127::nda-1",
+   "document_id": 127,
+   "hypothesis_id": "nda-1",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::129::nda-2",
+   "document_id": 129,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::212::nda-2",
+   "document_id": 212,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::225::nda-2",
+   "document_id": 225,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::227::nda-1",
+   "document_id": 227,
+   "hypothesis_id": "nda-1",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::296::nda-1",
+   "document_id": 296,
+   "hypothesis_id": "nda-1",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::296::nda-2",
+   "document_id": 296,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::296::nda-7",
+   "document_id": 296,
+   "hypothesis_id": "nda-7",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::310::nda-2",
+   "document_id": 310,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::354::nda-19",
+   "document_id": 354,
+   "hypothesis_id": "nda-19",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::357::nda-1",
+   "document_id": 357,
+   "hypothesis_id": "nda-1",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::387::nda-2",
+   "document_id": 387,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::387::nda-7",
+   "document_id": 387,
+   "hypothesis_id": "nda-7",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::401::nda-2",
+   "document_id": 401,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::412::nda-2",
+   "document_id": 412,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::413::nda-3",
+   "document_id": 413,
+   "hypothesis_id": "nda-3",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::413::nda-7",
+   "document_id": 413,
+   "hypothesis_id": "nda-7",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::433::nda-2",
+   "document_id": 433,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::444::nda-2",
+   "document_id": 444,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::451::nda-2",
+   "document_id": 451,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::471::nda-2",
+   "document_id": 471,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::471::nda-7",
+   "document_id": 471,
+   "hypothesis_id": "nda-7",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::496::nda-2",
+   "document_id": 496,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::497::nda-17",
+   "document_id": 497,
+   "hypothesis_id": "nda-17",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::523::nda-19",
+   "document_id": 523,
+   "hypothesis_id": "nda-19",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::540::nda-2",
+   "document_id": 540,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::543::nda-1",
+   "document_id": 543,
+   "hypothesis_id": "nda-1",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::543::nda-2",
+   "document_id": 543,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::544::nda-1",
+   "document_id": 544,
+   "hypothesis_id": "nda-1",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::555::nda-17",
+   "document_id": 555,
+   "hypothesis_id": "nda-17",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::565::nda-20",
+   "document_id": 565,
+   "hypothesis_id": "nda-20",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::591::nda-2",
+   "document_id": 591,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::600::nda-2",
+   "document_id": 600,
+   "hypothesis_id": "nda-2",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::600::nda-7",
+   "document_id": 600,
+   "hypothesis_id": "nda-7",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::606::nda-1",
+   "document_id": 606,
+   "hypothesis_id": "nda-1",
+   "gold_label": "Contradiction"
+  },
+  {
+   "case_id": "test::2::nda-15",
+   "document_id": 2,
+   "hypothesis_id": "nda-15",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::5::nda-8",
+   "document_id": 5,
+   "hypothesis_id": "nda-8",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::6::nda-13",
+   "document_id": 6,
+   "hypothesis_id": "nda-13",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::8::nda-3",
+   "document_id": 8,
+   "hypothesis_id": "nda-3",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::11::nda-16",
+   "document_id": 11,
+   "hypothesis_id": "nda-16",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::26::nda-15",
+   "document_id": 26,
+   "hypothesis_id": "nda-15",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::30::nda-15",
+   "document_id": 30,
+   "hypothesis_id": "nda-15",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::30::nda-7",
+   "document_id": 30,
+   "hypothesis_id": "nda-7",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::40::nda-4",
+   "document_id": 40,
+   "hypothesis_id": "nda-4",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::49::nda-8",
+   "document_id": 49,
+   "hypothesis_id": "nda-8",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::50::nda-3",
+   "document_id": 50,
+   "hypothesis_id": "nda-3",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::51::nda-3",
+   "document_id": 51,
+   "hypothesis_id": "nda-3",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::58::nda-8",
+   "document_id": 58,
+   "hypothesis_id": "nda-8",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::65::nda-3",
+   "document_id": 65,
+   "hypothesis_id": "nda-3",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::65::nda-8",
+   "document_id": 65,
+   "hypothesis_id": "nda-8",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::66::nda-13",
+   "document_id": 66,
+   "hypothesis_id": "nda-13",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::67::nda-16",
+   "document_id": 67,
+   "hypothesis_id": "nda-16",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::77::nda-12",
+   "document_id": 77,
+   "hypothesis_id": "nda-12",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::78::nda-16",
+   "document_id": 78,
+   "hypothesis_id": "nda-16",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::80::nda-4",
+   "document_id": 80,
+   "hypothesis_id": "nda-4",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::99::nda-16",
+   "document_id": 99,
+   "hypothesis_id": "nda-16",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::157::nda-19",
+   "document_id": 157,
+   "hypothesis_id": "nda-19",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::157::nda-4",
+   "document_id": 157,
+   "hypothesis_id": "nda-4",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::165::nda-17",
+   "document_id": 165,
+   "hypothesis_id": "nda-17",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::190::nda-15",
+   "document_id": 190,
+   "hypothesis_id": "nda-15",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::190::nda-8",
+   "document_id": 190,
+   "hypothesis_id": "nda-8",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::296::nda-10",
+   "document_id": 296,
+   "hypothesis_id": "nda-10",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::354::nda-1",
+   "document_id": 354,
+   "hypothesis_id": "nda-1",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::357::nda-13",
+   "document_id": 357,
+   "hypothesis_id": "nda-13",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::392::nda-17",
+   "document_id": 392,
+   "hypothesis_id": "nda-17",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::400::nda-3",
+   "document_id": 400,
+   "hypothesis_id": "nda-3",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::400::nda-5",
+   "document_id": 400,
+   "hypothesis_id": "nda-5",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::476::nda-13",
+   "document_id": 476,
+   "hypothesis_id": "nda-13",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::521::nda-12",
+   "document_id": 521,
+   "hypothesis_id": "nda-12",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::521::nda-18",
+   "document_id": 521,
+   "hypothesis_id": "nda-18",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::526::nda-15",
+   "document_id": 526,
+   "hypothesis_id": "nda-15",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::539::nda-13",
+   "document_id": 539,
+   "hypothesis_id": "nda-13",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::539::nda-19",
+   "document_id": 539,
+   "hypothesis_id": "nda-19",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::539::nda-3",
+   "document_id": 539,
+   "hypothesis_id": "nda-3",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::540::nda-13",
+   "document_id": 540,
+   "hypothesis_id": "nda-13",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::542::nda-15",
+   "document_id": 542,
+   "hypothesis_id": "nda-15",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::542::nda-18",
+   "document_id": 542,
+   "hypothesis_id": "nda-18",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::543::nda-17",
+   "document_id": 543,
+   "hypothesis_id": "nda-17",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::544::nda-3",
+   "document_id": 544,
+   "hypothesis_id": "nda-3",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::546::nda-8",
+   "document_id": 546,
+   "hypothesis_id": "nda-8",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::596::nda-15",
+   "document_id": 596,
+   "hypothesis_id": "nda-15",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::600::nda-16",
+   "document_id": 600,
+   "hypothesis_id": "nda-16",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::606::nda-20",
+   "document_id": 606,
+   "hypothesis_id": "nda-20",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::606::nda-3",
+   "document_id": 606,
+   "hypothesis_id": "nda-3",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::611::nda-3",
+   "document_id": 611,
+   "hypothesis_id": "nda-3",
+   "gold_label": "Entailment"
+  },
+  {
+   "case_id": "test::8::nda-19",
+   "document_id": 8,
+   "hypothesis_id": "nda-19",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::11::nda-17",
+   "document_id": 11,
+   "hypothesis_id": "nda-17",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::22::nda-20",
+   "document_id": 22,
+   "hypothesis_id": "nda-20",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::40::nda-3",
+   "document_id": 40,
+   "hypothesis_id": "nda-3",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::42::nda-17",
+   "document_id": 42,
+   "hypothesis_id": "nda-17",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::43::nda-18",
+   "document_id": 43,
+   "hypothesis_id": "nda-18",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::49::nda-16",
+   "document_id": 49,
+   "hypothesis_id": "nda-16",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::59::nda-13",
+   "document_id": 59,
+   "hypothesis_id": "nda-13",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::59::nda-17",
+   "document_id": 59,
+   "hypothesis_id": "nda-17",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::60::nda-15",
+   "document_id": 60,
+   "hypothesis_id": "nda-15",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::65::nda-11",
+   "document_id": 65,
+   "hypothesis_id": "nda-11",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::77::nda-10",
+   "document_id": 77,
+   "hypothesis_id": "nda-10",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::80::nda-15",
+   "document_id": 80,
+   "hypothesis_id": "nda-15",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::80::nda-3",
+   "document_id": 80,
+   "hypothesis_id": "nda-3",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::84::nda-16",
+   "document_id": 84,
+   "hypothesis_id": "nda-16",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::85::nda-3",
+   "document_id": 85,
+   "hypothesis_id": "nda-3",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::90::nda-7",
+   "document_id": 90,
+   "hypothesis_id": "nda-7",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::117::nda-19",
+   "document_id": 117,
+   "hypothesis_id": "nda-19",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::138::nda-16",
+   "document_id": 138,
+   "hypothesis_id": "nda-16",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::157::nda-10",
+   "document_id": 157,
+   "hypothesis_id": "nda-10",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::157::nda-7",
+   "document_id": 157,
+   "hypothesis_id": "nda-7",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::181::nda-1",
+   "document_id": 181,
+   "hypothesis_id": "nda-1",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::218::nda-20",
+   "document_id": 218,
+   "hypothesis_id": "nda-20",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::225::nda-10",
+   "document_id": 225,
+   "hypothesis_id": "nda-10",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::289::nda-2",
+   "document_id": 289,
+   "hypothesis_id": "nda-2",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::293::nda-17",
+   "document_id": 293,
+   "hypothesis_id": "nda-17",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::301::nda-17",
+   "document_id": 301,
+   "hypothesis_id": "nda-17",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::361::nda-12",
+   "document_id": 361,
+   "hypothesis_id": "nda-12",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::387::nda-17",
+   "document_id": 387,
+   "hypothesis_id": "nda-17",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::389::nda-17",
+   "document_id": 389,
+   "hypothesis_id": "nda-17",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::392::nda-16",
+   "document_id": 392,
+   "hypothesis_id": "nda-16",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::395::nda-15",
+   "document_id": 395,
+   "hypothesis_id": "nda-15",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::395::nda-17",
+   "document_id": 395,
+   "hypothesis_id": "nda-17",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::408::nda-11",
+   "document_id": 408,
+   "hypothesis_id": "nda-11",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::444::nda-15",
+   "document_id": 444,
+   "hypothesis_id": "nda-15",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::465::nda-18",
+   "document_id": 465,
+   "hypothesis_id": "nda-18",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::476::nda-16",
+   "document_id": 476,
+   "hypothesis_id": "nda-16",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::521::nda-11",
+   "document_id": 521,
+   "hypothesis_id": "nda-11",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::521::nda-3",
+   "document_id": 521,
+   "hypothesis_id": "nda-3",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::526::nda-16",
+   "document_id": 526,
+   "hypothesis_id": "nda-16",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::526::nda-18",
+   "document_id": 526,
+   "hypothesis_id": "nda-18",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::542::nda-12",
+   "document_id": 542,
+   "hypothesis_id": "nda-12",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::565::nda-2",
+   "document_id": 565,
+   "hypothesis_id": "nda-2",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::585::nda-17",
+   "document_id": 585,
+   "hypothesis_id": "nda-17",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::585::nda-19",
+   "document_id": 585,
+   "hypothesis_id": "nda-19",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::596::nda-3",
+   "document_id": 596,
+   "hypothesis_id": "nda-3",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::596::nda-5",
+   "document_id": 596,
+   "hypothesis_id": "nda-5",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::600::nda-5",
+   "document_id": 600,
+   "hypothesis_id": "nda-5",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::600::nda-8",
+   "document_id": 600,
+   "hypothesis_id": "nda-8",
+   "gold_label": "NotMentioned"
+  },
+  {
+   "case_id": "test::611::nda-10",
+   "document_id": 611,
+   "hypothesis_id": "nda-10",
+   "gold_label": "NotMentioned"
+  }
+ ]
+}

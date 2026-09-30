@@ -2320,7 +2320,7 @@ Feedback received 2026-09-23 from Ajay Vikram Singh on the Week 3 Problem Statem
 (`PE6201_Project_Problem_Statement_Asmitha.pdf`), ahead of the 4 October final submission. This
 section records what the feedback confirmed was already working, what it flagged as gaps, and the
 concrete plan revisions each gap drove - kept here (not silently edited into earlier sections) so
-the audit trail of *why* the plan changed is preserved, matching CLAUDE.md's Decisions Log style.
+the audit trail of *why* the plan changed is preserved.
 
 ## 22.1 Confirmed already working (no plan change)
 

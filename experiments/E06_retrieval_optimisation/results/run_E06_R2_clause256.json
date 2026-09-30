@@ -1,0 +1,48 @@
+{
+  "run_id": "R2_clause256",
+  "config": {
+    "method": "dense",
+    "chunk_method": "clause",
+    "chunk_size": 256,
+    "chunk_overlap": 50,
+    "embedding_model": "all-mpnet-base-v2",
+    "top_k": 5
+  },
+  "n_documents": 423,
+  "n_cases": 4371,
+  "metrics": {
+    "n_cases": 4371,
+    "overall": {
+      "evidence_recall_at_k": 0.8703597071476271,
+      "evidence_precision": 0.05038758107966735,
+      "mrr": 0.2763824915300058
+    },
+    "entailment": {
+      "n": 3530,
+      "evidence_recall_at_k": 0.8639502675480012,
+      "evidence_precision": 0.05052580084601508,
+      "mrr": 0.2744266500839567
+    },
+    "contradiction": {
+      "n": 841,
+      "evidence_recall_at_k": 0.8972625867988535,
+      "evidence_precision": 0.049807419634712524,
+      "mrr": 0.2845919092524362
+    },
+    "miss_count": 389
+  },
+  "context_size": {
+    "mean_chunks": 4.887211164493251,
+    "mean_chars": 5356.909860443834,
+    "mean_tokens": 1004.9148936170212,
+    "median_tokens": 1015,
+    "p90_tokens": 1150,
+    "max_tokens": 1663
+  },
+  "latency_ms": {
+    "mean": 0.07248070580853706,
+    "median": 0.005917041562497616,
+    "p90": 0.023875036276876926
+  },
+  "total_build_and_query_seconds": 130.40036075003445
+}

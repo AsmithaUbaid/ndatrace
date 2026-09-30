@@ -1,0 +1,34 @@
+{
+  "trigger_verification": {
+    "triggered_count": 15,
+    "tp": 1,
+    "fp": 14,
+    "fn": 0,
+    "tn": 135,
+    "triggered_case_ids": [
+      "train::161::nda-2",
+      "train::161::nda-7",
+      "train::273::nda-1",
+      "train::316::nda-17",
+      "train::316::nda-2",
+      "train::320::nda-12",
+      "train::328::nda-1",
+      "train::328::nda-10",
+      "train::338::nda-2",
+      "train::500::nda-11",
+      "train::516::nda-1",
+      "train::518::nda-10",
+      "train::538::nda-13",
+      "train::92::nda-17",
+      "train::92::nda-20"
+    ]
+  },
+  "tool_reachability": {
+    "resolvable_cross_reference_count": 15,
+    "ranks_6_10_available_count": 15,
+    "e09_static_six_triggered_count": 1,
+    "e09_static_six_triggered_ids": [
+      "train::518::nda-10"
+    ]
+  }
+}

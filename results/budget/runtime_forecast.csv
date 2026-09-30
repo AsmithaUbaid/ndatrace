@@ -1,0 +1,13 @@
+scenario,run,cases,sec_per_case,estimated_total_sec,estimated_hours
+BASE-CASE (measured),"A1 full-context, local Llama",2091,7.68,16069.0,4.46
+BASE-CASE (measured),"A2 RAG, local Llama",2091,4.53,9479.0,2.63
+BASE-CASE (measured),"A3 RAG+agent (measured, already includes historical escalation mix), local Llama",2091,9.19,19225.0,5.34
+BEST-CASE,"A3 RAG+agent local, escalation_rate=0.3, extra_turn_factor=1.0",2091,4.53,9479.0,2.63
+BASE-CASE,"A3 RAG+agent local, escalation_rate=0.45, extra_turn_factor=1.3",2091,5.76,12039.0,3.34
+WORST-CASE,"A3 RAG+agent local, escalation_rate=0.6, extra_turn_factor=1.8",2091,8.89,18580.0,5.16
+E15 subsample (measured per-case),"A1 full-context, hosted Gemini",300,1.11,333.0,0.093
+E15 subsample (measured per-case),"A1 full-context, hosted Gemini",500,1.11,556.0,0.154
+E15 subsample (measured per-case),"A2 RAG, hosted Gemini",300,1.03,310.0,0.086
+E15 subsample (measured per-case),"A2 RAG, hosted Gemini",500,1.03,516.0,0.143
+E15 subsample (measured per-case),"A3 RAG+agent, hosted Gemini",300,2.67,801.0,0.223
+E15 subsample (measured per-case),"A3 RAG+agent, hosted Gemini",500,2.67,1336.0,0.371

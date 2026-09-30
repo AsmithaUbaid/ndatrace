@@ -1,195 +1,101 @@
 # NDATrace Architecture
 
-This describes the **currently implemented** system, verified directly against
-`pipeline/orchestrator.py`, `backend/routes/*.py`, and `backend/app.py` — not an
-aspirational design. See `docs/decisions.md` for why each component looks the way it does, and
-`docs/evaluation_protocol.md` for what evidence backs the architecture choice.
+This describes the interactive prototype runtime, verified directly against
+`pipeline/frozen_rag.py`, `pipeline/final_review.py`, and `backend/routes/review.py`. Both the
+single-requirement endpoint (`POST /api/review`) and the batch UI endpoint (`POST /review`) use the
+same frozen E20 RAG pipeline. For quality-reference conclusions and rejected alternatives, see
+`docs/architecture_decisions/INDEX.md`.
 
-## 1. System overview
-
-Synchronous modular monolith:
-
-- **Pipeline** (`pipeline/`): parser → chunker → embedder → retriever → reranker → rule-baseline →
-  classifier → confidence/routing → selective agent, orchestrated by `pipeline/orchestrator.py`.
-- **Backend** (`backend/`): FastAPI app (`backend/app.py`), Pydantic request/response models
-  (`backend/models.py`), SQLite persistence (`backend/database.py`) for live product usage, plus
-  read-only access to offline experiment result files.
-- **Frontend** (`frontend/`): Next.js + React + TypeScript client.
-- **Persistence**: SQLite for live reviews (product usage), append-only JSONL under `results/runs/`
-  for experiment records (never overwritten — see `docs/evaluation_protocol.md`).
-- **Vector search**: FAISS-free — retrieval is done with in-process sentence-transformer embeddings
-  and cosine similarity (`pipeline/retriever.py`, `pipeline/embedder.py`), no external vector DB.
-
-## 2. Request flow (`POST /review`, `backend/routes/review.py`)
+## 1. Request flow (`POST /api/review`, `backend/routes/review.py`)
 
 ```text
-POST /review  { nda_text, hypothesis_ids? }
-  |
-load_hypotheses() -- all 17 fixed ContractNLI hypotheses, or the requested subset
-  |
-ModelGateway() -- fails fast (503) if no provider is configured
-  |
-review_document(doc_text, hypotheses, gateway)   [pipeline/orchestrator.py]
-  |  one Retriever built once, reused across every hypothesis for this document
-  |  each hypothesis processed independently (see "Per-hypothesis error isolation" below)
-  |
-  for each hypothesis --> review_requirement(...)   [see Section 3]
-  |
-database.save_review(...)  -- persisted to SQLite
-  |
-ReviewResponse  { review_id, results: [...], total_cost_usd, total_latency_ms }
+NDA + requirement
+        |
+input validation
+        |
+clause-aware chunking (256 tokens; chunk boundaries follow clause breaks, no token overlap —
+the `chunk_overlap=50` setting exists in config but is not read by the frozen chunker)
+        |
+BM25 top-20 -> ms-marco-MiniLM-L-12-v2 rerank -> top-5 context
+        |
+openai/gpt-5-mini + frozen GPT-P0 prompt   [pipeline/final_review.py]
+        |
+structured output parser   [evaluation/structured_output.py]
+        |
+runtime evidence-source validator v2   [pipeline/evidence_validator.py]
+        |
+reviewer-facing result   { label, evidence, source clauses, source_valid, needs_human_review }
+        |
+human final decision
 ```
 
-## 3. Per-requirement flow (`review_requirement()`, the actual classification+routing logic)
+The classifier receives only the retrieved top-five context, never the full NDA. There is no
+agent, routing policy, rule boost, or silent FULL fallback. GPT-P0 requests only
+`{label, evidence}`; there is no model-reported confidence, so none is fabricated. The batch API
+retains its historical confidence field as `null` with `confidence_available: false`.
 
-This is the real, current implementation — including a detail that is easy to miss from a diagram
-alone: **the system makes two classifier calls per requirement before deciding whether to invoke
-the agent**, not one.
+## 2. Product runtime decision versus the quality-reference result
 
-```text
-Document + one hypothesis
-        |
-   Sentence chunking (pipeline/chunker.py)
-        |
-   Dense retrieval (embedder + cosine similarity, top-20)
-        |
-   Cross-encoder reranking (ms-marco-MiniLM-L-12-v2, keep top-7)
-        |
-        +-- rule_result = classify_by_keywords(hypothesis, doc_text)   [pipeline/rule_baseline.py]
-        |
-   +----+----------------------------------------------------------+
-   |                                                                 |
-   RULE-BOOSTED PATH                                       PLAIN PATH (no rule fusion)
-   retriever.query_rerank_and_boost()                      retriever.query_and_rerank()
-   (rule match RRF-fused into the ranking                  (same retrieve+rerank, but the rule's
-    when it fires - docs/decisions.md ADR-002)               matched chunk is NOT boosted in)
-        |                                                        |
-   classify() --> rag_result                                classify() --> plain_result
-   (THIS IS THE PRODUCTION ANSWER                            (used ONLY to compute the routing
-    if the case is accepted)                                  signal below - docs/decisions.md
-        |                                                      ADR-006)
-        +--------------------+------------------------------------+
-                              |
-             route(self_confidence=rag_result.confidence,
-                   rule_agrees=(rule_result == plain_result.label))
-                   [pipeline/confidence.py]
-                              |
-              +---------------+----------------+
-              |                                 |
-           ACCEPT                            REVIEW
-              |                                 |
-     return rag_result as final       run_agent(retriever, hypothesis,
-     (label, confidence, evidence,      initial_chunks=rag_result's chunks,
-      explanation all from the          gateway) [pipeline/agent.py]
-      rule-boosted classification)             |
-                                       bounded ReAct loop over 5 tools
-                                       (pipeline/agent_tools.py), step/
-                                       time/duplicate-call limits
-                                                |
-                                       agent's final label/confidence/
-                                       evidence/explanation returned
-                                       instead of rag_result's
-```
+NDATrace's interactive prototype uses the frozen top-5 RAG pipeline because it offers a
+bounded-context architecture, lower input-token usage, and clause-level retrieval suitable for
+interactive NDA review.
 
-**Why two classifier calls exist**: an earlier version compared the rule's label against
-`rag_result` directly (the rule-boosted classification). That comparison is circular — the rule's
-own matched chunk had already been fused into `rag_result`'s context, so "agreement" partly
-measured whether the LLM noticed the chunk the rule handed it, not independent corroboration
-(`docs/decisions.md` ADR-006, code-audit finding C-1). The fix classifies a second, plain
-(non-rule-boosted) context purely to compute the routing signal, while still returning the
-rule-boosted `rag_result` as the actual answer whenever the case is accepted. Real, measured cost on
-the full 2,091-case official test set: RAG (accepted cases, two classifier calls) $0.000152/case;
-RAG+agent (REVIEW-routed cases also pay for the agent's own tool calls) $0.000405/case — about 2.7x
-plain RAG, not merely a rough estimate. See `docs/decisions.md`'s routing-independence fix entry for
-the full breakdown.
+FULL-context GPT remains the strongest measured quality-reference configuration on the ContractNLI
+evaluation dataset's TEST split, achieving higher Joint evidence-grounded correctness. Therefore
+the prototype runtime choice is an engineering/productization decision, not a claim that RAG
+achieved higher quality.
 
-## 4. Rule-baseline logic (`pipeline/rule_baseline.py`)
+- **Full-context is the strongest measured quality-reference configuration.** On the full 2,091-case official
+  ContractNLI TEST set, GPT-5-mini + P0 + FULL scored accuracy 77.6%, macro-F1 0.727, joint
+  label+evidence correctness 74.6%, Contradiction recall 75.5% (n=2,091; see
+  `docs/experiment_registry.md`'s E17/E17B rows).
+- **RAG is the interactive prototype runtime.** On the matched development-sample
+  comparison (E13), retrieval reduced input tokens substantially but did not demonstrate a quality
+  advantage over full context. **E20 repeated this as a same-population, all-2,091-TEST-case
+  comparison with paired significance testing**: RAG's classification accuracy was statistically
+  indistinguishable from FULL (76.8% vs 77.6%, McNemar p=0.217), but FULL's Joint (evidence-
+  grounded) success was significantly higher (74.6% vs 72.5%, p=0.0047) — a real, not noise-level,
+  gap. RAG cut input tokens 50.4% and API cost 16.8% on the same run. It is the
+  **quality-reference-losing but production-oriented** runtime: bounded context cost regardless of
+  document length, and reusable per-document retrieval indexing across the 17 requirement checks —
+  a scaling argument this dataset (median 1,836 / max 7,861 TEST tokens) is too short to itself
+  validate against real 50–100 page contracts. Full record: ADR-012,
+  `docs/architecture_decisions/INDEX.md`.
+- **The selective agent was evaluated but did not demonstrate useful tool-use benefit and was not
+  selected.** Net effect was small and statistically inconclusive across every sample tested.
+- **E15 did not establish a sufficiently effective general selective-routing policy.** Every
+  routing signal tested either left a large share of failures unreviewed or required an
+  unacceptable review workload; no ACCEPT/REVIEW or ACCEPT/ABSTAIN policy is active in this path.
+  Automatic uncertainty routing was evaluated but not adopted because the tested signal did not
+  reliably isolate errors. The prototype escalates deterministic/security failures (parse errors,
+  invalid labels, unsupported quotes, E22's prompt-injection guard) via the `security_review_required`
+  flag, but it cannot automatically detect every semantically wrong verdict. Human review therefore
+  remains mandatory on every case, not just flagged ones.
+- **The human reviewer remains the final authority.** This system produces a checkable label plus
+  cited evidence for a reviewer to confirm or overrule — it does not auto-approve or auto-reject
+  an NDA.
+- **The system is evidence-grounded but not prompt-injection-hardened.** The evidence validator
+  confirms a quoted string came from the source document; it does not confirm the document's
+  content is trustworthy. A disclosed injection limitation is recorded in
+  `docs/experiment_registry.md`'s E16 and E21 rows.
 
-Deterministic keyword/phrase matching per hypothesis, zero LLM cost. Used in three distinct roles
-in the current system, not just as a standalone baseline architecture:
+## 3. Final held-out TEST metrics (n=2,091, one-shot, official TEST split)
 
-1. **Standalone comparison point** — the "Rule" row in every architecture comparison table.
-2. **Retrieval booster** — its matched chunk (when it fires) is fused into the RAG retrieval
-   ranking via Reciprocal Rank Fusion (`docs/decisions.md` ADR-002, round 7).
-3. **Routing signal input** — its label is compared against the plain (non-boosted) classification
-   to decide ACCEPT vs. REVIEW (`pipeline/confidence.py`).
+| System | Accuracy | Macro-F1 | Joint (label+evidence) | Contradiction recall |
+|---|---:|---:|---:|---:|
+| **GPT-5-mini + P0 + FULL (quality reference)** | **77.6%** | **0.727** | **74.6%** | **75.5%** |
 
-## 5. Evidence handling
+Full breakdown, comparators (rule baseline, local Qwen), and provenance: `results/final/README.md`,
+`docs/experiment_registry.md` (E17/E17B).
 
-- Retrieved chunks are joined into a single context string passed to the classifier
-  (`" ".join(r.chunk.text for r in retrieved)`); the classifier's returned `evidence` field is
-  meant to be a verbatim quote from that context, checked (not silently trusted) by
-  `pipeline/evidence_validator.py` for substring match — catches hallucinated/paraphrased
-  citations.
-- For the joint label+evidence correctness metric (used only in offline experiment scripts, not in
-  the live backend), the retrieved chunks are mapped back to ContractNLI's own gold span indices
-  via `evaluation/scorer.py`'s `map_chunks_to_gold_span_indices`. **This mapping was not being
-  populated at all in `scripts/run_final_test_evaluation.py` until it was found and fixed** — see
-  `docs/decisions.md` ADR-010 for the full bug writeup; it does not affect the live `/review`
-  endpoint, only offline evaluation scripts.
+A same-population RAG comparator (frozen `retrieval_v1` top-5, identical model/prompt/evaluator)
+was also run on the full TEST split (E20) for a paired statistical comparison — FULL's Joint
+advantage held and is statistically significant there too. The interactive prototype nevertheless
+uses that unchanged RAG configuration for the product reasons in §2; see ADR-012 for the record.
 
-## 6. Known implementation files
+## 4. Batch and single-requirement entry points
 
-| Concern | File |
-|---|---|
-| Chunking | `pipeline/chunker.py` |
-| Embedding | `pipeline/embedder.py` |
-| Retrieval (dense, reranked, rule-boosted) | `pipeline/retriever.py`, `pipeline/reranker.py`, `pipeline/sparse_retriever.py` (BM25, not adopted) |
-| Rule baseline | `pipeline/rule_baseline.py` |
-| Classification | `pipeline/classifier.py` |
-| Evidence validation | `pipeline/evidence_validator.py` |
-| Confidence/routing | `pipeline/confidence.py` |
-| Selective agent | `pipeline/agent.py`, `pipeline/agent_tools.py` |
-| Per-requirement + per-document orchestration | `pipeline/orchestrator.py` |
-| Model access (hosted + local) | `pipeline/model_gateway.py` |
-| FastAPI app + routes | `backend/app.py`, `backend/routes/review.py`, `backend/routes/results.py`, `backend/routes/experiments.py` |
-| SQLite persistence | `backend/database.py` |
-
-## 7. Architecture concerns / open questions
-
-Documented plainly, not fixed as part of this cleanup — see `docs/decisions.md` for full context
-on each:
-
-- **The second classification call for routing independence roughly doubles LLM cost** for every
-  accepted case, and triples it for REVIEW-routed cases once the agent's calls are added. This was
-  a deliberate trade for methodological correctness (ADR-006), not an oversight, but it is a real,
-  ongoing cost the current design pays.
-- **The routing signal has limited predictive power.** Best AUROC measured across every signal
-  tried (self-confidence, retrieval score, retrieval margin, rule-agreement) is 0.657–0.660 — short
-  of the 0.7 target that would have justified hard abstention (ADR-005). The entire ACCEPT/REVIEW
-  split, and therefore the entire selective-agent architecture, rests on this imperfect signal.
-- **The selective agent's benefit is statistically inconclusive, and the full-scale hosted test-set
-  result actually points the opposite direction from the dev-sample rationale.** McNemar's test
-  never reaches significance in any sample tested (dev: p=0.51; hosted 500-case: p=0.058; hosted
-  full 2,091-case: p=0.088 — recomputed in `notebooks/07_selective_agent_
-  experiments.ipynb`, where regression now numerically exceeds recovery). See ADR-007's later
-  update for the full disclosure.
-- **Full-context remains competitive, and on the hosted full test-set is the single
-  highest-accuracy architecture measured (81.2%).** It was excluded from production on a
-  scalability *hypothesis* (documents will get longer/noisier in real use), not because it
-  underperformed on any data collected so far. See the long-document stress test proposal below.
-- **Full-context's advantage is not universal**: on local Llama 3.2 3B, full-context (49.2%)
-  actually underperforms the zero-cost rule baseline (57.6%) — a real, measured finding that a
-  weaker model does not benefit from full-context the way the hosted model does.
-- **Long-document scalability requires validation.** No experiment in this repository has tested
-  any architecture on documents longer than ContractNLI's own NDAs (median ~2,300 tokens). The
-  central design argument for RAG over full-context depends entirely on an assumption about
-  longer-document behavior that has not been tested.
-
-## 8. Proposed future experiment: long-document stress test
-
-**Status: PROPOSED — NOT YET RUN.** No results exist for this; nothing below should be read as a
-finding.
-
-**Purpose:** determine whether RAG (with or without the agent) is actually justified over
-full-context once documents get longer than this dataset's short, curated NDAs — the open
-scalability hypothesis noted above.
-
-**Method:** take existing test-split documents with known gold labels/evidence, and construct
-controlled-length variants (1x original, 2x, 4x, 8x) by appending irrelevant but realistic
-contractual boilerplate sections, while preserving the original evidence spans and labels exactly.
-Run Full-context, RAG, and RAG+agent against each length tier.
-
-**Metrics:** accuracy, macro-F1, Contradiction recall, joint label+evidence correctness, input
-token count, cost, p50 latency, p95 latency — tracked per length tier to see where (if anywhere)
-full-context's cost/accuracy trade-off actually crosses over against RAG's.
+`POST /api/review` reviews one free-text requirement. `POST /review` reuses one BM25 index to review
+any selected subset of the 17 standard requirements and persists the results for `/history`.
+Both call `pipeline/final_review.py`; neither calls `pipeline/orchestrator.py`, the agent, or a
+routing policy. The older agent code remains only for historical experiment reproducibility.

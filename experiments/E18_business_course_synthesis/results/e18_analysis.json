@@ -1,0 +1,579 @@
+{
+ "majority_baseline_TEST": {
+  "rule": "always predict Entailment, empty evidence",
+  "test_label_counts": {
+   "Entailment": 968,
+   "Contradiction": 220,
+   "NotMentioned": 903
+  },
+  "n": 2091,
+  "accuracy": 0.46293639406982307,
+  "macro_f1": 0.2109621880788929,
+  "recall": {
+   "Entailment": 1.0,
+   "Contradiction": 0.0,
+   "NotMentioned": 0.0
+  },
+  "joint_success": 0.0,
+  "note": "descriptive extra baseline; does not modify B01/rule/Qwen/GPT results"
+ },
+ "agent_token_economics": {
+  "B_repeated_tokens_per_turn": 1986,
+  "B_components": {
+   "agent_control_prompt_tokens": 510,
+   "resent_top5_context_tokens_representative": 1476
+  },
+  "D_new_tokens_per_turn": 1000.0,
+  "D_source": "APPROXIMATION: E10's hard_limits.max_cumulative_retrieved_tokens (2000) / max_tool_calls (2). No real NDATrace agent trace made ANY tool call (all 15 E11 traces: agent_steps=1, stop_reason='final') so an empirical multi-step D cannot be measured from this project's own data.",
+  "observed_agent_steps_in_E11": [
+   1
+  ],
+  "n_traces": 15,
+  "max_agent_steps_configured": 3,
+  "max_tool_calls_configured": 2
+ },
+ "oracle_ceiling": {
+  "oracle_gold_evidence_local_qwen": {
+   "macro_f1": 0.6381,
+   "contradiction_recall": 0.3
+  },
+  "oracle_gold_evidence_gpt5mini": {
+   "macro_f1": 0.9057,
+   "contradiction_recall": 0.82
+  },
+  "real_context_full_gpt_DEV": {
+   "macro_f1": 0.8339702887865749,
+   "joint": 0.7733333333333333
+  },
+  "real_context_full_gpt_TEST_sample_n150": {
+   "macro_f1": 0.7773549447968052,
+   "joint": 0.7666666666666667
+  },
+  "real_context_full_gpt_TEST_FULL_n2091": {
+   "macro_f1": 0.7270249699156156,
+   "joint": 0.7460545193687231,
+   "source": "E17B merged full-population result (primary)"
+  },
+  "reading": "Qwen was weak even WITH gold evidence (macro-F1 0.638 Oracle vs GPT 0.906 Oracle) -> the E00B-era finding that model reasoning, not retrieval, was the dominant bottleneck for Qwen. GPT substantially outperformed Qwen and moved much closer to the Oracle reasoning ceiling (0.906), but a meaningful gap remained (full TEST macro-F1 0.727 vs Oracle 0.906). For final GPT Contradiction failures, interpretation was the dominant observed failure mode: 38 of 50 evidence-bearing Contradiction misses (full TEST, n=220) quoted text overlapping the annotated gold evidence but still predicted the wrong label -- missed-provision and evidence failures still exist elsewhere (E17B failure taxonomy). Oracle accuracy != achievable production accuracy (no retrieval/full-context system gets literally gold evidence)."
+ },
+ "full_vs_rag_tokens": {
+  "overall": {
+   "FULL_mean_input_tokens": 2455.1666666666665,
+   "RAG_mean_input_tokens": 1138.9266666666667,
+   "FULL_joint": 0.7733333333333333,
+   "RAG_joint": 0.7533333333333333,
+   "outcome": "FULL MATERIALLY BETTER (frozen E13 rule)"
+  },
+  "by_length_tercile": {
+   "short": {
+    "n": 50,
+    "chars_min": 2270,
+    "chars_max": 7059,
+    "full_mean_tokens": 1257.92,
+    "rag_mean_tokens": 1066.02,
+    "token_saving": 191.9000000000001,
+    "pct_saving": 0.15255342152124152
+   },
+   "medium": {
+    "n": 50,
+    "chars_min": 7059,
+    "chars_max": 13609,
+    "full_mean_tokens": 2164.44,
+    "rag_mean_tokens": 1149.74,
+    "token_saving": 1014.7,
+    "pct_saving": 0.4688048640756962
+   },
+   "long": {
+    "n": 50,
+    "chars_min": 13609,
+    "chars_max": 32359,
+    "full_mean_tokens": 3943.14,
+    "rag_mean_tokens": 1201.02,
+    "token_saving": 2742.12,
+    "pct_saving": 0.695415328900318
+   }
+  }
+ },
+ "cost_to_serve": {
+  "C_AI_measured": {
+   "gpt": 0.0020229340028694405,
+   "qwen_api_cost": 0.0,
+   "qwen_note": "API cost = $0; LOCAL COMPUTE/TIME IS NOT MONETIZED (7.13h for 2091 cases on the dev laptop) -- not zero real economic cost",
+   "rule": 0.0
+  },
+  "p_safe_measured(=joint_success)": {
+   "gpt_TEST_FULL_2091(primary)": 0.7460545193687231,
+   "qwen_TEST_full": 0.39693926351028214,
+   "rule_TEST_full": 0.5007173601147776,
+   "gpt_TEST_balanced_150(historical,_not_used_as_p_safe)": 0.7666666666666667
+  },
+  "human_review_cost_scenarios_usd_per_case": {
+   "1min_at_$20/hr": 0.3333,
+   "1min_at_$40/hr": 0.6667,
+   "1min_at_$75/hr": 1.25,
+   "3min_at_$20/hr": 1.0,
+   "3min_at_$40/hr": 2.0,
+   "3min_at_$75/hr": 3.75,
+   "5min_at_$20/hr": 1.6667,
+   "5min_at_$40/hr": 3.3333,
+   "5min_at_$75/hr": 6.25,
+   "10min_at_$20/hr": 3.3333,
+   "10min_at_$40/hr": 6.6667,
+   "10min_at_$75/hr": 12.5
+  },
+  "human_review_cost_disclaimer": "ILLUSTRATIVE SCENARIO ASSUMPTION -- no NDATrace/course source specifies a real reviewer hourly rate or review time",
+  "cost_to_serve_grid_sample": [
+   {
+    "system": "hosted_GPT",
+    "C_AI": 0.0020229340028694405,
+    "p_safe(joint)": 0.7460545193687231,
+    "human_review_scenario": "1min_at_$20/hr",
+    "C_H": 0.3333,
+    "V": 100,
+    "fixed_cost_scenario": "none",
+    "F": 0.0,
+    "C_month": 8.666296269727402,
+    "cost_per_1000": 86.66296269727403
+   },
+   {
+    "system": "hosted_GPT",
+    "C_AI": 0.0020229340028694405,
+    "p_safe(joint)": 0.7460545193687231,
+    "human_review_scenario": "1min_at_$20/hr",
+    "C_H": 0.3333,
+    "V": 100,
+    "fixed_cost_scenario": "illustrative_small_saas",
+    "F": 500.0,
+    "C_month": 508.6662962697274,
+    "cost_per_1000": 86.66296269727403
+   },
+   {
+    "system": "hosted_GPT",
+    "C_AI": 0.0020229340028694405,
+    "p_safe(joint)": 0.7460545193687231,
+    "human_review_scenario": "1min_at_$20/hr",
+    "C_H": 0.3333,
+    "V": 1000,
+    "fixed_cost_scenario": "none",
+    "F": 0.0,
+    "C_month": 86.66296269727403,
+    "cost_per_1000": 86.66296269727403
+   },
+   {
+    "system": "hosted_GPT",
+    "C_AI": 0.0020229340028694405,
+    "p_safe(joint)": 0.7460545193687231,
+    "human_review_scenario": "1min_at_$20/hr",
+    "C_H": 0.3333,
+    "V": 1000,
+    "fixed_cost_scenario": "illustrative_small_saas",
+    "F": 500.0,
+    "C_month": 586.662962697274,
+    "cost_per_1000": 86.66296269727403
+   },
+   {
+    "system": "hosted_GPT",
+    "C_AI": 0.0020229340028694405,
+    "p_safe(joint)": 0.7460545193687231,
+    "human_review_scenario": "1min_at_$20/hr",
+    "C_H": 0.3333,
+    "V": 8000,
+    "fixed_cost_scenario": "none",
+    "F": 0.0,
+    "C_month": 693.3037015781922,
+    "cost_per_1000": 86.66296269727403
+   },
+   {
+    "system": "hosted_GPT",
+    "C_AI": 0.0020229340028694405,
+    "p_safe(joint)": 0.7460545193687231,
+    "human_review_scenario": "1min_at_$20/hr",
+    "C_H": 0.3333,
+    "V": 8000,
+    "fixed_cost_scenario": "illustrative_small_saas",
+    "F": 500.0,
+    "C_month": 1193.3037015781922,
+    "cost_per_1000": 86.66296269727403
+   },
+   {
+    "system": "hosted_GPT",
+    "C_AI": 0.0020229340028694405,
+    "p_safe(joint)": 0.7460545193687231,
+    "human_review_scenario": "1min_at_$40/hr",
+    "C_H": 0.6667,
+    "V": 100,
+    "fixed_cost_scenario": "none",
+    "F": 0.0,
+    "C_month": 17.13283859397417,
+    "cost_per_1000": 171.3283859397417
+   },
+   {
+    "system": "hosted_GPT",
+    "C_AI": 0.0020229340028694405,
+    "p_safe(joint)": 0.7460545193687231,
+    "human_review_scenario": "1min_at_$40/hr",
+    "C_H": 0.6667,
+    "V": 100,
+    "fixed_cost_scenario": "illustrative_small_saas",
+    "F": 500.0,
+    "C_month": 517.1328385939742,
+    "cost_per_1000": 171.3283859397417
+   },
+   {
+    "system": "hosted_GPT",
+    "C_AI": 0.0020229340028694405,
+    "p_safe(joint)": 0.7460545193687231,
+    "human_review_scenario": "1min_at_$40/hr",
+    "C_H": 0.6667,
+    "V": 1000,
+    "fixed_cost_scenario": "none",
+    "F": 0.0,
+    "C_month": 171.3283859397417,
+    "cost_per_1000": 171.3283859397417
+   },
+   {
+    "system": "hosted_GPT",
+    "C_AI": 0.0020229340028694405,
+    "p_safe(joint)": 0.7460545193687231,
+    "human_review_scenario": "1min_at_$40/hr",
+    "C_H": 0.6667,
+    "V": 1000,
+    "fixed_cost_scenario": "illustrative_small_saas",
+    "F": 500.0,
+    "C_month": 671.3283859397417,
+    "cost_per_1000": 171.3283859397417
+   },
+   {
+    "system": "hosted_GPT",
+    "C_AI": 0.0020229340028694405,
+    "p_safe(joint)": 0.7460545193687231,
+    "human_review_scenario": "1min_at_$40/hr",
+    "C_H": 0.6667,
+    "V": 8000,
+    "fixed_cost_scenario": "none",
+    "F": 0.0,
+    "C_month": 1370.6270875179337,
+    "cost_per_1000": 171.3283859397417
+   },
+   {
+    "system": "hosted_GPT",
+    "C_AI": 0.0020229340028694405,
+    "p_safe(joint)": 0.7460545193687231,
+    "human_review_scenario": "1min_at_$40/hr",
+    "C_H": 0.6667,
+    "V": 8000,
+    "fixed_cost_scenario": "illustrative_small_saas",
+    "F": 500.0,
+    "C_month": 1870.6270875179337,
+    "cost_per_1000": 171.3283859397417
+   }
+  ],
+  "cost_to_serve_grid_size": 216,
+  "sensitivity_per_1000_vs_p_safe": {
+   "C_H_scenario": "5min_at_$40/hr",
+   "C_H": 3.3333,
+   "curves": {
+    "hosted_GPT (C_AI=0.002023)": [
+     3335.3229340028693,
+     3168.6579340028693,
+     3001.9929340028693,
+     2835.3279340028694,
+     2668.6629340028694,
+     2501.9979340028694,
+     2335.3329340028695,
+     2168.6679340028695,
+     2002.0029340028693,
+     1835.3379340028696,
+     1668.6729340028694,
+     1502.0079340028694,
+     1335.3429340028695,
+     1168.6779340028695,
+     1002.0129340028697,
+     835.3479340028695,
+     668.6829340028693,
+     502.01793400286954,
+     335.35293400286935,
+     168.68793400286958,
+     2.0229340028694405
+    ],
+    "local_Qwen (C_AI=0)": [
+     3333.2999999999997,
+     3166.6349999999998,
+     2999.97,
+     2833.305,
+     2666.6400000000003,
+     2499.975,
+     2333.31,
+     2166.645,
+     1999.9799999999998,
+     1833.315,
+     1666.6499999999999,
+     1499.985,
+     1333.3200000000002,
+     1166.655,
+     999.9900000000001,
+     833.3249999999999,
+     666.6599999999999,
+     499.99500000000006,
+     333.3299999999999,
+     166.66500000000013,
+     0.0
+    ],
+    "manual_only (p_safe=0 by definition, cost=C_H every case)": [
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997,
+     3333.2999999999997
+    ]
+   },
+   "p_axis": [
+    0.0,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+   ]
+  },
+  "break_even": {
+   "Qwen_vs_GPT": {
+    "E_target_allin_cost_gpt": 0.8484994045911046,
+    "C_alt_qwen_AI_cost": 0.0,
+    "p_BE_qwen_needs": 0.7454476330989996,
+    "qwen_actual_p": 0.39693926351028214,
+    "meets_breakeven": false
+   },
+   "AI_plus_human_vs_manual_only": {
+    "manual_only_cost_per_case": 3.3333,
+    "gpt_allin_cost_per_case": 0.8484994045911046,
+    "gpt_cheaper_than_manual": true,
+    "p_BE_for_gpt_to_beat_manual": 0.0006068862697234945
+   }
+  }
+ },
+ "routing_safety": {
+  "source": "E15 fresh DEV_ROUTING_v1 validation (n=138)",
+  "provisional_targets": {
+   "review_rate<=": 0.4,
+   "residual_joint_error<": 0.1,
+   "note": "inherited/provisional project targets, NOT a measured enterprise SLA"
+  },
+  "policies": {
+   "R0": {
+    "review_rate": 0.0,
+    "automation_coverage": 1.0,
+    "failure_capture": 0.0,
+    "residual_joint_error": 0.2898550724637681,
+    "selective_joint_success": 0.7101449275362319,
+    "false_review_rate": 0.0,
+    "safe_automation_rate": 0.7101449275362319,
+    "unsafe_automation_rate": 0.2898550724637681,
+    "human_review_rate": 0.0,
+    "sums_to_1": 1.0,
+    "silent_failure_rate": 0.2898550724637681,
+    "unsafe_non_abstention_rate": 0.2898550724637681
+   },
+   "R1": {
+    "review_rate": 0.043478260869565216,
+    "automation_coverage": 0.9565217391304348,
+    "failure_capture": 0.125,
+    "residual_joint_error": 0.26515151515151514,
+    "selective_joint_success": 0.7348484848484849,
+    "false_review_rate": 0.01020408163265306,
+    "safe_automation_rate": 0.7028985507246377,
+    "unsafe_automation_rate": 0.2536231884057971,
+    "human_review_rate": 0.043478260869565216,
+    "sums_to_1": 1.0,
+    "silent_failure_rate": 0.2536231884057971,
+    "unsafe_non_abstention_rate": 0.26515151515151514
+   },
+   "R2": {
+    "review_rate": 0.21014492753623187,
+    "automation_coverage": 0.7898550724637681,
+    "failure_capture": 0.375,
+    "residual_joint_error": 0.22935779816513763,
+    "selective_joint_success": 0.7706422018348624,
+    "false_review_rate": 0.14285714285714285,
+    "safe_automation_rate": 0.6086956521739131,
+    "unsafe_automation_rate": 0.18115942028985507,
+    "human_review_rate": 0.21014492753623187,
+    "sums_to_1": 1.0,
+    "silent_failure_rate": 0.18115942028985507,
+    "unsafe_non_abstention_rate": 0.22935779816513763
+   },
+   "R3": {
+    "review_rate": 0.5144927536231884,
+    "automation_coverage": 0.4855072463768116,
+    "failure_capture": 0.825,
+    "residual_joint_error": 0.1044776119402985,
+    "selective_joint_success": 0.8955223880597015,
+    "false_review_rate": 0.3877551020408163,
+    "safe_automation_rate": 0.43478260869565216,
+    "unsafe_automation_rate": 0.050724637681159424,
+    "human_review_rate": 0.5144927536231884,
+    "sums_to_1": 1.0,
+    "silent_failure_rate": 0.050724637681159424,
+    "unsafe_non_abstention_rate": 0.1044776119402985
+   }
+  },
+  "conclusion": "E15 demonstrated that the deterministic observable runtime signals tried (parse validity, evidence source-validity, label/evidence consistency, keyword-rule agreement) were not sufficient to reliably detect confident reasoning errors: R0 (no routing) leaves 29.0% silent failure; R3 (best-performing candidate) needed 51.3% human review to bring residual error to 10.4%, still missing the <10% target, and no candidate entered the target region (review<=40% AND residual<10%)."
+ },
+ "robustness_summary": {
+  "clean_joint": 0.85,
+  "attack_joint": 0.75,
+  "attack_induced_joint_regressions": 2,
+  "injection_attack_success_rate": 0.36363636363636365,
+  "injection_attack_successes": 4,
+  "n_injection_pairs": 11,
+  "clean_source_valid_rate": 0.9666666666666667,
+  "attack_source_valid_rate": 1.0,
+  "decision": "B",
+  "n_pairs": 20,
+  "warning": "source-valid evidence != trusted instruction source (do not exaggerate an n=20-pair finding)"
+ },
+ "failure_taxonomy": {
+  "buckets_full_2091(primary)": {
+   "reasoning_failure_or_missed_provision": 48,
+   "correct_label_evidence_mismatch": 43,
+   "source_validation_issue": 36,
+   "missed_provision": 39,
+   "reasoning_failure": 42,
+   "notmentioned_over_inference": 323
+  },
+  "total_full_2091": 531,
+  "contradiction_full_2091(primary)": {
+   "correct": [
+    166,
+    220
+   ],
+   "recall": 0.7545454545454545,
+   "joint": [
+    158,
+    220
+   ],
+   "C_to_E": 50,
+   "C_to_NM": 4,
+   "invalid": 0,
+   "note": "At full TEST scale, many remaining Contradiction errors were interpretation failures rather than evidence-access failures: 38 of 50 evidence-bearing Contradiction misses quoted text overlapping the annotated gold evidence but still predicted the wrong label."
+  },
+  "buckets_sample_150(consistency_check_only)": {
+   "reasoning_failure_with_gold_evidence_found (wrong label; quoted evidence overlaps gold)": 10,
+   "missed_provision (predicted NotMentioned, empty evidence, gold text present in FULL context)": 4,
+   "exception_or_carveout_failure": 1,
+   "correct_label_evidence_selection_failure": 2,
+   "notmentioned_over_inference (gold NotMentioned, predicted E or C)": 18
+  },
+  "total_sample_150": 35,
+  "contradiction_sample_150(consistency_check_only)": {
+   "correct": [
+    39,
+    50
+   ],
+   "joint": [
+    37,
+    50
+   ],
+   "C_to_E": 10,
+   "C_to_NM": 1
+  }
+ },
+ "quadratic_token_growth": [
+  {
+   "T": 1,
+   "B*T": 1986,
+   "D*T(T-1)/2": 0.0,
+   "total": 1986.0
+  },
+  {
+   "T": 2,
+   "B*T": 3972,
+   "D*T(T-1)/2": 1000.0,
+   "total": 4972.0
+  },
+  {
+   "T": 3,
+   "B*T": 5958,
+   "D*T(T-1)/2": 3000.0,
+   "total": 8958.0
+  }
+ ],
+ "reliability_compounding": {
+  "note": "SCENARIO/measured single-call joint-success rates used as a per-step reliability proxy s; real NDATrace agent traces never exceeded 1 step, so a true multi-step s is not measured. Shown for T=1..3 (the configured agent cap).",
+  "candidates": {
+   "E13_FULL_single_call_joint_success": [
+    {
+     "T": 1,
+     "P_success": 0.7733
+    },
+    {
+     "T": 2,
+     "P_success": 0.59799289
+    },
+    {
+     "T": 3,
+     "P_success": 0.462427901837
+    }
+   ],
+   "E17_hosted_TEST_single_call_joint_success": [
+    {
+     "T": 1,
+     "P_success": 0.7666666666666667
+    },
+    {
+     "T": 2,
+     "P_success": 0.5877777777777778
+    },
+    {
+     "T": 3,
+     "P_success": 0.4506296296296297
+    }
+   ],
+   "E11_A3_agent_first_step_final_rate": [
+    {
+     "T": 1,
+     "P_success": 1.0
+    },
+    {
+     "T": 2,
+     "P_success": 1.0
+    },
+    {
+     "T": 3,
+     "P_success": 1.0
+    }
+   ]
+  }
+ }
+}

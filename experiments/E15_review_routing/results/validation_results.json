@@ -1,0 +1,1856 @@
+{
+ "model_performance": {
+  "n": 138,
+  "accuracy": 0.7391304347826086,
+  "macro_f1": 0.72082067074096,
+  "joint": 0.7101449275362319,
+  "joint_n": 98,
+  "recall": {
+   "Entailment": 0.85,
+   "Contradiction": 0.7777777777777778,
+   "NotMentioned": 0.6166666666666667
+  },
+  "contradiction_recall_ci95": [
+   0.5478,
+   0.91
+  ],
+  "joint_by_class": {
+   "Entailment": 0.7833333333333333,
+   "Contradiction": 0.7777777777777778,
+   "NotMentioned": 0.6166666666666667
+  },
+  "confusion": {
+   "Entailment": {
+    "Entailment": 51,
+    "Contradiction": 4,
+    "NotMentioned": 4,
+    "null": 1
+   },
+   "Contradiction": {
+    "Contradiction": 14,
+    "Entailment": 4
+   },
+   "NotMentioned": {
+    "NotMentioned": 37,
+    "Entailment": 16,
+    "Contradiction": 7
+   }
+  },
+  "parse": {
+   "strict": 137,
+   "invalid": 1
+  },
+  "cost_usd": 0.30771675,
+  "n_hallucinated_quote_cases": 5,
+  "source_valid_quote_rate": 0.97
+ },
+ "policies": {
+  "R0": {
+   "joint": {
+    "policy": "R0",
+    "failure_def": "joint_ok",
+    "n": 138,
+    "review": 0,
+    "review_rate": 0.0,
+    "auto": 138,
+    "automation_coverage": 1.0,
+    "confusion": {
+     "failure_review": 0,
+     "failure_auto": 40,
+     "success_review": 0,
+     "success_auto": 98
+    },
+    "error_capture": 0.0,
+    "routing_precision": null,
+    "false_review_rate": 0.0,
+    "residual_error_rate": 0.2898550724637681,
+    "selective_success": 0.7101449275362319,
+    "total_failures": 40
+   },
+   "classification": {
+    "policy": "R0",
+    "failure_def": "label_ok",
+    "n": 138,
+    "review": 0,
+    "review_rate": 0.0,
+    "auto": 138,
+    "automation_coverage": 1.0,
+    "confusion": {
+     "failure_review": 0,
+     "failure_auto": 36,
+     "success_review": 0,
+     "success_auto": 102
+    },
+    "error_capture": 0.0,
+    "routing_precision": null,
+    "false_review_rate": 0.0,
+    "residual_error_rate": 0.2608695652173913,
+    "selective_success": 0.7391304347826086,
+    "total_failures": 36
+   },
+   "by_true_class": {
+    "Entailment": {
+     "n": 60,
+     "review_rate": 0.0,
+     "joint_failures": 13,
+     "failures_caught": 0,
+     "residual_failures": 13,
+     "correct_reviewed": 0,
+     "correct_total": 47,
+     "auto": 60
+    },
+    "Contradiction": {
+     "n": 18,
+     "review_rate": 0.0,
+     "joint_failures": 4,
+     "failures_caught": 0,
+     "residual_failures": 4,
+     "correct_reviewed": 0,
+     "correct_total": 14,
+     "auto": 18
+    },
+    "NotMentioned": {
+     "n": 60,
+     "review_rate": 0.0,
+     "joint_failures": 23,
+     "failures_caught": 0,
+     "residual_failures": 23,
+     "correct_reviewed": 0,
+     "correct_total": 37,
+     "auto": 60
+    }
+   },
+   "raw_review_rate": 0.0,
+   "dev_standardized_review_rate": 0.0,
+   "dev_standardized_automation_coverage": 1.0,
+   "dev_standardized_residual_joint_error": 0.28516018429229617,
+   "dev_standardized_joint_capture": 0.0,
+   "raw_review_rate_ci95": [
+    0,
+    0.0271
+   ],
+   "capture_ci95": [
+    0,
+    0.0876
+   ],
+   "residual_ci95": [
+    0.2207,
+    0.3704
+   ],
+   "workload_raw": {
+    "100": 0.0,
+    "1000": 0.0,
+    "8000": 0.0
+   },
+   "workload_dev_standardized": {
+    "100": 0.0,
+    "1000": 0.0,
+    "8000": 0.0
+   }
+  },
+  "R1": {
+   "joint": {
+    "policy": "R1",
+    "failure_def": "joint_ok",
+    "n": 138,
+    "review": 6,
+    "review_rate": 0.043478260869565216,
+    "auto": 132,
+    "automation_coverage": 0.9565217391304348,
+    "confusion": {
+     "failure_review": 5,
+     "failure_auto": 35,
+     "success_review": 1,
+     "success_auto": 97
+    },
+    "error_capture": 0.125,
+    "routing_precision": 0.8333333333333334,
+    "false_review_rate": 0.01020408163265306,
+    "residual_error_rate": 0.26515151515151514,
+    "selective_success": 0.7348484848484849,
+    "total_failures": 40
+   },
+   "classification": {
+    "policy": "R1",
+    "failure_def": "label_ok",
+    "n": 138,
+    "review": 6,
+    "review_rate": 0.043478260869565216,
+    "auto": 132,
+    "automation_coverage": 0.9565217391304348,
+    "confusion": {
+     "failure_review": 2,
+     "failure_auto": 34,
+     "success_review": 4,
+     "success_auto": 98
+    },
+    "error_capture": 0.05555555555555555,
+    "routing_precision": 0.3333333333333333,
+    "false_review_rate": 0.0392156862745098,
+    "residual_error_rate": 0.25757575757575757,
+    "selective_success": 0.7424242424242424,
+    "total_failures": 36
+   },
+   "by_true_class": {
+    "Entailment": {
+     "n": 60,
+     "review_rate": 0.06666666666666667,
+     "joint_failures": 13,
+     "failures_caught": 4,
+     "residual_failures": 9,
+     "correct_reviewed": 0,
+     "correct_total": 47,
+     "auto": 56
+    },
+    "Contradiction": {
+     "n": 18,
+     "review_rate": 0.05555555555555555,
+     "joint_failures": 4,
+     "failures_caught": 0,
+     "residual_failures": 4,
+     "correct_reviewed": 1,
+     "correct_total": 14,
+     "auto": 17
+    },
+    "NotMentioned": {
+     "n": 60,
+     "review_rate": 0.016666666666666666,
+     "joint_failures": 23,
+     "failures_caught": 1,
+     "residual_failures": 22,
+     "correct_reviewed": 0,
+     "correct_total": 37,
+     "auto": 59
+    }
+   },
+   "raw_review_rate": 0.043478260869565216,
+   "dev_standardized_review_rate": 0.04525340190721097,
+   "dev_standardized_automation_coverage": 0.9547465980927891,
+   "dev_standardized_residual_joint_error": 0.2566086649122118,
+   "dev_standardized_joint_capture": 0.14084692267227775,
+   "raw_review_rate_ci95": [
+    0.0201,
+    0.0916
+   ],
+   "capture_ci95": [
+    0.0546,
+    0.2611
+   ],
+   "residual_ci95": [
+    0.1973,
+    0.3463
+   ],
+   "workload_raw": {
+    "100": 4.3,
+    "1000": 43.5,
+    "8000": 347.8
+   },
+   "workload_dev_standardized": {
+    "100": 4.5,
+    "1000": 45.3,
+    "8000": 362.0
+   }
+  },
+  "R2": {
+   "joint": {
+    "policy": "R2",
+    "failure_def": "joint_ok",
+    "n": 138,
+    "review": 29,
+    "review_rate": 0.21014492753623187,
+    "auto": 109,
+    "automation_coverage": 0.7898550724637681,
+    "confusion": {
+     "failure_review": 15,
+     "failure_auto": 25,
+     "success_review": 14,
+     "success_auto": 84
+    },
+    "error_capture": 0.375,
+    "routing_precision": 0.5172413793103449,
+    "false_review_rate": 0.14285714285714285,
+    "residual_error_rate": 0.22935779816513763,
+    "selective_success": 0.7706422018348624,
+    "total_failures": 40
+   },
+   "classification": {
+    "policy": "R2",
+    "failure_def": "label_ok",
+    "n": 138,
+    "review": 29,
+    "review_rate": 0.21014492753623187,
+    "auto": 109,
+    "automation_coverage": 0.7898550724637681,
+    "confusion": {
+     "failure_review": 12,
+     "failure_auto": 24,
+     "success_review": 17,
+     "success_auto": 85
+    },
+    "error_capture": 0.3333333333333333,
+    "routing_precision": 0.41379310344827586,
+    "false_review_rate": 0.16666666666666666,
+    "residual_error_rate": 0.22018348623853212,
+    "selective_success": 0.7798165137614679,
+    "total_failures": 36
+   },
+   "by_true_class": {
+    "Entailment": {
+     "n": 60,
+     "review_rate": 0.13333333333333333,
+     "joint_failures": 13,
+     "failures_caught": 8,
+     "residual_failures": 5,
+     "correct_reviewed": 0,
+     "correct_total": 47,
+     "auto": 52
+    },
+    "Contradiction": {
+     "n": 18,
+     "review_rate": 0.7777777777777778,
+     "joint_failures": 4,
+     "failures_caught": 0,
+     "residual_failures": 4,
+     "correct_reviewed": 14,
+     "correct_total": 14,
+     "auto": 4
+    },
+    "NotMentioned": {
+     "n": 60,
+     "review_rate": 0.11666666666666667,
+     "joint_failures": 23,
+     "failures_caught": 7,
+     "residual_failures": 16,
+     "correct_reviewed": 0,
+     "correct_total": 37,
+     "auto": 53
+    }
+   },
+   "raw_review_rate": 0.21014492753623187,
+   "dev_standardized_review_rate": 0.18557269902496518,
+   "dev_standardized_automation_coverage": 0.8144273009750348,
+   "dev_standardized_residual_joint_error": 0.20976707165457403,
+   "dev_standardized_joint_capture": 0.4008980235966033,
+   "raw_review_rate_ci95": [
+    0.1505,
+    0.2855
+   ],
+   "capture_ci95": [
+    0.2422,
+    0.5297
+   ],
+   "residual_ci95": [
+    0.1605,
+    0.3167
+   ],
+   "workload_raw": {
+    "100": 21.0,
+    "1000": 210.1,
+    "8000": 1681.2
+   },
+   "workload_dev_standardized": {
+    "100": 18.6,
+    "1000": 185.6,
+    "8000": 1484.6
+   }
+  },
+  "R3": {
+   "joint": {
+    "policy": "R3",
+    "failure_def": "joint_ok",
+    "n": 138,
+    "review": 71,
+    "review_rate": 0.5144927536231884,
+    "auto": 67,
+    "automation_coverage": 0.4855072463768116,
+    "confusion": {
+     "failure_review": 33,
+     "failure_auto": 7,
+     "success_review": 38,
+     "success_auto": 60
+    },
+    "error_capture": 0.825,
+    "routing_precision": 0.4647887323943662,
+    "false_review_rate": 0.3877551020408163,
+    "residual_error_rate": 0.1044776119402985,
+    "selective_success": 0.8955223880597015,
+    "total_failures": 40
+   },
+   "classification": {
+    "policy": "R3",
+    "failure_def": "label_ok",
+    "n": 138,
+    "review": 71,
+    "review_rate": 0.5144927536231884,
+    "auto": 67,
+    "automation_coverage": 0.4855072463768116,
+    "confusion": {
+     "failure_review": 29,
+     "failure_auto": 7,
+     "success_review": 42,
+     "success_auto": 60
+    },
+    "error_capture": 0.8055555555555556,
+    "routing_precision": 0.4084507042253521,
+    "false_review_rate": 0.4117647058823529,
+    "residual_error_rate": 0.1044776119402985,
+    "selective_success": 0.8955223880597015,
+    "total_failures": 36
+   },
+   "by_true_class": {
+    "Entailment": {
+     "n": 60,
+     "review_rate": 0.5833333333333334,
+     "joint_failures": 13,
+     "failures_caught": 9,
+     "residual_failures": 4,
+     "correct_reviewed": 26,
+     "correct_total": 47,
+     "auto": 25
+    },
+    "Contradiction": {
+     "n": 18,
+     "review_rate": 0.7777777777777778,
+     "joint_failures": 4,
+     "failures_caught": 3,
+     "residual_failures": 1,
+     "correct_reviewed": 11,
+     "correct_total": 14,
+     "auto": 4
+    },
+    "NotMentioned": {
+     "n": 60,
+     "review_rate": 0.36666666666666664,
+     "joint_failures": 23,
+     "failures_caught": 21,
+     "residual_failures": 2,
+     "correct_reviewed": 1,
+     "correct_total": 37,
+     "auto": 38
+    }
+   },
+   "raw_review_rate": 0.5144927536231884,
+   "dev_standardized_review_rate": 0.5127665273759776,
+   "dev_standardized_automation_coverage": 0.4872334726240224,
+   "dev_standardized_residual_joint_error": 0.10683145128481425,
+   "dev_standardized_joint_capture": 0.8174644923724356,
+   "raw_review_rate_ci95": [
+    0.4318,
+    0.5964
+   ],
+   "capture_ci95": [
+    0.6805,
+    0.9125
+   ],
+   "residual_ci95": [
+    0.0515,
+    0.2003
+   ],
+   "workload_raw": {
+    "100": 51.4,
+    "1000": 514.5,
+    "8000": 4115.9
+   },
+   "workload_dev_standardized": {
+    "100": 51.3,
+    "1000": 512.8,
+    "8000": 4102.1
+   }
+  }
+ },
+ "contradiction_descriptive_n18": {
+  "R0": {
+   "joint_failures": 4,
+   "failures_caught": 0,
+   "residual_failures": 4,
+   "correct_reviewed": 0,
+   "correct_total": 14
+  },
+  "R1": {
+   "joint_failures": 4,
+   "failures_caught": 0,
+   "residual_failures": 4,
+   "correct_reviewed": 1,
+   "correct_total": 14
+  },
+  "R2": {
+   "joint_failures": 4,
+   "failures_caught": 0,
+   "residual_failures": 4,
+   "correct_reviewed": 14,
+   "correct_total": 14
+  },
+  "R3": {
+   "joint_failures": 4,
+   "failures_caught": 3,
+   "residual_failures": 1,
+   "correct_reviewed": 11,
+   "correct_total": 14
+  }
+ },
+ "selection": {
+  "criteria": {
+   "1_std_review<=40%": false,
+   "2_raw_residual<10%": false,
+   "2b_std_residual<10% (info)": false,
+   "3_capture_gap_vs_R1>=20pp": true,
+   "4_no_C_safety_regression": true,
+   "5_no_structural_problem": true
+  },
+  "R3_selected": false,
+  "R1_useful_structural_guard": 0.125,
+  "R1_capture": 0.125
+ },
+ "stageA_vs_validation_R3": {
+  "review_rate": {
+   "stageA": 0.5733333333333334,
+   "validation": 0.5144927536231884
+  },
+  "error_capture": {
+   "stageA": 0.9,
+   "validation": 0.825
+  },
+  "residual_error_rate": {
+   "stageA": 0.046875,
+   "validation": 0.1044776119402985
+  },
+  "routing_precision": {
+   "stageA": 0.313953488372093,
+   "validation": 0.4647887323943662
+  },
+  "false_review_rate": {
+   "stageA": 0.49166666666666664,
+   "validation": 0.3877551020408163
+  }
+ },
+ "residual_failures_R3": [
+  {
+   "case_id": "dev::586::nda-4",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "bucket": "missed_contradiction",
+   "rule_label": "Entailment",
+   "gold_span_idx": [
+    69
+   ],
+   "pred_span_idx": [
+    13,
+    26,
+    27,
+    28,
+    29,
+    30
+   ],
+   "n_quotes": 2,
+   "quotes": [
+    "(i) the term \"Receiving Party\" means the Party receiving Evaluation Material;",
+    "(a) Confidentiality of Evaluation Material. All Evaluation Material (i) shall be used solely for the purpose of evaluating and considering the Transaction; (ii) shall be kept strictly confidential by the Receiving Party;"
+   ],
+   "gold_span_text": [
+    "Notwithstanding any other provision of this Agreement, neither Party will be restricted from using the information contained in the Evaluation Material that is retained in the minds of Representatives who have had access"
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::72::nda-16",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "bucket": "reasoning_error_entailment",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    39
+   ],
+   "pred_span_idx": [],
+   "n_quotes": 0,
+   "quotes": [],
+   "gold_span_text": [
+    "11. Upon receipt of a written request to the undersigned, the undersigned and its Representatives shall promptly return to BDO any and all Information received, printed, downloaded or otherwise copied together with perso"
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::381::nda-1",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "bucket": "reasoning_error_entailment",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    31
+   ],
+   "pred_span_idx": [],
+   "n_quotes": 0,
+   "quotes": [],
+   "gold_span_text": [
+    "Selling Parties recognize and acknowledge that the Company's trade secrets and all other confidential and proprietary information of a business, financial or other nature, including without limitation, proprietary inform"
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::411::nda-4",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "bucket": "reasoning_error_entailment",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    17
+   ],
+   "pred_span_idx": [],
+   "n_quotes": 0,
+   "quotes": [],
+   "gold_span_text": [
+    "(a) Each of Stockholders severally agrees that such Stockholder shall not, at any time following the effectiveness of the Merger, print, publish, divulge or communicate to any person, firm, corporation or other business "
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::605::nda-10",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "bucket": "reasoning_error_entailment",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    8
+   ],
+   "pred_span_idx": [],
+   "n_quotes": 0,
+   "quotes": [],
+   "gold_span_text": [
+    "(b) \u201cBlueknight Non-public Information\u201d shall mean information pertaining to Blueknight, the General Partner and/or their respective Affiliates that has not been Publicly Disclosed and that Blueknight or the General Part"
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::37::nda-10",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "Entailment",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    21,
+    55
+   ],
+   "n_quotes": 2,
+   "quotes": [
+    "(c) discussions, negotiations, and correspondence between the Disclosing Party or any of its directors, officers, employees, consultants or professional advisers and the Receiving Party or any of its directors, officers,",
+    "2.1.3 not disclose or permit the disclosure of any of the Confidential Information to any other person without obtaining the prior written consent of the Disclosing Party or, if relevant, other owner or except as express"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::590::nda-16",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "Entailment",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    83,
+    84,
+    85,
+    86
+   ],
+   "n_quotes": 3,
+   "quotes": [
+    "If either party hereto shall determine that it does not wish to proceed with the Proposed Transaction, such party shall promptly advise the other party of that decision.",
+    "In that case, or if the\nProposed Transaction otherwise is not consummated for any reason, Receiving Party shall, upon Disclosing Party\u2019s written request, promptly deliver to Disclosing Party all Proprietary Information, ",
+    "However, Receiving Party may retain in the office of its legal counsel, one copy of Proprietary Information for record purposes only."
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  }
+ ],
+ "residual_buckets_R3": {
+  "missed_contradiction": 1,
+  "reasoning_error_entailment": 4,
+  "over_inference": 2
+ },
+ "residual_failures_R1": [
+  {
+   "case_id": "dev::79::nda-7",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "bucket": "missed_contradiction",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    18,
+    19
+   ],
+   "pred_span_idx": [
+    18
+   ],
+   "n_quotes": 1,
+   "quotes": [
+    "Dealer shall not distribute, disseminate, publish or disclose the Confidential Information to any person, or entity not employed or retained by Dealer or the use of the Confidential Information for any purpose other than"
+   ],
+   "gold_span_text": [
+    "Dealer shall not distribute, disseminate, publish or disclose the Confidential Information to any person, or entity not employed or retained by Dealer or the use of the Confidential Information for any purpose other than",
+    "Dealer will disclose the Confidential Information only to those individuals employed by Dealer who need to know such Confidential Information."
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::72::nda-17",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "bucket": "missed_contradiction",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    88
+   ],
+   "pred_span_idx": [
+    18,
+    39,
+    88
+   ],
+   "n_quotes": 3,
+   "quotes": [
+    "To maintain the Information in the strictest of confidence and to control the dissemination of the Information, including any documents or copies (paper, electronic or otherwise) thereof contained in the Information in a",
+    "Upon receipt of a written request to the undersigned, the undersigned and its Representatives shall promptly return to BDO any and all Information received, printed, downloaded or otherwise copied together with personal ",
+    "The Information being made available is confidential and may not be photocopied, reproduced or distributed to any other person at any time, except for the purposes of obtaining professional advice, without the prior writ"
+   ],
+   "gold_span_text": [
+    "9. The Information being made available is confidential and may not be photocopied, reproduced or distributed to any other person at any time, except for the purposes of obtaining professional advice, without the prior w"
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::406::nda-17",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "bucket": "missed_contradiction",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    26,
+    29
+   ],
+   "pred_span_idx": [
+    26,
+    27,
+    28,
+    29,
+    30,
+    57,
+    58
+   ],
+   "n_quotes": 4,
+   "quotes": [
+    "2. Ciufo (a) must receive and hold the Proprietary Information in trust and in strictest confidence; (b) must protect the Proprietary Information from disclosure and in no event take any action causing, or failing to tak",
+    "Any and all reproductions of the Proprietary Information must prominently contain a confidentiality legend.",
+    "All Proprietary Information furnished by Health Card to Ciufo is considered loaned for use solely in connection with the Project, and shall be returned by Ciufo to Health Card upon request by Health Card.",
+    "Ciufo shall certify that it has destroyed or returned all copies of the Proprietary Information in its possession."
+   ],
+   "gold_span_text": [
+    "2. Ciufo ",
+    "(c) must not use, duplicate, reproduce, distribute, disclose or otherwise disseminate the Proprietary Information except to perform the Project. "
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::586::nda-4",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "bucket": "missed_contradiction",
+   "rule_label": "Entailment",
+   "gold_span_idx": [
+    69
+   ],
+   "pred_span_idx": [
+    13,
+    26,
+    27,
+    28,
+    29,
+    30
+   ],
+   "n_quotes": 2,
+   "quotes": [
+    "(i) the term \"Receiving Party\" means the Party receiving Evaluation Material;",
+    "(a) Confidentiality of Evaluation Material. All Evaluation Material (i) shall be used solely for the purpose of evaluating and considering the Transaction; (ii) shall be kept strictly confidential by the Receiving Party;"
+   ],
+   "gold_span_text": [
+    "Notwithstanding any other provision of this Agreement, neither Party will be restricted from using the information contained in the Evaluation Material that is retained in the minds of Representatives who have had access"
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::72::nda-15",
+   "gold": "Entailment",
+   "pred": "Contradiction",
+   "bucket": "reasoning_error_entailment",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    93
+   ],
+   "pred_span_idx": [
+    20,
+    87
+   ],
+   "n_quotes": 2,
+   "quotes": [
+    "3. The Information is to be used by the undersigned, its affiliates, and their respective directors, officers, employees, accountants, attorneys, solicitors, financing sources, consultants, agents, representatives and ad",
+    "8. In accordance with the terms of the NDA executed by you, the Information being made available to you at the Data Rooms or any other information to be made available to you by BDO is to be kept confidential and upon th"
+   ],
+   "gold_span_text": [
+    "Also, BDO reserves the right not to sell or otherwise dispose of the Assets and to terminate, at any time, further participation in the investigation and due diligence process by you or any other party and to modify any "
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::72::nda-16",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "bucket": "reasoning_error_entailment",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    39
+   ],
+   "pred_span_idx": [],
+   "n_quotes": 0,
+   "quotes": [],
+   "gold_span_text": [
+    "11. Upon receipt of a written request to the undersigned, the undersigned and its Representatives shall promptly return to BDO any and all Information received, printed, downloaded or otherwise copied together with perso"
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::79::nda-15",
+   "gold": "Entailment",
+   "pred": "Contradiction",
+   "bucket": "reasoning_error_entailment",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    22,
+    23
+   ],
+   "pred_span_idx": [
+    18,
+    19
+   ],
+   "n_quotes": 2,
+   "quotes": [
+    "Dealer shall not distribute, disseminate, publish or disclose the Confidential Information to any person, or entity not employed or retained by Dealer or the use of the Confidential Information for any purpose other than",
+    "Dealer will disclose the Confidential Information only to those individuals employed by Dealer who need to know such Confidential Information."
+   ],
+   "gold_span_text": [
+    "4. Ownership/Return of Confidential Information. ",
+    "Dealer agrees and acknowledges that the Confidential Information is the property of CIF, and upon termination of this Agreement all rights to the use and ownership of the Confidential Information shall be retained exclus"
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::381::nda-1",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "bucket": "reasoning_error_entailment",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    31
+   ],
+   "pred_span_idx": [],
+   "n_quotes": 0,
+   "quotes": [],
+   "gold_span_text": [
+    "Selling Parties recognize and acknowledge that the Company's trade secrets and all other confidential and proprietary information of a business, financial or other nature, including without limitation, proprietary inform"
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::152::nda-15",
+   "gold": "Entailment",
+   "pred": "Contradiction",
+   "bucket": "reasoning_error_entailment",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    8,
+    21
+   ],
+   "pred_span_idx": [
+    7,
+    8,
+    19,
+    22,
+    23
+   ],
+   "n_quotes": 4,
+   "quotes": [
+    "It is understood and agreed that these disclosures are made for the exclusive purpose of furthering the receiving party\u2019s information about a possible business relationship concerning the AddiFlex\u00ae project (hereinafter \u201c",
+    "All Information identified as confidential and disclosed there under shall remain the sole property of the disclosing party, and the receiving party shall have no interest in or rights thereto except as set forth herein.",
+    "Both parties may only make such copies as are strictly necessary for the purposes identified in 1. above and for disclosures that are not in breach of this agreement.",
+    "The parties agree to disclose to each other, the results of the tests performed in connection with the Project."
+   ],
+   "gold_span_text": [
+    "2. All Information identified as confidential and disclosed there under shall remain the sole property of the disclosing party, and the receiving party shall have no interest in or rights thereto except as set forth here",
+    "It is explicitly agreed that the composition of the material AddiFlex as well as the manufacturing process used to produce AddiFlex shall not be the subject of any test and that all information relating to the compositio"
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::398::nda-15",
+   "gold": "Entailment",
+   "pred": "Contradiction",
+   "bucket": "reasoning_error_entailment",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    38
+   ],
+   "pred_span_idx": [
+    28,
+    36
+   ],
+   "n_quotes": 2,
+   "quotes": [
+    "(b) Seller will keep confidential and will not for a period of three (3) years after the execution of this Agreement, directly or indirectly, divulge to anyone, use or otherwise appropriate any of the Confidential Inform",
+    "Seller acknowledges and agrees that as the owner of the Division it has created substantial confidential information used in and concerning the business and has been afforded an unique opportunity to acquire confidential"
+   ],
+   "gold_span_text": [
+    "Seller acknowledges and agrees that these prohibitions against disclosure of Confidential Information are in addition to, and not in lieu of, any rights or remedies that Purchasers or Parent may have available pursuant t"
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::411::nda-4",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "bucket": "reasoning_error_entailment",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    17
+   ],
+   "pred_span_idx": [],
+   "n_quotes": 0,
+   "quotes": [],
+   "gold_span_text": [
+    "(a) Each of Stockholders severally agrees that such Stockholder shall not, at any time following the effectiveness of the Merger, print, publish, divulge or communicate to any person, firm, corporation or other business "
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::605::nda-10",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "bucket": "reasoning_error_entailment",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    8
+   ],
+   "pred_span_idx": [],
+   "n_quotes": 0,
+   "quotes": [],
+   "gold_span_text": [
+    "(b) \u201cBlueknight Non-public Information\u201d shall mean information pertaining to Blueknight, the General Partner and/or their respective Affiliates that has not been Publicly Disclosed and that Blueknight or the General Part"
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::605::nda-13",
+   "gold": "Entailment",
+   "pred": "Entailment",
+   "bucket": "correct_label_evidence_failure",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [
+    9,
+    11,
+    27,
+    29,
+    30,
+    31,
+    32
+   ],
+   "pred_span_idx": [
+    9,
+    10,
+    11,
+    12
+   ],
+   "n_quotes": 1,
+   "quotes": [
+    "The term Blueknight Non-public Information shall not include, however, information which (i) is or becomes generally available to the public other than as a result of disclosure by Receiving Party in breach of this Agree"
+   ],
+   "gold_span_text": [
+    "The term Blueknight Non-public Information shall not include, however, information which ",
+    "(ii) was or becomes available to Receiving Party on a non-confidential basis prior to or after its disclosure by Blueknight or the General Partner from a person, other than Blueknight or the General Partner, who is not k",
+    "Furthermore, the parties agree that "
+   ],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::12::nda-15",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    10,
+    11,
+    34
+   ],
+   "n_quotes": 3,
+   "quotes": [
+    "With the understanding that CLIENT\u2019s Formulations and Processing Procedures are proprietary to CLIENT, to the extent that CLIENT shall disclose to BROOKS personal, financial and product information, including their Formu",
+    "BROOKS, its directors, employees, agents and representatives shall not disclose, disseminate, publish, communicate or divulge any Confidential Information to anyone outside BROOKS, or to any employee of BROOKS not having",
+    "Upon termination of the business relationship between the Parties, BROOKS shall, upon written request of CLIENT, deliver any records, data, information and other documents, and all copies thereof, furnished by CLIENT to "
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::13::nda-20",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    86
+   ],
+   "n_quotes": 1,
+   "quotes": [
+    "That portion of the Confidential Information that may be found in analyses, compilations, studies or other documents prepared by or for a Party and all Confidential Information that is oral will be kept by a Party subjec"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::27::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    20,
+    38,
+    46
+   ],
+   "n_quotes": 3,
+   "quotes": [
+    "Recipients will not disclose, distribute, copy or use any Confidential Information or the fact that a Transaction is being considered or is under a production contract without the prior written consent of the other Party",
+    "Recipient shall reproduce Discloser's proprietary rights notices on any copies, in the same manner in which such notices were set forth in or on the original.",
+    "The Recipient and its Representatives shall not retain any copies, extracts or other reproductions, in whole or in part, of such written or electronic material, except as may be needed to comply with applicable law and, "
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::37::nda-10",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "Entailment",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    21,
+    55
+   ],
+   "n_quotes": 2,
+   "quotes": [
+    "(c) discussions, negotiations, and correspondence between the Disclosing Party or any of its directors, officers, employees, consultants or professional advisers and the Receiving Party or any of its directors, officers,",
+    "2.1.3 not disclose or permit the disclosure of any of the Confidential Information to any other person without obtaining the prior written consent of the Disclosing Party or, if relevant, other owner or except as express"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::37::nda-11",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    53,
+    57,
+    95,
+    104
+   ],
+   "n_quotes": 4,
+   "quotes": [
+    "2.1.1 treat all Confidential Information as secret and confidential;",
+    "2.1.5 not use or exploit any of the Confidential Information for any purpose whatsoever other than the Permitted Purpose; and",
+    "5.1.3 make no further use of any Confidential Information which falls within the Specified Scope.",
+    "6.2.1 to grant the Receiving Party any licence or rights other than as may be expressly stated in this Agreement;"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::54::nda-16",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    25,
+    29
+   ],
+   "n_quotes": 2,
+   "quotes": [
+    "Any and all documents containing confidential information, copies of such documents and extracts the DISCLOSEE makes from such documents and models the DISCLOSER provides must be returned or demonstrably destroyed and th",
+    "This also applies without limitations to any possible termination of the business relationship between both parties."
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::54::nda-12",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    18,
+    19,
+    26,
+    27,
+    30,
+    31
+   ],
+   "n_quotes": 4,
+   "quotes": [
+    "The DISCLOSEE agrees to keep any and all written, electronic and oral information and models conveyed or made available to it directly or indirectly in the course of the collaboration strictly in confidence and not to di",
+    "The DISCLOSEE also agrees not to use the confidential information other than for the purpose as provided herein and not to use that information commercially in any way without the DISCLOSER's consent in writing.",
+    "Any and all confidential information, including any and all protected and other rights created and/or produced in connection with the confidential information provided, no matter when or by whom, are the property of Fron",
+    "Documents which contain confidential information must not be reproduced or extracts made from them without the DISCLOSER's prior consent in writing. Models sent must not be analysed."
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::61::nda-1",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    8,
+    19,
+    20
+   ],
+   "n_quotes": 3,
+   "quotes": [
+    "Company agrees that all information, documents, data, materials and the AOC proprietary software systems disclosed to, or accessed by, Company in connection with, or related to, the RFP or the RFP process, in any form wh",
+    "k. Any and all other information, data or materials that Company receives access to or obtains in connection with onsite visits, meetings or in any other forms of communication whether oral or written with AOC personnel ",
+    "l. Any and all other information, data or materials learned by Company through inspection of the AOC\u2019s property regarding the AOC\u2019s products, designs, business plans, strategies or processes, business opportunities, proc"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::71::nda-1",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    9,
+    10
+   ],
+   "n_quotes": 2,
+   "quotes": [
+    "Prospect and Prospect\u2019s Broker acknowledge that all information and materials provided by Listing Broker regarding the above-referenced Property is confidential and may not be used for any purpose other than evaluation.",
+    "Prospect\u2019s and Prospect\u2019s Broker\u2019s dissemination of any information and materials provided by Listing Broker will be limited to attorneys, accountants, banking representatives, and business advisors directly involved wit"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::70::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    20,
+    21,
+    22
+   ],
+   "n_quotes": 3,
+   "quotes": [
+    "I understand that I may access and/or use FAU Confidential Information, Restricted Data and Sensitive Data only as necessary to perform my job-related duties and that I may disclose (i.e., share) FAU Confidential Informa",
+    "I understand that only encrypted and password protected devices may be used to transport PHI or other Restricted Data (defined below).",
+    "I understand that smartphones and other mobile devices used to access FAU information systems must be configured to encrypt any Restricted or Sensitive Data (defined below), including photographs and videos, in persisten"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::75::nda-1",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    3,
+    36
+   ],
+   "n_quotes": 2,
+   "quotes": [
+    "Any and all information, including but not limited to, location, financial information, title reports, surveys, and other agreements, documents, materials and oral and/or written information with respect to the Property,",
+    "Undersigned acknowledges that the location of the Property is Confidential Information."
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::82::nda-15",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    5,
+    6,
+    7
+   ],
+   "n_quotes": 3,
+   "quotes": [
+    "In consideration of our Agreement to supply to you certain written or oral information relating to the Business and entering into discussions relating to the sale of the Business to you (howsoever structured), you the Re",
+    "1.1 shall keep secret and confidential our discussions and any information about the Business supplied to you or your advisers by us or by our advisers, whether before or after this Agreement and any analyses or other do",
+    "1.2 shall not use any Confidential Information for your own purposes or to obtain a commercial, trading or other advantage, but shall use such Confidential Information for the sole purpose of evaluating and negotiating t"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::82::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    5,
+    6,
+    11
+   ],
+   "n_quotes": 3,
+   "quotes": [
+    "In consideration of our Agreement to supply to you certain written or oral information relating to the Business and entering into discussions relating to the sale of the Business to you (howsoever structured), you the Re",
+    "shall keep secret and confidential our discussions and any information about the Business supplied to you or your advisers by us or by our advisers, whether before or after this Agreement and any analyses or other docume",
+    "shall procure that your employees, agents and advisers, or any other party acting on your instructions to whom disclosure of Confidential Information is to be made, agree before such disclosure to be bound by the terms o"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::435::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    10,
+    23
+   ],
+   "n_quotes": 2,
+   "quotes": [
+    "All materials (including, without limitation, documents, drawings, models, apparatus, sketches, designs and lists) furnished to one party by the other, and which are designated in writing to be the property of such party",
+    "Each of the parties agrees that it will not make use of, disseminate, or in any way disclose any Confidential Information of the other party to any person, firm or business, except to the extent necessary for negotiation"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::478::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    7,
+    14,
+    53
+   ],
+   "n_quotes": 3,
+   "quotes": [
+    "For purposes of this Agreement, Proprietary Information shall mean, without limitation, computer programs, code, algorithms, names and expertise of employees and consultants, formulas, processes, inventions, schematics a",
+    "The Receiving Party shall ensure that all copies of Proprietary Information stored electronically on its server, tape backup or on the hard drives of computers used by its Affiliates in connection with the Pilot Study ha",
+    "Upon termination, the Receiving Party shall cease use of the Disclosing Party's Proprietary Information, and shall destroy all Proprietary Information, including without limitation, reports, analyses, e-mails or any othe"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::435::nda-20",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    19,
+    20,
+    24
+   ],
+   "n_quotes": 3,
+   "quotes": [
+    "5. \"Residual Information\" shall mean any Confidential Information of the disclosing party which may be retained in intangible form in the minds of those individuals of the receiving party who have had proper access to su",
+    "Notwithstanding anything else in this Agreement, the receiving party shall be free to use any Residual Information for any purpose whatsoever, including, without limitation, the development of its own products, provided ",
+    "9. This Agreement shall govern all communications between the parties that are made during the period from the effective date of this Agreement to the date on which either party receives from the other written notice tha"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::488::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    4,
+    5,
+    16
+   ],
+   "n_quotes": 3,
+   "quotes": [
+    "Each of the parties agrees that it will not make use of, disseminate, or in any way disclose any Confidential Information of the other party to any person, firm or business, except to the extent necessary for negotiation",
+    "Each of the parties agrees that it shall disclose Confidential Information of the other party only to those of its employees, consultants, advisors and investors who need to know such information and who have previously ",
+    "All materials (including, without limitation, documents, drawings, models, apparatus, sketches, designs and lists) furnished to one party by the other, and which are designated in writing to be the property of such party"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::507::nda-15",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    7,
+    8
+   ],
+   "n_quotes": 2,
+   "quotes": [
+    "In consideration of Big Sky's disclosure to Holdings of the Information, Holdings agrees that it will keep the Information confidential and that the Information will not, without the prior written consent of Big Sky, be ",
+    "Moreover, Big Sky agrees to transmit the Information only to such of its Representatives who need to know the Information for the sole purpose of assisting Holdings in evaluating the Transaction and who are informed of t"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::563::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    15,
+    41,
+    42,
+    43,
+    44,
+    45
+   ],
+   "n_quotes": 3,
+   "quotes": [
+    "(iii) any reports, analyses, forecasts, memoranda, compilations, studies, notes or summaries of such information, or other written or electronic documents prepared by, or on behalf of or for the Recipient or affiliates, ",
+    "The Recipient will, within five business days of a written request by the Disclosing Party, confirm that it has destroyed the original provided to Recipient (and all copies made by it) any documents (in whatever form or ",
+    "Notwithstanding the immediately preceding sentence, the parties agree that destruction will not be made of (i) any electronic copy of any Confidential Information that was created pursuant to the standard electronic back"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::590::nda-16",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "Entailment",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    83,
+    84,
+    85,
+    86
+   ],
+   "n_quotes": 3,
+   "quotes": [
+    "If either party hereto shall determine that it does not wish to proceed with the Proposed Transaction, such party shall promptly advise the other party of that decision.",
+    "In that case, or if the\nProposed Transaction otherwise is not consummated for any reason, Receiving Party shall, upon Disclosing Party\u2019s written request, promptly deliver to Disclosing Party all Proprietary Information, ",
+    "However, Receiving Party may retain in the office of its legal counsel, one copy of Proprietary Information for record purposes only."
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::590::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    6,
+    72,
+    85,
+    86
+   ],
+   "n_quotes": 4,
+   "quotes": [
+    "\u201cProprietary Information\u201d means any and all information and material disclosed by Disclosing Party or any of its Representatives to Receiving Party or any of its Representatives in connection with the Proposed Transactio",
+    "All Proprietary Information (including without limitation, all copies, extracts and portions thereof) is and shall remain the sole property of Disclosing Party, provided, that all Derived Information shall be the sole pr",
+    "Receiving Party shall, upon Disclosing Party\u2019s written request, promptly deliver to Disclosing Party all Proprietary Information, and, at Disclosing Party\u2019s sole election, return or destroy (provided that my such destruc",
+    "However, Receiving Party may retain in the office of its legal counsel, one copy of Proprietary Information for record purposes only."
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  },
+  {
+   "case_id": "dev::595::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "rule_label": "NotMentioned",
+   "gold_span_idx": [],
+   "pred_span_idx": [
+    14,
+    18,
+    19,
+    20,
+    66,
+    67,
+    68,
+    69,
+    70
+   ],
+   "n_quotes": 3,
+   "quotes": [
+    "As used in this letter agreement (this \u201cAgreement\u201d), the term \u201cEvaluation Material\u201d means all information regarding the Company, its businesses, technology, products, prospects and plans, a Transaction or the fact that t",
+    "You and your Representatives (i) will use the Evaluation Material solely for the purpose of evaluating a possible Transaction with the Company involving you or your affiliates and (ii) will keep the Evaluation Material s",
+    "In that case, or in the event that (i) a Transaction is not consummated by you or (ii) at any time the Company so requests, you will promptly (a) deliver to the Company all of the Evaluation Material, including all copie"
+   ],
+   "gold_span_text": [],
+   "hypothesis": null
+  }
+ ],
+ "residual_buckets_R1": {
+  "missed_contradiction": 4,
+  "reasoning_error_entailment": 8,
+  "correct_label_evidence_failure": 1,
+  "over_inference": 22
+ },
+ "all_failures": [
+  {
+   "case_id": "dev::79::nda-7",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "bucket": "missed_contradiction",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::72::nda-17",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "bucket": "missed_contradiction",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::406::nda-17",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "bucket": "missed_contradiction",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::586::nda-4",
+   "gold": "Contradiction",
+   "pred": "Entailment",
+   "bucket": "missed_contradiction",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": false
+  },
+  {
+   "case_id": "dev::27::nda-12",
+   "gold": "Entailment",
+   "pred": "Entailment",
+   "bucket": "source_validation_issue",
+   "R0": false,
+   "R1": true,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::72::nda-15",
+   "gold": "Entailment",
+   "pred": "Contradiction",
+   "bucket": "reasoning_error_entailment",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::72::nda-16",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "bucket": "reasoning_error_entailment",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": false
+  },
+  {
+   "case_id": "dev::79::nda-15",
+   "gold": "Entailment",
+   "pred": "Contradiction",
+   "bucket": "reasoning_error_entailment",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::381::nda-1",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "bucket": "reasoning_error_entailment",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": false
+  },
+  {
+   "case_id": "dev::152::nda-15",
+   "gold": "Entailment",
+   "pred": "Contradiction",
+   "bucket": "reasoning_error_entailment",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::398::nda-18",
+   "gold": "Entailment",
+   "pred": "Entailment",
+   "bucket": "source_validation_issue",
+   "R0": false,
+   "R1": true,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::398::nda-15",
+   "gold": "Entailment",
+   "pred": "Contradiction",
+   "bucket": "reasoning_error_entailment",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::406::nda-1",
+   "gold": "Entailment",
+   "pred": null,
+   "bucket": "unusable_parse",
+   "R0": false,
+   "R1": true,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::411::nda-4",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "bucket": "reasoning_error_entailment",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": false
+  },
+  {
+   "case_id": "dev::605::nda-10",
+   "gold": "Entailment",
+   "pred": "NotMentioned",
+   "bucket": "reasoning_error_entailment",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": false
+  },
+  {
+   "case_id": "dev::605::nda-12",
+   "gold": "Entailment",
+   "pred": "Entailment",
+   "bucket": "source_validation_issue",
+   "R0": false,
+   "R1": true,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::605::nda-13",
+   "gold": "Entailment",
+   "pred": "Entailment",
+   "bucket": "correct_label_evidence_failure",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::12::nda-15",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::13::nda-20",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::27::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::37::nda-10",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": false
+  },
+  {
+   "case_id": "dev::37::nda-11",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::54::nda-16",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::54::nda-12",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::61::nda-1",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::71::nda-1",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::70::nda-15",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "bucket": "source_validation_issue",
+   "R0": false,
+   "R1": true,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::70::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::75::nda-1",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::82::nda-15",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::82::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::435::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::478::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::435::nda-20",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::488::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::507::nda-15",
+   "gold": "NotMentioned",
+   "pred": "Contradiction",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": true,
+   "R3": true
+  },
+  {
+   "case_id": "dev::563::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::590::nda-16",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": false
+  },
+  {
+   "case_id": "dev::590::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  },
+  {
+   "case_id": "dev::595::nda-17",
+   "gold": "NotMentioned",
+   "pred": "Entailment",
+   "bucket": "over_inference",
+   "R0": false,
+   "R1": false,
+   "R2": false,
+   "R3": true
+  }
+ ],
+ "rule_agreement": {
+  "agree_rate": 0.4927536231884058,
+  "joint_success_agree": 0.8823529411764706,
+  "joint_success_disagree": 0.5428571428571428
+ }
+}

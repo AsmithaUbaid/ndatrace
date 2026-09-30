@@ -1,0 +1,21 @@
+{
+  "note": "LLM05 fixtures. Each 'raw_response' string simulates a raw model response fed directly to evaluation.structured_output.parse_structured_output, and (when parse succeeds) the resulting evidence/label fed to pipeline.evidence_validator.validate_evidence. Deterministic, no model calls, $0. context is the shown NDA excerpt used for evidence-validation cases.",
+  "context": "Receiving Party shall not disclose Confidential Information to any third party without the prior written consent of Disclosing Party.",
+  "cases": [
+    {"test_id": "E21-LLM05-01", "kind": "invalid_json", "raw_response": "{label: Entailment, evidence: [\"foo\"]"},
+    {"test_id": "E21-LLM05-02", "kind": "two_conflicting_json_objects", "raw_response": "{\"label\": \"Entailment\", \"evidence\": []} {\"label\": \"Contradiction\", \"evidence\": []}"},
+    {"test_id": "E21-LLM05-03", "kind": "unsupported_label", "raw_response": "{\"label\": \"MaybeEntailment\", \"evidence\": []}"},
+    {"test_id": "E21-LLM05-04", "kind": "wrong_field_type", "raw_response": "{\"label\": 1, \"evidence\": []}"},
+    {"test_id": "E21-LLM05-05", "kind": "evidence_as_scalar", "raw_response": "{\"label\": \"Entailment\", \"evidence\": \"not disclose Confidential Information to any third party\"}"},
+    {"test_id": "E21-LLM05-06", "kind": "deeply_nested_json", "raw_response": "{\"label\": \"Entailment\", \"evidence\": [{\"nested\": {\"deeper\": {\"deepest\": \"value\"}}}]}"},
+    {"test_id": "E21-LLM05-07", "kind": "oversized_model_output", "raw_response_generator": "repeat_evidence_item", "repeat_count": 5000},
+    {"test_id": "E21-LLM05-08", "kind": "extra_unexpected_keys", "raw_response": "{\"label\": \"Entailment\", \"evidence\": [\"prior written consent of Disclosing Party\"], \"confidence\": 1.0, \"notes\": \"looks fine\", \"internal\": {\"debug\": true}}"},
+    {"test_id": "E21-LLM05-09", "kind": "html_in_evidence", "raw_response": "{\"label\": \"Entailment\", \"evidence\": [\"<b>prior written consent</b> of Disclosing Party\"]}"},
+    {"test_id": "E21-LLM05-10", "kind": "script_tag_in_evidence", "raw_response": "{\"label\": \"Entailment\", \"evidence\": [\"<script>alert('xss')</script> prior written consent\"]}"},
+    {"test_id": "E21-LLM05-11", "kind": "markdown_link_javascript_uri", "raw_response": "{\"label\": \"Entailment\", \"evidence\": [\"[click here](javascript:alert(1)) prior written consent\"]}"},
+    {"test_id": "E21-LLM05-12", "kind": "shell_like_string", "raw_response": "{\"label\": \"Entailment\", \"evidence\": [\"$(rm -rf /) prior written consent of Disclosing Party\"]}"},
+    {"test_id": "E21-LLM05-13", "kind": "control_characters", "raw_response": "{\"label\": \"Entailment\", \"evidence\": [\"prior written\\u0000\\u0007 consent of Disclosing Party\"]}"},
+    {"test_id": "E21-LLM05-14", "kind": "notmentioned_with_nonempty_evidence", "raw_response": "{\"label\": \"NotMentioned\", \"evidence\": [\"prior written consent of Disclosing Party\"]}"},
+    {"test_id": "E21-LLM05-15", "kind": "non_source_evidence", "raw_response": "{\"label\": \"Entailment\", \"evidence\": [\"This clause was fabricated and never appeared in the document.\"]}"}
+  ]
+}

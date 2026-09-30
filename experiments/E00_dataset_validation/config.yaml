@@ -1,0 +1,19 @@
+experiment_id: E00
+dataset_manifest: OFFICIAL_SPLITS_RAW   # no custom manifest -- validates the raw official files
+split_role: n/a                          # this experiment touches all three splits for validation only, tunes on none
+purpose: dataset_and_split_validation
+
+inputs:
+  train: data/contractnli/train.json
+  dev: data/contractnli/dev.json
+  test: data/contractnli/test.json
+
+model_calls: none
+api_calls: none
+embedding_calls: none
+
+outputs:
+  - results/split_validation.json
+  - results/metric_audit.json
+  - results/contamination_summary.json
+  - E00_dataset_validation.ipynb   # executed, real outputs, local-only (no model/API calls)

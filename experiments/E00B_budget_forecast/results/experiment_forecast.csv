@@ -1,0 +1,13 @@
+experiment,scenario,n_cases,hosted_models,estimated_cost_usd,cost_basis
+E01_Oracle,"n=100, 2 hosted models (real-historical-cost basis)",100,2,0.1116,"historical actual per-case cost (Gemini+GPT-5-mini, Oracle v1)"
+E01_Oracle,"n=150, 2 hosted models (real-historical-cost basis)",150,2,0.1674,"historical actual per-case cost (Gemini+GPT-5-mini, Oracle v1)"
+E01_Oracle,"n=300, 2 hosted models (real-historical-cost basis)",300,2,0.3348,"historical actual per-case cost (Gemini+GPT-5-mini, Oracle v1)"
+E01_Oracle,"n=500, 2 hosted models (real-historical-cost basis)",500,2,0.558,"historical actual per-case cost (Gemini+GPT-5-mini, Oracle v1)"
+E01_Oracle,"n=1000, 2 hosted models (real-historical-cost basis)",1000,2,1.116,"historical actual per-case cost (Gemini+GPT-5-mini, Oracle v1)"
+E03_prompt_selection,"n=100 TRAIN subset x ~4 prompt variants, 1 selected hosted model",400,1,0.0527,"historical actual per-case cost (T024 RAG, Gemini, v2 prompt)"
+E03_prompt_selection,"n=150 TRAIN subset x ~4 prompt variants, 1 selected hosted model",600,1,0.0791,"historical actual per-case cost (T024 RAG, Gemini, v2 prompt)"
+E03_prompt_selection,"n=300 TRAIN subset x ~4 prompt variants, 1 selected hosted model",1200,1,0.1582,"historical actual per-case cost (T024 RAG, Gemini, v2 prompt)"
+E15_hosted_vs_local,"n=200 stratified TEST subsample x 3 non-rule architectures, 1 hosted model",600,1,0.1769,"historical actual per-case cost (T041 full-context/RAG/RAG+agent, Gemini, full TEST)"
+E15_hosted_vs_local,"n=300 stratified TEST subsample x 3 non-rule architectures, 1 hosted model",900,1,0.2654,"historical actual per-case cost (T041 full-context/RAG/RAG+agent, Gemini, full TEST)"
+E15_hosted_vs_local,"n=500 stratified TEST subsample x 3 non-rule architectures, 1 hosted model",1500,1,0.4424,"historical actual per-case cost (T041 full-context/RAG/RAG+agent, Gemini, full TEST)"
+rerun_reserve,malformed outputs / provider errors / invalid runs (10% of E01+E03+E15 subtotal),,,,computed in budget_plan.json as 10% of the E01+E03+E15 RECOMMENDED subtotal

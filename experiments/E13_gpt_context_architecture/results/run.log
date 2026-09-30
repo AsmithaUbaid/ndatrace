@@ -1,0 +1,919 @@
+{
+ "manifest_DEV_ARCH_v1_seed1400_150_51docs": true,
+ "full_artifact_same_ids_order": true,
+ "rag_artifact_same_ids_order": true,
+ "same_hypothesis_text_both_arms": true,
+ "full_context_is_complete_dev_document": true,
+ "rag_top5_only": true,
+ "no_evaluator_truth_in_model_facing": true,
+ "system_prompt_full_hash_is_gpt_p0": true,
+ "ledger_approx_2_2317": true,
+ "no_existing_e13_ledger_rows": true,
+ "prior_ledger_rows_e12b_600_e12c_300": true,
+ "no_existing_e13_outputs": true,
+ "budget_gate_pass": true
+} 
+pre-run ledger $2.2317; gate 4.387 <= 5.00
+02:10:09 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:09 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:09 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:09 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:09 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:15 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 1/150] STRICT    dev::28::nda-20        (7.08s, arm $0.0017)
+02:10:15 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:16 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 2/150] STRICT    dev::20::nda-2         (7.93s, arm $0.0034)
+02:10:16 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 3/150] STRICT    dev::19::nda-2         (8.13s, arm $0.0052)
+02:10:16 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:16 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:17 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 4/150] STRICT    dev::32::nda-2         (9.42s, arm $0.0076)
+02:10:18 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:19 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 5/150] STRICT    dev::20::nda-1         (11.1s, arm $0.0098)
+02:10:20 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:26 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 6/150] STRICT    dev::44::nda-2         (6.59s, arm $0.0113)
+02:10:26 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:27 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 7/150] STRICT    dev::35::nda-2         (11.73s, arm $0.0146)
+02:10:28 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:29 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 8/150] STRICT    dev::35::nda-1         (14.42s, arm $0.0184)
+02:10:30 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 9/150] STRICT    dev::37::nda-1         (13.68s, arm $0.0216)
+02:10:30 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:30 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:33 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 10/150] STRICT    dev::37::nda-2         (15.68s, arm $0.0253)
+02:10:33 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:39 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 11/150] STRICT    dev::54::nda-17        (8.89s, arm $0.0275)
+02:10:39 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 12/150] STRICT    dev::45::nda-2         (11.53s, arm $0.0302)
+02:10:39 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:40 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:40 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 13/150] STRICT    dev::45::nda-7         (10.79s, arm $0.0329)
+02:10:41 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 14/150] STRICT    dev::54::nda-7         (7.67s, arm $0.0351)
+02:10:41 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:41 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 15/150] STRICT    dev::44::nda-7         (15.33s, arm $0.0385)
+02:10:41 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:41 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:44 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 16/150] STRICT    dev::70::nda-2         (3.85s, arm $0.0397)
+02:10:45 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:45 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 17/150] STRICT    dev::73::nda-1         (4.46s, arm $0.0421)
+02:10:46 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:46 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 18/150] STRICT    dev::63::nda-2         (6.82s, arm $0.0443)
+02:10:46 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:47 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 19/150] STRICT    dev::56::nda-20        (8.03s, arm $0.0469)
+02:10:47 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:48 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 20/150] STRICT    dev::69::nda-2         (8.12s, arm $0.0494)
+02:10:49 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:51 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 21/150] STRICT    dev::75::nda-2         (5.76s, arm $0.0510)
+02:10:52 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:52 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 22/150] STRICT    dev::81::nda-1         (5.61s, arm $0.0526)
+02:10:52 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 23/150] STRICT    dev::75::nda-20        (6.52s, arm $0.0549)
+02:10:53 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:53 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:55 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 24/150] STRICT    dev::152::nda-2        (4.19s, arm $0.0564)
+02:10:56 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:58 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 25/150] STRICT    dev::82::nda-20        (9.91s, arm $0.0586)
+02:10:58 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 26/150] STRICT    dev::205::nda-16       (6.25s, arm $0.0606)
+02:10:59 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 27/150] STRICT    dev::405::nda-2        (6.4s, arm $0.0630)
+02:10:59 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:10:59 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:00 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:02 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 28/150] STRICT    dev::411::nda-2        (6.3s, arm $0.0650)
+02:11:02 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 29/150] STRICT    dev::73::nda-17        (17.79s, arm $0.0709)
+02:11:03 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:03 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:07 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 30/150] STRICT    dev::435::nda-2        (9.03s, arm $0.0729)
+02:11:08 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:09 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 31/150] STRICT    dev::411::nda-5        (10.87s, arm $0.0758)
+02:11:10 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:11 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 32/150] STRICT    dev::435::nda-4        (11.78s, arm $0.0780)
+02:11:11 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:13 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 33/150] STRICT    dev::440::nda-20       (10.55s, arm $0.0802)
+02:11:13 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:17 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 34/150] STRICT    dev::478::nda-2        (7.82s, arm $0.0820)
+02:11:17 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:19 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 35/150] STRICT    dev::478::nda-1        (11.95s, arm $0.0846)
+02:11:20 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:21 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 36/150] STRICT    dev::482::nda-2        (10.44s, arm $0.0865)
+02:11:21 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 37/150] STRICT    dev::440::nda-1        (19.45s, arm $0.0901)
+02:11:22 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:22 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:23 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 38/150] STRICT    dev::486::nda-2        (9.8s, arm $0.0923)
+02:11:23 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 39/150] STRICT    dev::507::nda-2        (5.86s, arm $0.0936)
+02:11:23 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:23 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:25 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 40/150] STRICT    dev::547::nda-1        (4.01s, arm $0.0944)
+02:11:26 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:29 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 41/150] STRICT    dev::507::nda-20       (9.16s, arm $0.0958)
+02:11:29 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:30 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 42/150] STRICT    dev::547::nda-16       (8.86s, arm $0.0976)
+02:11:30 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:32 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 43/150] STRICT    dev::575::nda-17       (6.51s, arm $0.0992)
+02:11:32 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:33 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 44/150] STRICT    dev::563::nda-2        (9.82s, arm $0.1013)
+02:11:33 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:34 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 45/150] STRICT    dev::563::nda-1        (11.49s, arm $0.1039)
+02:11:35 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:35 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 46/150] STRICT    dev::575::nda-2        (6.18s, arm $0.1056)
+02:11:35 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:41 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 47/150] STRICT    dev::610::nda-2        (8.12s, arm $0.1080)
+02:11:41 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:45 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 48/150] STRICT    dev::7::nda-1          (9.81s, arm $0.1115)
+02:11:45 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 49/150] STRICT    dev::590::nda-2        (14.76s, arm $0.1157)
+02:11:45 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:45 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 50/150] STRICT    dev::610::nda-4        (11.02s, arm $0.1188)
+02:11:45 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:46 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:47 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 51/150] STRICT    dev::7::nda-12         (6.0s, arm $0.1213)
+02:11:47 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:49 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 52/150] STRICT    dev::605::nda-2        (17.48s, arm $0.1261)
+02:11:50 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:51 INFO     [ndatrace.model_gateway] Model call succeeded
+02:11:51 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 53/150] STRICT    dev::15::nda-1         (5.77s, arm $0.1279)
+[full 54/150] STRICT    dev::13::nda-1         (6.31s, arm $0.1306)
+02:11:51 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 55/150] STRICT    dev::15::nda-12        (4.33s, arm $0.1316)
+02:11:51 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:51 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:52 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:53 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 56/150] STRICT    dev::16::nda-12        (4.15s, arm $0.1329)
+02:11:54 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 57/150] STRICT    dev::13::nda-12        (9.06s, arm $0.1359)
+02:11:54 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:54 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:55 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 58/150] STRICT    dev::17::nda-16        (3.84s, arm $0.1377)
+02:11:55 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:56 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 59/150] STRICT    dev::16::nda-13        (5.23s, arm $0.1391)
+02:11:57 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:11:59 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 60/150] STRICT    dev::20::nda-12        (5.58s, arm $0.1405)
+02:11:59 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:00 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 61/150] STRICT    dev::17::nda-17        (8.95s, arm $0.1429)
+02:12:01 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:02 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 62/150] STRICT    dev::20::nda-15        (7.92s, arm $0.1449)
+02:12:02 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:03 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 63/150] STRICT    dev::33::nda-10        (8.22s, arm $0.1473)
+02:12:03 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:06 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 64/150] STRICT    dev::35::nda-12        (5.62s, arm $0.1495)
+02:12:06 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:07 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 65/150] STRICT    dev::35::nda-10        (8.38s, arm $0.1525)
+02:12:08 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:08 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 66/150] STRICT    dev::37::nda-19        (4.7s, arm $0.1543)
+02:12:08 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:08 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 67/150] STRICT    dev::33::nda-15        (12.26s, arm $0.1563)
+02:12:09 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:09 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 68/150] STRICT    dev::37::nda-12        (7.57s, arm $0.1586)
+02:12:10 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:13 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 69/150] STRICT    dev::45::nda-10        (4.75s, arm $0.1596)
+02:12:13 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 70/150] STRICT    dev::39::nda-12        (7.83s, arm $0.1613)
+02:12:14 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:14 INFO     [ndatrace.model_gateway] Model call succeeded
+02:12:14 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+[full 71/150] STRICT    dev::56::nda-12        (4.72s, arm $0.1625)
+02:12:14 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:15 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 72/150] STRICT    dev::39::nda-13        (7.85s, arm $0.1641)
+02:12:16 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:18 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 73/150] STRICT    dev::45::nda-1         (10.81s, arm $0.1661)
+02:12:19 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:20 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 74/150] STRICT    dev::63::nda-15        (6.46s, arm $0.1675)
+02:12:21 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:22 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 75/150] STRICT    dev::56::nda-13        (9.2s, arm $0.1694)
+02:12:23 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:23 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 76/150] STRICT    dev::70::nda-16        (7.87s, arm $0.1707)
+02:12:23 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:24 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 77/150] STRICT    dev::70::nda-19        (5.45s, arm $0.1720)
+02:12:24 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:25 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 78/150] STRICT    dev::63::nda-13        (12.06s, arm $0.1745)
+02:12:26 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:27 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 79/150] STRICT    dev::71::nda-10        (6.23s, arm $0.1758)
+02:12:27 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 80/150] STRICT    dev::71::nda-4         (4.72s, arm $0.1766)
+02:12:27 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:28 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:30 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 81/150] STRICT    dev::72::nda-12        (7.02s, arm $0.1788)
+02:12:30 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:33 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 82/150] STRICT    dev::72::nda-13        (9.13s, arm $0.1813)
+02:12:34 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:35 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 83/150] STRICT    dev::79::nda-12        (7.87s, arm $0.1834)
+02:12:35 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:37 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 84/150] STRICT    dev::73::nda-12        (11.06s, arm $0.1874)
+02:12:37 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:39 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 85/150] STRICT    dev::152::nda-1        (5.78s, arm $0.1890)
+02:12:39 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 86/150] STRICT    dev::79::nda-13        (9.42s, arm $0.1913)
+02:12:39 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:40 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:41 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 87/150] STRICT    dev::405::nda-1        (4.76s, arm $0.1929)
+02:12:42 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 88/150] STRICT    dev::73::nda-13        (15.11s, arm $0.1982)
+02:12:42 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:42 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:44 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 89/150] STRICT    dev::152::nda-11       (8.9s, arm $0.2006)
+02:12:44 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:45 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 90/150] STRICT    dev::456::nda-19       (3.79s, arm $0.2013)
+02:12:46 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:46 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 91/150] STRICT    dev::456::nda-15       (6.67s, arm $0.2028)
+02:12:46 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 92/150] STRICT    dev::405::nda-10       (7.37s, arm $0.2054)
+02:12:46 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:47 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:49 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 93/150] STRICT    dev::547::nda-12       (4.71s, arm $0.2072)
+02:12:49 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:49 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 94/150] STRICT    dev::547::nda-10       (7.32s, arm $0.2097)
+02:12:50 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:50 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 95/150] STRICT    dev::595::nda-10       (4.79s, arm $0.2123)
+02:12:50 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 96/150] STRICT    dev::598::nda-10       (3.91s, arm $0.2139)
+02:12:51 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:51 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:55 INFO     [ndatrace.model_gateway] Model call succeeded
+02:12:55 INFO     [ndatrace.model_gateway] Model call succeeded
+02:12:55 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 97/150] STRICT    dev::595::nda-13       (9.12s, arm $0.2175)
+[full 98/150] STRICT    dev::9::nda-1          (4.98s, arm $0.2195)
+[full 99/150] STRICT    dev::610::nda-10       (6.03s, arm $0.2215)
+02:12:56 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:56 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:56 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:57 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 100/150] STRICT    dev::598::nda-12       (8.04s, arm $0.2242)
+02:12:57 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:58 INFO     [ndatrace.model_gateway] Model call succeeded
+02:12:58 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 101/150] STRICT    dev::9::nda-10         (3.41s, arm $0.2258)
+[full 102/150] STRICT    dev::13::nda-11        (3.4s, arm $0.2275)
+02:12:59 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:59 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:12:59 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 103/150] STRICT    dev::14::nda-1         (2.53s, arm $0.2282)
+02:13:00 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:00 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 104/150] STRICT    dev::13::nda-10        (4.46s, arm $0.2303)
+02:13:00 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:01 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 105/150] STRICT    dev::610::nda-12       (11.25s, arm $0.2342)
+02:13:02 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 106/150] STRICT    dev::14::nda-10        (3.17s, arm $0.2350)
+02:13:02 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:02 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:02 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 107/150] STRICT    dev::17::nda-1         (3.77s, arm $0.2364)
+02:13:03 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:03 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 108/150] STRICT    dev::17::nda-10        (4.16s, arm $0.2380)
+02:13:04 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:05 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 109/150] STRICT    dev::19::nda-13        (5.26s, arm $0.2394)
+02:13:05 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:07 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 110/150] STRICT    dev::19::nda-16        (5.76s, arm $0.2408)
+02:13:07 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:09 INFO     [ndatrace.model_gateway] Model call succeeded
+02:13:09 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 111/150] STRICT    dev::27::nda-11        (6.72s, arm $0.2424)
+[full 112/150] STRICT    dev::32::nda-11        (5.73s, arm $0.2440)
+02:13:10 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:10 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:12 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 113/150] STRICT    dev::27::nda-10        (9.93s, arm $0.2465)
+02:13:12 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:13 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 114/150] STRICT    dev::44::nda-10        (3.67s, arm $0.2474)
+02:13:13 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:15 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 115/150] STRICT    dev::32::nda-17        (10.46s, arm $0.2499)
+02:13:16 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:17 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 116/150] STRICT    dev::45::nda-16        (8.41s, arm $0.2518)
+02:13:18 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:20 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 117/150] STRICT    dev::64::nda-11        (5.07s, arm $0.2537)
+02:13:21 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:22 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 118/150] STRICT    dev::70::nda-1         (4.36s, arm $0.2547)
+02:13:22 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:24 INFO     [ndatrace.model_gateway] Model call succeeded
+02:13:24 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 119/150] STRICT    dev::70::nda-11        (3.32s, arm $0.2554)
+[full 120/150] STRICT    dev::44::nda-1         (16.78s, arm $0.2586)
+02:13:24 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:24 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:28 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 121/150] STRICT    dev::205::nda-1        (4.18s, arm $0.2599)
+02:13:28 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:29 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 122/150] STRICT    dev::82::nda-1         (7.22s, arm $0.2608)
+02:13:30 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:30 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 123/150] STRICT    dev::45::nda-17        (18.41s, arm $0.2639)
+02:13:30 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 124/150] STRICT    dev::64::nda-10        (17.58s, arm $0.2688)
+02:13:31 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:31 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:32 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 125/150] STRICT    dev::82::nda-11        (8.39s, arm $0.2701)
+02:13:33 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:33 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 126/150] STRICT    dev::205::nda-11       (4.97s, arm $0.2715)
+02:13:34 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:35 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 127/150] STRICT    dev::398::nda-11       (4.73s, arm $0.2730)
+02:13:35 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 128/150] STRICT    dev::398::nda-10       (5.99s, arm $0.2748)
+02:13:35 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:35 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:37 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 129/150] STRICT    dev::411::nda-11       (6.53s, arm $0.2762)
+02:13:37 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:38 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 130/150] STRICT    dev::456::nda-1        (2.86s, arm $0.2767)
+02:13:38 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 131/150] STRICT    dev::435::nda-10       (5.27s, arm $0.2779)
+02:13:38 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:39 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:39 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 132/150] STRICT    dev::435::nda-16       (4.65s, arm $0.2790)
+02:13:39 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 133/150] STRICT    dev::456::nda-10       (2.63s, arm $0.2796)
+02:13:40 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:40 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:40 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 134/150] STRICT    dev::411::nda-12       (7.99s, arm $0.2815)
+02:13:41 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:42 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 135/150] STRICT    dev::478::nda-10       (4.22s, arm $0.2828)
+02:13:43 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:43 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 136/150] STRICT    dev::507::nda-11       (3.67s, arm $0.2837)
+02:13:44 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:44 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 137/150] STRICT    dev::478::nda-11       (6.14s, arm $0.2855)
+02:13:45 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:46 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 138/150] STRICT    dev::547::nda-15       (6.22s, arm $0.2868)
+02:13:47 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:48 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 139/150] STRICT    dev::507::nda-1        (8.91s, arm $0.2893)
+02:13:48 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 140/150] STRICT    dev::563::nda-11       (5.39s, arm $0.2908)
+02:13:49 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:49 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 141/150] STRICT    dev::547::nda-17       (6.91s, arm $0.2930)
+02:13:49 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:49 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:51 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 142/150] STRICT    dev::598::nda-11       (2.53s, arm $0.2941)
+02:13:52 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:53 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 143/150] STRICT    dev::563::nda-16       (8.82s, arm $0.2963)
+02:13:53 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 144/150] STRICT    dev::595::nda-12       (4.89s, arm $0.2985)
+02:13:53 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 145/150] STRICT    dev::605::nda-1        (2.27s, arm $0.2996)
+02:13:54 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:54 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:54 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:13:56 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 146/150] STRICT    dev::610::nda-1        (2.46s, arm $0.3009)
+02:13:56 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 147/150] STRICT    dev::605::nda-11       (3.36s, arm $0.3020)
+02:13:59 INFO     [ndatrace.model_gateway] Model call succeeded
+02:13:59 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 148/150] STRICT    dev::598::nda-16       (9.83s, arm $0.3045)
+[full 149/150] STRICT    dev::610::nda-11       (5.53s, arm $0.3066)
+02:14:00 INFO     [ndatrace.model_gateway] Model call succeeded
+[full 150/150] STRICT    dev::595::nda-1        (13.84s, arm $0.3120)
+== full: {"spend_usd": 0.31196474999999996, "wall_seconds": 232.29685916600283, "rate_limit_like_errors": 0, "stopped": null, "failed_calls": 0, "verify": {"records_150": true, "no_duplicates": true, "all_case_ids_present": true, "all_successful": true, "prompt_hash_ok": true, "run_id_ok": true}}
+02:14:01 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:01 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:01 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:01 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:01 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:06 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 1/150] STRICT    dev::28::nda-20        (5.51s, arm $0.0013)
+02:14:06 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 2/150] STRICT    dev::19::nda-2         (5.98s, arm $0.0028)
+02:14:07 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:07 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:07 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 3/150] STRICT    dev::20::nda-1         (7.35s, arm $0.0046)
+02:14:08 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:10 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 4/150] STRICT    dev::20::nda-2         (10.13s, arm $0.0070)
+02:14:11 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 5/150] STRICT    dev::32::nda-2         (10.71s, arm $0.0094)
+02:14:11 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:12 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:13 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 6/150] STRICT    dev::35::nda-1         (7.82s, arm $0.0109)
+02:14:14 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:18 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 7/150] STRICT    dev::44::nda-2         (7.56s, arm $0.0125)
+02:14:19 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:20 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 8/150] STRICT    dev::44::nda-7         (6.51s, arm $0.0140)
+02:14:21 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:25 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 9/150] STRICT    dev::37::nda-1         (17.03s, arm $0.0165)
+02:14:25 INFO     [ndatrace.model_gateway] Model call succeeded
+02:14:25 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 10/150] STRICT    dev::35::nda-2         (18.9s, arm $0.0193)
+[rag 11/150] STRICT    dev::37::nda-2         (14.74s, arm $0.0224)
+02:14:25 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:26 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:26 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:28 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 12/150] STRICT    dev::45::nda-2         (9.87s, arm $0.0245)
+02:14:29 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:33 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 13/150] STRICT    dev::45::nda-7         (12.6s, arm $0.0272)
+02:14:33 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:35 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 14/150] STRICT    dev::54::nda-7         (9.98s, arm $0.0294)
+02:14:36 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:37 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 15/150] STRICT    dev::54::nda-17        (12.05s, arm $0.0313)
+02:14:37 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 16/150] STRICT    dev::63::nda-2         (8.52s, arm $0.0333)
+02:14:37 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:37 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:41 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 17/150] STRICT    dev::69::nda-2         (8.42s, arm $0.0354)
+02:14:41 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 18/150] STRICT    dev::70::nda-2         (6.3s, arm $0.0370)
+02:14:41 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:42 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:42 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 19/150] STRICT    dev::56::nda-20        (17.44s, arm $0.0409)
+02:14:43 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:50 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 20/150] STRICT    dev::73::nda-17        (13.36s, arm $0.0446)
+02:14:50 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 21/150] STRICT    dev::75::nda-20        (9.11s, arm $0.0472)
+02:14:51 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:51 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:52 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 22/150] STRICT    dev::81::nda-1         (9.37s, arm $0.0497)
+02:14:52 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 23/150] STRICT    dev::75::nda-2         (10.99s, arm $0.0526)
+02:14:52 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:53 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:54 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 24/150] STRICT    dev::73::nda-1         (17.33s, arm $0.0572)
+02:14:54 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:57 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 25/150] STRICT    dev::152::nda-2        (6.21s, arm $0.0589)
+02:14:57 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:14:59 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 26/150] STRICT    dev::82::nda-20        (9.09s, arm $0.0616)
+02:15:00 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:01 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 27/150] STRICT    dev::205::nda-16       (9.58s, arm $0.0642)
+02:15:02 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 28/150] STRICT    dev::405::nda-2        (9.7s, arm $0.0666)
+02:15:02 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:02 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 29/150] STRICT    dev::411::nda-2        (8.34s, arm $0.0689)
+02:15:03 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:03 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:05 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 30/150] STRICT    dev::435::nda-2        (5.59s, arm $0.0702)
+02:15:05 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:08 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 31/150] STRICT    dev::440::nda-1        (6.06s, arm $0.0712)
+02:15:09 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:10 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 32/150] STRICT    dev::411::nda-5        (13.47s, arm $0.0743)
+02:15:11 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:14 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 33/150] STRICT    dev::435::nda-4        (12.87s, arm $0.0764)
+02:15:15 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:15 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 34/150] STRICT    dev::478::nda-1        (10.12s, arm $0.0783)
+02:15:16 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:17 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 35/150] STRICT    dev::478::nda-2        (9.15s, arm $0.0799)
+02:15:17 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:20 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 36/150] STRICT    dev::482::nda-2        (10.09s, arm $0.0821)
+02:15:21 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:21 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 37/150] STRICT    dev::440::nda-20       (18.96s, arm $0.0842)
+02:15:22 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 38/150] STRICT    dev::507::nda-2        (6.65s, arm $0.0855)
+02:15:22 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:22 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:25 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 39/150] STRICT    dev::486::nda-2        (10.53s, arm $0.0878)
+02:15:25 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:26 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 40/150] STRICT    dev::563::nda-1        (4.2s, arm $0.0886)
+02:15:26 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:27 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 41/150] STRICT    dev::547::nda-1        (6.73s, arm $0.0896)
+02:15:27 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:29 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 42/150] STRICT    dev::507::nda-20       (12.41s, arm $0.0924)
+02:15:30 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:33 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 43/150] STRICT    dev::547::nda-16       (11.71s, arm $0.0949)
+02:15:33 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 44/150] STRICT    dev::575::nda-2        (6.29s, arm $0.0963)
+02:15:34 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:34 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:35 INFO     [ndatrace.model_gateway] Model call succeeded
+02:15:35 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 45/150] STRICT    dev::575::nda-17       (8.95s, arm $0.0981)
+[rag 46/150] STRICT    dev::563::nda-2        (9.96s, arm $0.1004)
+02:15:35 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:35 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:38 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 47/150] STRICT    dev::590::nda-2        (8.58s, arm $0.1027)
+02:15:38 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:40 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 48/150] STRICT    dev::610::nda-2        (6.91s, arm $0.1045)
+02:15:41 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:42 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 49/150] STRICT    dev::7::nda-12         (3.65s, arm $0.1057)
+02:15:42 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 50/150] STRICT    dev::605::nda-2        (8.65s, arm $0.1081)
+02:15:42 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:42 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:45 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 51/150] STRICT    dev::7::nda-1          (10.2s, arm $0.1113)
+02:15:45 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 52/150] STRICT    dev::610::nda-4        (10.62s, arm $0.1140)
+02:15:45 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:46 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:47 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 53/150] STRICT    dev::13::nda-1         (6.67s, arm $0.1160)
+02:15:47 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:47 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 54/150] STRICT    dev::15::nda-1         (5.77s, arm $0.1175)
+02:15:49 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 55/150] STRICT    dev::15::nda-12        (3.54s, arm $0.1187)
+02:15:49 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:49 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:50 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 56/150] STRICT    dev::13::nda-12        (8.71s, arm $0.1208)
+02:15:51 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:53 INFO     [ndatrace.model_gateway] Model call succeeded
+02:15:53 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 57/150] STRICT    dev::16::nda-13        (5.86s, arm $0.1222)
+[rag 58/150] STRICT    dev::16::nda-12        (7.25s, arm $0.1238)
+02:15:53 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:54 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:56 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 59/150] STRICT    dev::20::nda-12        (5.46s, arm $0.1251)
+02:15:56 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 60/150] STRICT    dev::17::nda-16        (8.52s, arm $0.1267)
+02:15:56 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:57 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:15:58 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 61/150] STRICT    dev::17::nda-17        (9.93s, arm $0.1286)
+02:15:59 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:00 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 62/150] STRICT    dev::33::nda-10        (7.23s, arm $0.1302)
+02:16:00 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 63/150] STRICT    dev::20::nda-15        (7.41s, arm $0.1317)
+02:16:00 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:01 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:04 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 64/150] STRICT    dev::37::nda-12        (3.77s, arm $0.1327)
+02:16:04 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:07 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 65/150] STRICT    dev::35::nda-12        (8.25s, arm $0.1347)
+02:16:07 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:08 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 66/150] STRICT    dev::33::nda-15        (12.59s, arm $0.1367)
+02:16:09 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:09 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 67/150] STRICT    dev::35::nda-10        (13.12s, arm $0.1396)
+02:16:10 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 68/150] STRICT    dev::37::nda-19        (9.49s, arm $0.1415)
+02:16:10 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:10 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:14 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 69/150] STRICT    dev::39::nda-13        (6.95s, arm $0.1429)
+02:16:14 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:15 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 70/150] STRICT    dev::56::nda-12        (5.18s, arm $0.1442)
+02:16:15 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 71/150] STRICT    dev::39::nda-12        (11.16s, arm $0.1463)
+02:16:15 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:15 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:16 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 72/150] STRICT    dev::45::nda-10        (6.76s, arm $0.1475)
+02:16:16 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:17 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 73/150] STRICT    dev::45::nda-1         (8.99s, arm $0.1493)
+02:16:18 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:21 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 74/150] STRICT    dev::63::nda-13        (6.29s, arm $0.1505)
+02:16:21 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 75/150] STRICT    dev::56::nda-13        (7.41s, arm $0.1519)
+02:16:22 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:22 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:22 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 76/150] STRICT    dev::70::nda-16        (6.72s, arm $0.1534)
+02:16:23 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 77/150] STRICT    dev::70::nda-19        (5.31s, arm $0.1546)
+02:16:23 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:23 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:25 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 78/150] STRICT    dev::63::nda-15        (10.52s, arm $0.1561)
+02:16:26 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 79/150] STRICT    dev::71::nda-4         (4.59s, arm $0.1569)
+02:16:26 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:26 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:27 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 80/150] STRICT    dev::71::nda-10        (5.61s, arm $0.1580)
+02:16:27 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 81/150] STRICT    dev::72::nda-12        (4.52s, arm $0.1592)
+02:16:27 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:28 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:32 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 82/150] STRICT    dev::79::nda-12        (5.32s, arm $0.1606)
+02:16:32 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 83/150] STRICT    dev::73::nda-13        (6.32s, arm $0.1617)
+02:16:33 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:33 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:35 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 84/150] STRICT    dev::79::nda-13        (7.54s, arm $0.1637)
+02:16:35 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 85/150] STRICT    dev::73::nda-12        (9.4s, arm $0.1664)
+02:16:35 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:35 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 86/150] STRICT    dev::72::nda-13        (12.67s, arm $0.1693)
+02:16:35 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:36 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:38 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 87/150] STRICT    dev::152::nda-11       (6.19s, arm $0.1709)
+02:16:38 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 88/150] STRICT    dev::152::nda-1        (6.35s, arm $0.1728)
+02:16:39 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:39 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:40 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 89/150] STRICT    dev::405::nda-10       (5.24s, arm $0.1746)
+02:16:40 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 90/150] STRICT    dev::405::nda-1        (5.52s, arm $0.1759)
+02:16:40 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:41 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:42 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 91/150] STRICT    dev::456::nda-15       (6.57s, arm $0.1772)
+02:16:42 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:42 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 92/150] STRICT    dev::456::nda-19       (4.24s, arm $0.1781)
+02:16:43 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:45 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 93/150] STRICT    dev::547::nda-12       (5.29s, arm $0.1795)
+02:16:46 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 94/150] STRICT    dev::595::nda-10       (5.49s, arm $0.1811)
+02:16:46 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:46 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:47 INFO     [ndatrace.model_gateway] Model call succeeded
+02:16:47 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 95/150] STRICT    dev::547::nda-10       (8.98s, arm $0.1833)
+[rag 96/150] STRICT    dev::595::nda-13       (5.44s, arm $0.1848)
+02:16:48 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:48 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:49 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 97/150] STRICT    dev::598::nda-10       (6.24s, arm $0.1867)
+02:16:49 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:52 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 98/150] STRICT    dev::598::nda-12       (6.54s, arm $0.1886)
+02:16:52 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 99/150] STRICT    dev::9::nda-1          (5.0s, arm $0.1899)
+02:16:52 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:52 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 100/150] STRICT    dev::9::nda-10         (3.82s, arm $0.1908)
+02:16:53 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:53 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:55 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 101/150] STRICT    dev::610::nda-10       (9.51s, arm $0.1938)
+02:16:56 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:56 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 102/150] STRICT    dev::13::nda-10        (3.73s, arm $0.1948)
+02:16:56 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:56 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 103/150] STRICT    dev::14::nda-1         (3.8s, arm $0.1957)
+02:16:57 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:57 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 104/150] STRICT    dev::610::nda-12       (10.08s, arm $0.1988)
+02:16:58 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:16:59 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 105/150] STRICT    dev::17::nda-1         (3.37s, arm $0.1995)
+02:17:00 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:00 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 106/150] STRICT    dev::14::nda-10        (4.65s, arm $0.2005)
+02:17:00 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 107/150] STRICT    dev::13::nda-11        (7.61s, arm $0.2025)
+02:17:00 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:00 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 108/150] STRICT    dev::17::nda-10        (3.94s, arm $0.2035)
+02:17:00 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:01 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:03 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 109/150] STRICT    dev::27::nda-11        (3.47s, arm $0.2043)
+02:17:04 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 110/150] STRICT    dev::32::nda-11        (3.64s, arm $0.2050)
+02:17:04 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:04 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:05 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 111/150] STRICT    dev::19::nda-13        (7.1s, arm $0.2066)
+02:17:05 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 112/150] STRICT    dev::27::nda-10        (5.28s, arm $0.2078)
+02:17:05 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:06 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:10 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 113/150] STRICT    dev::44::nda-10        (5.13s, arm $0.2087)
+02:17:10 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 114/150] STRICT    dev::19::nda-16        (10.76s, arm $0.2105)
+02:17:10 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:11 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:17 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 115/150] STRICT    dev::44::nda-1         (13.41s, arm $0.2126)
+02:17:18 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:18 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 116/150] STRICT    dev::45::nda-16        (13.06s, arm $0.2150)
+02:17:18 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 117/150] STRICT    dev::32::nda-17        (14.91s, arm $0.2178)
+02:17:19 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:19 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:19 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 118/150] STRICT    dev::64::nda-10        (9.65s, arm $0.2195)
+02:17:20 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:21 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 119/150] STRICT    dev::64::nda-11        (4.09s, arm $0.2203)
+02:17:22 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:22 INFO     [ndatrace.model_gateway] Model call succeeded
+02:17:22 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 120/150] STRICT    dev::70::nda-11        (3.89s, arm $0.2211)
+[rag 121/150] STRICT    dev::70::nda-1         (4.2s, arm $0.2220)
+02:17:23 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:23 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:23 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 122/150] STRICT    dev::82::nda-1         (3.94s, arm $0.2228)
+02:17:24 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:26 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 123/150] STRICT    dev::82::nda-11        (4.64s, arm $0.2237)
+02:17:27 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:27 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 124/150] STRICT    dev::205::nda-11       (4.71s, arm $0.2247)
+02:17:27 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 125/150] STRICT    dev::205::nda-1        (4.99s, arm $0.2255)
+02:17:27 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:28 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:28 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 126/150] STRICT    dev::398::nda-10       (4.69s, arm $0.2267)
+02:17:29 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:31 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 127/150] STRICT    dev::45::nda-17        (21.17s, arm $0.2305)
+02:17:31 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 128/150] STRICT    dev::411::nda-11       (4.3s, arm $0.2315)
+02:17:32 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:32 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:32 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 129/150] STRICT    dev::411::nda-12       (4.96s, arm $0.2327)
+02:17:33 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:34 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 130/150] STRICT    dev::435::nda-10       (5.79s, arm $0.2339)
+02:17:34 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:34 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 131/150] STRICT    dev::456::nda-1        (3.12s, arm $0.2344)
+02:17:35 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:35 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 132/150] STRICT    dev::456::nda-10       (3.15s, arm $0.2351)
+02:17:35 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 133/150] STRICT    dev::398::nda-11       (9.47s, arm $0.2373)
+02:17:36 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 134/150] STRICT    dev::435::nda-16       (4.74s, arm $0.2384)
+02:17:36 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:36 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:36 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:37 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 135/150] STRICT    dev::478::nda-10       (3.19s, arm $0.2392)
+02:17:38 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:38 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 136/150] STRICT    dev::507::nda-1        (2.75s, arm $0.2400)
+02:17:39 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:41 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 137/150] STRICT    dev::507::nda-11       (5.62s, arm $0.2417)
+02:17:41 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 138/150] STRICT    dev::478::nda-11       (6.84s, arm $0.2433)
+02:17:42 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:42 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:43 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 139/150] STRICT    dev::547::nda-15       (7.22s, arm $0.2451)
+02:17:43 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:43 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 140/150] STRICT    dev::595::nda-1        (2.3s, arm $0.2459)
+02:17:44 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:44 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 141/150] STRICT    dev::563::nda-11       (6.17s, arm $0.2475)
+02:17:45 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:45 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 142/150] STRICT    dev::547::nda-17       (8.07s, arm $0.2496)
+02:17:46 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:46 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 143/150] STRICT    dev::598::nda-11       (2.6s, arm $0.2503)
+02:17:47 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:47 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 144/150] STRICT    dev::563::nda-16       (5.78s, arm $0.2516)
+02:17:47 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 145/150] STRICT    dev::595::nda-12       (4.3s, arm $0.2526)
+02:17:48 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:48 INFO     [httpx] HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+02:17:48 INFO     [ndatrace.model_gateway] Model call succeeded
+02:17:48 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 146/150] STRICT    dev::605::nda-11       (2.35s, arm $0.2533)
+[rag 147/150] STRICT    dev::605::nda-1        (3.4s, arm $0.2543)
+02:17:50 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 148/150] STRICT    dev::610::nda-1        (3.12s, arm $0.2552)
+02:17:50 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 149/150] STRICT    dev::610::nda-11       (3.06s, arm $0.2562)
+02:17:59 INFO     [ndatrace.model_gateway] Model call succeeded
+[rag 150/150] STRICT    dev::598::nda-16       (14.92s, arm $0.2607)
+== rag: {"spend_usd": 0.26070175, "wall_seconds": 239.02013308403548, "rate_limit_like_errors": 0, "stopped": null, "failed_calls": 0, "verify": {"records_150": true, "no_duplicates": true, "all_case_ids_present": true, "all_successful": true, "prompt_hash_ok": true, "run_id_ok": true}}
+ALL DONE spend $0.5727, ledger $2.8044

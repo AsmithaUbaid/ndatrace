@@ -1,0 +1,48 @@
+{
+  "run_id": "R4_bge",
+  "config": {
+    "method": "dense",
+    "chunk_method": "clause",
+    "chunk_size": 256,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-base-en-v1.5",
+    "top_k": 5
+  },
+  "n_documents": 423,
+  "n_cases": 4371,
+  "metrics": {
+    "n_cases": 4371,
+    "overall": {
+      "evidence_recall_at_k": 0.8843922008429554,
+      "evidence_precision": 0.05267703012156794,
+      "mrr": 0.31020950914679346
+    },
+    "entailment": {
+      "n": 3530,
+      "evidence_recall_at_k": 0.8836157482350823,
+      "evidence_precision": 0.05299961215275917,
+      "mrr": 0.302671063420245
+    },
+    "contradiction": {
+      "n": 841,
+      "evidence_recall_at_k": 0.8876512706477034,
+      "evidence_precision": 0.051323029443678995,
+      "mrr": 0.3418512611262561
+    },
+    "miss_count": 349
+  },
+  "context_size": {
+    "mean_chunks": 4.887211164493251,
+    "mean_chars": 5393.160375200183,
+    "mean_tokens": 1009.2372454815832,
+    "median_tokens": 1019,
+    "p90_tokens": 1163,
+    "max_tokens": 1569
+  },
+  "latency_ms": {
+    "mean": 0.05828133886827024,
+    "median": 0.005875015631318092,
+    "p90": 0.02316699828952551
+  },
+  "total_build_and_query_seconds": 122.75660362502094
+}

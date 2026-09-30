@@ -1,0 +1,23 @@
+{
+  "control": "backend/models.py max_length + pipeline/cost_guard.py + backend/rate_limit.py",
+  "checks": {
+    "nda_text_at_limit_accepted_by_schema": true,
+    "nda_text_over_limit_rejected_422": true,
+    "requirement_at_limit_accepted_by_schema": true,
+    "requirement_over_limit_rejected_422": true,
+    "unknown_hypothesis_id_rejected_400": true,
+    "empty_nda_text_rejected_422": true,
+    "oversized_pdf_rejected_413": true,
+    "small_request_estimated_cost_usd": 0.004321,
+    "small_request_under_per_request_ceiling": true,
+    "normal_request_passes_check_budget": true,
+    "exhausted_budget_correctly_rejects": true,
+    "retry_count_configured": 1,
+    "timeout_seconds_configured": 60,
+    "rate_limit_allowed_before_reject": 30,
+    "rate_limit_rejected_on_call_number": 31,
+    "rate_limit_behaves_as_configured": true,
+    "concurrency_limit_enforced": true
+  },
+  "outcome": "PASS"
+}

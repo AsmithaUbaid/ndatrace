@@ -1,0 +1,33 @@
+{
+  "checks": {
+    "manifest_150_50_50_50": true,
+    "manifest_seed_1200_74_docs": true,
+    "manifest_disjoint_flags": true,
+    "context_same_ids_order": true,
+    "context_top5_only": true,
+    "context_no_gold_leakage": true,
+    "prompt_hashes_match_stageA": true,
+    "budget_gate_pass": true,
+    "no_existing_raw_outputs": true
+  },
+  "prompt_hashes": {
+    "gpt_p0": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
+    "gpt_p1": "1d0916a46c33b2e3f44dc5513fae85c3b234cac4",
+    "gpt_p2": "4198f59b9b59b2cdefc623640802f23ca33ed3c5",
+    "gpt_p3": "d2bca31164c2db9ea9995fb769977e3e2c0a6496"
+  },
+  "run_order": [
+    "gpt_p0",
+    "gpt_p1",
+    "gpt_p2",
+    "gpt_p3"
+  ],
+  "model": "openai/gpt-5-mini",
+  "provider": "openrouter",
+  "timeout_seconds": 60,
+  "temperature": 0.0,
+  "pre_run_ledger_usd": 0.7077744499999996,
+  "gate_reason": "OK: projected total $2.3837 <= allowed $3.7500 (planning budget $5.00 - reserve $1.25)",
+  "tests_before_run": "338 passed",
+  "timestamp": "2026-09-26T16:54:29.208689+00:00"
+}

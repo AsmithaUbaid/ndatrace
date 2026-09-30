@@ -1,0 +1,115 @@
+{
+  "config": {
+    "chunking": {
+      "chunk_method": "clause",
+      "chunk_size": 256,
+      "chunk_overlap": 50
+    },
+    "candidate_pool_size": 20,
+    "final_top_k": 5,
+    "reranker": "ms-marco-MiniLM-L-12-v2",
+    "dense_embedding": "BAAI/bge-base-en-v1.5"
+  },
+  "bm25_pool_recall_at_20": 0.9986948611519648,
+  "dense_pool_recall_at_20": 0.9990619995424389,
+  "bm25_plus_rerank": {
+    "metrics": {
+      "n_cases": 4371,
+      "overall": {
+        "evidence_recall_at_k": 0.9223518975749581,
+        "evidence_precision": 0.05352623509380265,
+        "mrr": 0.3764585373868954
+      },
+      "entailment": {
+        "n": 3530,
+        "evidence_recall_at_k": 0.9182843203381441,
+        "evidence_precision": 0.05378965366043727,
+        "mrr": 0.37740736162860017
+      },
+      "contradiction": {
+        "n": 841,
+        "evidence_recall_at_k": 0.9394250814583751,
+        "evidence_precision": 0.05242056619936809,
+        "mrr": 0.37247595763278085
+      },
+      "miss_count": 189
+    },
+    "context_size": {
+      "mean_chunks": 4.887211164493251,
+      "mean_chars": 5459.962937542897,
+      "mean_tokens": 1022.874628231526,
+      "median_tokens": 1034,
+      "p90_tokens": 1167,
+      "max_tokens": 1649
+    }
+  },
+  "dense_plus_rerank": {
+    "metrics": {
+      "n_cases": 4371,
+      "overall": {
+        "evidence_recall_at_k": 0.9221819462725427,
+        "evidence_precision": 0.05349220017072343,
+        "mrr": 0.3764499663676861
+      },
+      "entailment": {
+        "n": 3530,
+        "evidence_recall_at_k": 0.9180738792211875,
+        "evidence_precision": 0.05374663848427403,
+        "mrr": 0.377388700717588
+      },
+      "contradiction": {
+        "n": 841,
+        "evidence_recall_at_k": 0.9394250814583751,
+        "evidence_precision": 0.052424224847497605,
+        "mrr": 0.37250973776465846
+      },
+      "miss_count": 190
+    },
+    "context_size": {
+      "mean_chunks": 4.887211164493251,
+      "mean_chars": 5459.706474490963,
+      "mean_tokens": 1022.8400823610158,
+      "median_tokens": 1033,
+      "p90_tokens": 1167,
+      "max_tokens": 1649
+    }
+  },
+  "overlap_analysis": {
+    "both_hit": 4181,
+    "both_miss": 189,
+    "bm25_only_hit": 1,
+    "dense_only_hit": 0,
+    "note": "bm25_only_hit = cases BM25+rerank solved that dense+rerank missed, and vice versa"
+  },
+  "contradiction_overlap_analysis": {
+    "both_hit": 809,
+    "both_miss": 32,
+    "bm25_only_hit": 0,
+    "dense_only_hit": 0
+  },
+  "latency_ms": {
+    "bm25_candidate_generation": {
+      "mean": 0.15751891015206163,
+      "median": 0.13462500646710396,
+      "p90": 0.22066698875278234
+    },
+    "dense_candidate_generation": {
+      "mean": 1.0989209799457353,
+      "median": 0.0411659711971879,
+      "p90": 0.0892499228939414
+    },
+    "bm25_reranking": {
+      "mean": 175.45406070602957,
+      "median": 126.59537501167506,
+      "p90": 318.7877089949325
+    },
+    "dense_reranking": {
+      "mean": 175.03307346994788,
+      "median": 126.10870797652751,
+      "p90": 319.31570905726403
+    }
+  },
+  "experiment_wall_seconds_this_run": 1539.5972743750317,
+  "bm25_index_build_seconds_isolated": 1.9,
+  "_note": "The old field name 'bm25_full_universe_build_seconds_this_run' was mislabeled -- the timer spans the whole per-document loop (both candidate generators and both rerankers), not isolated BM25 index-build time. Renamed to 'experiment_wall_seconds_this_run'; the isolated BM25 build figure (~1.9s across all 423 docs) is from Stage A calibration."
+}

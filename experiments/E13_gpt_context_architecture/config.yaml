@@ -1,0 +1,111 @@
+experiment_id: E13_gpt_context_architecture
+status: STAGE_B_COMPLETE  # outcome B (FULL materially better via RAG evidence guards; net_joint -3); DEV architecture-selection result, not final architecture; not committed
+question: >
+  Under the same GPT-5-mini model, prompt, output contract, and evaluator, does retrieval_v1 RAG outperform or adequately match
+  full-NDA context while reducing token use, latency, and cost?
+context: >
+  GPT prompt optimisation is CLOSED (E12B/E12C): GPT-P0 = classification_prompt_v1 stays active. Agent track rejected (A3), static top-11
+  rejected. This is the first GPT full-context measurement (E05 full-context was Qwen; E08B/E12 GPT runs were RAG only).
+
+dataset:
+  split: DEV  # Role B (architecture validation) per docs/data_contamination_register.md; NOT TEST; no new TRAIN architecture manifest
+  manifest: DEV_ARCH_v1
+  seed: 1400  # fresh; prior 42, 99, 123, 300, 500, 700, 900, 1100, 1200, 1300
+  n: 150
+  per_class: {Entailment: 50, Contradiction: 50, NotMentioned: 50}
+  unique_documents: 51
+  selection: deterministic, performance-agnostic (same algorithm as prior manifests), no hard-case enrichment
+  historical_exposure_disclosure: >
+    DEV is NOT unseen. Reconstruction-v2 (E00-E12C) never touched DEV, but the historical T-series used it heavily: the 150-case seed-42 sample
+    touched 58/61 DEV documents (Oracle/prompt/RAG/confidence/agent tuning), 55 golden-battery cases (24 docs), and the full 1,037-case rule baseline and
+    614-case retrieval experiments touched every document. Document-level disjointness is therefore INFEASIBLE (3 untouched docs). DEV_ARCH_v1 is CASE-level
+    disjoint from the 150-case sample and every golden case (48 of its 51 documents were touched by other hypotheses historically). Per docs/data_contamination_register.md
+    section 5, no historical DEV outcome may justify an E13 decision; retrieval_v1 and GPT-P0 were both chosen on TRAIN.
+  remaining_never_used_dev_after_selection: {total: 696, Entailment: 377, NotMentioned: 301, Contradiction: 18}
+  preservation_note: >
+    Only 18 never-used Contradiction cases remain for later DEV work (routing/abstention calibration, robustness). Later work may need to reuse DEV_ARCH_v1
+    cases (disclosed) or work with few fresh Contradictions.
+  audit: results/dev_audit.json
+
+arms:  # ONLY the text inserted in the context field differs
+  A_full: {artifact: DEV_ARCH_v1_FULL_CONTEXT.json, context: "complete NDA text, verbatim, no retrieval/rerank/truncation/omission", run_id: e13_gpt_full}
+  B_rag:  {artifact: DEV_ARCH_v1_RETRIEVED_retrieval_v1.json, context: "retrieval_v1 top-5 chunks joined by \\n\\n---\\n\\n (BM25 -> clause_256 -> top-20 -> ms-marco-MiniLM-L-12-v2 -> top-5, unchanged)", run_id: e13_gpt_rag}
+frozen:
+  model: openai/gpt-5-mini
+  provider: openrouter
+  temperature: 0.0
+  request_timeout_seconds: 60  # identical for both arms
+  system_prompt: {file: prompts/reconstruction_v2/gpt_p0.txt, sha1: 3fcc7c95cf1287c292e403f12b307c9d912278ce, identical_both_arms: true}
+  user_template: "Requirement: {hypothesis_text}\n\nNDA context: {context_text}"  # identical both arms
+  output_schema: unchanged (inherited label-vs-evidence quirk preserved)
+  parser: evaluation.structured_output.parse_structured_output
+  evidence_validator: pipeline.evidence_validator.validate_evidence
+  scorer: scripts/analyze_e08b_stronger_model.py helpers (same as E12B/E12C)
+  not_added: [top-11, agent, different prompt, different model]
+wrapper_disclosure: >
+  A shared neutral header "NDA context:" is used for BOTH arms to remove wrapper wording as a confound. Historical wrappers differed: E05 full-context used
+  "Full NDA text:"; E07/E08B/E12 RAG used "Retrieved NDA excerpts:". Consequently the E13 RAG arm is NOT byte-identical to the E08B/E12 GPT-RAG messages (only the wrapper
+  header differs; system prompt and evidence instruction are byte-identical), so E13-RAG vs E12-RAG cross-comparisons carry that small disclosed difference.
+  Limitation: the frozen GPT-P0 system prompt (kept byte-identical by requirement) says "excerpts retrieved from the NDA", which is literally inaccurate for the FULL arm.
+  Neither arm's system prompt was edited; this may slightly disadvantage FULL and is disclosed.
+
+metrics:  # frozen before any call
+  primary: [joint_label_evidence_success, contradiction_recall, macro_f1]
+  secondary: [accuracy, entailment_recall, notmentioned_recall, evidence_recall, evidence_precision, source_valid_evidence_rate, strict_parse_rate]
+  operational: [input_tokens, output_tokens, latency_per_call, cost]
+  contradiction_analysis: [correct_of_50, recall, C_to_E, C_to_NM, contradiction_joint, every_discordant_contradiction_case_inspected]
+  paired: [classification_transitions, joint_transitions, discordant_case_ids]
+  statistics: [exact_mcnemar_classification, exact_mcnemar_joint, "10000 paired bootstrap (seed 900): accuracy, macro_f1, contradiction_recall, joint deltas"]
+  emphasis: effect sizes and transitions first; one-case flips are not architecture effects (E12A repeatability noise); no case is re-run
+
+analysis_plan:
+  context_loss_vs_distractor: >
+    FULL succeeds & RAG fails -> inspect whether RAG omitted needed evidence: retrieval/filtering loss | context-isolation problem | evidence-selection issue | model variability/other.
+    RAG succeeds & FULL fails -> inspect whether full context added distractor clauses | conflicting provisions | exception distraction | evidence-selection drift | other.
+  document_length_groups:  # cutoffs from FULL-NDA token TERTILES, fixed before any call
+    short: {nda_tokens_le: 1352, n: 53}
+    medium: {nda_tokens_le: 2683, n: 49}
+    long: {nda_tokens_gt: 2683, n: 48}
+    report_per_group: [n, full_context_tokens, rag_tokens, full_joint, rag_joint, delta]
+    purpose: does RAG become more valuable as documents get longer
+    caveat: DEV NDAs are short by production standards (max ~6.2K NDA tokens); extrapolation to long contracts is not supported by this data
+
+decision_rule:  # FROZEN (user-approved corrected rule) BEFORE any hosted call. Replaces the Stage A proposal (the +9 prompt-optimisation threshold is NOT reused). No weighted score.
+  definitions:
+    net_joint: "RAG joint-success count minus FULL joint-success count (of 150)"
+    RAG_quality_guards:  # RAG fails a guard if ANY is true; all four are treated as important guards
+      1: "RAG Contradiction correct count is >=3/50 below FULL's (>=6pp lower Contradiction Recall)"
+      2: "RAG Macro-F1 is more than 0.03 below FULL's"
+      3: "RAG Evidence Recall is more than 3pp below FULL's"
+      4: "RAG Evidence Precision is more than 3pp below FULL's"
+  outcomes:
+    A_RAG_MATERIALLY_BETTER: "net_joint >= +5 AND all quality guards pass"
+    B_FULL_MATERIALLY_BETTER: "net_joint <= -5 OR (RAG fails a guard AND net_joint <= 0). Not overridden because RAG is cheaper; FULL's operational penalty is reported separately."
+    C_EFFECTIVELY_TIED_SELECT_RAG: "-4 <= net_joint <= +4 AND RAG passes all guards -> select RAG for operational efficiency (~54% lower input tokens, lower expected cost, more scalable context handling, explicit evidence-selection pipeline)"
+    D_MIXED_NO_FREEZE: "RAG has positive net_joint but fails a guard, or metrics disagree in a way not covered above; no winner forced, no architecture freeze"
+  coverage_check: "net>=5&pass->A; net<=-5->B; -4..0&fail->B; -4..4&pass->C; 1..4&fail->D; >=5&fail->D (exhaustive)"
+  why_plus_minus_5: "5/150 = 3.3pp: the predeclared PRACTICAL architecture-difference threshold, chosen cautiously because earlier experiments showed non-zero hosted-model outcome variability. It is NOT a statistical-significance threshold."
+  operational_principle: >
+    No automatic winner overrides for latency/cost ratios or p95. Actual input-token ratio, latency ratio, cost ratio and timeout/error behaviour are REPORTED.
+    Only technical infeasibility (truncation, repeated timeouts, provider rejection) invalidates an arm operationally.
+  statistics: "McNemar/bootstrap are supporting evidence only; effect sizes and transitions first; no case is re-run"
+  final_architecture_claim: "none -- E13 is the DEV architecture-selection result (DEV architecture validation with disclosed historical exposure), not the final production architecture"
+  full_context_limitation: "DEV NDAs are relatively short (max request ~6.3K tokens); E13 does not establish that full-context scales to much larger enterprise NDAs; scalability stays a later production consideration and historical assumptions do not override the measured result"
+
+execution:
+  arm_order: [A_full, B_rag]  # fixed, sequential arms; fixed order accepted (no randomisation; the order cannot affect a stateless temperature-0 API call materially, but is disclosed)
+  max_concurrency_within_arm: 5  # same for both arms
+  timeout_seconds: 60  # same for both arms
+  circuit_breaker: "5 consecutive failed calls -> stop scheduling, let in-flight finish, preserve, report; no auto-resume"
+  no_interim_quality_analysis_between_arms: true
+  create_only_output_files: true
+  ledger_run_ids: [e13_gpt_full, e13_gpt_rag]
+  note: total arm wall-clock is concurrency-dependent; compare per-call latency only
+
+budget:
+  planning_usd: 5.00
+  reserve_usd: 1.25
+  gate: "ledger + conservative E13 spend + reserve <= planning"
+  forecast: results/pre_run_forecast.json
+  result: PASS
+model_calls_stage_a: NONE

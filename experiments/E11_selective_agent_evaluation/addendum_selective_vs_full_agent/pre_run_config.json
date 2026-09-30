@@ -1,0 +1,166 @@
+{
+  "status": "D1_FROZEN_AWAITING_APPROVAL",
+  "hosted_calls_made_in_D1": 0,
+  "commit": "7802b528c13bb67fd80d66e26bf42a9a3c8f640b",
+  "population": {
+    "source_manifest": "experiments/E05_full_context/TRAIN_ARCH_v1.json",
+    "manifest_sha1": "3a5491ab0de1c101b8d1043ff4dffa21029a58f6",
+    "ordered_case_id_list_sha1": "1544a2be756c4e45128c46a0f8a363af009a6f2e",
+    "n": 150,
+    "class_distribution": {
+      "Entailment": 50,
+      "Contradiction": 50,
+      "NotMentioned": 50
+    },
+    "split": "TRAIN",
+    "test_allowed": false
+  },
+  "rag": {
+    "model": "openai/gpt-5-mini",
+    "prompt": "prompts/reconstruction_v2/gpt_p0.txt",
+    "prompt_sha1": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
+    "retrieval": "clause_256 -> BM25 top-20 -> cross-encoder/ms-marco-MiniLM-L-12-v2 -> top-5",
+    "retrieval_artifact": "experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1.json",
+    "retrieval_artifact_sha1": "af5b07ebff19f596375cfdea6f25530d4511c903",
+    "baseline_predictions": "experiments/E08B_stronger_model_diagnostic/results/run_E08B_A2_gpt5mini_train_cases.jsonl",
+    "baseline_predictions_sha1": "c1f801adfe6864884341db5d1d11919f18abfec2",
+    "gold": "experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1_GOLD.json",
+    "gold_sha1": "ca9c438fef11398a0f84d4b46a0f712b74c5d67b",
+    "parser": "existing strict/recovery structured-output parser",
+    "evidence_validator": "runtime_evidence_validator_v2",
+    "evaluator": "evidence_evaluator_v2, tau=0.5"
+  },
+  "router": {
+    "name": "R5_q10",
+    "status": "diagnostic comparator only; not production approved",
+    "definition": "R1 OR top1 reranker score <= -0.5165155708789826 OR top1-top2 margin <= 0.1690671443939209 OR cross-reference cue in retrieved top-5",
+    "R1": "unusable parse/error OR E/C with no evidence OR any source-invalid quote OR NotMentioned with evidence",
+    "router_protocol": "experiments/E15_review_routing/addendum_rag_evidence_routing/frozen_protocol.json",
+    "router_protocol_sha1": "0ed608441d15b8b06829341572149efa52702aaa",
+    "routed_cases": 41,
+    "routing_rate": 0.2733333333333333
+  },
+  "agent": {
+    "controller": "pipeline/agent_v2.py",
+    "controller_sha1": "d688def33bbd83809d5dcad5d1d7861570f3be1d",
+    "tools": "pipeline/agent_tools_v2.py",
+    "tools_sha1": "f44ac1f35bbdbf65d266d70914b683a312e42130",
+    "control_prompt": "prompts/agent_v2_control.txt",
+    "control_prompt_sha1": "30781d7cac504c7887f2ae0dc63c1564f5430df9",
+    "composite_agent_sha1": "5717e352928b08518069cb9eb5a036ba41cd1d26",
+    "max_agent_steps": 3,
+    "max_tool_calls": 2,
+    "max_identical_call_repeats": 1,
+    "max_added_context_chars": 8000,
+    "max_total_model_calls_per_case_including_reused_base": 4,
+    "max_wall_clock_seconds": 60,
+    "max_estimated_agent_cost_usd_per_case": 0.01,
+    "tools_exposed": [
+      "FOLLOW_CROSS_REFERENCE",
+      "GET_MORE_CANDIDATES"
+    ],
+    "fallback": "return frozen base-RAG label/evidence unchanged"
+  },
+  "arms": {
+    "A_RAG_ONLY": {
+      "cases": 150,
+      "agent_runs": 0,
+      "new_hosted_calls": 0
+    },
+    "B_R5_Q10_SELECTIVE_AGENT": {
+      "cases": 150,
+      "agent_runs": 41,
+      "non_agent_cases_reuse_A": 109
+    },
+    "C_FULL_AGENT": {
+      "cases": 150,
+      "agent_runs": 150
+    },
+    "ORACLE_DIAGNOSTIC": {
+      "cases": 150,
+      "base_joint_failures_receiving_agent_output": 39,
+      "new_hosted_calls": 0,
+      "note": "derived from Arm C traces; scorer-only diagnostic upper bound"
+    }
+  },
+  "execution_efficiency": {
+    "method": "run one forced-agent trace for each of the 150 cases; derive Arm B from the same traces on the 41 frozen R5_q10 cases and Arm C from all traces",
+    "reason": "avoids 41 duplicate hosted runs and makes selective/full outcomes identical on shared treated cases",
+    "unique_agent_cases": 150,
+    "hosted_call_forecast": {
+      "empirical_point_estimate": 150,
+      "two_step_planning_case": 300,
+      "hard_maximum": 450
+    }
+  },
+  "forecast": {
+    "basis": {
+      "all_case_step1_input_tokens": {
+        "total": 212685,
+        "mean": 1417.9,
+        "median": 1434,
+        "p90": 1571,
+        "max": 2042
+      },
+      "E11_measured_output_tokens_per_call": 538.4666666666667,
+      "E11_measured_cost_per_call_usd": 0.0014539166666666665,
+      "E11_measured_latency_seconds_per_call": 6.074642247116814,
+      "E11_measured_p90_latency_seconds": 9.70008962508291,
+      "planning_added_tokens_per_later_turn": 1000,
+      "conservative_output_tokens_per_call": 1859,
+      "pricing_usd_per_million": {
+        "input": 0.25,
+        "output": 2.0
+      }
+    },
+    "actual_new_run_full_150": {
+      "input_tokens": {
+        "one_step": 212685,
+        "two_step_planning": 575370,
+        "three_step_conservative": 1110600
+      },
+      "output_tokens": {
+        "one_step": 80770,
+        "two_step_planning": 161540,
+        "three_step_conservative": 836550
+      },
+      "incremental_cost_usd": {
+        "one_step": 0.21471125,
+        "two_step_planning": 0.4669225,
+        "three_step_conservative": 1.95075
+      },
+      "sequential_runtime_seconds": {
+        "one_step": 911.1963370675221,
+        "two_step": 1822.3926741350442,
+        "three_step_at_E11_p90": 4365.0403312873095,
+        "absolute_60s_per_case_cap": 9000
+      }
+    },
+    "Arm_B_attributed_if_same_path_distribution": {
+      "R5_step1_input_tokens_exact": {
+        "total": 59333,
+        "mean": 1447.1463414634147,
+        "p90": 1742,
+        "max": 2042
+      },
+      "one_step_incremental_cost_usd_approx": 0.05899,
+      "two_step_incremental_cost_usd_approx": 0.12763,
+      "three_step_conservative_cost_usd_approx": 0.53321
+    },
+    "provider_key_status_checked_utc": "2026-09-27T14:17:56Z",
+    "provider_key_limit_usd": 10.0,
+    "provider_key_usage_usd": 2.276084876,
+    "provider_key_remaining_usd": 7.723915124,
+    "required_D2_preflight": "refresh provider balance and abort if remaining balance is below conservative forecast plus reserve"
+  },
+  "run_order": [
+    "verify hashes, tests, provider balance, and no TEST access",
+    "materialize Arm A entirely from frozen stored outputs",
+    "freeze scorer-free execution membership and R5_q10 flags",
+    "run one resumable forced-agent pass over all 150 cases in source-manifest order",
+    "derive Arm B from the 41 R5_q10 traces plus 109 Arm-A rows",
+    "derive Arm C from all 150 traces",
+    "derive oracle diagnostic from Arm-C traces on the 39 base Joint failures",
+    "score all arms, run failure-routing and E18 human-cost analyses, write report, stop"
+  ]
+}

@@ -6,12 +6,16 @@ has no server-side logic of its own beyond Next.js routing.
 
 ## What it does
 
-- Submit an NDA (paste text or upload a PDF, extracted server-side via `POST /extract-pdf`) and
-  select which of the 17 standard confidentiality requirements to check.
-- Display results per requirement: label (Entailment/Contradiction/NotMentioned), confidence,
-  cited evidence, whether the selective agent was escalated, and per-case cost/latency.
-- Browse past reviews (`/history`) and offline experiment results (`/experiments`).
-- Export/copy a review's results as text or JSON.
+- **`/` — frozen RAG batch review (`POST /review`).** Submit an NDA
+  (paste text or upload a PDF) and pick which of the 17 standard confidentiality requirements to
+  check (checkbox multi-select, all selected by default). Results show the verdict, explanation,
+  exact evidence, and source-clause provenance; results are saved to SQLite.
+- **`/history`** — browse past batch reviews (`GET /results`, `GET /review/{id}`).
+- **`/experiments`** — the reconstruction-v2 final TEST comparison (`GET /experiments`, reads
+  `results/final/reconstruction_v2/`).
+
+`/` and the single-requirement backend endpoint use the same frozen top-5 RAG classifier path.
+The UI uses the batch adapter so one document index can serve multiple selected requirements.
 
 ## Local development
 
@@ -38,19 +42,18 @@ port; set `NEXT_PUBLIC_API_URL` only to point at a different backend host/port.
 
 | Path | Purpose |
 |---|---|
-| `app/page.tsx` | Main review screen — NDA input, requirement selection, results display |
-| `app/history/page.tsx` | Past live reviews (`GET /results`) |
-| `app/experiments/page.tsx` | Offline experiment browser (`GET /experiments`) |
-| `components/RequirementCard.tsx` | One requirement's result: label, evidence, confidence, agent/cost details |
-| `components/ResultsSummaryBar.tsx` | Headline + clickable Entailment/Contradiction/NotMentioned count chips |
-| `components/FilterTabs.tsx` | Filter results by label or "needs attention" (low confidence / agent-escalated) |
-| `components/ConfidenceBar.tsx` | Visual confidence indicator |
-| `components/LabelBadge.tsx` | Colored label chip |
-| `components/Checkbox.tsx` | Custom-styled checkbox (requirement selection) |
-| `components/NavBar.tsx` | Top navigation |
-| `lib/api.ts` | Fetch wrappers for every backend endpoint in `../docs/api.md` |
-| `lib/verdict.ts` | Label → color/icon/filter-key mapping shared across components |
-| `lib/export.ts` | Copy-to-clipboard / download-as-text/JSON for a completed review |
+| `app/page.tsx` | Batch review screen — NDA input, checkbox picker for the 17 requirements, submits to frozen-RAG `POST /review` |
+| `app/history/page.tsx` | Past batch reviews (`GET /results`, `GET /review/{id}`) |
+| `app/experiments/page.tsx` | Reconstruction-v2 final TEST comparison (`GET /experiments`, reads `results/final/reconstruction_v2/`) |
+| `components/RequirementCard.tsx` | One result: verdict, explanation, source-validated evidence, and subtle retrieval provenance |
+| `components/ResultsSummaryBar.tsx`, `components/FilterTabs.tsx` | Batch-review result filtering by verdict/needs-attention |
+| `components/Checkbox.tsx` | Custom-styled checkbox for the requirement picker |
+| `components/ResultCard.tsx` | Renders a `POST /api/review` result (label, evidence, `needs_human_review`/`source_valid` state, no fabricated confidence) - not currently used by any page since `/final` was removed |
+| `components/LimitationsPanel.tsx` | Collapsible panel stating the system's known limitations (reviewer aid only, human final authority, NotMentioned/injection caveats) |
+| `components/NavBar.tsx` | Top navigation (Review / History / Experiments) |
+| `lib/api.ts` | Fetch wrappers + TypeScript types for every backend endpoint in `../docs/api.md` |
+| `lib/verdict.ts` | Label → normalized verdict (color/icon/filter-key) mapping and review-attention helpers |
+| `lib/export.ts` | Copy-to-clipboard / download-as-text/JSON for a completed batch review |
 
 ## Build / production commands
 

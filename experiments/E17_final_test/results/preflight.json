@@ -1,0 +1,75 @@
+{
+ "hosted_gpt": {
+  "n_requests": 150,
+  "requests_sha256": "a7c2d76985479b001cb73fc102b2c808f5a4d44ab301a6327a88f01ac1bfbd4b",
+  "system_prompt_sha1": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
+  "model": "openai/gpt-5-mini",
+  "request_tokens": {
+   "n": 150,
+   "mean": 2383.6466666666665,
+   "median": 1951.0,
+   "p90": 4359.5,
+   "p95": 4768.95,
+   "max": 7938.0
+  },
+  "output_tokens_hist_288_calls": {
+   "mean": 774.1770833333334,
+   "p90": 1285.2
+  },
+  "expected_cost": 0.32163987499999996,
+  "expected_cost_per_call": 0.002144265833333333,
+  "conservative_cost": 0.47494675000000003,
+  "conservative_cost_per_call": 0.003166311666666667,
+  "pricing_per_million": {
+   "input": 0.25,
+   "output": 2.0
+  },
+  "hist_cost_per_call_E13_E15_mean": 0.002152,
+  "budget_gate": {
+   "ledger": 3.19156595,
+   "conservative_hosted": 0.47494675000000003,
+   "reserve": 1.25,
+   "sum": 4.9165127,
+   "plan": 5.0,
+   "pass": true,
+   "headroom_under_plan": 0.08348729999999982,
+   "max_allowed_conservative": 0.5584340499999998
+  }
+ },
+ "local_qwen": {
+  "n_requests": 2091,
+  "model": "qwen2.5:7b-instruct-ctx16k (num_ctx=16384 baked into Modelfile)",
+  "system_prompt_sha1": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
+  "request_tokens_qwen_tokenizer": {
+   "n": 2091,
+   "mean": 2336.68818747011,
+   "median": 2003.0,
+   "p90": 4305.0,
+   "p95": 4889.5,
+   "max": 8073.0
+  },
+  "num_ctx": 16384,
+  "output_reserve_tokens": 1024,
+  "max_request_plus_reserve": 9097,
+  "cases_exceeding_context": 0,
+  "context_safe": true,
+  "context_headroom_tokens_at_max": 7287,
+  "runtime_forecast_hours": {
+   "expected_regression": 7.6835401023744945,
+   "conservative_regression_plus_p90_resid": 9.156485938834946,
+   "hist_mean_latency_x_n": 7.41379538888889,
+   "hist_p90_latency_x_n": 12.576203333333332
+  },
+  "hist_E05": {
+   "n": 150,
+   "mean_s": 12.764066666666668,
+   "median_s": 10.175,
+   "p90_s": 21.651999999999997,
+   "max_s": 84.04,
+   "fit_s_per_1k_tokens": 5.531661527842793,
+   "fit_intercept_s": 0.3027083541776081
+  }
+ },
+ "shared_template": "Requirement: {hypothesis_text}\n\nNDA context: {context_text}",
+ "note": "no model calls; TEST content used only to construct requests and count tokens"
+}

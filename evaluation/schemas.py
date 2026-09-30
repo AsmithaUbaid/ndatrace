@@ -38,6 +38,13 @@ class Prediction(BaseModel):
     """A single prediction from the pipeline."""
     doc_id: str = Field(description="Document ID from ContractNLI")
     hypothesis_id: str = Field(description="Hypothesis ID (e.g., nda-1)")
+    split: str = Field(
+        default="",
+        description="Source split (train/dev/test), for the reconstruction-v2 split-qualified "
+                     "case ID scheme (docs/evaluation_protocol.md Part 1 section 8). Empty by "
+                     "default so historical records (which never set this) keep matching on "
+                     "(doc_id, hypothesis_id) alone — see _match_predictions_to_golds().",
+    )
     predicted_label: Label = Field(description="Model's predicted label")
     confidence: float = Field(
         default=1.0, ge=0.0, le=1.0,
@@ -81,6 +88,10 @@ class GoldCase(BaseModel):
     """A ground-truth case for evaluation."""
     doc_id: str
     hypothesis_id: str
+    split: str = Field(
+        default="",
+        description="Source split (train/dev/test) — see Prediction.split for the matching rule.",
+    )
     gold_label: Label
     gold_span_indices: list[int] = Field(
         default_factory=list,
@@ -142,8 +153,8 @@ class MetricResult(BaseModel):
     # Contradiction recall, reported as its own headline metric (not
     # folded into risk_sensitive_recall's average) with a 95% Wilson
     # interval, since it's a minority class (~11% of labels) where the
-    # combined metric above can hide poor performance. Instructor
-    # feedback, 2026-09-23 - see docs/decisions.md.
+    # combined metric above can hide poor performance. Added in response
+    # to instructor feedback on the Week 3 Problem Statement.
     contradiction_recall: float = 0.0
     contradiction_n: int = 0
     contradiction_correct: int = 0

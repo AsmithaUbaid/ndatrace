@@ -1,0 +1,1243 @@
+{
+  "status": "COMPLETE_STOP_AFTER_REPORT",
+  "evaluator": "evidence_evaluator_v2",
+  "arms": {
+    "base": {
+      "n": 150,
+      "classification_correct_n": 118,
+      "accuracy": 0.7866666666666666,
+      "macro_f1": 0.7868620987914067,
+      "recall": {
+        "Entailment": 0.82,
+        "Contradiction": 0.76,
+        "NotMentioned": 0.78
+      },
+      "recall_counts": {
+        "Entailment": [
+          41,
+          50
+        ],
+        "Contradiction": [
+          38,
+          50
+        ],
+        "NotMentioned": [
+          39,
+          50
+        ]
+      },
+      "confusion_matrix_rows_gold_cols_pred": [
+        [
+          41,
+          3,
+          6
+        ],
+        [
+          10,
+          38,
+          2
+        ],
+        [
+          4,
+          7,
+          39
+        ]
+      ],
+      "joint_n": 113,
+      "joint": 0.7533333333333333,
+      "joint_by_class_counts": {
+        "Entailment": [
+          39,
+          50
+        ],
+        "Contradiction": [
+          35,
+          50
+        ],
+        "NotMentioned": [
+          39,
+          50
+        ]
+      },
+      "evidence_recall_counts": [
+        88,
+        100
+      ],
+      "evidence_recall": 0.88,
+      "evidence_precision_counts": [
+        88,
+        103
+      ],
+      "evidence_precision": 0.8543689320388349,
+      "source_valid_case_counts": [
+        147,
+        150
+      ],
+      "source_valid_case_rate": 0.98,
+      "source_valid_quote_counts": [
+        190,
+        193
+      ],
+      "source_valid_quote_rate": 0.9844559585492227
+    },
+    "v1": {
+      "n": 150,
+      "classification_correct_n": 117,
+      "accuracy": 0.78,
+      "macro_f1": 0.7793318340367152,
+      "recall": {
+        "Entailment": 0.84,
+        "Contradiction": 0.7,
+        "NotMentioned": 0.8
+      },
+      "recall_counts": {
+        "Entailment": [
+          42,
+          50
+        ],
+        "Contradiction": [
+          35,
+          50
+        ],
+        "NotMentioned": [
+          40,
+          50
+        ]
+      },
+      "confusion_matrix_rows_gold_cols_pred": [
+        [
+          42,
+          0,
+          8
+        ],
+        [
+          12,
+          35,
+          3
+        ],
+        [
+          3,
+          7,
+          40
+        ]
+      ],
+      "joint_n": 110,
+      "joint": 0.7333333333333333,
+      "joint_by_class_counts": {
+        "Entailment": [
+          38,
+          50
+        ],
+        "Contradiction": [
+          32,
+          50
+        ],
+        "NotMentioned": [
+          40,
+          50
+        ]
+      },
+      "evidence_recall_counts": [
+        83,
+        100
+      ],
+      "evidence_recall": 0.83,
+      "evidence_precision_counts": [
+        83,
+        99
+      ],
+      "evidence_precision": 0.8383838383838383,
+      "source_valid_case_counts": [
+        141,
+        150
+      ],
+      "source_valid_case_rate": 0.94,
+      "source_valid_quote_counts": [
+        170,
+        181
+      ],
+      "source_valid_quote_rate": 0.9392265193370166
+    },
+    "v2": {
+      "n": 150,
+      "classification_correct_n": 111,
+      "accuracy": 0.74,
+      "macro_f1": 0.7403500204477694,
+      "recall": {
+        "Entailment": 0.74,
+        "Contradiction": 0.74,
+        "NotMentioned": 0.74
+      },
+      "recall_counts": {
+        "Entailment": [
+          37,
+          50
+        ],
+        "Contradiction": [
+          37,
+          50
+        ],
+        "NotMentioned": [
+          37,
+          50
+        ]
+      },
+      "confusion_matrix_rows_gold_cols_pred": [
+        [
+          37,
+          5,
+          8
+        ],
+        [
+          11,
+          37,
+          2
+        ],
+        [
+          4,
+          9,
+          37
+        ]
+      ],
+      "joint_n": 103,
+      "joint": 0.6866666666666666,
+      "joint_by_class_counts": {
+        "Entailment": [
+          30,
+          50
+        ],
+        "Contradiction": [
+          36,
+          50
+        ],
+        "NotMentioned": [
+          37,
+          50
+        ]
+      },
+      "evidence_recall_counts": [
+        83,
+        100
+      ],
+      "evidence_recall": 0.83,
+      "evidence_precision_counts": [
+        83,
+        104
+      ],
+      "evidence_precision": 0.7980769230769231,
+      "source_valid_case_counts": [
+        141,
+        150
+      ],
+      "source_valid_case_rate": 0.94,
+      "source_valid_quote_counts": [
+        190,
+        202
+      ],
+      "source_valid_quote_rate": 0.9405940594059405
+    }
+  },
+  "deltas_pp": {
+    "base_to_v1": {
+      "accuracy_pp": -0.6666666666666599,
+      "macro_f1_pp": -0.7530264754691429,
+      "joint_pp": -2.0000000000000018,
+      "Entailment_recall_pp": 2.0000000000000018,
+      "Contradiction_recall_pp": -6.000000000000005,
+      "NotMentioned_recall_pp": 2.0000000000000018,
+      "evidence_recall_pp": -5.000000000000004,
+      "evidence_precision_pp": -1.5985093654996563,
+      "source_valid_case_pp": -4.0000000000000036,
+      "source_valid_quote_pp": -4.522943921220612
+    },
+    "base_to_v2": {
+      "accuracy_pp": -4.666666666666663,
+      "macro_f1_pp": -4.651207834363724,
+      "joint_pp": -6.666666666666665,
+      "Entailment_recall_pp": -7.9999999999999964,
+      "Contradiction_recall_pp": -2.0000000000000018,
+      "NotMentioned_recall_pp": -4.0000000000000036,
+      "evidence_recall_pp": -5.000000000000004,
+      "evidence_precision_pp": -5.629200896191177,
+      "source_valid_case_pp": -4.0000000000000036,
+      "source_valid_quote_pp": -4.38618991432822
+    },
+    "v1_to_v2": {
+      "accuracy_pp": -4.0000000000000036,
+      "macro_f1_pp": -3.8981813588945813,
+      "joint_pp": -4.666666666666663,
+      "Entailment_recall_pp": -9.999999999999998,
+      "Contradiction_recall_pp": 4.0000000000000036,
+      "NotMentioned_recall_pp": -6.000000000000005,
+      "evidence_recall_pp": 0.0,
+      "evidence_precision_pp": -4.030691530691522,
+      "source_valid_case_pp": 0.0,
+      "source_valid_quote_pp": 0.13675400689239225
+    }
+  },
+  "transitions": {
+    "base_to_v1": {
+      "classification_recoveries": [
+        "train::466::nda-15",
+        "train::603::nda-15",
+        "train::94::nda-13",
+        "train::279::nda-1",
+        "train::320::nda-1"
+      ],
+      "classification_regressions": [
+        "train::300::nda-20",
+        "train::373::nda-11",
+        "train::473::nda-7",
+        "train::484::nda-8",
+        "train::86::nda-1",
+        "train::159::nda-1"
+      ],
+      "net_classification": -1,
+      "joint_recoveries": [
+        "train::515::nda-2",
+        "train::603::nda-15",
+        "train::94::nda-13",
+        "train::279::nda-1",
+        "train::320::nda-1"
+      ],
+      "joint_regressions": [
+        "train::88::nda-1",
+        "train::300::nda-20",
+        "train::373::nda-11",
+        "train::473::nda-7",
+        "train::379::nda-12",
+        "train::484::nda-8",
+        "train::86::nda-1",
+        "train::159::nda-1"
+      ],
+      "net_joint": -3,
+      "C_recoveries": [],
+      "C_regressions": [
+        "train::300::nda-20",
+        "train::373::nda-11",
+        "train::473::nda-7"
+      ],
+      "net_C": -3,
+      "evidence_recall_gains": [
+        "train::438::nda-20",
+        "train::515::nda-2",
+        "train::603::nda-15"
+      ],
+      "evidence_recall_regressions": [
+        "train::88::nda-1",
+        "train::102::nda-19",
+        "train::300::nda-20",
+        "train::316::nda-17",
+        "train::248::nda-10",
+        "train::379::nda-12",
+        "train::466::nda-15",
+        "train::484::nda-8"
+      ],
+      "net_evidence_recall_cases": -5
+    },
+    "base_to_v2": {
+      "classification_recoveries": [
+        "train::466::nda-15"
+      ],
+      "classification_regressions": [
+        "train::300::nda-20",
+        "train::265::nda-15",
+        "train::271::nda-15",
+        "train::375::nda-15",
+        "train::457::nda-4",
+        "train::484::nda-8",
+        "train::86::nda-1",
+        "train::280::nda-1"
+      ],
+      "net_classification": -7,
+      "joint_recoveries": [
+        "train::318::nda-2",
+        "train::515::nda-2"
+      ],
+      "joint_regressions": [
+        "train::300::nda-20",
+        "train::220::nda-12",
+        "train::226::nda-12",
+        "train::265::nda-15",
+        "train::271::nda-15",
+        "train::375::nda-15",
+        "train::457::nda-4",
+        "train::484::nda-8",
+        "train::538::nda-13",
+        "train::619::nda-12",
+        "train::86::nda-1",
+        "train::280::nda-1"
+      ],
+      "net_joint": -10,
+      "C_recoveries": [],
+      "C_regressions": [
+        "train::300::nda-20"
+      ],
+      "net_C": -1,
+      "evidence_recall_gains": [
+        "train::438::nda-20",
+        "train::515::nda-2",
+        "train::603::nda-15"
+      ],
+      "evidence_recall_regressions": [
+        "train::300::nda-20",
+        "train::220::nda-12",
+        "train::248::nda-10",
+        "train::265::nda-15",
+        "train::457::nda-4",
+        "train::466::nda-15",
+        "train::538::nda-13",
+        "train::619::nda-12"
+      ],
+      "net_evidence_recall_cases": -5
+    },
+    "v1_to_v2": {
+      "classification_recoveries": [
+        "train::373::nda-11",
+        "train::473::nda-7",
+        "train::159::nda-1"
+      ],
+      "classification_regressions": [
+        "train::265::nda-15",
+        "train::271::nda-15",
+        "train::375::nda-15",
+        "train::457::nda-4",
+        "train::603::nda-15",
+        "train::94::nda-13",
+        "train::279::nda-1",
+        "train::280::nda-1",
+        "train::320::nda-1"
+      ],
+      "net_classification": -6,
+      "joint_recoveries": [
+        "train::88::nda-1",
+        "train::318::nda-2",
+        "train::373::nda-11",
+        "train::473::nda-7",
+        "train::379::nda-12",
+        "train::159::nda-1"
+      ],
+      "joint_regressions": [
+        "train::220::nda-12",
+        "train::226::nda-12",
+        "train::265::nda-15",
+        "train::271::nda-15",
+        "train::375::nda-15",
+        "train::457::nda-4",
+        "train::538::nda-13",
+        "train::603::nda-15",
+        "train::619::nda-12",
+        "train::94::nda-13",
+        "train::279::nda-1",
+        "train::280::nda-1",
+        "train::320::nda-1"
+      ],
+      "net_joint": -7,
+      "C_recoveries": [
+        "train::373::nda-11",
+        "train::473::nda-7"
+      ],
+      "C_regressions": [],
+      "net_C": 2,
+      "evidence_recall_gains": [
+        "train::88::nda-1",
+        "train::102::nda-19",
+        "train::316::nda-17",
+        "train::379::nda-12",
+        "train::484::nda-8"
+      ],
+      "evidence_recall_regressions": [
+        "train::220::nda-12",
+        "train::265::nda-15",
+        "train::457::nda-4",
+        "train::538::nda-13",
+        "train::619::nda-12"
+      ],
+      "net_evidence_recall_cases": 0
+    }
+  },
+  "operations": {
+    "v1": {
+      "cases": 150,
+      "hosted_calls": 152,
+      "input_tokens": 214369,
+      "output_tokens": 86805,
+      "cost_usd": 0.22720225,
+      "cost_per_case_usd": 0.0015146816666666667,
+      "total_incremental_latency_seconds": 880.8076652924065,
+      "mean_incremental_latency_seconds": 5.872051101949376,
+      "p95_incremental_latency_seconds": 10.047794458921999,
+      "tool_using_cases": 2,
+      "tool_use_rate": 0.013333333333333334,
+      "step1_final_without_tool_n": 148,
+      "step1_final_without_tool_rate": 0.9866666666666667,
+      "mean_steps": 1.0133333333333334,
+      "p95_steps": 1,
+      "mean_tool_calls": 0.013333333333333334,
+      "tool_call_distribution": {
+        "0": 148,
+        "1": 2
+      },
+      "tool_name_counts": {
+        "FOLLOW_CROSS_REFERENCE": 1,
+        "GET_MORE_CANDIDATES": 1
+      },
+      "duplicate_attempts": 1,
+      "invalid_actions": 0,
+      "tool_errors": 1,
+      "fallback_events": 1,
+      "stop_reason_counts": {
+        "final": 149,
+        "duplicate_tool_call": 1
+      },
+      "provider_error_calls": 0,
+      "retry_count": 0
+    },
+    "v2": {
+      "cases": 150,
+      "hosted_calls": 189,
+      "input_tokens": 355792,
+      "output_tokens": 154914,
+      "cost_usd": 0.398776,
+      "cost_per_case_usd": 0.002658506666666667,
+      "total_incremental_latency_seconds": 1553.502395959571,
+      "mean_incremental_latency_seconds": 10.356682639730474,
+      "p95_incremental_latency_seconds": 22.984808624954894,
+      "tool_using_cases": 30,
+      "tool_use_rate": 0.2,
+      "step1_final_without_tool_n": 117,
+      "step1_final_without_tool_rate": 0.78,
+      "mean_steps": 1.26,
+      "p95_steps": 3,
+      "mean_tool_calls": 0.26,
+      "tool_call_distribution": {
+        "0": 120,
+        "1": 21,
+        "2": 9
+      },
+      "tool_name_counts": {
+        "GET_MORE_CANDIDATES": 23,
+        "FOLLOW_CROSS_REFERENCE": 16
+      },
+      "duplicate_attempts": 11,
+      "invalid_actions": 6,
+      "tool_errors": 10,
+      "fallback_events": 25,
+      "stop_reason_counts": {
+        "final": 125,
+        "invalid_action": 6,
+        "duplicate_tool_call": 11,
+        "max_tool_calls": 8
+      },
+      "provider_error_calls": 0,
+      "retry_count": 0
+    }
+  },
+  "tool_effectiveness": {
+    "definition": "Outcome-associated proxy; a single-arm prompt ablation cannot prove tool-call causality.",
+    "category_counts": {
+      "neutral": 29,
+      "harmful": 1
+    },
+    "category_rates_among_tool_cases": {
+      "useful": 0.0,
+      "neutral": 0.9666666666666667,
+      "harmful": 0.03333333333333333
+    },
+    "tool_cases": [
+      {
+        "case_id": "train::160::nda-10",
+        "gold_label": "Entailment",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "invalid_action"
+      },
+      {
+        "case_id": "train::247::nda-10",
+        "gold_label": "Entailment",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "FOLLOW_CROSS_REFERENCE"
+        ],
+        "tool_arguments": [
+          {
+            "reference": "Article 2"
+          }
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "duplicate_tool_call"
+      },
+      {
+        "case_id": "train::273::nda-1",
+        "gold_label": "Entailment",
+        "base_label": "NotMentioned",
+        "v2_label": "Contradiction",
+        "tools": [
+          "FOLLOW_CROSS_REFERENCE",
+          "FOLLOW_CROSS_REFERENCE"
+        ],
+        "tool_arguments": [
+          {
+            "reference": "paragraphs (a) to (c) of the definition of \u201cConfidential Information\u201d"
+          },
+          {
+            "reference": "1.1"
+          }
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": false,
+        "stop_reason": "final"
+      },
+      {
+        "case_id": "train::273::nda-10",
+        "gold_label": "Entailment",
+        "base_label": "Entailment",
+        "v2_label": "Entailment",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": false,
+        "stop_reason": "final"
+      },
+      {
+        "case_id": "train::317::nda-13",
+        "gold_label": "Entailment",
+        "base_label": "Entailment",
+        "v2_label": "Entailment",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": false,
+        "stop_reason": "final"
+      },
+      {
+        "case_id": "train::353::nda-10",
+        "gold_label": "Entailment",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "FOLLOW_CROSS_REFERENCE",
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {
+            "reference": "1. Definitions"
+          },
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "max_tool_calls"
+      },
+      {
+        "case_id": "train::379::nda-10",
+        "gold_label": "Entailment",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "duplicate_tool_call"
+      },
+      {
+        "case_id": "train::484::nda-8",
+        "gold_label": "Entailment",
+        "base_label": "Entailment",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "harmful",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": true,
+        "joint_regression": true,
+        "fallback": false,
+        "stop_reason": "final"
+      },
+      {
+        "case_id": "train::518::nda-10",
+        "gold_label": "Entailment",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "FOLLOW_CROSS_REFERENCE",
+          "FOLLOW_CROSS_REFERENCE"
+        ],
+        "tool_arguments": [
+          {
+            "reference": "the definition of Confidential Information"
+          },
+          {
+            "reference": "2."
+          }
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "max_tool_calls"
+      },
+      {
+        "case_id": "train::86::nda-10",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "FOLLOW_CROSS_REFERENCE"
+        ],
+        "tool_arguments": [
+          {
+            "reference": "4 Definition of confidential information"
+          }
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "duplicate_tool_call"
+      },
+      {
+        "case_id": "train::94::nda-16",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": false,
+        "stop_reason": "final"
+      },
+      {
+        "case_id": "train::121::nda-11",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "duplicate_tool_call"
+      },
+      {
+        "case_id": "train::125::nda-10",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "invalid_action"
+      },
+      {
+        "case_id": "train::159::nda-11",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": false,
+        "stop_reason": "final"
+      },
+      {
+        "case_id": "train::164::nda-10",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "FOLLOW_CROSS_REFERENCE",
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {
+            "reference": "Confidential Information"
+          },
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "max_tool_calls"
+      },
+      {
+        "case_id": "train::164::nda-11",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "duplicate_tool_call"
+      },
+      {
+        "case_id": "train::187::nda-10",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "FOLLOW_CROSS_REFERENCE",
+          "FOLLOW_CROSS_REFERENCE"
+        ],
+        "tool_arguments": [
+          {
+            "reference": "paragraph 3"
+          },
+          {
+            "reference": "paragraph 3 hereof"
+          }
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "max_tool_calls"
+      },
+      {
+        "case_id": "train::222::nda-18",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": false,
+        "stop_reason": "final"
+      },
+      {
+        "case_id": "train::232::nda-10",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "FOLLOW_CROSS_REFERENCE"
+        ],
+        "tool_arguments": [
+          {
+            "reference": "Confidential Information"
+          }
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "duplicate_tool_call"
+      },
+      {
+        "case_id": "train::251::nda-17",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "duplicate_tool_call"
+      },
+      {
+        "case_id": "train::279::nda-10",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "duplicate_tool_call"
+      },
+      {
+        "case_id": "train::297::nda-1",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "FOLLOW_CROSS_REFERENCE",
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {
+            "reference": "The term \u201cConfidential Information\u201d"
+          },
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "max_tool_calls"
+      },
+      {
+        "case_id": "train::320::nda-1",
+        "gold_label": "NotMentioned",
+        "base_label": "Contradiction",
+        "v2_label": "Contradiction",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": false,
+        "stop_reason": "final"
+      },
+      {
+        "case_id": "train::320::nda-12",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "duplicate_tool_call"
+      },
+      {
+        "case_id": "train::328::nda-10",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "FOLLOW_CROSS_REFERENCE",
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {
+            "reference": "Section 1.B(iii)"
+          },
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "max_tool_calls"
+      },
+      {
+        "case_id": "train::341::nda-12",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "duplicate_tool_call"
+      },
+      {
+        "case_id": "train::371::nda-10",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "GET_MORE_CANDIDATES",
+          "FOLLOW_CROSS_REFERENCE"
+        ],
+        "tool_arguments": [
+          {},
+          {
+            "reference": "1. DEFINITIONS"
+          }
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "max_tool_calls"
+      },
+      {
+        "case_id": "train::379::nda-11",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "duplicate_tool_call"
+      },
+      {
+        "case_id": "train::516::nda-1",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "FOLLOW_CROSS_REFERENCE"
+        ],
+        "tool_arguments": [
+          {
+            "reference": "Section 2 below"
+          }
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "invalid_action"
+      },
+      {
+        "case_id": "train::516::nda-11",
+        "gold_label": "NotMentioned",
+        "base_label": "NotMentioned",
+        "v2_label": "NotMentioned",
+        "tools": [
+          "FOLLOW_CROSS_REFERENCE",
+          "GET_MORE_CANDIDATES"
+        ],
+        "tool_arguments": [
+          {
+            "reference": "Section 5"
+          },
+          {}
+        ],
+        "category": "neutral",
+        "classification_recovery": false,
+        "joint_recovery": false,
+        "evidence_recovery": false,
+        "classification_regression": false,
+        "joint_regression": false,
+        "fallback": true,
+        "stop_reason": "max_tool_calls"
+      }
+    ],
+    "tool_used_group": {
+      "n": 30,
+      "classification_correct_n": 22,
+      "joint_n": 20,
+      "base_to_v2_net_classification": -1,
+      "base_to_v2_net_joint": -1
+    },
+    "no_tool_group": {
+      "n": 120,
+      "classification_correct_n": 89,
+      "joint_n": 83,
+      "base_to_v2_net_classification": -6,
+      "base_to_v2_net_joint": -9
+    }
+  },
+  "posthoc": {
+    "v1_wrong_to_v2_correct": [
+      "train::373::nda-11",
+      "train::473::nda-7",
+      "train::159::nda-1"
+    ],
+    "v1_wrong_step1_final_to_v2_tool_to_correct": []
+  },
+  "economics": {
+    "cost_per_net_joint_recovery_usd": "not meaningful / no net recovery",
+    "cost_per_net_C_recovery_usd": "not meaningful / no net recovery",
+    "latency_per_net_joint_recovery_seconds": "not meaningful / no net recovery",
+    "latency_per_net_C_recovery_seconds": "not meaningful / no net recovery"
+  },
+  "retention_checks": {
+    "1_joint_improves_vs_base": false,
+    "2_net_joint_positive": false,
+    "3_C_recall_or_net_C_meaningfully_positive": false,
+    "4_C_regressions_controlled": true,
+    "5_evidence_precision_drop_le_3pp": false,
+    "6_evidence_recall_drop_le_3pp": false,
+    "7_Entailment_recall_drop_le_3pp": false,
+    "8_NotMentioned_recall_drop_le_3pp": false,
+    "9_tool_use_materially_higher_than_v1": true,
+    "10_some_tool_calls_useful": false,
+    "11_cost_latency_acceptable": true,
+    "12_no_serious_safety_control_issue": false
+  },
+  "retention_pass": false
+}

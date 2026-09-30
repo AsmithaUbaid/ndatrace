@@ -1,0 +1,14 @@
+{
+ "ledger": 3.1121157,
+ "e16_expected": 0.07688099999999999,
+ "e16_conservative": 0.11656099999999998,
+ "final_test_conservative": 0.5,
+ "reserve": 1.25,
+ "sum": 4.978676699999999,
+ "plan": 5.0,
+ "pass": true,
+ "n_requests": 40,
+ "max_est_input_tokens": 5873,
+ "total_est_input_tokens": 72964,
+ "manifest_sha256": "83f94a19bff5e87b94cacdaa6efde9081ec2e2509696acac23d135f370a9bc18"
+}

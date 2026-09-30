@@ -1,9 +1,11 @@
 """
-NDATrace FastAPI Application (WBS T032).
+NDATrace FastAPI Application.
 
-Serves the frozen production pipeline (pipeline/orchestrator.py,
-T031: RAG + selective agent) over HTTP, plus read access to past live
-reviews (SQLite) and offline experiment records (results/runs/*.jsonl).
+Serves the frozen E20 top-5 RAG product pipeline at POST /api/review and
+through the batch/history adapter at POST /review. Both use BM25 top-20,
+cross-encoder reranking, top-5 GPT-5-mini + P0 classification, parsing,
+and evidence validation; neither uses an agent or routing. The historical
+FULL benchmark result remains available through GET /experiments.
 """
 
 from __future__ import annotations
@@ -30,8 +32,8 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Permissive for local dev (Next.js frontend on a different port, T034-T037
-# not built yet); tighten to an explicit origin list once the frontend exists.
+# Permissive for local dev (Next.js frontend on a different port); tighten
+# to an explicit origin list once there's a non-local deployment target.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

@@ -1,0 +1,80 @@
+{
+ "note": "Analysis-only buckets assigned by manual inspection AFTER metrics were frozen (final_metrics.sha256). No rules or scoring derived from these.",
+ "total_joint_failures": 35,
+ "label_wrong": 33,
+ "label_right_evidence_wrong": 2,
+ "buckets": {
+  "reasoning_failure_with_gold_evidence_found (wrong label; quoted evidence overlaps gold)": {
+   "n": 10,
+   "cases": [
+    "test::8::nda-1",
+    "test::18::nda-17",
+    "test::2::nda-7",
+    "test::77::nda-20",
+    "test::80::nda-7",
+    "test::387::nda-7",
+    "test::413::nda-7",
+    "test::497::nda-17",
+    "test::523::nda-19",
+    "test::190::nda-15"
+   ],
+   "note": "9 gold=Contradiction predicted Entailment; 1 gold=Entailment predicted Contradiction"
+  },
+  "missed_provision (predicted NotMentioned, empty evidence, gold text present in FULL context)": {
+   "n": 4,
+   "cases": [
+    "test::127::nda-1 (gold C)",
+    "test::67::nda-16",
+    "test::77::nda-12",
+    "test::539::nda-19"
+   ]
+  },
+  "exception_or_carveout_failure": {
+   "n": 1,
+   "cases": [
+    "test::565::nda-20"
+   ],
+   "note": "model quoted a 'Notwithstanding any other provision' clause instead of the gold redelivery clauses; carve-out involvement is also plausible in 387::nda-7 and 80::nda-7 (judgment, counted under reasoning)"
+  },
+  "correct_label_evidence_selection_failure": {
+   "n": 2,
+   "cases": [
+    "test::23::nda-2",
+    "test::600::nda-2"
+   ],
+   "note": "both gold=Contradiction, label correct, quoted spans do not overlap gold"
+  },
+  "notmentioned_over_inference (gold NotMentioned, predicted E or C)": {
+   "n": 18,
+   "cases": [
+    "9 predicted Entailment: 40::nda-3, 11::nda-17, 138::nda-16, 157::nda-7, 387::nda-17, 395::nda-15, 521::nda-3, 585::nda-17, 600::nda-5",
+    "9 predicted Contradiction: 22::nda-20, 80::nda-15, 181::nda-1, 218::nda-20, 225::nda-10, 289::nda-2, 585::nda-19, 565::nda-2, 611::nda-10"
+   ]
+  }
+ },
+ "cross_cutting": {
+  "malformed_output": 0,
+  "cases_with_a_non_source_quote": 3,
+  "non_source_quote_cases_among_failures": [
+   "test::2::nda-7",
+   "test::289::nda-2"
+  ],
+  "formatting_note": "test::289::nda-2's non-source quote involves a ligature character (documented non-coverage of validator/evaluator v2); both are also counted in their primary bucket",
+  "unclear": 0
+ },
+ "contradiction_failure_analysis": {
+  "classification_failures": 11,
+  "C_to_E": 10,
+  "C_to_NM": 1,
+  "joint_failures": 13,
+  "evidence_existed_in_C_to_E": "10/10 (each had >=1 quote)",
+  "evidence_existed_in_C_to_NM": "0/1 (test::127::nda-1, empty evidence)",
+  "relevant_gold_text_plainly_present_in_full_context": "yes in all 13 (full NDA supplied; gold spans exist in the document)",
+  "C_to_E_where_quoted_evidence_overlapped_gold": "9/10 (model found the right clause but judged it as entailing the requirement); 1/10 (test::565::nda-20) quoted a 'Notwithstanding' carve-out instead",
+  "exception_carveout_involvement": "clear in 1 (test::565::nda-20); possible in 387::nda-7 / 80::nda-7",
+  "label_right_evidence_wrong": [
+   "test::23::nda-2",
+   "test::600::nda-2"
+  ]
+ }
+}

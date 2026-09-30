@@ -1,0 +1,19 @@
+experiment_id: E17B_full_test_completion
+status: EXECUTED (complete) - protocol unchanged; see summary.md
+pre_run_commit: 3b2167a
+purpose: "Complete GPT-5-mini evaluation on the remaining TEST cases so GPT, Qwen, and rule can be compared on the identical full 2,091-case TEST population. Post-freeze completion of TEST coverage, not a new blind evaluation, not a tuning run."
+frozen_system: "IDENTICAL to E17: openai/gpt-5-mini, GPT-P0 (sha1 3fcc7c95...), FULL NDA context, same user template, same parser (evaluation.structured_output), runtime evidence validator v2, evaluator evidence_evaluator_v2, temperature 0.0, timeout 60s, no routing."
+test_json_sha256: 460267b56052a2dc5aead98eb35eadef9e6734d5723d37b4a9790e410f812387
+e17_immutable: {manifest: TEST_HOSTED_v1, n: 150, sha256: a1cc8f53bb4d41c7e1c66862241cbe2892000eef9d6d27a41b7a37e072eb709a, not_rerun: true}
+e17b_complement:
+  manifest: E17B_REMAINING_v1
+  n: 1941
+  label_counts: {Entailment: 918, Contradiction: 170, NotMentioned: 853}
+  manifest_sha256: 7eef3e7741f9db632b7c15196b996829b19971fd6fe01fec1d2e69f9bcb56cf4
+  request_sha256: 5a2c54e42d8adc3360d25ffeca72b2e1f7998c2b2a9c57aebe237ecfb3098214
+  intersection_with_E17_empty: true
+  union_with_E17_equals_all_test_2091: true
+preflight: {mean_tokens: 2274.2, median: 1956, p90: 4209, p95: 4769, max: 7932, context_limit: 400000, cases_exceeding_limit: 0}
+execution: "concurrency 6 (two credential pools of 3 each, purely an execution-load detail, not an experimental arm; never recorded in per-case results); timeout 60s; 5-consecutive-failure circuit breaker; run exactly the 1941 frozen cases once; no reruns/repairs/resampling; credential values read ONLY from environment variables at runtime, never written to any file/log/notebook/result."
+merge: "E17's immutable 150 + E17B's new 1941, joined on case_id; asserted 2091 unique rows, 0 duplicates, 0 missing, exact TEST gold-label counts before any headline metric is computed."
+no_test_tuning: "No prompt/architecture/parser/evaluator/validator/routing change before, during, or after E17B. E15 (no routing selected) and E16 (evidence-grounded but not injection-hardened) are unchanged."

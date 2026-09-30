@@ -1,0 +1,123 @@
+experiment_id: E06_retrieval_optimisation
+status: COMPLETE  # R0-R5 + final matched lexical-vs-dense-rerank control all run; retrieval_v1 TRUE FINAL FROZEN as BM25+rerank
+frozen_config_name: retrieval_v1
+frozen_config:
+  method: bm25
+  chunk_method: clause
+  chunk_size: 256
+  chunk_overlap: 50
+  embedding_model: null   # none -- BM25 has no embedding model or vector index
+  similarity: null
+  candidate_pool_size: 20
+  top_k: 5
+  reranking: true
+  reranker_model: cross-encoder/ms-marco-MiniLM-L-12-v2
+frozen_config_metrics:
+  evidence_recall_at_k: 0.9224
+  contradiction_evidence_recall_at_k: 0.9394
+  evidence_precision: 0.0535
+  mrr: 0.3765
+  miss_count: 189
+  mean_context_tokens: 1023
+  mean_total_query_latency_ms: 175.6   # bm25_candidate_generation (~0.16ms) + bm25_reranking (~175.5ms)
+matched_lexical_control:
+  bm25_clause256_k5: {recall: 0.9048, contradiction_recall: 0.8745, precision: 0.0506, mrr: 0.3222, miss_count: 253}
+  dense_bge_clause256_k5: {recall: 0.8844, contradiction_recall: 0.8877, precision: 0.0527, mrr: 0.3102, miss_count: 349}
+  finding: "BM25 slightly beats plain (non-reranked) dense at this operating point -- disclosed, not hidden"
+r5_status: APPROVED_AND_RUN  # decisive reranking win (dense arm) -- see summary.md
+r5_result:
+  recovered: 231
+  regressed: 72
+  net_gain: 159
+  contradiction_recovered: 53
+  contradiction_regressed: 9
+final_matched_control:
+  name: lexical_vs_dense_under_reranking
+  status: APPROVED_AND_RUN
+  rule: >
+    If BM25+reranker is effectively tied with or better than dense+reranker: prefer BM25+reranker
+    (simpler, no embedding/index complexity). If dense+reranker materially improves Contradiction
+    Recall, overall Recall, or MRR: dense has earned its added complexity. No hybrid retrieval.
+  bm25_pool_recall_at_20: 0.99869
+  dense_pool_recall_at_20: 0.99906
+  bm25_plus_rerank: {recall: 0.92235, contradiction_recall: 0.93943, precision: 0.05353, mrr: 0.37646, miss_count: 189}
+  dense_plus_rerank: {recall: 0.92218, contradiction_recall: 0.93943, precision: 0.05349, mrr: 0.37645, miss_count: 190}
+  overlap: {both_hit: 4181, both_miss: 189, bm25_only_hit: 1, dense_only_hit: 0}
+  contradiction_overlap: {both_hit: 809, both_miss: 32, bm25_only_hit: 0, dense_only_hit: 0}
+  latency_ms:
+    bm25_candidate_generation: 0.158
+    dense_candidate_generation: 1.099
+    bm25_reranking: 175.454
+    dense_reranking: 175.033
+  outcome: "Empirical/practical tie (no significance test performed) -- 4,370/4,371 (99.98%) identical outcomes, 100% identical on Contradiction (841/841). Tie-break rule applied: BM25 selected for simplicity."
+  decision: retrieval_v1 = bm25 (not dense)
+dataset_manifest: EVIDENCE_BEARING_TRAIN  # all 4,371 Entailment+Contradiction TRAIN cases
+split_role: development   # Role A, TRAIN only
+purpose: retrieval_optimisation
+
+dataset:
+  source_split: train
+  eligible_classes: [Entailment, Contradiction]
+  verified_count: 4371
+  full_universe_practical: true   # see summary.md's runtime calibration
+
+nda_local_search: verified_in_code   # pipeline/retriever.py: one Retriever/index per document
+
+query_construction:
+  source: hypothesis_text (ContractNLI requirement text)
+  excludes: [gold_label, gold_evidence_text, annotation_choice]
+
+evidence_hit_semantics: reused_from_E00   # evaluation/scorer.py::map_chunks_to_gold_span_indices
+                                          # NOT the unfrozen classification joint-metric tau
+
+stages:
+  R0:
+    name: lexical_baseline
+    method: bm25
+    implementation: pipeline/sparse_retriever.py (already exists, already bug-fixed)
+    chunk_method: clause
+    chunk_size: 512
+    top_k: 5
+  R1:
+    name: dense_baseline
+    method: dense
+    embedding_model: all-mpnet-base-v2   # current settings.embedding_model default
+    chunk_method: clause
+    chunk_size: 512
+    top_k: 5
+  R2:
+    name: chunking_ladder
+    method: dense   # winner of R0 vs R1, frozen before this stage
+    candidates:
+      - {chunk_method: clause, chunk_size: 256}
+      - {chunk_method: clause, chunk_size: 512}
+      - {chunk_method: sentence, chunk_size: null}
+    top_k: 5   # frozen from R0/R1
+  R3:
+    name: top_k_sweep
+    chunk_method: FROZEN_FROM_R2
+    k_candidates: [3, 5, 10]
+  R4:
+    name: embedding_comparison
+    status: JUSTIFIED   # see summary.md section 14 for reasoning
+    candidates: [all-mpnet-base-v2, BAAI/bge-base-en-v1.5]
+    chunk_method: FROZEN_FROM_R2
+    top_k: FROZEN_FROM_R3
+  R5:
+    name: advanced_retrieval
+    status: NOT RUN unless the predeclared trigger condition (summary.md section 15) is met
+
+model_calls: NONE -- E06 never calls Qwen, GPT-5 mini, or any hosted model
+api_calls: NONE
+
+caching:
+  location: cache/indexes/e06/
+  key: "sha1(document_id | chunk_method | chunk_size | chunk_overlap | embedding_model | retrieval_method)"
+  note: top_k is NOT part of the key -- changing K never requires rebuilding an index
+
+outputs:
+  - results/run_E06_{run_id}.json (aggregate metrics per configuration)
+  - results/run_E06_{run_id}_cases.jsonl (per-case retrieval results)
+  - results/retrieval_failure_analysis.csv (Stage B)
+  - TRAIN_PROMPT_v1_RETRIEVED_retrieval_v1.json (Stage B, feeds back into E03)
+  - E06_retrieval_optimisation.ipynb (Stage B, after results exist)

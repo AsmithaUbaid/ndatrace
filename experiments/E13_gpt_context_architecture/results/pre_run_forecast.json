@@ -1,0 +1,183 @@
+{
+ "artifact_checks": {
+  "full_150": true,
+  "rag_150": true,
+  "same_ids_order_as_manifest": true,
+  "same_document_ids": true,
+  "same_hypothesis_text": true,
+  "no_evaluator_truth_in_model_facing": true,
+  "full_context_equals_complete_dev_document_text": true,
+  "rag_top5_only": true,
+  "rag_retrieval_config_equals_E12B": true,
+  "rag_rerank_order_non_increasing": true,
+  "system_prompt_is_frozen_gpt_p0": true,
+  "messages_identical_except_context_field": true
+ },
+ "system_prompt_sha1": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
+ "user_template": "Requirement: {hypothesis_text}\n\nNDA context: {context_text}",
+ "context_join_rag": "\n\n---\n\n",
+ "calibration_ratio": 0.9906920743707889,
+ "nda_text_tokens": {
+  "full": {
+   "mean": 2342.32,
+   "median": 2142.0,
+   "p90": 4319,
+   "p95": 5742,
+   "max": 6243
+  },
+  "rag": {
+   "mean": 1008.6066666666667,
+   "median": 1006.0,
+   "p90": 1149,
+   "p95": 1184,
+   "max": 1396
+  }
+ },
+ "request_tokens_calibrated": {
+  "full": {
+   "mean": 2456.665369114049,
+   "median": 2258.7779295653986,
+   "p90": 4415.514575470606,
+   "p95": 5826.260089374609,
+   "max": 6322.596818634374
+  },
+  "rag": {
+   "mean": 1136.28418162032,
+   "median": 1138.3051934520365,
+   "p90": 1277.9927759383177,
+   "p95": 1311.6763064669244,
+   "max": 1520.712334159161
+  }
+ },
+ "request_tokens_cl100k_uncalibrated": {
+  "full": {
+   "mean": 2479.7466666666664,
+   "median": 2280.0,
+   "p90": 4457,
+   "p95": 5881,
+   "max": 6382
+  },
+  "rag": {
+   "mean": 1146.96,
+   "median": 1149.0,
+   "p90": 1290,
+   "p95": 1324,
+   "max": 1535
+  }
+ },
+ "reduction_full_to_rag": {
+  "mean_abs": 1320.3811874937292,
+  "mean_pct": 53.74688812298031,
+  "median_pct": 49.60526315789473,
+  "nda_text_mean_pct": 56.939843118503596
+ },
+ "context_window_safety": {
+  "provider_listing_context_length": 400000,
+  "provider_max_completion_tokens": 128000,
+  "source": "OpenRouter public GET /api/v1/models (metadata only, no model call), 2026-09-27; also matches E12A's assumed 400K",
+  "repo_config_records_context_window": false,
+  "max_full_request_tokens_cl100k": 6382,
+  "max_full_request_tokens_calibrated": 6382,
+  "headroom_pct_vs_400k": 97.6545,
+  "would_truncate_or_reject_any_case": false
+ },
+ "length_group_cutoffs_nda_tokens": {
+  "short_le": 1352,
+  "medium_le": 2683
+ },
+ "length_groups": {
+  "short": {
+   "n": 53,
+   "nda_tokens_full_mean": 1139.1509433962265,
+   "request_tokens_full_mean": 1264.721240602407,
+   "request_tokens_rag_mean": 1063.4985956853968,
+   "nda_tokens_range": [
+    442,
+    1352
+   ],
+   "labels": {
+    "Entailment": 18,
+    "Contradiction": 17,
+    "NotMentioned": 18
+   }
+  },
+  "medium": {
+   "n": 49,
+   "nda_tokens_full_mean": 2114.204081632653,
+   "request_tokens_full_mean": 2230.9778968662185,
+   "request_tokens_rag_mean": 1158.6447082850368,
+   "nda_tokens_range": [
+    1394,
+    2683
+   ],
+   "labels": {
+    "Entailment": 12,
+    "Contradiction": 21,
+    "NotMentioned": 16
+   }
+  },
+  "long": {
+   "n": 48,
+   "nda_tokens_full_mean": 3903.6875,
+   "request_tokens_full_mean": 4003.159638931981,
+   "request_tokens_rag_mean": 1193.8252284532327,
+   "nda_tokens_range": [
+    2714,
+    6243
+   ],
+   "labels": {
+    "Entailment": 20,
+    "Contradiction": 12,
+    "NotMentioned": 16
+   }
+  }
+ },
+ "output_tokens_real_p0_E12B_E12C": {
+  "mean": 674.6466666666666,
+  "p90": 1150,
+  "n": 300
+ },
+ "cost_usd": {
+  "expected": {
+   "full": {
+    "input": 0.09212495134177684,
+    "output": 0.202394,
+    "total": 0.29451895134177686
+   },
+   "rag": {
+    "input": 0.042610656810761996,
+    "output": 0.202394,
+    "total": 0.245004656810762
+   }
+  },
+  "expected_total": 0.5395236081525389,
+  "conservative": {
+   "full": 0.5121374999999999,
+   "rag": 0.3929247290976869
+  },
+  "conservative_total": 0.9050622290976869,
+  "stress_output_x1.5_info_only": {
+   "full": 0.3965815,
+   "rag": 0.346201656810762
+  },
+  "stress_total": 0.7427831568107619
+ },
+ "ledger_now": 2.2317324500000013,
+ "ledger_after": {
+  "expected": 2.7712560581525403,
+  "conservative": 3.1367946790976884
+ },
+ "budget_gate": {
+  "allowed": true,
+  "reason": "OK: projected total $3.1368 <= allowed $3.7500 (planning budget $5.00 - reserve $1.25)",
+  "arithmetic": 4.386794679097688,
+  "stress_arithmetic": 4.224515606810764
+ },
+ "runtime": {
+  "rag_mean_call_s_assumed": 7.0608815881672,
+  "full_mean_call_s_assumed": 8.431093588192287,
+  "note": "full-arm latency scaling extrapolated from E12A (+64% input -> +10.7% latency); a large extrapolation, uncertain",
+  "sequential_minutes": 38.729937940898715,
+  "concurrency5_minutes": 7.745987588179743
+ }
+}

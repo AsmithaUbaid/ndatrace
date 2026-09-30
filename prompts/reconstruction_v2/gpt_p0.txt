@@ -1,0 +1,12 @@
+You are given an NDA requirement and relevant excerpts retrieved from the NDA.
+
+Classify the requirement against the excerpts as exactly one of:
+- "Entailment"
+- "Contradiction"
+- "NotMentioned"
+
+Respond with ONLY a JSON object with this exact field:
+{
+  "label": "Entailment" | "Contradiction" | "NotMentioned"
+}
+ Also return the exact sentence(s) from the text that support your label, verbatim, as a list under "evidence". Return an empty list for NotMentioned.

@@ -1,0 +1,104 @@
+{
+  "n_cases": 150,
+  "classification": {
+    "accuracy": 0.7866666666666666,
+    "macro_f1": 0.7868620987914067,
+    "per_class_recall": {
+      "Entailment": 0.82,
+      "Contradiction": 0.76,
+      "NotMentioned": 0.78
+    },
+    "contradiction_recall": 0.76,
+    "contradiction_recall_ci95": [
+      0.6258705062480764,
+      0.8570274759812778
+    ],
+    "contradiction_n": 50,
+    "confusion_matrix": {
+      "labels": [
+        "Entailment",
+        "Contradiction",
+        "NotMentioned"
+      ],
+      "matrix": [
+        [
+          41,
+          3,
+          6
+        ],
+        [
+          10,
+          38,
+          2
+        ],
+        [
+          4,
+          7,
+          39
+        ]
+      ]
+    }
+  },
+  "structured_output": {
+    "strict_n": 150,
+    "recovered_n": 0,
+    "invalid_n": 0,
+    "strict_parse_validity_pct": 100.0,
+    "usable_parse_validity_pct": 100.0,
+    "total_retries": 0,
+    "model_errors": 0,
+    "timeouts": 0
+  },
+  "evidence": {
+    "evidence_bearing_n": 100,
+    "evidence_recall": 0.86,
+    "evidence_precision": 0.8349514563106796,
+    "correct_label_bad_evidence_count": 4,
+    "wrong_label_source_valid_evidence_count": 20,
+    "paraphrased_evidence_count": 6
+  },
+  "joint": {
+    "overall": 0.74,
+    "by_class": {
+      "Entailment": 0.74,
+      "Contradiction": 0.7,
+      "NotMentioned": 0.78
+    }
+  },
+  "retrieval_aware_failure_counts": {
+    "n/a (correct)": 114,
+    "B_reasoning_limited": 27,
+    "C_evidence_selection_failure": 4,
+    "A_retrieval_limited": 5
+  },
+  "retrieval_aware_failure_counts_contradiction": {
+    "n/a (correct)": 36,
+    "B_reasoning_limited": 12,
+    "C_evidence_selection_failure": 2
+  },
+  "input_tokens": {
+    "mean": 1148.82,
+    "median": 1163.5,
+    "p90": 1307,
+    "max": 1784
+  },
+  "output_tokens": {
+    "mean": 708.7066666666667,
+    "median": 689.5,
+    "p90": 1235,
+    "max": 1859
+  },
+  "generation_latency_ms": {
+    "mean": 7411.432088869624,
+    "median": 6684.958771045785,
+    "p90": 12549.430458107963,
+    "max": 16792.086415924132
+  },
+  "cost_usd": {
+    "total": 0.25569275,
+    "mean_per_case": 0.0017046183333333336,
+    "median_per_case": 0.00162725,
+    "p90_per_case": 0.002783,
+    "max_per_case": 0.0039265
+  }
+}

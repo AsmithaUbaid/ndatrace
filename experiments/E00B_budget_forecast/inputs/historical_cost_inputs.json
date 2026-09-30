@@ -1,0 +1,78 @@
+{
+  "system_prompt_tokens": {
+    "value": 571,
+    "unit": "tokens (cl100k_base approx)",
+    "source_file_removed": "prompts/classify_v6.txt (deleted in the 2026-09-29 legacy prompt cleanup, see prompts/README.md)",
+    "note": "build_token_estimates() used to compute toks(classify_v6.txt.read_text()) live; frozen here since the file is gone."
+  },
+  "per_case": {
+    "oracle_v1_gemini": {
+      "source_file_removed": "results/archive/runs/run_B04_oracle_google_gemini-2.5-flash-lite.jsonl",
+      "n_cases": 150,
+      "total_cost_usd": 0.012512200000000001,
+      "usd_per_case": 8.34e-05
+    },
+    "oracle_v1_gpt5mini": {
+      "source_file_removed": "results/archive/runs/run_B04_oracle_openai_gpt-5-mini.jsonl",
+      "n_cases": 150,
+      "total_cost_usd": 0.154889,
+      "usd_per_case": 0.0010326
+    },
+    "rag_v2_gemini": {
+      "source_file_removed": "results/archive/runs/run_T024_rag.jsonl",
+      "n_cases": 150,
+      "total_cost_usd": 0.0197665,
+      "usd_per_case": 0.0001318
+    },
+    "full_context_test_gemini": {
+      "source_file_removed": "results/final/legacy/run_T041_final_test_full_context_google_gemini-2.5-flash-lite.jsonl",
+      "n_cases": 2091,
+      "total_cost_usd": 0.6851487,
+      "usd_per_case": 0.0003277
+    },
+    "rag_test_gemini": {
+      "source_file_removed": "results/final/legacy/run_T041_final_test_rag_google_gemini-2.5-flash-lite.jsonl",
+      "n_cases": 2091,
+      "total_cost_usd": 0.3169166,
+      "usd_per_case": 0.0001516
+    },
+    "rag_agent_test_gemini": {
+      "source_file_removed": "results/final/legacy/run_T041_final_test_rag_agent_google_gemini-2.5-flash-lite.jsonl",
+      "n_cases": 2091,
+      "total_cost_usd": 0.8476647,
+      "usd_per_case": 0.0004054
+    }
+  },
+  "latency": {
+    "local_llama3.2_3b_full_context": {
+      "source_file_removed": "results/archive/runs/run_T041_final_test_full_context_llama3.2_3b.jsonl",
+      "n": 500,
+      "mean_latency_ms": 7684.8
+    },
+    "local_llama3.2_3b_rag": {
+      "source_file_removed": "results/archive/runs/run_T041_final_test_rag_llama3.2_3b.jsonl",
+      "n": 500,
+      "mean_latency_ms": 4533.4
+    },
+    "local_llama3.2_3b_rag_agent": {
+      "source_file_removed": "results/archive/runs/run_T041_final_test_rag_agent_llama3.2_3b.jsonl",
+      "n": 500,
+      "mean_latency_ms": 9194.3
+    },
+    "hosted_gemini_full_context": {
+      "source_file_removed": "results/final/legacy/run_T041_final_test_full_context_google_gemini-2.5-flash-lite.jsonl",
+      "n": 2091,
+      "mean_latency_ms": 1111.1
+    },
+    "hosted_gemini_rag": {
+      "source_file_removed": "results/final/legacy/run_T041_final_test_rag_google_gemini-2.5-flash-lite.jsonl",
+      "n": 2091,
+      "mean_latency_ms": 1032.3
+    },
+    "hosted_gemini_rag_agent": {
+      "source_file_removed": "results/final/legacy/run_T041_final_test_rag_agent_google_gemini-2.5-flash-lite.jsonl",
+      "n": 2091,
+      "mean_latency_ms": 2671.1
+    }
+  }
+}

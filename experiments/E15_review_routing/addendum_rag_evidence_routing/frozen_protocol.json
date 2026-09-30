@@ -1,0 +1,94 @@
+{
+  "status": "FROZEN_BEFORE_GOLD_SCORING",
+  "stage": "C2_ROUTING_ONLY",
+  "hosted_calls_allowed": false,
+  "commit_at_freeze": "7802b528c13bb67fd80d66e26bf42a9a3c8f640b",
+  "population": {
+    "manifest": "TRAIN_ARCH_v1",
+    "n": 150,
+    "class_distribution": {
+      "Entailment": 50,
+      "Contradiction": 50,
+      "NotMentioned": 50
+    },
+    "prediction_artifact": "experiments/E08B_stronger_model_diagnostic/results/run_E08B_A2_gpt5mini_train_cases.jsonl",
+    "prediction_artifact_git_hash": "58dc14e599618acefa45429763325b06008f9b81",
+    "retrieval_artifact": "experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1.json",
+    "retrieval_artifact_git_hash": "90bdef9857d3a72d4177ffce790390a3a67db4b3",
+    "gold_artifact": "experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1_GOLD.json",
+    "gold_artifact_git_hash": "255b8ca4f741d3378c9051c42480d84650aa14d3"
+  },
+  "frozen_system": {
+    "model": "openai/gpt-5-mini",
+    "prompt": "prompts/reconstruction_v2/gpt_p0.txt",
+    "prompt_sha1": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
+    "retrieval": "BM25 clause_256 top-20 candidate pool -> cross-encoder/ms-marco-MiniLM-L-12-v2 -> top-5",
+    "runtime_evidence_validator": "runtime_evidence_validator_v2"
+  },
+  "threshold_derivation": {
+    "rule": "10th, 20th, and 30th inclusive percentiles over all 150 runtime retrieval-signal values; computed without reading labels, gold evidence, correctness, or failure taxonomy",
+    "weak_top1_reranker_score_lte": {
+      "q10": -0.5165155708789826,
+      "q20": 1.216312289237976,
+      "q30": 3.0927855730056764
+    },
+    "ambiguous_top1_top2_margin_lte": {
+      "q10": 0.1690671443939209,
+      "q20": 0.33835411071777344,
+      "q30": 0.5550333499908447
+    }
+  },
+  "routers": {
+    "R0": "never route",
+    "R1": "unusable parse/error OR E/C with no evidence OR any source-invalid quote OR NotMentioned with evidence",
+    "R2_qXX": "R1 OR weak top-1 reranker score at the frozen qXX cutoff",
+    "R3_qXX": "R1 OR ambiguous top1-top2 reranker margin at the frozen qXX cutoff",
+    "R4_qXX": "R1 OR weak retrieval OR ambiguous retrieval at the same frozen qXX cutoffs",
+    "R5_qXX": "R4_qXX OR deterministic cross-reference-to-named-provision cue in retrieved top-5",
+    "H_rule_disagreement": "historical comparator only: R1 OR keyword-rule label disagrees with model label"
+  },
+  "excluded_from_selection": {
+    "self_reported_confidence": "not present in GPT-P0 output",
+    "provider_logprobs": "not requested or recorded",
+    "exception_cue_as_standalone_router": "prior E09 evidence found it nearly universal and non-selective",
+    "H_rule_disagreement": "historical comparator, not the new evidence/retrieval-risk router"
+  },
+  "router_selection_rule": {
+    "eligible_families": ["R1", "R2", "R3", "R4", "R5"],
+    "must_meet_all": [
+      "review_rate <= 0.40",
+      "residual_joint_error_among_non_routed < 0.10"
+    ],
+    "tie_break_order": [
+      "higher Contradiction joint-failure capture",
+      "higher overall joint-failure capture",
+      "lower review rate",
+      "simpler router family",
+      "lower quantile"
+    ],
+    "if_none_pass": "select no agent router; report diagnostic frontier and stop before agent pilot"
+  },
+  "agent_eligibility_scorer_only": {
+    "eligible": [
+      "RETRIEVAL_FILTERING_LIMITED with missing gold evidence below top-5",
+      "DYNAMIC_INFORMATION_ACQUISITION requiring cross-reference resolution"
+    ],
+    "ineligible": [
+      "MODEL_REASONING_LIMITED",
+      "EVIDENCE_SELECTION_LIMITED without missing information"
+    ],
+    "source": "existing E09 manual taxonomy; never exposed to router"
+  },
+  "approved_pilot_gate_revision": {
+    "cost_per_net_contradiction_recovery_usd": 0.10,
+    "pilot_treatment": "reported_descriptive_non_blocking",
+    "confirmation_treatment": "blocking"
+  },
+  "approved_final_retention_group_F": {
+    "comparison": "RAG -> router -> human versus RAG -> router -> agent -> human if unresolved",
+    "runtime_resolved_definition": "agent used at least one tool, returned strict/recovered source-valid label-consistent output, and did not fallback or hit a control cap",
+    "meaningful_workload_reduction": "at least max(3 cases, 10% of routed cases) fewer human reviews",
+    "pass_rule": "either lower expected cost-to-serve under E18 headline $3.33/review with at least 3 human reviews saved, OR at least 10% and at least 3 human reviews saved with headline cost-to-serve increase no greater than 5%",
+    "reporting": "also report every existing E18 human-review scenario; do not invent a new wage assumption"
+  }
+}
