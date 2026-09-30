@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E08B Stage B full benchmark (reconstruction-v2) -- ALL 150 TRAIN_ARCH_v1 cases, A2-GPT5mini.
+E08B Stage B full benchmark (final) -- ALL 150 TRAIN_ARCH_v1 cases, A2-GPT5mini.
 
 Frozen configuration (matched to E07 exactly, only the model differs -- calibration-approved,
 see experiments/E08B_stronger_model_diagnostic/results/calibration_8case.json):
@@ -37,7 +37,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
-from evaluation.budget import check_budget_against_ledger, record_spend, reconstruction_spend_so_far  # noqa: E402
+from evaluation.budget import check_budget_against_ledger, record_spend, final_spend_so_far  # noqa: E402
 from evaluation.prompt_selection import load_prompt_config  # noqa: E402
 from evaluation.structured_output import parse_structured_output  # noqa: E402
 from pipeline.evidence_validator import validate_evidence  # noqa: E402
@@ -100,8 +100,8 @@ def main() -> int:
           f"150/150 present, ordering matches, retrieval_config={rc}, zero gold leakage. "
           f"Retrieval NOT re-run -- reading the frozen artifact only.")
 
-    pre_run_spend = reconstruction_spend_so_far()
-    print(f"\nPre-run reconstruction-v2 ledger spend: ${pre_run_spend:.4f}")
+    pre_run_spend = final_spend_so_far()
+    print(f"\nPre-run final ledger spend: ${pre_run_spend:.4f}")
     gate = check_budget_against_ledger(
         projected_experiment_cost_usd=CONSERVATIVE_PROJECTED_150_CASE_USD,
         planning_budget_usd=PLANNING_BUDGET_USD,
@@ -223,10 +223,10 @@ def main() -> int:
         json.dump({"total_wall_seconds": total_seconds, "n_cases": len(cases),
                     "run_id": run_id, "run_spend_usd": run_spend_this_run,
                     "pre_run_ledger_spend_usd": pre_run_spend,
-                    "post_run_ledger_spend_usd": reconstruction_spend_so_far()}, f, indent=2)
+                    "post_run_ledger_spend_usd": final_spend_so_far()}, f, indent=2)
     print(f"\nwrote {OUT_CASES_PATH} ({len(cases)} cases, {total_seconds/60:.1f} min total)")
     print(f"Real spend this run: ${run_spend_this_run:.4f}. "
-          f"Ledger total now: ${reconstruction_spend_so_far():.4f}")
+          f"Ledger total now: ${final_spend_so_far():.4f}")
     return 0
 
 

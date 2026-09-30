@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-E00B - Budget, token & runtime forecast (reconstruction-v2).
+E00B - Budget, token & runtime forecast (final).
 
 Local-only: reads already-saved local files (data/contractnli/*.json, results/*.jsonl,
 configs/pricing/*.yaml) and does arithmetic via evaluation.budget. Makes ZERO model/API
 calls and downloads nothing. Produces the CSV/JSON outputs under
 experiments/E00B_budget_forecast/results/ and results/budget/.
 
-Answers: "Can the planned reconstruction-v2 experiment programme fit within the remaining
+Answers: "Can the planned final experiment programme fit within the remaining
 hosted-model budget and practical runtime, and how should that constraint shape the
 experimental design?"
 """
@@ -27,11 +27,11 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
 from evaluation.budget import (  # noqa: E402
-    RECONSTRUCTION_LEDGER_PATH,
+    FINAL_LEDGER_PATH,
     check_budget,
     estimate_cost,
     load_pricing,
-    reconstruction_spend_so_far,
+    final_spend_so_far,
 )
 
 BUDGET_DIR = REPO / "results/budget"
@@ -484,14 +484,14 @@ def main():
         "hard_budget_gate": {
             "implementation": "evaluation/budget.py::check_budget() -- pure function, no network calls, must be called before any hosted experiment executes",
             "rule": "if actual_spend_so_far + projected_experiment_cost > (planning_budget - reserve): block the run",
-            "actual_spend_source": "evaluation/budget.py::check_budget_against_ledger() reads reconstruction_spend_so_far() from the running ledger below -- NEVER the historical T-series ledger, which is a separate, audit-only record.",
+            "actual_spend_source": "evaluation/budget.py::check_budget_against_ledger() reads final_spend_so_far() from the running ledger below -- NEVER the historical T-series ledger, which is a separate, audit-only record.",
         },
-        "reconstruction_v2_spend_ledger": {
-            "path": str(RECONSTRUCTION_LEDGER_PATH.relative_to(REPO)),
-            "status": "READY -- append-only, currently empty (no reconstruction-v2 hosted call has been made yet)",
-            "current_total_usd": reconstruction_spend_so_far(),
+        "final_v2_spend_ledger": {
+            "path": str(FINAL_LEDGER_PATH.relative_to(REPO)),
+            "status": "READY -- append-only, currently empty (no final hosted call has been made yet)",
+            "current_total_usd": final_spend_so_far(),
             "write_function": "evaluation.budget.record_spend(experiment_id, provider, model, input_tokens, output_tokens, cost_usd, run_id) -- call after every real successful hosted call, starting with E01",
-            "read_function": "evaluation.budget.reconstruction_spend_so_far() -- sums cost_usd across every recorded row",
+            "read_function": "evaluation.budget.final_spend_so_far() -- sums cost_usd across every recorded row",
         },
         "answers": {
             "A_hosted_budget_available_usd": PLANNING_BUDGET_USD,
@@ -501,7 +501,7 @@ def main():
             "E_can_2_hosted_oracle_models_fit": True,
             "F_budget_remaining_for_E03_E15_after_oracle_usd": round(allowed_budget - oracle_300["estimated_cost_usd"], 4),
             "G_recommended_bulk_output_token_cap": "~20-30 tokens (compact structured JSON: label + evidence_ids only) for bulk experiments; verbose explanations reserved for explanation-quality-focused experiments only",
-            "H_experiments_that_should_be_local_only": ["E00 (done)", "E04 rule baseline", "E06 retrieval optimisation (no LLM calls)", "E09 agent justification analysis (reuses existing predictions)", "the bulk of E12/E14 architecture comparison (local-first per the reconstruction brief)"],
+            "H_experiments_that_should_be_local_only": ["E00 (done)", "E04 rule baseline", "E06 retrieval optimisation (no LLM calls)", "E09 agent justification analysis (reuses existing predictions)", "the bulk of E12/E14 architecture comparison (local-first per the project contract)"],
             "I_runs_that_would_exceed_safe_budget": "Running the FULL 2,091-case TEST split on 2+ hosted models across all 4 architectures repeatedly (as the historical T-series did across T041-A and T041-B) would approach $1.5-2 per full pass -- affordable once, but NOT to be repeated casually; each hosted TEST-split run should go through the budget gate first.",
             "J_local_runtime_estimate": (
                 "Full 2,091-case TEST set, all 3 non-rule local architectures sequentially: "

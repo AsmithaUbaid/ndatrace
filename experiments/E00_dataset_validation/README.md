@@ -6,7 +6,7 @@ Hypothesis: The official ContractNLI train/dev/test splits are clean (no doc-lev
     label/evidence conventions are unambiguous, and the existing metric implementations
     (evaluation/metrics.py, evaluation/scorer.py) are correct -- but historical sample reuse
     (dev split used for both tuning and validation) needs to be disclosed and not repeated.
-Why this experiment exists: docs/project_contract.md and the reconstruction brief require one
+Why this experiment exists: docs/project_contract.md and the project contract require one
     coherent data/evaluation protocol before any experiment (Oracle onward) runs, instead of
     the historical pattern of ad hoc, differently-seeded samples per script.
 Input dataset/split: data/contractnli/{train,dev,test}.json (official, read-only)

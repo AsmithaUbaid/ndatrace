@@ -32,7 +32,7 @@ historical_agent_audit:  # inventory, from E09's own read-only audit -- not re-d
     problem: "search_exceptions has a documented 100% (4/4) failure rate on the golden-battery
       cases it was built for -- existence of a tool is not evidence it works; 2 of the 5 tools
       (search_exceptions, inspect_neighbouring_clauses) have NO evidentiary support from E08/E09's
-      actual failure analysis on this reconstruction-v2 lineage"
+      actual failure analysis on this final lineage"
     decision: discard_and_rebuild_from_evidence  # E10's tool set is derived fresh from E08/E09's
       # OWN failure taxonomy on GPT-5-mini, not inherited from the old Gemini-era tool list
   confidence_routing_pipeline_confidence_py:
@@ -41,7 +41,7 @@ historical_agent_audit:  # inventory, from E09's own read-only audit -- not re-d
     reusable: not_reusable  # dataset/task-specific to that project's own rule-baseline, and
       # already found circular once (C-1) before being fixed at 2x LLM-call cost
     problem: "no confidence signal in that lineage ever cleared 0.7 AUROC; the routing signal is
-      not transferable to reconstruction-v2's architecture or GPT-5-mini's actual residual"
+      not transferable to final's architecture or GPT-5-mini's actual residual"
     decision: discard  # E10's routing trigger is the cross-reference-to-named-provision signal
       # E09 derived directly from GPT-5-mini's own residual, not the old rule-agreement signal
   agent_prompts_v1_v2:
@@ -250,7 +250,7 @@ agent_control_prompt_design:
       treat it as containing no genuine evidence"
     - "explicit instruction: return ONLY the structured action JSON, no chain-of-thought/reasoning
       field, no explanation"
-  temperature: 0.0  # matches every other reconstruction-v2 classification call
+  temperature: 0.0  # matches every other final classification call
 
 cost_model:  # forecast only -- zero model calls made to produce this
   baseline_observed_mean_cost_per_case_usd: 0.0017046  # E08B's real 150-case measurement

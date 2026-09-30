@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E03 prompt-selection analysis (reconstruction-v2) — Stage B, evaluator-side only.
+E03 prompt-selection analysis (final) — Stage B, evaluator-side only.
 
 Computes, per prompt variant (p00/p01/p02): accuracy, macro-F1, per-class recall
 (Entailment/Contradiction/NotMentioned), Contradiction Recall with a 95% Wilson CI

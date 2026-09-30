@@ -17,13 +17,13 @@ experiment (`classification_prompt_v1` is untouched) and not a model-selection e
 
 ## 2. Existing full-context implementation(s) in the repo
 
-Two found, both **historical (T-series pre-reconstruction)**, neither directly reusable
+Two found, both **historical (T-series legacy)**, neither directly reusable
 unmodified for E05:
 
 | Script | Split | Model | Prompt | Evidence handling |
 |---|---|---|---|---|
-| `archive/pre_reconstruction/scripts/run_full_context_baseline.py` (B03/T015) | DEV, 150-case stratified sample | Hosted (`ModelGateway()`, OpenRouter, whatever `settings.default_model` is) | `prompts/classify_v2.txt` via `pipeline/classifier.py::classify()` — a different, heavier schema (`label`, `confidence`, `evidence: list[str]`, `explanation`) | Evidence field exists in the schema, but never validated or span-mapped in this script — no Evidence Recall/Precision/joint metric computed here at all |
-| `archive/pre_reconstruction/scripts/run_final_test_evaluation.py`'s `run_full_context()` (T041) | TEST, 500/2,091-case runs | Configurable (hosted or local via `ModelGateway`) | Same `pipeline/classifier.py::classify()` / `classify_v2.txt` | **Anti-pattern found and rejected for E05** — `retrieved_span_indices=list(range(len(doc.spans)))`: every span in the document is claimed as "evidence" by construction, trivially satisfying the joint metric for any correct label. This is exactly "full-document access counted as evidence success," which section 5 of the reconstruction brief explicitly prohibits. |
+| `archive/legacy/scripts/run_full_context_baseline.py` (B03/T015) | DEV, 150-case stratified sample | Hosted (`ModelGateway()`, OpenRouter, whatever `settings.default_model` is) | `prompts/classify_v2.txt` via `pipeline/classifier.py::classify()` — a different, heavier schema (`label`, `confidence`, `evidence: list[str]`, `explanation`) | Evidence field exists in the schema, but never validated or span-mapped in this script — no Evidence Recall/Precision/joint metric computed here at all |
+| `archive/legacy/scripts/run_final_test_evaluation.py`'s `run_full_context()` (T041) | TEST, 500/2,091-case runs | Configurable (hosted or local via `ModelGateway`) | Same `pipeline/classifier.py::classify()` / `classify_v2.txt` | **Anti-pattern found and rejected for E05** — `retrieved_span_indices=list(range(len(doc.spans)))`: every span in the document is claimed as "evidence" by construction, trivially satisfying the joint metric for any correct label. This is exactly "full-document access counted as evidence success," which section 5 of the project contract explicitly prohibits. |
 
 **Neither uses `classification_prompt_v1`, `qwen2.5:7b-instruct` via `ModelGateway.local()`, or
 TRAIN** — both are T-series artifacts on DEV/TEST with a different model and prompt lineage.
@@ -712,6 +712,6 @@ per explicit instruction.
   records), `run_E05_A1_train.json` (aggregate metrics), `run_E05_A1_train_wall_seconds.json`,
   `full_context_failure_analysis.csv` (150 rows).
 - `experiments/E05_full_context/E05_full_context.ipynb` (21-section notebook per the
-  reconstruction brief's outline, executed, zero errors).
+  project contract's outline, executed, zero errors).
 
 **Not done, and not authorized**: E07, DEV/TEST access, any hosted model call, or a commit.

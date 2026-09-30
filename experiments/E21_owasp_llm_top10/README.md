@@ -1,7 +1,7 @@
 # E21 — OWASP LLM Top 10 (2025) Security Evaluation
 
 Baseline security evaluation of the **frozen** NDATrace RAG runtime (BM25 top-20 → L-12
-cross-encoder rerank → top-5 context → `openai/gpt-5-mini` + `prompts/reconstruction_v2/gpt_p0.txt`
+cross-encoder rerank → top-5 context → `openai/gpt-5-mini` + `prompts/final/gpt_p0.txt`
 → deterministic parser → evidence validator → human reviewer) against all ten OWASP LLM Top 10
 (2025) categories. This is a project security evaluation, not an OWASP certification.
 

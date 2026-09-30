@@ -129,7 +129,7 @@ needed and choose exactly one allowed tool, or conclude. Includes an explicit "c
 context is already sufficient — do not investigate merely because investigation is available"
 instruction, a reworded injection-detection paragraph (from `agent_step_v2.txt`'s pattern), and an
 explicit "no chain-of-thought" instruction. Temperature 0.0, matching every other
-reconstruction-v2 classification call.
+final classification call.
 
 ## 15. Final output schema
 

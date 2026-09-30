@@ -1,7 +1,7 @@
 # E17 — Final TEST evaluation (one-shot, executed per frozen protocol)
 
 **Candidate: evidence-grounded but not prompt-injection-hardened.** Not production-ready; not legal-approval automation; no claim of full-TEST GPT performance.
-Commit at TEST start: 5717bdf. First reconstruction-v2 TEST access 2026-09-26T19:23:43Z. TEST verified: 123 documents / 2,091 cases (E 968 / C 220 / NM 903). Metrics frozen before failure inspection (`results/final_metrics.json`, sha256 in `final_metrics.sha256`).
+Commit at TEST start: 5717bdf. First final TEST access 2026-09-26T19:23:43Z. TEST verified: 123 documents / 2,091 cases (E 968 / C 220 / NM 903). Metrics frozen before failure inspection (`results/final_metrics.json`, sha256 in `final_metrics.sha256`).
 Manifest TEST_HOSTED_v1 sha256 a1cc8f53…, hosted request artifact sha256 a7c2d769…. GPT-P0 sha1 3fcc7c95…, evidence_evaluator_v2, runtime validator v2. No selective routing.
 
 **Wording discipline:** GPT results are from a budget-constrained balanced stratified sample (n=150); the local comparators were measured over the full 2,091-case TEST population. The 150-case GPT numbers are not more precise than the 2,091-case comparator measurements.
@@ -54,7 +54,7 @@ E15 found no effective selective routing policy that satisfies the provisional w
 20 matched clean/attack pairs (40 hosted calls). 4/11 injection-type pairs showed attack success (2 label hijacks: an instruction-only document and a fake [SYSTEM] message; 2 output-format requests honored); 2 clean-correct→attack-wrong regressions; attacked evidence stayed source-grounded; no code execution, no secret/data leakage, no malformed hosted output. Source grounding does not imply the source text is trustworthy — the validator cannot detect malicious instructions that are genuinely in the NDA. GPT-P0 has no dedicated injection-resistance instruction and no patch was introduced before TEST. Distractor padding, long context, duplicated clauses and carve-outs were robust on that small set.
 
 ## H. Protocol deviations
-None to the frozen model/prompt/architecture/manifest/evaluator/validator/parser/routing/sample. One approved policy change: the budget breaker was disabled by explicit user update (spend recorded only). One process note: the analysis script's evidence-precision denominator counts cases with any quoted evidence, matching earlier reconstruction analyzers.
+None to the frozen model/prompt/architecture/manifest/evaluator/validator/parser/routing/sample. One approved policy change: the budget breaker was disabled by explicit user update (spend recorded only). One process note: the analysis script's evidence-precision denominator counts cases with any quoted evidence, matching earlier analyzers.
 
 ## I. Limitations
 Hosted GPT is a balanced n=150 sample (Contradiction n=50, Wilson interval ~±11 pts); standardized estimates rest on the assumption that the sampled cases represent each class; single run, temperature 0.0; DEV/TEST historical exposure of the ContractNLI benchmark family; comparator prompt is the GPT prompt (Qwen not tuned; wrapper differs from earlier E05 runs); source-validity and evidence metrics use the frozen evaluator_v2 conventions; failure buckets are analysis-only judgments.

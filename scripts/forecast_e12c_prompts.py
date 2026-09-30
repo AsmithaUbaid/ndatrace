@@ -6,7 +6,7 @@ import tiktoken
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
-from evaluation.budget import check_budget_against_ledger, reconstruction_spend_so_far  # noqa: E402
+from evaluation.budget import check_budget_against_ledger, final_spend_so_far  # noqa: E402
 
 C = REPO / "experiments/E12C_gpt_prompt_confirmation"; B = REPO / "experiments/E12B_gpt_prompt_optimization/results"
 ARMS = ["gpt_p0", "gpt_p3"]
@@ -18,8 +18,8 @@ sha = lambda p: hashlib.sha1(open(p, "rb").read()).hexdigest()
 
 
 def main():
-    P = {k: open(REPO / f"prompts/reconstruction_v2/{k}.txt", newline="").read() for k in ARMS}
-    h = {k: sha(REPO / f"prompts/reconstruction_v2/{k}.txt") for k in ARMS}
+    P = {k: open(REPO / f"prompts/final/{k}.txt", newline="").read() for k in ARMS}
+    h = {k: sha(REPO / f"prompts/final/{k}.txt") for k in ARMS}
     e12b = {"gpt_p0": [json.loads(l) for l in open(B / "run_E12B_gpt_p0_cases.jsonl")], "gpt_p3": [json.loads(l) for l in open(B / "run_E12B_gpt_p3_cases.jsonl")]}
     hash_checks = {k: {r["prompt_hash"] for r in e12b[k]} == {h[k]} for k in ARMS}
     man = json.load(open(C / "TRAIN_GPT_PROMPT_CONFIRM_v1.json")); ctx = json.load(open(C / "TRAIN_GPT_PROMPT_CONFIRM_v1_RETRIEVED_retrieval_v1.json"))
@@ -42,7 +42,7 @@ def main():
     exp = {k: sum(x * PI + statistics.mean(out[k]) * PO for x in intok[k]) for k in ARMS}
     cons = {k: sum(x * PI + st(out[k])["p90"] * PO for x in intok[k]) for k in ARMS}
     real_e12b = {k: sum(r["cost_usd"] for r in e12b[k]) for k in ARMS}
-    led = reconstruction_spend_so_far(); ce = sum(cons.values()); gate = check_budget_against_ledger(ce, 5.0, 0.25)
+    led = final_spend_so_far(); ce = sum(cons.values()); gate = check_budget_against_ledger(ce, 5.0, 0.25)
     mean_lat = statistics.mean(statistics.mean(v) for v in lat.values()) / 1000
     res = {"prompt_hashes": h, "hashes_match_E12B_records": hash_checks, "context_checks": checks, "calibration_ratio": ratio,
            "input_tokens_calibrated": {k: st(v) for k, v in intok.items()}, "e12b_real_output_tokens": {k: st(v) for k, v in out.items()},

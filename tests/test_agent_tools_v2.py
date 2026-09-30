@@ -1,5 +1,5 @@
 """
-Tests for pipeline/agent_tools_v2.py (E10/E11, reconstruction-v2). No model calls, no network --
+Tests for pipeline/agent_tools_v2.py (E10/E11, final). No model calls, no network --
 purely deterministic tool logic. Does not import or exercise pipeline/agent_tools.py (historical,
 untouched).
 """

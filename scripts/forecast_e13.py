@@ -6,10 +6,10 @@ import tiktoken
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
-from evaluation.budget import check_budget_against_ledger, reconstruction_spend_so_far  # noqa: E402
+from evaluation.budget import check_budget_against_ledger, final_spend_so_far  # noqa: E402
 
 D = REPO / "experiments/E13_gpt_context_architecture"; B = REPO / "experiments/E12B_gpt_prompt_optimization/results"; C = REPO / "experiments/E12C_gpt_prompt_confirmation/results"
-SYSTEM = open(REPO / "prompts/reconstruction_v2/gpt_p0.txt", newline="").read()          # GPT-P0 effective system prompt (includes the evidence line), byte-identical for BOTH arms
+SYSTEM = open(REPO / "prompts/final/gpt_p0.txt", newline="").read()          # GPT-P0 effective system prompt (includes the evidence line), byte-identical for BOTH arms
 USER_TEMPLATE = "Requirement: {hypothesis_text}\n\nNDA context: {context_text}"          # shared neutral wrapper, identical for BOTH arms
 JOIN = "\n\n---\n\n"
 LEAK = {"gold_label", "gold_span_indices", "choice", "relevance_flag", "expected_prediction", "failure_bucket", "failure_family"}
@@ -69,7 +69,7 @@ def main():
     for k in exp: exp[k]["total"] = exp[k]["input"] + exp[k]["output"]
     cons = {"full": cost([x for x in tf], o_p90) if False else sum(q(tf, .9) for _ in F) * PI + len(F) * o_p90 * PO, "rag": sum(q(calr, .9) for _ in R) * PI + len(R) * o_p90 * PO}
     stress = {"full": sum(tf) * PI + len(F) * o_mean * 1.5 * PO, "rag": sum(calr) * PI + len(R) * o_mean * 1.5 * PO}
-    ledger = reconstruction_spend_so_far(); ce = cons["full"] + cons["rag"]; gate = check_budget_against_ledger(ce, 5.0, 0.25)
+    ledger = final_spend_so_far(); ce = cons["full"] + cons["rag"]; gate = check_budget_against_ledger(ce, 5.0, 0.25)
     lat_rag = statistics.mean(statistics.mean(json.loads(l)["generation_latency_ms"] for l in open(f)) for f in [B / "run_E12B_gpt_p0_cases.jsonl", C / "run_E12C_gpt_p0_cases.jsonl"]) / 1000
     scale_full = 1 + 0.167 * (statistics.mean(calf) / statistics.mean(calr) - 1)  # E12A: +64% input -> +10.7% latency (0.167 per unit)
     runtime = {"rag_mean_call_s_assumed": lat_rag, "full_mean_call_s_assumed": lat_rag * scale_full, "note": "full-arm latency scaling extrapolated from E12A (+64% input -> +10.7% latency); a large extrapolation, uncertain",

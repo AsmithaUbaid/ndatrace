@@ -1,5 +1,5 @@
 """
-E01 Oracle — reusable, provider-agnostic logic (reconstruction-v2).
+E01 Oracle — reusable, provider-agnostic logic (final).
 
 Pure functions: build the model-visible input for one Oracle case, and parse/validate the
 model's compact JSON response. No network calls, no model calls. Used by both
@@ -76,7 +76,7 @@ def parse_oracle_output(raw_output: str) -> OracleParseResult:
     "label" field whose value is one of the three canonical labels. Anything else —
     malformed JSON, missing field, extra prose, an unrecognized label string — is
     parse_valid=False. No deterministic repair/inference of the intended label from
-    malformed text (reconstruction brief section 16) — that policy was not frozen before
+    malformed text (project contract section 16) — that policy was not frozen before
     this run, so it is not applied here.
     """
     text = raw_output.strip()
@@ -122,12 +122,12 @@ def build_result_record(
     error_message: str | None = None,
 ) -> dict[str, Any]:
     """
-    One structured record per model x case, per reconstruction brief section 15.
+    One structured record per model x case, per project contract section 15.
 
     `retry_count`/`error_type`/`error_message` were added after E01's first run (the original
     schema only had a single `error` string) — `error_type` distinguishes MODEL ERROR
     (provider timeout/local runtime failure) from PARSE ERROR (schema violation) per the
-    reconstruction brief's failure-policy split; `error_message` carries the human-readable
+    project contract's failure-policy split; `error_message` carries the human-readable
     detail. `retry_count` records how many transient-failure retries ModelGateway performed
     before this result (0 = succeeded on the first attempt).
     """

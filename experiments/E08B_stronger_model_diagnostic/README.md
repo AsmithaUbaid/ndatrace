@@ -49,9 +49,9 @@ What becomes frozen after this: PENDING -- an evidence base for E09's final agen
 
 ## Stage A vs. Stage B
 
-Same two-stage structure as every prior reconstruction-v2 experiment. **Stage A (this commit's
+Same two-stage structure as every prior final experiment. **Stage A (this commit's
 state): audit the current GPT-5 mini provider/pricing/config, verify the frozen A2 input
-artifact's integrity, read the real reconstruction-v2 spend ledger and apply the existing
+artifact's integrity, read the real final spend ledger and apply the existing
 budget gate (`evaluation.budget.check_budget_against_ledger`), project the 150-case cost using
 real historical GPT-5-mini output-token data (not a guess), and propose the exact matched-
 comparison, bucket-recovery, and statistical analysis plan.** No GPT-5 mini call has been made.

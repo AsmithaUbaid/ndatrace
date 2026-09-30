@@ -18,7 +18,7 @@ sample is 100/100/100 by construction, not the natural TRAIN distribution (49.1%
 11.7% Contradiction / 39.2% NotMentioned), so these numbers are never comparable to
 natural-distribution benchmark accuracy.
 
-**Total reconstruction-v2 hosted spend after E01: $0.1178** — well under the $0.3348
+**Total final hosted spend after E01: $0.1178** — well under the $0.3348
 pre-run projection (real Gemini cost came in at $0.0091 vs. a $0.0250 projection; real
 GPT-5-mini cost came in at $0.1087 vs. a $0.3098 projection). $3.63 of the $3.75 allowed
 budget remains untouched; the $1.25 reserve was never approached.
@@ -223,7 +223,7 @@ Respond with ONLY a JSON object with this exact field:
 No explanation, no evidence quotation, no additional fields.
 ```
 
-Label definitions cross-checked against the reconstruction brief's canonical wording (used
+Label definitions cross-checked against the project contract's canonical wording (used
 near-verbatim) and against ContractNLI's own task framing ("entailed by, contradicting to, or
 not mentioned by the contract") — not rewritten into generic legal judgement.
 
@@ -314,7 +314,7 @@ inflation):
 `evaluation/budget.py::check_budget_against_ledger()`, run locally (no network call):
 
 ```
-current reconstruction-v2 ledger spend: $0.00  (confirmed empty, header-only)
+current final ledger spend: $0.00  (confirmed empty, header-only)
 projected E01 hosted spend:             $0.3348
 protected reserve (25% of $5.00):       $1.25
 allowed budget:                         $3.75
@@ -322,7 +322,7 @@ projected total:                        $0.3348 <= $3.75  ->  ALLOWED
 ```
 
 Historical T-series spend ($3.0011, audited in E00B) is **not** deducted again — the gate
-reads only the reconstruction-v2 running ledger, per the "don't double-count" rule.
+reads only the final running ledger, per the "don't double-count" rule.
 
 ## 16. Estimated local runtime
 

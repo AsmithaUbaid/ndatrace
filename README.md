@@ -124,7 +124,7 @@ See [E21](experiments/E21_owasp_llm_top10/summary.md) and [E22](experiments/E22_
 
 ## 8. Important agent correction
 
-The reconstruction agent experiment exposed only two targeted, read-only tools:
+The agent experiment exposed only two targeted, read-only tools:
 
 - `FOLLOW_CROSS_REFERENCE` — retrieve a bounded excerpt from a named provision in the same NDA.
 - `GET_MORE_CANDIDATES` — reveal a bounded slice below the frozen top-5 from the existing ranked candidate pool.
@@ -233,7 +233,7 @@ tests/         Unit, integration, robustness, and leakage checks
 reports/       Current report draft plus preserved earlier versions
 ```
 
-Historical T-series materials are archived and retained as evidence; the active reconstruction-v2 program is E00–E22. ADR-001 through ADR-011 are historical. ADR-012 is the current reconstruction-v2 benchmark/product decision.
+Historical T-series materials are archived and retained as evidence; the active final program is E00–E22. ADR-001 through ADR-011 are historical. ADR-012 is the current final benchmark/product decision.
 
 ## 14. Reproduce saved research results
 

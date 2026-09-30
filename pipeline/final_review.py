@@ -35,7 +35,7 @@ from pipeline.config import settings
 MODEL = settings.default_model
 MODEL_MAX_RETRIES = 1
 MODEL_TIMEOUT_SECONDS = 60
-PROMPT_PATH = Path(__file__).resolve().parent.parent / "prompts/reconstruction_v2/gpt_p0.txt"
+PROMPT_PATH = Path(__file__).resolve().parent.parent / "prompts/final/gpt_p0.txt"
 USER_TEMPLATE = "Requirement: {hypothesis_text}\n\nNDA context: {context_text}"  # frozen; identical to E13/E15/E16/E17/E20
 
 _EXPLANATION = {

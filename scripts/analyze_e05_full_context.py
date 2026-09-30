@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E05 full-context (A1) analysis (reconstruction-v2) -- Stage B, evaluator-side only.
+E05 full-context (A1) analysis (final) -- Stage B, evaluator-side only.
 
 Computes classification metrics, structured-output metrics (strict vs. recovered vs. invalid --
 never collapsed into one number), evidence metrics (Evidence Recall/Precision using ONLY
@@ -61,7 +61,7 @@ def load_gold_span_indices() -> dict[str, list[int]]:
 
 def evidence_to_span_indices(evidence: list[str], doc_text: str, doc_spans: list[list[int]]) -> list[int]:
     """Maps each verbatim evidence quote to the doc.spans indices it overlaps -- same interval-
-    overlap semantics used throughout reconstruction-v2 (E04, E06). Only quotes that are real
+    overlap semantics used throughout final (E04, E06). Only quotes that are real
     verbatim substrings can be located at all; non-verbatim quotes contribute no span (they are
     already flagged separately via evidence_all_verbatim)."""
     indices: set[int] = set()
@@ -101,7 +101,7 @@ def length_bucket(tokens: int, p50: float, p90: float) -> str:
 
 def classify_failure_families(row: dict) -> list[str]:
     """Observed-category tagging -- primary+secondary allowed, nothing forced. Categories per
-    the reconstruction brief: A classification/reasoning, B evidence-selection, C structured-
+    the project contract: A classification/reasoning, B evidence-selection, C structured-
     output, D long-context-associated (descriptive only), E exception/carve-out (only if
     observed), F definition/cross-reference/multi-clause, G NotMentioned overprediction."""
     families = []

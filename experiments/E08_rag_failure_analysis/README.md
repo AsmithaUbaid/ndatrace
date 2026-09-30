@@ -40,7 +40,7 @@ What becomes frozen after this: PENDING -- the evidence base for E09, not an A3 
 
 ## Stage A vs. Stage B
 
-Same two-stage structure as every prior reconstruction-v2 experiment. **Stage A (this commit's
+Same two-stage structure as every prior final experiment. **Stage A (this commit's
 state): audit E07's existing outputs, verify error counts, run one pilot zero-cost refinement
 (evidence-overlap-with-gold vs. evidence-merely-verbatim) that materially changes how the "54
 wrong-label-but-valid-evidence" figure should be read, run one zero-cost oracle-action

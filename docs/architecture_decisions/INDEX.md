@@ -1,12 +1,12 @@
 # Architecture Decision Records — Index
 
-Distinguishes historical ADRs (already-run T-series work) from reconstruction-v2 ADRs
+Distinguishes historical ADRs (already-run T-series work) from final ADRs
 (independently re-derived under `docs/experiment_registry.md`'s E-series). No historical ADR
 is rewritten here.
 
-## Historical ADRs (pre-reconstruction; original evidence archived, not carried forward as a live doc)
+## Historical ADRs (legacy; original evidence archived, not carried forward as a live doc)
 
-| ADR | Title | Status for reconstruction-v2 |
+| ADR | Title | Status for final |
 |---|---|---|
 | ADR-001 | Model choice: google/gemini-2.5-flash-lite | Evidence only — E02 re-screens |
 | ADR-002 | Retrieval configuration | Evidence only — E06 re-derives |
@@ -16,11 +16,11 @@ is rewritten here.
 | ADR-006 | Routing-signal independence fix | Historical bug fix — code-level, stays fixed |
 | ADR-007 | Agent include/exclude | Evidence only — E09–E11 re-derive |
 | ADR-008 | Full-context baseline: diagnostic ceiling | Evidence only — E05/E12 re-derive |
-| ADR-009 | Final architecture freeze: RAG + selective agent | **Historical evidence only — NOT the reconstruction-v2 freeze.** E12 independently re-evaluates A0–A3. |
-| ADR-010 | Final locked test-set evaluation (T041) | Historical — E14 is the reconstruction-v2 equivalent |
+| ADR-009 | Final architecture freeze: RAG + selective agent | **Historical evidence only — NOT the final freeze.** E12 independently re-evaluates A0–A3. |
+| ADR-010 | Final locked test-set evaluation (T041) | Historical — E14 is the final equivalent |
 | ADR-011 | Golden battery Categories 1–2 | Evidence only |
 
-## Reconstruction-v2 ADRs
+## Final ADRs
 
 ### ADR-012 — E20 same-population TEST comparator: FULL retained as benchmark winner; RAG framed as the production-oriented direction
 
@@ -28,8 +28,8 @@ is rewritten here.
 winner, while the interactive prototype now serves the frozen E20 RAG configuration for its
 bounded-context product characteristics.
 
-**Context:** ADR-009 (historical) and E19's freeze established FULL as the reconstruction-v2
-architecture from E05–E13's matched *development*-sample comparisons. No reconstruction-v2
+**Context:** ADR-009 (historical) and E19's freeze established FULL as the final
+architecture from E05–E13's matched *development*-sample comparisons. No final
 experiment had run RAG and FULL head-to-head on the full official TEST split with paired
 significance testing until E20.
 

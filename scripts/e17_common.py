@@ -12,7 +12,7 @@ FROZEN = {"manifest_sha256": "a1cc8f53bb4d41c7e1c66862241cbe2892000eef9d6d27a41b
           "test_json_sha256": "460267b56052a2dc5aead98eb35eadef9e6734d5723d37b4a9790e410f812387", "prompt_sha1": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
           "hosted_requests_sha256": "a7c2d76985479b001cb73fc102b2c808f5a4d44ab301a6327a88f01ac1bfbd4b", "seed": 1600, "n": 150}
 TEMPLATE = "Requirement: {hypothesis_text}\n\nNDA context: {context_text}"
-SYSTEM = open(REPO / "prompts/reconstruction_v2/gpt_p0.txt", newline="").read()
+SYSTEM = open(REPO / "prompts/final/gpt_p0.txt", newline="").read()
 LABELS = ("Entailment", "Contradiction", "NotMentioned")
 W = {"Entailment": 968, "Contradiction": 220, "NotMentioned": 903}
 

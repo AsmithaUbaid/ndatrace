@@ -8,7 +8,7 @@ own, real, complete 150-case output; this file's content is byte-identical to th
 decision.
 **Completed cases:** 88 of 150 (stopped cleanly mid-run, file not corrupted — last record is
 valid JSON).
-**Reason:** the E03 experimental design changed before this run finished. Reconstruction-v2
+**Reason:** the E03 experimental design changed before this run finished. Final
 was resequenced: **E06 (Retrieval Optimisation) now runs before E03 (Prompt Selection)** — see
 `docs/experiment_registry.md`. E03's controlled context condition will use frozen retrieved
 context (from E06) instead of full-context NDA text, since full-context prompt comparison

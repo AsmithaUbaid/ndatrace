@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-E06 retrieval optimisation runner (reconstruction-v2) — Stage B only. NOT executed during
+E06 retrieval optimisation runner (final) — Stage B only. NOT executed during
 Stage A prep.
 
 Runs ONE retrieval configuration (chunking + embedding + retrieval method + top_k) over the
 full 4,371-case evidence-bearing TRAIN universe (Entailment + Contradiction), scores it with
 E00's frozen evidence-hit semantics, and saves per-case results + aggregate metrics. No LLM
 call anywhere — retrieval is deterministic/local (BM25 or a local sentence-transformers
-bi-encoder), per the reconstruction brief's explicit "do NOT call Qwen/GPT-5-mini/any hosted
+bi-encoder), per the project contract's explicit "do NOT call Qwen/GPT-5-mini/any hosted
 model in E06."
 
 Usage (Stage B only, after explicit approval), one call per configuration, e.g.:

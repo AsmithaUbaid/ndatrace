@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E03 controlled prompt selection runner (reconstruction-v2) — resumed after E06 froze
+E03 controlled prompt selection runner (final) — resumed after E06 froze
 retrieval_v1.
 
 Runs the frozen TRAIN_PROMPT_v1 case set (n=150) through one fixed model

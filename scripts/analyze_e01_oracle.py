@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-E01 Oracle — evaluation (reconstruction-v2). Reads the 4 saved run_E01_oracle_*.jsonl result
+E01 Oracle — evaluation (final). Reads the 4 saved run_E01_oracle_*.jsonl result
 files, computes per-model metrics via evaluation/metrics.py (reused, not reimplemented), and
 writes experiments/E01_oracle/results/e01_metrics.json. No model calls -- pure local analysis
 of already-saved results.
 
 Deliberately does NOT compute retrieval metrics (Evidence Recall@K, MRR, the joint metric) --
-Oracle has no retrieval step, per the reconstruction brief section 20.
+Oracle has no retrieval step, per the project contract section 20.
 """
 
 from __future__ import annotations
@@ -131,7 +131,7 @@ def main():
         }
 
     # Hosted cost, read from the real ledger (authoritative), not recomputed.
-    ledger_path = REPO / "results/budget/reconstruction_spend_ledger.csv"
+    ledger_path = REPO / "results/budget/final_spend_ledger.csv"
     import csv
     hosted_cost_by_model = {}
     with open(ledger_path) as f:

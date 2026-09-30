@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent; sys.path.insert(0, str(REPO))
-from evaluation.budget import record_spend, reconstruction_spend_so_far  # noqa: E402
+from evaluation.budget import record_spend, final_spend_so_far  # noqa: E402
 from evaluation.structured_output import parse_structured_output  # noqa: E402
 from pipeline.evidence_validator import validate_evidence  # noqa: E402
 from pipeline.model_gateway import ModelError, ModelGateway  # noqa: E402
@@ -20,12 +20,12 @@ lock = threading.Lock(); now = lambda: datetime.now(timezone.utc).isoformat()
 
 def main() -> int:
     man = json.load(open(D / "E16_hosted_requests.json")); reqs = man["requests"]; gate = json.load(open(R / "budget_gate.json"))
-    SYSTEM = open(REPO / "prompts/reconstruction_v2/gpt_p0.txt", newline="").read(); h = hashlib.sha1(SYSTEM.encode()).hexdigest()
-    pre = reconstruction_spend_so_far(); out_path = R / "run_E16_hosted_cases.jsonl"
+    SYSTEM = open(REPO / "prompts/final/gpt_p0.txt", newline="").read(); h = hashlib.sha1(SYSTEM.encode()).hexdigest()
+    pre = final_spend_so_far(); out_path = R / "run_E16_hosted_cases.jsonl"
     checks = {"manifest_frozen_40": man["status"].startswith("FROZEN") and len(reqs) == 40 and sum(r["variant"] == "attack" for r in reqs) == 20,
               "manifest_hash_matches_gate_file": hashlib.sha256((D / "E16_hosted_requests.json").read_bytes()).hexdigest() == gate["manifest_sha256"],
               "prompt_is_gpt_p0": h == P0_HASH, "ledger_matches_gate_file": abs(pre - gate["ledger"]) < 1e-9, "budget_gate_pass": gate["pass"] and pre + gate["e16_conservative"] + gate["final_test_conservative"] + 1.25 <= 5.00,
-              "no_existing_outputs": not out_path.exists(), "no_existing_e16_ledger_rows": "e16_" not in open(REPO / "results/budget/reconstruction_spend_ledger.csv").read()}
+              "no_existing_outputs": not out_path.exists(), "no_existing_e16_ledger_rows": "e16_" not in open(REPO / "results/budget/final_spend_ledger.csv").read()}
     json.dump({"checks": checks, "pre_run_ledger_usd": pre, "timestamp": now()}, open(R / "pre_run_verification.json", "w"), indent=2)
     print(json.dumps(checks, indent=1), f"\npre-run ledger ${pre:.5f}", flush=True)
     if not all(checks.values()): print("PRE-RUN VERIFICATION FAILED; no hosted call made."); return 1
@@ -58,8 +58,8 @@ def main() -> int:
     recs = [json.loads(l) for l in open(out_path)]; ids = [r["request_id"] for r in recs]
     verify = {"records_40": len(recs) == 40, "no_duplicates": len(set(ids)) == 40, "all_ids": set(ids) == {q["request_id"] for q in reqs}, "no_provider_errors": not any(r.get("error_type") in ("TIMEOUT", "MODEL_ERROR") for r in recs)}
     json.dump({"spend_usd": state["spend"], "wall_seconds": time.perf_counter() - t_all, "stopped": state["stop"], "api_calls_completed": sum(r.get("cost_usd") is not None for r in recs), "parse_failures": sum(r["parse_status"] == "invalid" for r in recs),
-               "verify": verify, "pre_run_ledger_usd": pre, "post_run_ledger_usd": reconstruction_spend_so_far()}, open(R / "run_E16_wall_seconds.json", "w"), indent=2)
-    print(f"DONE spend ${state['spend']:.4f} stop={state['stop']} verify={verify} ledger ${reconstruction_spend_so_far():.5f}", flush=True); return 0 if all(verify.values()) and not state["stop"] else 2
+               "verify": verify, "pre_run_ledger_usd": pre, "post_run_ledger_usd": final_spend_so_far()}, open(R / "run_E16_wall_seconds.json", "w"), indent=2)
+    print(f"DONE spend ${state['spend']:.4f} stop={state['stop']} verify={verify} ledger ${final_spend_so_far():.5f}", flush=True); return 0 if all(verify.values()) and not state["stop"] else 2
 
 
 if __name__ == "__main__":

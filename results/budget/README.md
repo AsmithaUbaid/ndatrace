@@ -7,7 +7,7 @@
   (also mirrored in `experiments/E00B_budget_forecast/results/` as that experiment's own frozen
   snapshot; both copies are required — `evaluation/budget.py` and `tests/test_budget.py` read from
   this directory specifically)
-- `reconstruction_spend_ledger.csv` — the running, append-only spend ledger for every reconstruction-v2
+- `final_spend_ledger.csv` — the running, append-only spend ledger for every final
   experiment that made real API calls, updated as the project progressed (not a frozen E00B
   snapshot; this is the live source)
 

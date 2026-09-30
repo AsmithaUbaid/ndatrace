@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E06 real failure analysis on the selected retrieval config (reconstruction-v2).
+E06 real failure analysis on the selected retrieval config (final).
 
 For every miss (zero overlap between top-K retrieved chunks and gold spans) at the frozen
 retrieval_v1 config, re-queries the SAME cached index with a much larger K (50, effectively

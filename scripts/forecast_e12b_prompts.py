@@ -6,7 +6,7 @@ import tiktoken
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
-from evaluation.budget import check_budget_against_ledger, reconstruction_spend_so_far  # noqa: E402
+from evaluation.budget import check_budget_against_ledger, final_spend_so_far  # noqa: E402
 from evaluation.prompt_selection import load_prompt_config  # noqa: E402
 
 E12B = REPO / "experiments/E12B_gpt_prompt_optimization"
@@ -21,7 +21,7 @@ st = lambda v: {"mean": statistics.mean(v), "median": statistics.median(v), "p90
 
 
 def main():
-    P = {k: open(REPO / f"prompts/reconstruction_v2/{k}.txt", newline="").read() for k in PROMPTS}
+    P = {k: open(REPO / f"prompts/final/{k}.txt", newline="").read() for k in PROMPTS}
     EV = ' Also return the exact sentence(s) from the text that support your label, verbatim, as a list under "evidence". Return an empty list for NotMentioned.'
     eff = load_prompt_config("p00")["system_prompt"].rstrip() + "\n" + EV
     integ = {"gpt_p0_byte_identical_to_E08B_effective_system_prompt": P["gpt_p0"] == eff,
@@ -52,7 +52,7 @@ def main():
     PI, PO = 0.25 / 1e6, 2.0 / 1e6
     exp = {k: sum(x * PI + out_mean * PO for x in intok[k]) for k in PROMPTS}
     cons = {k: sum(x * PI + out_p90 * PO for x in intok[k]) for k in PROMPTS}
-    ledger = reconstruction_spend_so_far(); ce = sum(cons.values())
+    ledger = final_spend_so_far(); ce = sum(cons.values())
     gate = check_budget_against_ledger(ce, 5.00, 0.25)
     lat = statistics.mean([json.load(open(E08B / "run_E08B_A2_gpt5mini_train.json"))["generation_latency_ms"]["mean"],
                            json.load(open(E12A / "run_E12A_top11_gpt5mini_train.json"))["latency_ms"]["mean"]]) / 1000

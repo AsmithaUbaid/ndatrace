@@ -3,7 +3,7 @@
 
 The runner is deliberately scorer-free: it never loads gold labels/evidence, correctness,
 failure taxonomy, or TEST.  It appends one raw trace per completed case and records every
-successful hosted call in the existing reconstruction spend ledger.
+successful hosted call in the existing final spend ledger.
 """
 
 from __future__ import annotations
@@ -48,7 +48,7 @@ EXPECTED_SHA1 = {
     MANIFEST_PATH: "3a5491ab0de1c101b8d1043ff4dffa21029a58f6",
     RETRIEVAL_PATH: "af5b07ebff19f596375cfdea6f25530d4511c903",
     BASE_PATH: "c1f801adfe6864884341db5d1d11919f18abfec2",
-    REPO / "prompts/reconstruction_v2/gpt_p0.txt": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
+    REPO / "prompts/final/gpt_p0.txt": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
     REPO / "prompts/agent_v2_control.txt": "30781d7cac504c7887f2ae0dc63c1564f5430df9",
     REPO / "pipeline/agent_tools_v2.py": "f44ac1f35bbdbf65d266d70914b683a312e42130",
 }

@@ -37,7 +37,7 @@ RETR = e20["retrieval_diagnostics"]
 POP = e20["population"]
 
 csv_rows = {}
-for line in (ROOT / "results/final/reconstruction_v2/full_test_comparison.csv").read_text().splitlines()[1:]:
+for line in (ROOT / "results/final/v2/full_test_comparison.csv").read_text().splitlines()[1:]:
     parts = line.split(",")
     csv_rows[parts[0]] = parts
 RULE = csv_rows["rule"]  # system,n,accuracy,macro_f1,joint,ent_recall,contr_recall,nm_recall,ev_recall,ev_prec,src_valid,cost
@@ -319,7 +319,7 @@ clause at all. I therefore score <strong>Joint correctness</strong> — the labe
 evidence-grounded, alongside accuracy, macro-F1, and per-class recall.</p>
 <p class="small">Methodological caveat: the TEST split was not tuned against within this project's
 own development process (E01–E16 stayed within TRAIN/DEV), but a superseded earlier run did score
-predictions against it before this reconstruction began — disclosed in
+predictions against it before this final build began — disclosed in
 <code>docs/data_contamination_register.md</code>. I describe TEST as "not tuned against," not
 "blind."</p>
 
@@ -467,7 +467,7 @@ above could be more than scenarios.</p>
 {FIG3}
 <figcaption><b>Figure 3.</b> Joint correctness vs. cost per case, matched TEST population
 (n={POP['n']:,}). All three systems share the identical population, so the comparison is direct.
-Source: <code>results/final/reconstruction_v2/full_test_comparison.csv</code> +
+Source: <code>results/final/v2/full_test_comparison.csv</code> +
 <code>E20_final_report.json</code>.</figcaption>
 </figure>
 

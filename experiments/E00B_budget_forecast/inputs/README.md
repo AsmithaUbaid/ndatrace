@@ -1,7 +1,7 @@
 # E00B frozen historical cost/latency inputs
 
 `historical_cost_inputs.json` freezes the specific numbers `scripts/build_e00b_forecast.py`
-computed from 9 pre-reconstruction legacy result files (`results/archive/runs/` and
+computed from 9 legacy result files (`results/archive/runs/` and
 `results/final/legacy/`), before those directories were deleted in the final legacy cleanup pass
 (2026-09-29). The raw per-prediction JSONL files are gone; only the already-derived scalar values
 below survive, which is all `build_e00b_forecast.py` ever read from them (it never inspected

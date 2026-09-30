@@ -1,7 +1,7 @@
 """
 E22 LLM01 remediation: a deterministic, explainable guard over the RETRIEVED
 NDA context shown to the classifier (pipeline/final_review.py). This is NOT
-a change to prompts/reconstruction_v2/gpt_p0.txt and NOT a semantic/model-
+a change to prompts/final/gpt_p0.txt and NOT a semantic/model-
 based classifier - it is plain regex pattern matching over normalized text,
 chosen specifically because E21 (LLM01) found that source-grounded evidence
 validation cannot detect a malicious instruction that is genuinely present

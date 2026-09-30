@@ -9,9 +9,9 @@ used).
 The original experiment register (Section 8 of `docs/archive/initial_project_plan.md`) is
 historical planning, not a live index.
 
-## Reconstruction-v2
+## Final
 
-New reconstruction-v2 experiments (`E00` onward) get their own subdirectory here, e.g.
+New final experiments (`E00` onward) get their own subdirectory here, e.g.
 `experiments/E01_oracle_reasoning_ceiling/`, following the template at
 `experiments/_template/README.md` and the rules in `docs/experiment_protocol.md`. The planned
 sequence and its status is `docs/experiment_registry.md`. No `E##` directories exist yet —

@@ -90,9 +90,9 @@ export type FinalReviewResponse = {
   retrieved_chunks: RetrievedChunk[];
 };
 
-// One row of the reconstruction-v2 final held-out TEST comparison
+// One row of the final held-out TEST comparison
 // (E17/E17B), read server-side from
-// results/final/reconstruction_v2/full_test_comparison.csv - never
+// results/final/v2/full_test_comparison.csv - never
 // recomputed client-side.
 export type FinalTestResult = {
   system: string;

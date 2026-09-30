@@ -1,7 +1,7 @@
 {
  "_provenance": {
   "source_experiment": "E17 + E17B ledger",
-  "source_artifact": "results/budget/reconstruction_spend_ledger.csv; experiments/E17B_full_test_completion/results/run_E17B_wall.json",
+  "source_artifact": "results/budget/final_spend_ledger.csv; experiments/E17B_full_test_completion/results/run_E17B_wall.json",
   "source_commit": "270b006",
   "measured_or_scenario": "measured (AI cost); scenario (human-review cost, cost-to-serve model)",
   "population": "n=2091 GPT hosted calls (150 + 1941)",

@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-E04 rule baseline runner (reconstruction-v2) — Stage B.
+E04 rule baseline runner (final) — Stage B.
 
 Runs the FROZEN, UNMODIFIED A0 rule baseline (pipeline/rule_baseline.py's classify_with_span)
 against the full official TRAIN split only (423 docs x 17 hypotheses = 7,191 cases). No LLM/API
 calls — pure deterministic keyword matching over full NDA text (not retrieval_v1's retrieved
-excerpts — A0 is intentionally a separate, cheaper architecture, per the reconstruction brief).
+excerpts — A0 is intentionally a separate, cheaper architecture, per the project contract).
 
 Historical exposure disclosure: this exact rule_baseline.py code has previously been evaluated
 on the full official DEV split (B02) and the full official TEST split (T041) in the T-series
-pre-reconstruction project. No rule modification happens here — this
-run is a reconstruction-v2 CHARACTERIZATION of a pre-existing, unchanged baseline on TRAIN, not
+legacy project. No rule modification happens here — this
+run is a final CHARACTERIZATION of a pre-existing, unchanged baseline on TRAIN, not
 a claim that A0 was developed blind to DEV/TEST.
 
 Writes one fully-traceable JSONL record per case (results/run_E04_R0_train_cases.jsonl) for

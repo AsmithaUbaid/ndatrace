@@ -1,6 +1,6 @@
 ```
 Experiment ID: E00B
-Question: Can the planned reconstruction-v2 experiment programme (E01 Oracle, E03 prompt
+Question: Can the planned final experiment programme (E01 Oracle, E03 prompt
     selection, E15 hosted-vs-local comparison) fit within the remaining hosted-model budget
     and practical runtime, and how should that constraint shape the experimental design?
 Hypothesis: Given this project's own real historical per-case costs (not a token formula
@@ -9,7 +9,7 @@ Hypothesis: Given this project's own real historical per-case costs (not a token
     retirement date (2026-10-16) are the real constraints.
 Why this experiment exists: the professor explicitly required token/budget calculation
     BEFORE Oracle and before spending the remaining hosted-model budget (docs/project_contract.md
-    section 14; reconstruction brief Part 4).
+    section 14; project contract Part 4).
 Input dataset/split: data/contractnli/train.json (token estimation only, TRAIN per Role A),
     results/runs/*.jsonl + results/archive/runs/*.jsonl (historical spend audit, local-only)
 Frozen dependencies: none (pre-Oracle forecasting)

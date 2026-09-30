@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import e17_common as C
-from evaluation.budget import record_spend, reconstruction_spend_so_far
+from evaluation.budget import record_spend, final_spend_so_far
 from evaluation.structured_output import parse_structured_output
 from pipeline.evidence_validator import validate_evidence
 from pipeline.model_gateway import ModelError, ModelGateway
@@ -22,7 +22,7 @@ def main() -> int:
     F = C.load_frozen()  # asserts every E17 frozen value unchanged; complement built from the same load_frozen()
     k1, k2 = os.environ.get("E17B_KEY_1"), os.environ.get("E17B_KEY_2"); assert k1 and k2, "set E17B_KEY_1 / E17B_KEY_2 env vars (not persisted anywhere)"
     gws = [ModelGateway(model=MODEL, api_key=k1, timeout_seconds=TIMEOUT), ModelGateway(model=MODEL, api_key=k2, timeout_seconds=TIMEOUT)]
-    pre = reconstruction_spend_so_far(); assert "e17b_" not in open(C.REPO / "results/budget/reconstruction_spend_ledger.csv").read()
+    pre = final_spend_so_far(); assert "e17b_" not in open(C.REPO / "results/budget/final_spend_ledger.csv").read()
     print(f"pre-run ledger ${pre:.5f}; {len(cases)} cases; frozen checks OK; 2 credential pools, concurrency 3 each", flush=True)
     state = {"consec": 0, "stop": None, "spend": 0.0, "done": 0}; stop = threading.Event(); t_all = time.perf_counter()
 
@@ -53,8 +53,8 @@ def main() -> int:
     recs = [json.loads(l) for l in open(out_path)]; ids = [r["case_id"] for r in recs]
     verify = {"records_1941": len(recs) == 1941, "no_duplicates": len(set(ids)) == 1941, "all_ids": set(ids) == {c["case_id"] for c in cases}, "no_provider_errors": not any(r.get("error_type") in ("TIMEOUT", "MODEL_ERROR") for r in recs)}
     json.dump({"spend_usd": state["spend"], "wall_seconds": time.perf_counter() - t_all, "stopped": state["stop"], "successful_calls": sum(r.get("cost_usd") is not None for r in recs), "failed_calls": sum(r.get("cost_usd") is None for r in recs),
-               "parse_failures": sum(r["parse_status"] == "invalid" for r in recs), "verify": verify, "pre_run_ledger_usd": pre, "post_run_ledger_usd": reconstruction_spend_so_far()}, open(D / "results/run_E17B_wall.json", "w"), indent=2)
-    print(f"DONE spend ${state['spend']:.4f} stop={state['stop']} verify={verify} ledger ${reconstruction_spend_so_far():.5f}", flush=True)
+               "parse_failures": sum(r["parse_status"] == "invalid" for r in recs), "verify": verify, "pre_run_ledger_usd": pre, "post_run_ledger_usd": final_spend_so_far()}, open(D / "results/run_E17B_wall.json", "w"), indent=2)
+    print(f"DONE spend ${state['spend']:.4f} stop={state['stop']} verify={verify} ledger ${final_spend_so_far():.5f}", flush=True)
 
 if __name__ == "__main__":
     main()

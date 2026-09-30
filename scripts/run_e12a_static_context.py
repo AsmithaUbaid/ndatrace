@@ -15,7 +15,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
-from evaluation.budget import check_budget_against_ledger, record_spend, reconstruction_spend_so_far  # noqa: E402
+from evaluation.budget import check_budget_against_ledger, record_spend, final_spend_so_far  # noqa: E402
 from evaluation.prompt_selection import load_prompt_config  # noqa: E402
 from evaluation.structured_output import parse_structured_output  # noqa: E402
 from pipeline.evidence_validator import validate_evidence  # noqa: E402
@@ -65,7 +65,7 @@ def main() -> int:
             all(a >= b for a, b in zip(s, s[1:]))
             for s in (c["ranked_chunk_rerank_scores"] for c in cand["cases"])),
     }
-    pre_spend = reconstruction_spend_so_far()
+    pre_spend = final_spend_so_far()
     gate = check_budget_against_ledger(CONSERVATIVE_USD, PLANNING_BUDGET_USD, RESERVE_FRACTION)
     checks["budget_gate_pass"] = bool(gate.allowed)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -143,9 +143,9 @@ def main() -> int:
                 print("SAFETY STOP: budget threshold reached"); break
     total = time.perf_counter() - t_start
     json.dump({"total_wall_seconds": total, "n_cases": i, "run_id": run_id, "run_spend_usd": spend,
-               "pre_run_ledger_spend_usd": pre_spend, "post_run_ledger_spend_usd": reconstruction_spend_so_far()},
+               "pre_run_ledger_spend_usd": pre_spend, "post_run_ledger_spend_usd": final_spend_so_far()},
               open(OUT_DIR / "run_E12A_wall_seconds.json", "w"), indent=2)
-    print(f"done {total/60:.1f} min, spend ${spend:.4f}, ledger ${reconstruction_spend_so_far():.4f}")
+    print(f"done {total/60:.1f} min, spend ${spend:.4f}, ledger ${final_spend_so_far():.4f}")
     return 0
 
 

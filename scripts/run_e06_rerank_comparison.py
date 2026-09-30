@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E06 R5 — controlled reranking comparison (reconstruction-v2).
+E06 R5 — controlled reranking comparison (final).
 
 CONTROL: dense top-20 candidates (frozen clause_256 + bge-base-en-v1.5) -> take original top-5.
 RERANK:  the SAME exact top-20 candidates -> cross-encoder rerank (ms-marco-MiniLM-L-12-v2,

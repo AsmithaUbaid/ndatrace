@@ -20,7 +20,7 @@ last saved record is valid JSON). **P1 and P2 never started.**
 Full-context prompt comparison is a valid, real condition — it's architecture A1's actual
 production input shape — but it does not establish that the winning prompt transfers to the
 fragmented, noisier retrieved-chunk context that architectures A2/A3 (the intended RAG
-pipeline) will actually feed the classifier. Because reconstruction-v2 has not yet frozen a
+pipeline) will actually feed the classifier. Because final has not yet frozen a
 retrieval configuration (E06 hasn't run), continuing E03 now would either implicitly optimize
 the prompt for A1 specifically, or require freezing an ad hoc, unvalidated retrieval config
 just to get realistic context — exactly the risk Stage A's own context-condition reasoning
@@ -93,7 +93,7 @@ the label that matters most for this domain (missing a real conflict is the cost
 ### Contradiction-focused comparison
 
 Contradiction Recall is reported alone (not folded into an averaged risk-sensitive metric),
-consistent with the reconstruction brief and the project's own prior instructor-feedback fix.
+consistent with the project contract and the project's own prior instructor-feedback fix.
 P0's 22.0% is itself weak in absolute terms (E01's Oracle already established Contradiction is
 a genuine reasoning bottleneck even with perfect evidence) — but it is 3.7x P1's rate and 11x
 P2's rate, a decisive, non-tied gap given non-overlapping-in-practice confidence intervals at
@@ -171,14 +171,14 @@ phenomenon, not an artifact of one setup.
 
 **Connection to downstream work**: `classification_prompt_v1` becomes the default prompt for
 E05 (full-context baseline), E07 (standard RAG), E08 (RAG failure analysis), and E09-E11
-(agentic work), per the reconstruction brief. This freeze does not by itself establish that any
+(agentic work), per the project contract. This freeze does not by itself establish that any
 particular architecture is superior — prompt selection and architecture comparison remain
 separate questions, to be settled by E12.
 
 ### Files created (Stage B, resumed run)
 
 - `experiments/E03_prompt_selection/E03_prompt_selection.ipynb` (18-section notebook per the
-  reconstruction brief's outline, re-executed, zero errors).
+  project contract's outline, re-executed, zero errors).
 - `experiments/E03_prompt_selection/results/run_E03_prompt_selection_p0{0,1,2}.jsonl` (450
   fully-traceable prediction records: run_id, experiment_id, case_id, document_id,
   hypothesis_id, gold_label, predicted_label, parse_valid, input/output tokens, latency,
@@ -221,7 +221,7 @@ PVAL01, 300 TRAIN_ORACLE_v1).
 | NotMentioned | 50 | 25 |
 | **Total** | **150** | **73** |
 
-Case IDs use the frozen reconstruction-v2 scheme, `f"train::{document_id}::{hypothesis_id}"`.
+Case IDs use the frozen final scheme, `f"train::{document_id}::{hypothesis_id}"`.
 Source: official TRAIN only — no DEV, no TEST, no historical dev sample, no AV01/PVAL01 reuse.
 
 **Overlap with `TRAIN_ORACLE_v1` (E01), checked for transparency, not avoided**: 17 of 150
@@ -232,20 +232,20 @@ conditions, not a train/validation split where reuse would leak information.
 
 ## 6. Controlled context condition — decided, not left ambiguous
 
-**Chosen: full-context NDA text** (option A from the reconstruction brief), not retrieved
+**Chosen: full-context NDA text** (option A from the project contract), not retrieved
 context (option B).
 
 **Reasoning**: option B would require freezing *some* retrieval configuration before comparing
-prompts. But reconstruction-v2 has not frozen a retrieval config yet — E06 (retrieval
+prompts. But final has not frozen a retrieval config yet — E06 (retrieval
 optimisation) hasn't run. Using it would mean either (a) reusing the **historical** T-series
 retrieval config, which `docs/evaluation_protocol.md` explicitly treats as evidence only, not
-a binding reconstruction-v2 decision, or (b) picking a retrieval config ad hoc just for E03,
+a binding final decision, or (b) picking a retrieval config ad hoc just for E03,
 which would itself be an unscrutinized retrieval decision smuggled into what's supposed to be
 a pure prompt comparison — exactly what section 5 warns against ("do not mix prompt selection
 with retrieval quality"). Full-context requires zero retrieval decisions, is deterministic and
 trivially reproducible, and cleanly isolates the prompt as the only variable. This is not
 treated as ambiguous enough to halt Stage A over — the case for full-context is not a coin
-flip, it's the only option that doesn't presuppose a retrieval decision reconstruction-v2
+flip, it's the only option that doesn't presuppose a retrieval decision final
 hasn't made yet.
 
 **Verified feasible**: TRAIN document length (cl100k-approx tokens): mean 2,118, median 1,905,
@@ -376,7 +376,7 @@ cost-tracking infra issue during E01's smoke test.
   rather than duplicating them.
 - `evaluation/prompt_selection.py` — reusable message-construction + prompt-config loader.
 - `configs/prompts/classification/classification_p0{0,1,2}.yaml` — the frozen prompt ladder,
-  in the reconstruction-v2 versioned-prompt convention (`docs/experiment_protocol.md`).
+  in the final versioned-prompt convention (`docs/experiment_protocol.md`).
 - `tests/test_prompt_selection.py` — 5 unit tests (message never leaks `gold_label`, configs
   load correctly, p01/p02 contain the expected content, token-overhead ordering is monotonic).
 

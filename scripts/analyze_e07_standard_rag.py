@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E07 standard RAG (A2) analysis (reconstruction-v2) -- Stage B, evaluator-side only.
+E07 standard RAG (A2) analysis (final) -- Stage B, evaluator-side only.
 
 Mirrors scripts/analyze_e05_full_context.py's structure (classification/structured-output/
 evidence/joint metrics, length-bucket-free here since RAG context size barely varies), plus the
@@ -68,7 +68,7 @@ def evidence_to_span_indices(evidence: list[str], chunk_texts: list[str],
     (already extracted from the document); a quote's absolute document location is resolved by
     searching within each chunk's own text and mapping back using that chunk's real document
     offset (chunk_offsets), then overlap-testing against the document's annotated span list --
-    the same interval-overlap semantics used throughout reconstruction-v2 (E04, E05, E06)."""
+    the same interval-overlap semantics used throughout final (E04, E05, E06)."""
     indices: set[int] = set()
     for quote in evidence:
         if not quote:

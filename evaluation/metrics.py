@@ -128,7 +128,7 @@ def recall_with_ci(
     Works for any Label — Contradiction is reported prominently as the
     project's headline risk metric via contradiction_recall_with_ci()
     below, but the same machinery applies to NotMentioned or Entailment
-    without a bespoke per-class function (reconstruction-v2 correction:
+    without a bespoke per-class function (final correction:
     a prior version of this module added a one-off
     not_mentioned_recall_with_ci() candidate; this generic function
     replaces that need).
@@ -275,7 +275,7 @@ def joint_label_evidence_correctness(
       a NotMentioned prediction that nonetheless cites evidence is
       fabricating support for an absence and must fail the joint check,
       even though its label is correct (docs/evaluation_protocol.md,
-      reconstruction-v2 correction to this function's original behaviour,
+      final correction to this function's original behaviour,
       which counted any correct-NotMentioned label as jointly correct
       regardless of whether evidence was claimed).
     """
@@ -652,7 +652,7 @@ def _case_key(doc_id: str, hypothesis_id: str, split: str = "") -> tuple[str, st
     """
     Canonical case-matching key.
 
-    Split-qualified — (split, doc_id, hypothesis_id) — matching the frozen reconstruction-v2
+    Split-qualified — (split, doc_id, hypothesis_id) — matching the frozen final
     case-ID scheme f"{split}::{document_id}::{hypothesis_id}"
     (docs/evaluation_protocol.md Part 1 section 8). `split` defaults to "" for every historical
     Prediction/GoldCase record, which never set it — those keep matching on (doc_id,

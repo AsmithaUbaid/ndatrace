@@ -48,7 +48,7 @@ EXPECTED_SHA1 = {
     RETRIEVAL_PATH: "af5b07ebff19f596375cfdea6f25530d4511c903",
     BASE_PATH: "c1f801adfe6864884341db5d1d11919f18abfec2",
     PROMPT_V2_PATH: "d3c059dca56300825c788c6653c3752470fe74ed",
-    REPO / "prompts/reconstruction_v2/gpt_p0.txt": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
+    REPO / "prompts/final/gpt_p0.txt": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
     REPO / "pipeline/agent_v2.py": "6f7290f9402ced36da83723c9880c59b50a89041",
     REPO / "pipeline/agent_tools_v2.py": "f44ac1f35bbdbf65d266d70914b683a312e42130",
 }

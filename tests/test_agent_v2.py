@@ -1,5 +1,5 @@
 """
-Tests for pipeline/agent_v2.py (E10/E11, reconstruction-v2) -- the bounded selective agent (A3)
+Tests for pipeline/agent_v2.py (E10/E11, final) -- the bounded selective agent (A3)
 prototype. All model calls are a deterministic in-process stub -- zero hosted/local model calls
 anywhere in this file. Does not import or exercise pipeline/agent.py (historical, untouched).
 """

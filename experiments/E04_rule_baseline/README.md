@@ -9,7 +9,7 @@ Hypothesis: A small set of per-hypothesis positive/negative keyword rules over f
     to justify its cost.
 Why this experiment exists: establishes the cheapest possible classification baseline before
     E05 (full-context LLM) and E07 (RAG), so later architecture comparisons have a $0,
-    zero-latency floor to measure against (reconstruction brief, architecture comparison E12).
+    zero-latency floor to measure against (project contract, architecture comparison E12).
 Input dataset/split: Official TRAIN only, full universe (423 docs x 17 hypotheses = 7,191
     cases, natural class distribution 3,530 Entailment / 2,820 NotMentioned / 841
     Contradiction) -- see summary.md section 8 for why no subsampling is proposed.
@@ -52,7 +52,7 @@ holds regardless of what the failure data showed.
 
 Full Stage A audit and Stage B results: `summary.md`. Existing reusable code:
 `pipeline/rule_baseline.py` (`classify_by_keywords`, `classify_with_span`) -- historical
-(T-series pre-reconstruction), frozen unmodified as `A0_rule_baseline_v1`
+(T-series legacy), frozen unmodified as `A0_rule_baseline_v1`
 (source commit `7d33d038f81a1b0da093bce70cb22e267c552f91`, confirmed unmodified by empty
 `git diff` at run time). New Stage B code: `scripts/run_e04_rule_baseline.py` (runner),
 `scripts/analyze_e04_rule_baseline.py` (metrics + failure analysis).

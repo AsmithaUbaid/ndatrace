@@ -50,6 +50,6 @@ enforce dev/test separation.
 
 Everything else under `data/` (`*.json` files not in `golden/`, e.g. `agent_experiment.json`,
 `retrieval_experiment_results.json`, `performance_results.json`) is a saved output of a specific
-experiment or audit script (pre-reconstruction, T-series) alongside the script that produced it.
+experiment or audit script (legacy, T-series) alongside the script that produced it.
 `data/contractnli/README.md` documents the raw dataset
 files themselves.

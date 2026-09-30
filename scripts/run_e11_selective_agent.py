@@ -21,7 +21,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
-from evaluation.budget import check_budget_against_ledger, record_spend, reconstruction_spend_so_far  # noqa: E402
+from evaluation.budget import check_budget_against_ledger, record_spend, final_spend_so_far  # noqa: E402
 from pipeline.agent_v2 import cross_reference_to_named_provision_cue, run_selective_agent  # noqa: E402
 from pipeline.model_gateway import ModelError, ModelGateway  # noqa: E402
 
@@ -58,7 +58,7 @@ def main() -> int:
     assert len(triggered_ids) == 15, f"expected 15 triggered cases, got {len(triggered_ids)}"
     print(f"Pre-run safety check: 15/15 triggered cases confirmed: {triggered_ids}")
 
-    pre_run_ledger = reconstruction_spend_so_far()
+    pre_run_ledger = final_spend_so_far()
     gate = check_budget_against_ledger(CONSERVATIVE_PROJECTED_USD, PLANNING_BUDGET_USD,
                                         PROTECTED_RESERVE_FRACTION)
     print(f"Pre-run ledger: ${pre_run_ledger:.4f}. Budget gate: {gate.reason}")
@@ -167,7 +167,7 @@ def main() -> int:
         for r in a3_rows:
             f.write(json.dumps(r, default=str) + "\n")
 
-    post_run_ledger = reconstruction_spend_so_far()
+    post_run_ledger = final_spend_so_far()
     total_incremental_spend = post_run_ledger - pre_run_ledger
     with open(RESULTS_DIR / "run_E11_wall_seconds.json", "w") as f:
         json.dump({"total_wall_seconds": total_wall_s, "n_triggered": 15, "run_id": run_id,

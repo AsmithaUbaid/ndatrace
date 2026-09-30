@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E05 Stage B full benchmark (reconstruction-v2) -- ALL 150 TRAIN_ARCH_v1 cases, A1 architecture.
+E05 Stage B full benchmark (final) -- ALL 150 TRAIN_ARCH_v1 cases, A1 architecture.
 
 Frozen configuration (do not change without a new Stage A/calibration pass):
   - Manifest: experiments/E05_full_context/TRAIN_ARCH_v1.json (150 cases, 50/50/50, seed=700,
@@ -104,7 +104,7 @@ def main() -> int:
                 "case_id": case["case_id"], "document_id": case["document_id"],
                 "hypothesis_id": case["hypothesis_id"],
                 # gold_label kept evaluator-side only -- not read by the model, recorded here
-                # purely for later scoring, exactly as every other reconstruction-v2 runner does.
+                # purely for later scoring, exactly as every other final runner does.
                 "gold_label": case["gold_label"],
                 "model": MODEL, "prompt_version": PROMPT_VERSION,
                 "prompt_config_hash": prompt_config_hash,

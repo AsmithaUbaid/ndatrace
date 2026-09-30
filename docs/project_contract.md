@@ -1,9 +1,9 @@
 # NDATrace — Project Contract
 
-Status: **Completed reconstruction-v2; retained as the precommitted project contract.** This
-document froze the project's definition before reconstruction work began (E00 onward) and is kept
-unmodified as the record of what was committed to in advance — reconstruction-v2 (E00–E19) is now
-complete and its final result is documented in `docs/architecture.md`/`docs/experiment_registry.md`.
+Status: **Completed; retained as the precommitted project contract.** This
+document froze the project's definition before this work began (E00 onward) and is kept
+unmodified as the record of what was committed to in advance — the final build (E00–E19) is now
+complete and its result is documented in `docs/architecture.md`/`docs/experiment_registry.md`.
 It superseded ad hoc framing in local planning prose where the two conflicted — see
 Contradictions section at the end.
 
@@ -199,22 +199,22 @@ observed failure or explicit product requirement, not adopted speculatively.
 - Exact metric formulas, thresholds, and scoring logic for the four success axes.
 - Which specific models fill the "2 local + 2 hosted" Oracle screening slots.
 - Dataset splits, evaluation protocol mechanics, retrieval configuration, prompt versions.
-- Any code, file moves, or repository reconstruction — this document is contract-only.
+- Any code, file moves, or repository rework — this document is contract-only.
 
 ### Contradictions found between the current repository and this contract
 
-This repository is **not** at the pre-reconstruction stage the source instructions assume
+This repository is **not** at the legacy stage the source instructions assume
 — it is already far past it. Flagging these plainly rather than silently reconciling them:
 
 1. **Project maturity mismatch.** The instructions frame this as defining a contract
-   "before any reconstruction work begins," with repository reconstruction as a not-yet-
+   "before any of this work begins," with repository rework as a not-yet-
    started Part 2. In reality, the project had already built the full
    pipeline, run Oracle (B04), selected a model (Gemini 2.5 Flash Lite) via an ADR, run all
    nine rounds of retrieval experiments, frozen the architecture (RAG + selective agent,
    T031, 2026-09-23), built backend + frontend, run performance/reliability tests, and run
    the final locked test-set evaluation (T041) twice — including finding and fixing a
    critical joint-metric bug in that evaluation on 2026-09-24. Treating this document as
-   "before reconstruction" would misrepresent where the project actually stands.
+   "before this work" would misrepresent where the project actually stands.
 
 2. **Architecture count/framing is actually consistent, once relabeled.** The existing
    decisions log already runs a four-rung ladder — Rule / Full-context / RAG / RAG+agent —
@@ -245,4 +245,4 @@ This repository is **not** at the pre-reconstruction stage the source instructio
    `docs/project_contract.md` was written, consistent with the stop condition.
 
 No files were moved, renamed, or altered; no code was run; no dataset was changed. Waiting
-for approval before any reconstruction work.
+for approval before any of this work.

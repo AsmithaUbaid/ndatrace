@@ -92,7 +92,7 @@ Clean joint 85.0% → attack joint 75.0% (20 matched pairs); **4/11 injection-ty
 ## 13. Observability / monitoring plan (production; not built, specified)
 **Per-request:** request ID, model/version, prompt/version hash, NDA length/input tokens, output tokens, latency, monetary cost, predicted label, parse status, quote count, source-valid quote count, evidence-validator version, route/review status, error/retry status.
 **Aggregates:** p50/p95/p99 latency, cost/case, token distributions, parse-failure rate, source-validation failure rate, prediction-class distribution, review/escalation rate, sampled human-audit error rate, silent-failure estimate, prompt-injection/security incidents, document-length drift, model/provider/version changes.
-**Never logged by default:** confidential NDA content (matches the reconstruction's own logging rule, carried from the original NDATrace plan).
+**Never logged by default:** confidential NDA content (matches the project's own logging rule, carried from the original NDATrace plan).
 
 ## 14. Class-6 production feedback loop
 ```
@@ -118,12 +118,12 @@ Qwen: P0 (simplest) beat every more-elaborate variant. GPT: P3 showed a developm
 v1: exact-substring match only. Problem: harmless formatting differences (line breaks, zero-width characters, NFC) produced false evidence misses. v2: NFC + selected zero-width removal + whitespace collapse. Historical re-scoring: 41 changed mappings, **all formatting rescues, 0 false positives, 0 valid→invalid regressions**. E14 aligned the runtime validator to the same v2 semantics.
 
 ## 17. Experimental governance / leakage timeline
-| Split | Role | Reconstruction-v2 discipline |
+| Split | Role | Final discipline |
 |---|---|---|
 | TRAIN | Development | All prompt/retrieval/agent tuning happened here |
 | DEV | Architecture/prompt/routing validation | **Disclosed historical exposure** from prior project iterations (documented in `docs/data_contamination_register.md`); used only after that disclosure, never to justify a config choice retroactively |
 | TEST | Final, one-shot | **First accessed only after** model, prompt, architecture, evaluator, validator, and routing were all frozen (E17, 2026-09-26T19:23:43Z, commit 5717bdf). No TEST-informed changes were made afterward. |
-The register does not claim historical TEST access was ever perfectly blind pre-reconstruction; reconstruction-v2's own access is the clean, disclosed one this report stands on.
+The register does not claim historical TEST access was ever perfectly blind legacy; final's own access is the clean, disclosed one this report stands on.
 
 ## 18. Files created/changed (this refresh)
 Changed: `scripts/e18_business_analysis.py` (oracle_ceiling, cost_to_serve, failure_taxonomy now source from E17B full n=2,091), `scripts/e18_generate_figures.py` (new Figure 0; 01/02/06/07/13 regenerated with full-population values; Figure 4's caption corrected). New: `figures/00_final_test_comparison.png`. Unchanged (§27, no bug found): majority baseline, agent B/D setup, quadratic-growth analysis, FULL-vs-RAG DEV result, E15 routing calculations, E16 robustness result, seven-layer stack, observability plan, feedback loop, prompt-complexity/evaluator-hardening conclusions, leakage/governance history, coverage-matrix structure.

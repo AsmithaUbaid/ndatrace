@@ -29,7 +29,7 @@ input_representation:
 
 rule_baseline_code:
   module: pipeline/rule_baseline.py
-  status: HISTORICAL -- T-series pre-reconstruction, unmodified in Stage A
+  status: HISTORICAL -- T-series legacy, unmodified in Stage A
   mechanism: >
     Per-hypothesis (17 fixed ContractNLI hypothesis IDs) positive/negative literal keyword-
     phrase lists. Priority: any negative phrase found -> Contradiction; else any positive
@@ -68,7 +68,7 @@ staged_rule_plan:
       coverage -- the hypothesis's own keyword list never matched anything in the document at
       all, falling to the NotMentioned default. This is NOT primarily an exception/carve-out or
       negation-specific problem (only 220/3,105 errors, 7.1%, are false-positive fires; 248/3,105,
-      8.0%, are wrong-direction positive/negative conflicts) -- per the reconstruction brief's own
+      8.0%, are wrong-direction positive/negative conflicts) -- per the project contract's own
       instruction, E04 does not add a rule family in response, since the user's frozen decision
       was reuse-unchanged, and no rule family was authorized regardless of what the failure data
       showed.

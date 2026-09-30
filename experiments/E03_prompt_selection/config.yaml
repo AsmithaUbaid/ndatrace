@@ -50,7 +50,7 @@ prompts:
     path: ../../configs/prompts/classification/classification_p02.yaml
     role: structured decision procedure
   p03:
-    status: NOT RUN -- frozen to P0/P1/P2 before resuming, per reconstruction brief section 14
+    status: NOT RUN -- frozen to P0/P1/P2 before resuming, per project contract section 14
 
 output_schema: '{"label": "Entailment" | "Contradiction" | "NotMentioned"}'
 

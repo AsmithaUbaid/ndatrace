@@ -197,7 +197,7 @@ unresolved_issues:
     re-deriving this, but SHOULD still test them as components of a combined signal before fully
     discarding either."
   - "the T-series confidence-routing signal (rule-agreement) is dataset/task-specific to that
-    project's rule-baseline and does not carry over to reconstruction-v2's own architecture --
+    project's rule-baseline and does not carry over to final's own architecture --
     E09 must derive its own candidate signals from GPT-5-mini's actual residual failures, not
     reuse the old AUROC numbers as if they applied here."
   - "whether GPT-5-mini's prompt (still Qwen-selected P0) is itself suboptimal for GPT is an

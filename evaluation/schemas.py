@@ -40,7 +40,7 @@ class Prediction(BaseModel):
     hypothesis_id: str = Field(description="Hypothesis ID (e.g., nda-1)")
     split: str = Field(
         default="",
-        description="Source split (train/dev/test), for the reconstruction-v2 split-qualified "
+        description="Source split (train/dev/test), for the final split-qualified "
                      "case ID scheme (docs/evaluation_protocol.md Part 1 section 8). Empty by "
                      "default so historical records (which never set this) keep matching on "
                      "(doc_id, hypothesis_id) alone — see _match_predictions_to_golds().",

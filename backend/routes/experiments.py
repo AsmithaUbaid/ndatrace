@@ -1,7 +1,7 @@
 """
-NDATrace API Routes - reconstruction-v2 final TEST comparison.
+NDATrace API Routes - final TEST comparison.
 
-GET /experiments reads results/final/reconstruction_v2/full_test_comparison.csv
+GET /experiments reads results/final/v2/full_test_comparison.csv
 - the canonical, already-computed Rule/Qwen/GPT comparison on the identical
 n=2,091 official TEST population (E17/E17B). Never recomputes a metric.
 
@@ -24,7 +24,7 @@ router = APIRouter(tags=["experiments"])
 
 
 def _comparison_csv_path() -> Path:
-    return settings.results_path / "final" / "reconstruction_v2" / "full_test_comparison.csv"
+    return settings.results_path / "final" / "v2" / "full_test_comparison.csv"
 
 
 def _e20_report_path() -> Path:

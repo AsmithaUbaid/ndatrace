@@ -23,7 +23,7 @@ role-structure decision specifically — recorded plainly below rather than sile
    set-based recall vs. τ), confirmed to act as a majority-of-gold-spans rule given the real
    dataset's span-count distribution (43.7% of cases have exactly 1 gold span, mean ≈2.0).
    64/64 tests pass (`test_metrics.py` + `test_scorer.py` + `test_harness.py`).
-5. **Split-role structure — final.** Reconstruction-v2 uses the **official ContractNLI
+5. **Split-role structure — final.** Final uses the **official ContractNLI
    three-way split as-is** — no fourth operational split. **TRAIN** (Role A, development/tuning:
    Oracle, model screening, prompt selection, retrieval tuning, agent development; fixed TRAIN
    subsets like `TRAIN_WORKING`/`TRAIN_ORACLE`/`TRAIN_PROMPT` may be created only for
@@ -31,19 +31,19 @@ role-structure decision specifically — recorded plainly below rather than sile
    validation and architecture/configuration selection, used only after candidate configs are
    sufficiently frozen from TRAIN development — after DEV-based selection, freeze the
    configuration before TEST) / **TEST** (Role C, final held-out benchmark under the
-   reconstruction-v2 protocol, not accessed during tuning, no tuning after viewing results). DEV's
+   final protocol, not accessed during tuning, no tuning after viewing results). DEV's
    historical exposure is disclosed in `docs/data_contamination_register.md` as a **methodological
    limitation**, not treated as disqualifying DEV from its standard role — the same logic, applied
    consistently, would also disqualify TEST (which has its own real historical exposure).
-   Reconstruction-v2 disqualifies historical *outcomes* from influencing new decisions, not the
+   Final disqualifies historical *outcomes* from influencing new decisions, not the
    *splits* from their roles. (An earlier draft of this document briefly considered a separate
    held-out subset of TRAIN for validation instead of DEV; that was rejected — see
    `docs/data_contamination_register.md` §4.)
 6. **TEST terminology corrected.** Do not describe TEST as "perfectly unseen" or "blind" — it has
    disclosed historical exposure (T041-A/B, rule baseline, hosted comparison) that cannot be
-   undone. Use **"final held-out benchmark under the reconstruction-v2 protocol"** instead. What
-   reconstruction-v2 does guarantee: TEST is not accessed during reconstruction-v2's own tuning,
-   and no reconstruction-v2 decision may be justified by reference to a historical TEST outcome.
+   undone. Use **"final held-out benchmark under the final protocol"** instead. What
+   final does guarantee: TEST is not accessed during final's own tuning,
+   and no final decision may be justified by reference to a historical TEST outcome.
 7. **A0/A1 evidence-identification requirement — resolved, not left as an open question.** The
    historical convention ("full-context sees everything, so evidence is automatically present") is
    **rejected**: every architecture must explicitly identify the evidence it relied on as span/
@@ -52,7 +52,7 @@ role-structure decision specifically — recorded plainly below rather than sile
    under this policy, which blocks scoring A0/A1 on the joint metric until E04/E05 address it. Not
    built this phase (explicitly out of scope — no pipeline changes).
 8. **Case ID frozen and implemented**: `f"{split}::{document_id}::{hypothesis_id}"` for all future
-   reconstruction-v2 manifests. `Prediction`/`GoldCase` (`evaluation/schemas.py`) gained an
+   final manifests. `Prediction`/`GoldCase` (`evaluation/schemas.py`) gained an
    optional `split` field, default `""`. `evaluation/metrics.py`'s new `_case_key()` makes
    matching split-qualified when `split` is set, and identical to the old
    `(doc_id, hypothesis_id)`-only behavior when it's left blank — so no historical result file
@@ -80,7 +80,7 @@ made none, across all revisions.
 ## What becomes frozen (see `docs/evaluation_protocol.md` Part 1 for the full list)
 
 Official TRAIN/DEV/TEST split roles (no fourth split), TEST access policy with disclosed exposure
-and corrected terminology ("final held-out benchmark under the reconstruction-v2 protocol"), case
+and corrected terminology ("final held-out benchmark under the final protocol"), case
 ID scheme (implemented), label mapping, core metric definitions including the
 evidence-identification requirement and revised NotMentioned joint policy, Contradiction Recall +
 generic CI method, the evidence-matching *machinery* (identification requirement, two-stage

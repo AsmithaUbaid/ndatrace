@@ -36,8 +36,8 @@ class Settings(BaseSettings):
     # This is the single source of truth for the shipped model.
     # pipeline/final_review.py (the production runtime) reads this value
     # instead of hardcoding a model string. Gemini was an earlier,
-    # pre-reconstruction default (see docs/decisions.md ADR-001, historical) -
-    # the reconstruction-v2 architecture (docs/architecture_decisions/INDEX.md,
+    # legacy default (see docs/decisions.md ADR-001, historical) -
+    # the final architecture (docs/architecture_decisions/INDEX.md,
     # docs/experiment_registry.md's E01 row) selected openai/gpt-5-mini as the
     # frozen product model (top-5 RAG context + GPT-5-mini + P0 prompt).
     default_model: str = Field(

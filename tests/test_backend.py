@@ -61,9 +61,9 @@ def test_list_hypotheses_returns_real_contractnli_labels(client):
 
 
 def test_list_final_test_comparison_reads_canonical_csv(client):
-    """GET /experiments must be reconstruction-v2-aware: it reads the
-    already-computed results/final/reconstruction_v2/full_test_comparison.csv
-    (E17/E17B), never results/runs/*.jsonl (the pre-reconstruction log)."""
+    """GET /experiments must be final-aware: it reads the
+    already-computed results/final/v2/full_test_comparison.csv
+    (E17/E17B), never results/runs/*.jsonl (the legacy log)."""
     r = client.get("/experiments")
     assert r.status_code == 200
     rows = {row["system"]: row for row in r.json()}

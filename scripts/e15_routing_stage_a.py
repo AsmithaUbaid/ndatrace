@@ -164,7 +164,7 @@ def main():
 
     # ------------------------------------------------------------------ cost forecast from actual E13 FULL costs
     costs = sorted(r["cost_usd"] for r in RUN); p90 = costs[int(0.9 * len(costs))]; mean = sum(costs) / len(costs)
-    led = sum(float(x["cost_usd"] or 0) for x in csv.DictReader(open(REPO / "results/budget/reconstruction_spend_ledger.csv")))
+    led = sum(float(x["cost_usd"] or 0) for x in csv.DictReader(open(REPO / "results/budget/final_spend_ledger.csv")))
     n = len(chosen); exp_, cons = n * mean, n * p90
     exp_class = sum(N[g] * fr[g] for g in N)
     res2 = {"ledger_now": round(led, 8), "pool_after_exclusions": {"total": len(pool), **dict(pc)}, "manifest_size": n, "expected_calls": n, "expected_cost": round(exp_, 4), "conservative_cost_p90_every_call": round(cons, 4),

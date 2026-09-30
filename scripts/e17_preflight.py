@@ -9,7 +9,7 @@ from transformers import AutoTokenizer
 REPO = Path(__file__).resolve().parent.parent; sys.path.insert(0, str(REPO))
 OUT = REPO / "experiments/E17_final_test"
 test = json.load(open(REPO / "data/contractnli/test.json")); DOC = {d["id"]: d["text"] for d in test["documents"]}; HYP = {k: v["hypothesis"] for k, v in test["labels"].items()}
-SYS = open(REPO / "prompts/reconstruction_v2/gpt_p0.txt", newline="").read(); P0 = hashlib.sha1(SYS.encode()).hexdigest(); assert P0 == "3fcc7c95cf1287c292e403f12b307c9d912278ce"
+SYS = open(REPO / "prompts/final/gpt_p0.txt", newline="").read(); P0 = hashlib.sha1(SYS.encode()).hexdigest(); assert P0 == "3fcc7c95cf1287c292e403f12b307c9d912278ce"
 TEMPLATE = "Requirement: {hypothesis_text}\n\nNDA context: {context_text}"   # identical shared template used by E13/E15/E16 GPT runs
 user = lambda c: TEMPLATE.format(hypothesis_text=HYP[c["hypothesis_id"]], context_text=DOC[c["document_id"]])
 D = lambda a: {"n": len(a), "mean": float(np.mean(a)), "median": float(np.median(a)), "p90": float(np.percentile(a, 90)), "p95": float(np.percentile(a, 95)), "max": float(max(a))}
@@ -22,7 +22,7 @@ def outs(p): return [json.loads(l)["output_tokens"] for l in open(p)]
 o_hist = outs(REPO / "experiments/E13_gpt_context_architecture/results/run_E13_gpt_full_cases.jsonl") + outs(REPO / "experiments/E15_review_routing/results/run_E15_validation_cases.jsonl")
 OUT_MEAN, OUT_P90 = float(np.mean(o_hist)), float(np.percentile(o_hist, 90)); IN_P, OUT_P = 0.25e-6, 2.00e-6
 exp = sum(t * IN_P + OUT_MEAN * OUT_P for t in gtok); cons = sum(t * IN_P + OUT_P90 * OUT_P for t in gtok)
-led = sum(float(x["cost_usd"] or 0) for x in csv.DictReader(open(REPO / "results/budget/reconstruction_spend_ledger.csv")))
+led = sum(float(x["cost_usd"] or 0) for x in csv.DictReader(open(REPO / "results/budget/final_spend_ledger.csv")))
 gate = {"ledger": led, "conservative_hosted": cons, "reserve": 1.25, "sum": led + cons + 1.25, "plan": 5.0, "pass": led + cons + 1.25 <= 5.0, "headroom_under_plan": 5.0 - (led + cons + 1.25), "max_allowed_conservative": 5.0 - 1.25 - led}
 gpt = {"n_requests": 150, "requests_sha256": req_hash, "system_prompt_sha1": P0, "model": "openai/gpt-5-mini", "request_tokens": D(gtok), "output_tokens_hist_288_calls": {"mean": OUT_MEAN, "p90": OUT_P90}, "expected_cost": exp, "expected_cost_per_call": exp / 150,
        "conservative_cost": cons, "conservative_cost_per_call": cons / 150, "pricing_per_million": {"input": 0.25, "output": 2.00}, "hist_cost_per_call_E13_E15_mean": 0.002152, "budget_gate": gate}

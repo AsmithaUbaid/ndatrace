@@ -45,13 +45,13 @@ def metric(value, unit: str, source: dict) -> dict:
 # 1. Canonical numeric artifacts (fail loudly if missing)
 # ---------------------------------------------------------------------------
 
-gpt_metrics = load_json("results/final/reconstruction_v2/gpt_full_test_metrics.json")
-qwen_metrics = load_json("results/final/reconstruction_v2/qwen_full_test_metrics.json")
-rule_metrics = load_json("results/final/reconstruction_v2/rule_full_test_metrics.json")
-cost_summary = load_json("results/final/reconstruction_v2/cost_summary.json")
-contradiction_analysis = load_json("results/final/reconstruction_v2/contradiction_analysis.json")
-robustness_summary = load_json("results/final/reconstruction_v2/robustness_summary.json")
-routing_summary = load_json("results/final/reconstruction_v2/routing_summary.json")
+gpt_metrics = load_json("results/final/v2/gpt_full_test_metrics.json")
+qwen_metrics = load_json("results/final/v2/qwen_full_test_metrics.json")
+rule_metrics = load_json("results/final/v2/rule_full_test_metrics.json")
+cost_summary = load_json("results/final/v2/cost_summary.json")
+contradiction_analysis = load_json("results/final/v2/contradiction_analysis.json")
+robustness_summary = load_json("results/final/v2/robustness_summary.json")
+routing_summary = load_json("results/final/v2/routing_summary.json")
 e20_report = load_json("experiments/E20_final_rag_test/results/E20_final_report.json")
 e06_bm25 = load_json("experiments/E06_retrieval_optimisation/results/run_E06_R0_matched_clause256.json")
 e06_mpnet = load_json("experiments/E06_retrieval_optimisation/results/run_E06_R2_clause256.json")
@@ -92,7 +92,7 @@ for req in [gpt_metrics, qwen_metrics, rule_metrics, cost_summary, contradiction
             e06_r2_clause256, e06_r2_fixed512, e06_r2_sentence, e06_r3_k3, e06_r3_k10]:
     assert req, "canonical artifact loaded empty"
 
-RECON_V2 = "results/final/reconstruction_v2/"
+RECON_V2 = "results/final/v2/"
 E20_PATH = "experiments/E20_final_rag_test/results/E20_final_report.json"
 E18_PATH = "experiments/E18_business_course_synthesis/summary.md"
 ADR012_PATH = "docs/architecture_decisions/INDEX.md"
@@ -109,12 +109,12 @@ TOTAL_DOCS = sum(v["docs"] for v in SPLIT_COUNTS.values())  # 607
 TOTAL_CASES = sum(v["cases"] for v in SPLIT_COUNTS.values())  # 10,319
 
 # ---------------------------------------------------------------------------
-# 2. Case Explorer — join reconstruction-era per-case files (Rule/FULL/RAG,
+# 2. Case Explorer — join final-architecture per-case files (Rule/FULL/RAG,
 #    all real TEST n=2,091 runs, same doc_id+hypothesis_id case scheme) with
 #    ContractNLI gold labels. The selective agent (E11) was only ever run on
 #    a disjoint TRAIN n=150 population, so it has no per-case match here —
 #    every case's Agent column is left unpopulated and the UI shows the
-#    literal "No matched reconstruction result available" for it.
+#    literal "No matched final-architecture result available" for it.
 # ---------------------------------------------------------------------------
 
 RULE_TEST_FILE = "experiments/E17_final_test/results/run_E17_rule_full_test.jsonl"
@@ -255,10 +255,10 @@ for pred in load_jsonl_all(RAG_TEST_FILE):
         "model": pred.get("model"),
     }
 
-# No reconstruction-era per-case Agent (rag_agent) file exists for the TEST population — E11's
+# No final-architecture per-case Agent (rag_agent) file exists for the TEST population — E11's
 # selective-agent evaluation only ran on a disjoint TRAIN n=150 sample (different documents
 # entirely). Every case below is left with no "rag_agent" entry at all, which the frontend
-# renders as "No matched reconstruction result available" rather than inventing a match.
+# renders as "No matched final-architecture result available" rather than inventing a match.
 
 cases = [c for c in case_index.values() if c["goldLabel"] is not None]
 for c in cases:
@@ -312,7 +312,7 @@ for c in cases:
     c["jointArchitectures"] = {arch: result["jointPass"] for arch, result in c["architectures"].items()}
 
 # "Start here" selection — simple deterministic rules over real outcomes, not hand-picked prose.
-# Only Rule/FULL/RAG are real reconstruction-era per-case data here; there is no agent-routed
+# Only Rule/FULL/RAG are real final-architecture per-case data here; there is no agent-routed
 # per-case pick available (see note above), so that slot is left null rather than faked.
 def all_correct(c):
     return all(
@@ -346,7 +346,7 @@ contradiction_success = next((c for c in cases if c["goldLabel"] == "Contradicti
 start_here = {
     "simpleCorrect": simple_correct["docId"] + "::" + simple_correct["hypothesisId"] if simple_correct else None,
     "evidenceHeavy": evidence_heavy["docId"] + "::" + evidence_heavy["hypothesisId"] if evidence_heavy else None,
-    "crossReference": None,  # no reconstruction-era per-case agent data exists for this population
+    "crossReference": None,  # no final-architecture per-case agent data exists for this population
     "humanReview": uncertainty_case["docId"] + "::" + uncertainty_case["hypothesisId"] if uncertainty_case else None,
     "honestFailure": honest_failure["docId"] + "::" + honest_failure["hypothesisId"] if honest_failure else None,
     "retrievalMiss": retrieval_miss["docId"] + "::" + retrieval_miss["hypothesisId"] if retrieval_miss else None,
@@ -413,9 +413,9 @@ SHOWCASE_VALIDATION = {
 }
 
 CASE_POPULATION_NOTE = (
-    "Reconstruction-era population only: Rule (E17) / FULL-context (E17+E17B) / RAG (E20), all "
+    "Final-architecture population only: Rule (E17) / FULL-context (E17+E17B) / RAG (E20), all "
     "real per-case runs on the full official TEST split (n=2,091 shared by all three). No "
-    "reconstruction-era per-case Agent (selective-agent) run exists for this population — E11's "
+    "matching per-case Agent (selective-agent) run exists for this population — E11's "
     "selective-agent evaluation only covers a disjoint TRAIN n=150 sample. Agent examples therefore "
     "appear in a separately labeled TRAIN demo and are never joined to TEST architecture outputs."
 )
@@ -513,9 +513,9 @@ for test_id in ("E21-LLM01-04", "E21-LLM01-07"):
         "source": src("E21", "experiments/E21_owasp_llm_top10/results/final_report.json", "synthetic adversarial RAG-path fixture"),
     })
 
-# Silent-failure finding — reconstruction-era only (E17B, full TEST n=2,091), replaces the
-# removed pre-reconstruction (T-series) carve-out examples. No per-case quoted illustration of
-# this exact pattern exists in reconstruction-era artifacts, so this reports the real aggregate
+# Silent-failure finding — final-architecture only (E17B, full TEST n=2,091), replaces the
+# removed legacy (T-series) carve-out examples. No per-case quoted illustration of
+# this exact pattern exists in final-architecture artifacts, so this reports the real aggregate
 # finding rather than substituting a legacy or invented case quote.
 SILENT_FAILURE_FINDING = {
     "pattern": "Contradiction misclassified as Entailment: the model quotes real, source-valid "
@@ -524,8 +524,8 @@ SILENT_FAILURE_FINDING = {
     "source": "E17B, full TEST n=2,091, Contradiction class (n=220)",
     "stat": "50 of 220 gold-Contradiction cases were predicted Entailment (C→E); of those, 38 "
     "quoted a clause overlapping the correct gold span — the right clause, wrong label.",
-    "note": "A per-case quoted example of this pattern exists only in the removed pre-"
-    "reconstruction (T-series) dev-split artifact. This card reports the reconstruction-era "
+    "note": "A per-case quoted example of this pattern exists only in the removed "
+    "legacy (T-series) dev-split artifact. This card reports the final-architecture "
     "aggregate finding (experiments/E17B_full_test_completion/summary.md) instead of "
     "substituting that legacy case.",
 }
@@ -537,8 +537,7 @@ SILENT_FAILURE_FINDING = {
 
 data = {
     "meta": {
-        "generatedNote": "Generated by scripts/build_project_presentation_data.py from repo artifacts on the reconstruction branch. No model calls made.",
-        "branch": "reconstruction",
+        "generatedNote": "Generated by scripts/build_project_presentation_data.py from repo artifacts. No model calls made.",
     },
 
     "hero": {
@@ -909,9 +908,9 @@ data = {
         },
         {
             "category": "Sensitive Information Disclosure", "level": "mapped-only",
-            "evidence": "No dedicated PII/secret-leakage test run in reconstruction-v2",
+            "evidence": "No dedicated PII/secret-leakage test run in the final architecture",
             "control": "Structured logging rule (never log raw NDA text/prompts/keys) carried from the original project logging rule",
-            "residualRisk": "Not tested end-to-end under reconstruction-v2",
+            "residualRisk": "Not tested end-to-end under the final architecture",
             "source": src("—", "docs/architecture.md", "policy statement, not a measured test"),
         },
         {
@@ -942,7 +941,7 @@ data = {
         {"risk": "Prompt injection", "failureMode": "NDA text contains an embedded instruction the model follows", "mitigation": "None implemented", "evidence": "E16 (4/11 attack success)", "residualRisk": "Disclosed, unpatched", "humanControl": "Reviewer judgment on implausible outputs"},
         {"risk": "Excessive agency", "failureMode": "An agent takes unbounded actions/tool calls", "mitigation": "No agent in production runtime at all", "evidence": "ADR-012, docs/architecture.md §2", "residualRisk": "None in current runtime", "humanControl": "N/A — not present"},
         {"risk": "Unbounded consumption", "failureMode": "Cost/latency grows without limit on long documents", "mitigation": "Bounded top-5 RAG context (production runtime only)", "evidence": "Frozen retrieval configuration (E06)", "residualRisk": "FULL-context (quality reference only) is unbounded", "humanControl": "N/A — architectural"},
-        {"risk": "Sensitive NDA handling", "failureMode": "Confidential contract text logged or leaked", "mitigation": "Logging rule: never log raw NDA text/prompts/keys", "evidence": "Architecture policy statement, not independently tested this pass", "residualRisk": "Not end-to-end tested under reconstruction-v2", "humanControl": "N/A"},
+        {"risk": "Sensitive NDA handling", "failureMode": "Confidential contract text logged or leaked", "mitigation": "Logging rule: never log raw NDA text/prompts/keys", "evidence": "Architecture policy statement, not independently tested this pass", "residualRisk": "Not end-to-end tested under the final architecture", "humanControl": "N/A"},
         {"risk": "Provider failure", "failureMode": "OpenRouter/model outage mid-review", "mitigation": "FUTURE / NOT IMPLEMENTED — no fallback model wired in", "evidence": "E18 §12 seven-layer stack", "residualRisk": "Single-vendor dependency", "humanControl": "Manual retry / fallback to manual review"},
         {"risk": "Silent semantic error", "failureMode": "Confident wrong label with source-valid but wrong-clause evidence", "mitigation": "None — E15 found no reliable automatic routing signal", "evidence": "E15 (no policy meets provisional targets); E20 contradiction analysis (38/50 evidence-bearing Contradiction misses quote the right clause, wrong label)", "residualRisk": "Real and not caught by any current automatic guardrail", "humanControl": "Reviewer is the only real check"},
         {"risk": "Long-document uncertainty", "failureMode": "Untested behavior on real 50–100 page enterprise contracts", "mitigation": "FUTURE / NOT IMPLEMENTED — RAG's bounded-context argument is architectural, not validated at that scale", "evidence": "ADR-012 (TEST median 1,836 / max 7,861 tokens)", "residualRisk": "Open validation question", "humanControl": "N/A until tested"},
@@ -982,7 +981,7 @@ data = {
         {"key": "Reranker", "value": "cross-encoder/ms-marco-MiniLM-L-12-v2", "experiment": "E06", "artifact": "pipeline/frozen_rag.py"},
         {"key": "Final context", "value": "top-5", "experiment": "E06/E20", "artifact": "pipeline/frozen_rag.py"},
         {"key": "Model", "value": "openai/gpt-5-mini", "experiment": "E01", "artifact": "pipeline/final_review.py"},
-        {"key": "Prompt", "value": "P0 (prompts/reconstruction_v2/gpt_p0.txt)", "experiment": "E03", "artifact": "pipeline/final_review.py"},
+        {"key": "Prompt", "value": "P0 (prompts/final/gpt_p0.txt)", "experiment": "E03", "artifact": "pipeline/final_review.py"},
         {"key": "Temperature", "value": "0", "experiment": "E05", "artifact": "pipeline/final_review.py"},
         {"key": "Agent", "value": "none", "experiment": "E09/E11 (rejected)", "artifact": "docs/architecture_decisions/INDEX.md"},
         {"key": "Router", "value": "none", "experiment": "E15 (no policy met target)", "artifact": "docs/experiment_registry.md"},
@@ -1012,8 +1011,8 @@ data = {
     "dataProvenance": {
         "contractnli": {"ndaCount": TOTAL_DOCS, "hypotheses": 17, "examples": TOTAL_CASES, "splits": SPLIT_COUNTS},
         "goldWithheldFromInference": True,
-        "testExposureCaveat": "TEST is the final, one-shot reconstruction-v2 evaluation split (first accessed only after model/prompt/architecture/evaluator/validator were frozen, E17, commit 5717bdf) — but it is NOT claimed as perfectly blind: earlier project iterations (pre-reconstruction T041, rule/hosted comparisons) previously touched TEST. Disclosed in docs/data_contamination_register.md, not hidden.",
-        "reconstructionV2ProtocolCaveat": "Reconstruction-v2 independently re-derives every architecture/model/prompt decision under its own E-series rather than assuming pre-reconstruction (T-series) conclusions still hold.",
+        "testExposureCaveat": "TEST is the final, one-shot evaluation split (first accessed only after model/prompt/architecture/evaluator/validator were frozen, E17, commit 5717bdf) — but it is NOT claimed as perfectly blind: earlier project iterations (legacy T041, rule/hosted comparisons) previously touched TEST. Disclosed in docs/data_contamination_register.md, not hidden.",
+        "finalProtocolCaveat": "The final architecture independently re-derives every architecture/model/prompt decision under its own E-series rather than assuming legacy (T-series) conclusions still hold.",
         "source": src("E00", CONTAM_PATH, "full split/exposure inventory"),
     },
 
@@ -1385,7 +1384,7 @@ data["costAtScale"] = {
 }
 
 # Chart-ready views. Every value is derived above or read directly from a
-# saved reconstruction artifact; the frontend does not hardcode results.
+# saved artifact; the frontend does not hardcode results.
 def retrieval_point(name: str, metrics: dict, stage: str) -> dict:
     return {
         "name": name,

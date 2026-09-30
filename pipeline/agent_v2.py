@@ -1,5 +1,5 @@
 """
-E10/E11 (reconstruction-v2) -- the NEW bounded selective agent (A3) prototype: routing trigger,
+E10/E11 (final) -- the NEW bounded selective agent (A3) prototype: routing trigger,
 strict agent-action schema/validation, a finite bounded loop, hard limits enforced OUTSIDE the
 model, duplicate-call protection, and a fallback-to-A2 policy. Does NOT modify or import
 `pipeline/agent.py`/`pipeline/agent_tools.py`/`pipeline/confidence.py` (T-series, historical,

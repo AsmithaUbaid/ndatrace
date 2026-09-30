@@ -4,7 +4,7 @@
 DEV audit finding: document-level disjointness from historical DEV exposure is INFEASIBLE (58/61 DEV docs were touched by the historical 150-case
 seed-42 sample; union with the golden-battery docs = 60/61). Selection is therefore CASE-level disjoint from every case in (a) the historical 150-case
 seed-42 stratified sample and (b) every data/golden/*.json case. It is performance-agnostic: no model output, difficulty, or evidence property is read.
-Reconstruction-v2 (E00-E12C) never touched DEV.
+Final (E00-E12C) never touched DEV.
 """
 import glob, json, random, sys
 from collections import Counter, defaultdict
@@ -35,7 +35,7 @@ def main():
     lab = lambda keys: dict(Counter(ann[k] for k in keys))
     s150_docs, g_docs = {k[0] for k in s150}, {k[0] for k in golden}
     audit = {"dev_docs": len(docs), "dev_cases": len(ann), "dev_label_counts": lab(ann),
-             "reconstruction_v2_E00_E12C_dev_usage": "none (E04 rule baseline, E06 retrieval, E07-E12C all ran on TRAIN; E07/E04 text mentioning DEV describes historical T-series prior art)",
+             "final_v2_E00_E12C_dev_usage": "none (E04 rule baseline, E06 retrieval, E07-E12C all ran on TRAIN; E07/E04 text mentioning DEV describes historical T-series prior art)",
              "historical_150_case_seed42_sample": {"cases": len(s150), "docs": len(s150_docs), "labels": lab(s150)},
              "historical_golden_battery_cases": {"unique_cases": len(golden), "docs": len(g_docs), "by_file": gsrc, "labels": lab(golden)},
              "historical_full_dev_use": "full 1,037-case rule baseline (B02) and 614 E/C-case retrieval experiments (T020-T023) touched every DEV document; deterministic/free but shaped the OLD retrieval config",

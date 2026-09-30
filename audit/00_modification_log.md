@@ -133,7 +133,7 @@ no edits to historical result files, no push/merge/deploy without explicit appro
   `scripts/render_final_report_pdf.py` (reportlab; `reportlab`/`markdown` installed dev-only into
   `.venv`, not added to `requirements.txt`). Every metric in the report was pulled directly from
   primary artifacts this session (`experiments/E20_final_rag_test/results/E20_final_report.json`,
-  `results/final/reconstruction_v2/full_test_comparison.csv`, `experiments/E01_oracle/results/
+  `results/final/v2/full_test_comparison.csv`, `experiments/E01_oracle/results/
   e01_metrics.json`, `experiments/E11_selective_agent_evaluation/summary.md`, `experiments/
   E18_business_course_synthesis/results/e18_analysis.json`), not copied from prose summaries.
   Inspected the rendered PDF (3 pages); found and fixed a real bug on the first pass — the

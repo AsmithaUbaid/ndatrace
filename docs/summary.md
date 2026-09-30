@@ -1,8 +1,8 @@
 # NDATrace — Project Summary
 
 **NTU PE6201 Emerging AI Technologies.** Full detail is in `docs/experiment_registry.md`
-(reconstruction-v2 experiment ledger, E00–E20), `docs/architecture_decisions/INDEX.md`
-(reconstruction-v2 ADRs, incl. historical ADR-001–ADR-011 status), and `docs/architecture.md`
+(final experiment ledger, E00–E20), `docs/architecture_decisions/INDEX.md`
+(final ADRs, incl. historical ADR-001–ADR-011 status), and `docs/architecture.md`
 (implementation) — this page is the 5-minute version of the **final, selected** result.
 
 ## Problem statement
@@ -34,7 +34,7 @@ The selective agent remains rejected. Full request-flow detail: `docs/architectu
 
 ## How the final configuration was chosen
 
-Reconstruction-v2 (E00–E19) re-derived the model, prompt, and architecture choice independently
+Final (E00–E19) re-derived the model, prompt, and architecture choice independently
 under corrected discipline: E01 (Oracle/model diagnostic) selected `openai/gpt-5-mini`; E03
 selected the frozen `P0` classification prompt over 3 alternatives; E05–E09 compared full-context,
 RAG, and a selective agent on a matched development sample; E12–E13 re-confirmed full-context GPT
@@ -70,7 +70,7 @@ precision 74.7%**, **source-valid quote rate 98.0%** (98.0% of returned evidence
 verified verbatim substrings of the submitted NDA text by the runtime validator — a source-
 integrity check, not a correctness check).
 
-Recomputed directly from `results/final/reconstruction_v2/{gpt_full_test_metrics,
+Recomputed directly from `results/final/v2/{gpt_full_test_metrics,
 rule_full_test_metrics,qwen_full_test_metrics}.json` and `full_test_comparison.csv` — not quoted
 from memory. Source experiments: `experiments/E17_final_test/`, `experiments/E17B_full_test_
 completion/`. The original E17 n=150 balanced hosted sample is **historical/superseded** for
@@ -127,9 +127,9 @@ table), plus `docs/architecture.md` §2, for the full record of what was tried a
    evidence validator remains a structural source-integrity check only, not a general uncertainty
    detector.
 4. **A known, systematic weakness in exception/carve-out clause reconciliation**, originally found
-   in the pre-reconstruction golden battery (hand-built negative test cases found a 100% failure
+   in the legacy golden battery (hand-built negative test cases found a 100% failure
    rate, 4/4, on documents where a specific exception clause overrides an apparent general rule) —
-   disclosed, not re-verified against reconstruction-v2's own case set, and not fixed.
+   disclosed, not re-verified against final's own case set, and not fixed.
 5. **Long-document scalability is an untested design hypothesis.** ContractNLI's documents are all
    ordinary-length NDAs (TEST-split median 1,836 tokens, max 7,861 — measured directly in E20);
    full-context's cost/latency profile at much longer, noisier real contracts (50–100 page
@@ -147,21 +147,21 @@ and catch errors a tired reader misses, without ever being the sole check. That 
 defensible claim than "replaces review" — and it's the one these numbers support without softening
 them.
 
-## Historical note (pre-reconstruction pipeline)
+## Historical note (legacy pipeline)
 
-An earlier pass through this project (before reconstruction-v2) built and measured a different
+An earlier pass through this project (before final) built and measured a different
 architecture — RAG + a selective agent, on `google/gemini-2.5-flash-lite`, reaching 78.7%/77.7%
-accuracy (RAG/RAG+agent) on the same TEST split. That pre-reconstruction lineage (its scripts,
+accuracy (RAG/RAG+agent) on the same TEST split. That legacy lineage (its scripts,
 prompts, and pipeline modules) has since been removed from the repository as part of the final
-reconstruction-v2 cleanup — this note preserves the historical numbers only; the code that produced
+final cleanup — this note preserves the historical numbers only; the code that produced
 them is gone. It is **not** the final quality-reference result and should not be cited as such. The
 live `POST /review` and `/history` product flow uses the frozen E20 top-5 RAG runtime without the
 agent; see `docs/architecture.md`.
 
 ## Where to look for more detail
 
-- `docs/experiment_registry.md` — the reconstruction-v2 experiment ledger (E00–E22), with per-experiment status and artifact paths
-- `docs/architecture_decisions/INDEX.md` — reconstruction-v2 ADRs (ADR-012: E20's quality-reference-vs-production-oriented FULL/RAG finding) plus the historical ADR-001–ADR-011 status table
+- `docs/experiment_registry.md` — the final experiment ledger (E00–E22), with per-experiment status and artifact paths
+- `docs/architecture_decisions/INDEX.md` — final ADRs (ADR-012: E20's quality-reference-vs-production-oriented FULL/RAG finding) plus the historical ADR-001–ADR-011 status table
 - `docs/architecture.md` — current implementation, traced directly from code
 - `docs/evaluation_case_design.md` — the regression/robustness/security test taxonomy
 - `experiments/E18_business_course_synthesis/` — the full business/cost/course-framework synthesis, with live-computed figures

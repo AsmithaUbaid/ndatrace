@@ -17,7 +17,7 @@
   },
   "rag": {
     "model": "openai/gpt-5-mini",
-    "prompt": "prompts/reconstruction_v2/gpt_p0.txt",
+    "prompt": "prompts/final/gpt_p0.txt",
     "prompt_sha1": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
     "retrieval": "clause_256 -> BM25 top-20 -> cross-encoder/ms-marco-MiniLM-L-12-v2 -> top-5",
     "retrieval_artifact": "experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1.json",

@@ -40,7 +40,7 @@ PRICING_PER_MILLION: dict[str, dict[str, float]] = {
     # Local, via Ollama - no per-call API fee (problem statement's
     # hosted-vs-local comparison, C02). Uses local compute instead.
     "llama3.2:3b": {"input": 0.0, "output": 0.0},
-    # Local, via Ollama - E01 Oracle's "stronger local" candidate (reconstruction-v2).
+    # Local, via Ollama - E01 Oracle's "stronger local" candidate (final).
     # Registered to stop the "no pricing entry" fallback warning from firing on every call -
     # an infrastructure fix found during E01's smoke test, not a semantic/model change.
     "qwen2.5:7b-instruct": {"input": 0.0, "output": 0.0},

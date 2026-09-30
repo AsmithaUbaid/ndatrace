@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-E06 hybrid retrieval (reconstruction-v2) — the missing arm of the lexical/dense/hybrid/
+E06 hybrid retrieval (final) — the missing arm of the lexical/dense/hybrid/
 reranked comparison. R0/R2/R4 (BM25, dense-mpnet, dense-bge) and the matched
 lexical-vs-dense-rerank control already exist under the frozen protocol (clause_256, K=5,
 4,371-case evidence-bearing TRAIN universe); hybrid (BM25+dense via Reciprocal Rank Fusion)
-was never run under reconstruction-v2's protocol, only hypothesised from pre-reconstruction
+was never run under final's protocol, only hypothesised from legacy
 work. This script fills that one gap, reusing the exact same population/chunking/scorer/
 metrics as every other E06 run and pipeline/sparse_retriever.py's existing
 reciprocal_rank_fusion (rank-based, not raw-score averaging, per that module's own docstring

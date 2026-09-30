@@ -13,7 +13,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
-from evaluation.budget import check_budget_against_ledger, record_spend, reconstruction_spend_so_far  # noqa: E402
+from evaluation.budget import check_budget_against_ledger, record_spend, final_spend_so_far  # noqa: E402
 from evaluation.structured_output import parse_structured_output  # noqa: E402
 from pipeline.evidence_validator import validate_evidence  # noqa: E402
 from pipeline.model_gateway import ModelError, ModelGateway  # noqa: E402
@@ -41,11 +41,11 @@ def main() -> int:
     rag_by = {c["case_id"]: c for c in json.load(open(D / "DEV_ARCH_v1_RETRIEVED_retrieval_v1.json"))["cases"]}
     dev_docs = {d["id"]: d["text"] for d in json.load(open(REPO / "data/contractnli/dev.json"))["documents"]}
     pids = [a[0] for a in ARMS]
-    SYSTEM = open(REPO / "prompts/reconstruction_v2/gpt_p0.txt", newline="").read(); P0h = sha1(REPO / "prompts/reconstruction_v2/gpt_p0.txt")
+    SYSTEM = open(REPO / "prompts/final/gpt_p0.txt", newline="").read(); P0h = sha1(REPO / "prompts/final/gpt_p0.txt")
     hashes = {k: P0h for k in pids}; prompts = {k: SYSTEM for k in pids}
     import csv
-    led_rows = list(csv.DictReader(open(REPO / "results/budget/reconstruction_spend_ledger.csv")))
-    pre = reconstruction_spend_so_far(); gate = check_budget_against_ledger(CONSERVATIVE_REMAINING, PLANNING, RESERVE_FRAC)
+    led_rows = list(csv.DictReader(open(REPO / "results/budget/final_spend_ledger.csv")))
+    pre = final_spend_so_far(); gate = check_budget_against_ledger(CONSERVATIVE_REMAINING, PLANNING, RESERVE_FRAC)
     checks = {"manifest_DEV_ARCH_v1_seed1400_150_51docs": man["seed"] == 1400 and len(cases) == 150 and man["total_unique_documents"] == 51 and man["per_class_case_counts"] == {"Entailment": 50, "Contradiction": 50, "NotMentioned": 50} and man["source_split"] == "dev",
               "full_artifact_same_ids_order": list(full_by) == order, "rag_artifact_same_ids_order": list(rag_by) == order,
               "same_hypothesis_text_both_arms": all(full_by[c]["hypothesis_text"] == rag_by[c]["hypothesis_text"] == m["hypothesis_text"] for c, m in zip(order, cases)),
@@ -131,8 +131,8 @@ def main() -> int:
             json.dump({"arms": summary, "total_spend_usd": grand, "completed": False}, open(R / "run_E13_wall_seconds.json", "w"), indent=2)
             return 2
     json.dump({"arms": summary, "total_wall_seconds": time.perf_counter() - t_all, "total_spend_usd": grand, "pre_run_ledger_usd": pre,
-               "post_run_ledger_usd": reconstruction_spend_so_far(), "max_concurrency": MAX_CONCURRENCY, "completed": True}, open(R / "run_E13_wall_seconds.json", "w"), indent=2)
-    print(f"ALL DONE spend ${grand:.4f}, ledger ${reconstruction_spend_so_far():.4f}", flush=True); return 0
+               "post_run_ledger_usd": final_spend_so_far(), "max_concurrency": MAX_CONCURRENCY, "completed": True}, open(R / "run_E13_wall_seconds.json", "w"), indent=2)
+    print(f"ALL DONE spend ${grand:.4f}, ledger ${final_spend_so_far():.4f}", flush=True); return 0
 
 
 if __name__ == "__main__":

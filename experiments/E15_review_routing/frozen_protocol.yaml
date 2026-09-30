@@ -4,7 +4,7 @@ model: openai/gpt-5-mini via openrouter; prompt GPT-P0 (sha1 3fcc7c95...); FULL 
 policies: {R0: none, R1: "source/structural integrity", R2: "R1 + all predicted Contradiction (reference only)", R3: "R1 + keyword-rule disagreement (primary candidate)"}  # implemented in scripts/e15_routing_stage_a.py, unmodified
 provisional_constraints:   # provisional project-level values inherited from the earlier abstention plan; NOT measured capacity, SLA, or customer requirement
   MAX_DEV_STANDARDIZED_REVIEW_RATE: 0.40
-  MAX_RESIDUAL_JOINT_ERROR_RATE: 0.10   # reconstruction-era operational proxy, not a validated legal-risk threshold
+  MAX_RESIDUAL_JOINT_ERROR_RATE: 0.10   # final-architecture operational proxy, not a validated legal-risk threshold
   standardization_weights: {Entailment: 519, Contradiction: 95, NotMentioned: 423}   # /1037, official DEV true-label distribution; evaluation-only
 selection_rule:
   R3_selected_if_all: [standardized_review_rate<=0.40, residual_joint_error<0.10, "R3 captures materially more joint failures than R1", "no obvious Contradiction-safety regression", "no runtime/structural problem"]

@@ -1,7 +1,7 @@
 <!--
-Historical document. This is the pre-reconstruction RAG + selective-agent architecture
-description, preserved verbatim from `docs/architecture.md` before the reconstruction-v2 cleanup.
-Superseded by reconstruction-v2 (see `docs/architecture.md` for the current, canonical
+Historical document. This is the legacy RAG + selective-agent architecture
+description, preserved verbatim from `docs/architecture.md` before the final cleanup.
+Superseded by final (see `docs/architecture.md` for the current, canonical
 architecture). Retained here for provenance only — do not treat anything below as current.
 -->
 

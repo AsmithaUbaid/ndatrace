@@ -136,9 +136,9 @@ zero-width-character removal, whitespace collapse). This is **source-presence va
 
 ## `GET /experiments` — final TEST comparison
 
-Reads `results/final/reconstruction_v2/full_test_comparison.csv` — the already-computed
+Reads `results/final/v2/full_test_comparison.csv` — the already-computed
 Rule/Qwen/GPT-5-mini comparison on the identical n=2,091 official TEST population (E17/E17B).
-Never recomputes a metric and does not read `results/runs/*.jsonl` (the pre-reconstruction
+Never recomputes a metric and does not read `results/runs/*.jsonl` (the legacy
 experiment log). **File:** `backend/routes/experiments.py`.
 
 **Response 200** (`FinalTestResult[]`):

@@ -49,7 +49,7 @@ clearly since the label is easy to misread) = 65 correct. No arithmetic inconsis
 count used `evidence_valid` (the model's quote is a real, verbatim, non-hallucinated substring
 of the shown context, and label-consistent) — it does **not** check whether that quote actually
 overlaps the *true annotated gold span*. Recomputing evidence-to-gold-span overlap directly
-(same interval-overlap mechanism used throughout reconstruction-v2 — E04, E05, E06 — applied
+(same interval-overlap mechanism used throughout final — E04, E05, E06 — applied
 here to E07's saved `evidence` field and the frozen retrieved-context artifact's chunk offsets,
 zero LLM calls):
 
@@ -501,7 +501,7 @@ is relative to the agentic bucket — if a stronger model closes most of the rea
 gap for a modest cost increase, that may be a simpler, cheaper intervention than building and
 validating a selective-agent trigger for the smaller, harder-to-condition 41.3% agentic bucket.
 This diagnostic is **not executed in E08** and requires explicit separate authorization (it
-would be E07/E05's first hosted-model call in reconstruction-v2's A1/A2 architecture line).
+would be E07/E05's first hosted-model call in final's A1/A2 architecture line).
 
 ### Files created this pass
 

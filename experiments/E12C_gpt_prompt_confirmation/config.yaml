@@ -24,8 +24,8 @@ frozen:
   only_variable: system prompt (P0 vs P3)
 
 prompts:
-  gpt_p0: {file: prompts/reconstruction_v2/gpt_p0.txt, sha1: 3fcc7c95cf1287c292e403f12b307c9d912278ce}
-  gpt_p3: {file: prompts/reconstruction_v2/gpt_p3.txt, sha1: d2bca31164c2db9ea9995fb769977e3e2c0a6496}
+  gpt_p0: {file: prompts/final/gpt_p0.txt, sha1: 3fcc7c95cf1287c292e403f12b307c9d912278ce}
+  gpt_p3: {file: prompts/final/gpt_p3.txt, sha1: d2bca31164c2db9ea9995fb769977e3e2c0a6496}
   verified_identical_to_E12B_records: true  # sha1 in every E12B P0/P3 record equals these
 
 manifest:

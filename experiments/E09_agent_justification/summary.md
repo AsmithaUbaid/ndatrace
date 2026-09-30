@@ -171,7 +171,7 @@ local model calls** are needed anywhere in E09, including Stage B.
    signals — Stage B should not re-derive this, but should still test them as components of a
    combined signal before fully discarding either.
 3. The T-series confidence-routing signal (rule-agreement) is task/dataset-specific to that
-   project's own rule baseline and does not carry over to reconstruction-v2's architecture — E09
+   project's own rule baseline and does not carry over to final's architecture — E09
    must derive its own candidate signals from GPT-5-mini's actual residual failures.
 4. GPT-5-mini still uses Qwen-selected `classification_prompt_v1` (P0) — whether this is itself
    suboptimal for GPT is an explicitly separate, unresolved downstream question, deliberately not

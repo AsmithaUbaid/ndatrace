@@ -35,7 +35,7 @@ existing_rag_code_audit:
   reasons: >
     Different retrieval config entirely (sentence chunking + rule-boosted RRF fusion via
     Retriever.query_rerank_and_boost -- the OLD T-series retrieval decision, not
-    reconstruction-v2's frozen retrieval_v1). Different classification mechanism
+    final's frozen retrieval_v1). Different classification mechanism
     (pipeline.classifier.classify() + prompts/classify_v2.txt, a heavier schema with
     confidence/explanation fields -- not classification_prompt_v1/E03's evaluation.
     prompt_selection + ModelGateway.complete() mechanism). DEV split, hosted model

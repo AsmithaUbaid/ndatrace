@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent; sys.path.insert(0, str(REPO))
-from evaluation.budget import check_budget_against_ledger, record_spend, reconstruction_spend_so_far  # noqa: E402
+from evaluation.budget import check_budget_against_ledger, record_spend, final_spend_so_far  # noqa: E402
 from evaluation.structured_output import parse_structured_output  # noqa: E402
 from pipeline.evidence_validator import validate_evidence  # noqa: E402
 from pipeline.model_gateway import ModelError, ModelGateway  # noqa: E402
@@ -25,13 +25,13 @@ def main() -> int:
     man = json.load(open(D / "DEV_ROUTING_v1.json")); cases = man["cases"]
     full = {c["case_id"]: c for c in json.load(open(D / "DEV_ROUTING_v1_FULL_CONTEXT.json"))["cases"]}
     dev = {d["id"]: d["text"] for d in json.load(open(REPO / "data/contractnli/dev.json"))["documents"]}
-    SYSTEM = open(REPO / "prompts/reconstruction_v2/gpt_p0.txt", newline="").read(); h = hashlib.sha1(SYSTEM.encode()).hexdigest()
-    pre = reconstruction_spend_so_far(); gate = check_budget_against_ledger(CONSERVATIVE, PLANNING, RESERVE_FRAC)
+    SYSTEM = open(REPO / "prompts/final/gpt_p0.txt", newline="").read(); h = hashlib.sha1(SYSTEM.encode()).hexdigest()
+    pre = final_spend_so_far(); gate = check_budget_against_ledger(CONSERVATIVE, PLANNING, RESERVE_FRAC)
     out_path = R / "run_E15_validation_cases.jsonl"
     checks = {"manifest_frozen_138": man["status"].startswith("FROZEN") and len(cases) == 138 and man["seed"] == 1500,
               "full_ids_same_order": list(full) == [c["case_id"] for c in cases], "full_context_is_complete_dev_doc": all(full[c["case_id"]]["context_text"] == dev[c["document_id"]] for c in cases),
               "no_truth_in_model_facing": not any(LEAK & set(c) for c in full.values()), "prompt_is_gpt_p0": h == P0_HASH,
-              "ledger_approx_2_8044": abs(pre - 2.8044) < 0.001, "no_existing_e15_outputs": not out_path.exists(), "no_existing_e15_ledger_rows": "e15_" not in open(REPO / "results/budget/reconstruction_spend_ledger.csv").read(),
+              "ledger_approx_2_8044": abs(pre - 2.8044) < 0.001, "no_existing_e15_outputs": not out_path.exists(), "no_existing_e15_ledger_rows": "e15_" not in open(REPO / "results/budget/final_spend_ledger.csv").read(),
               "budget_gate_pass": bool(gate.allowed)}
     json.dump({"checks": checks, "pre_run_ledger_usd": pre, "gate_arithmetic": pre + CONSERVATIVE + 1.25, "max_concurrency": CONC, "timeout_seconds": TIMEOUT, "timestamp": now()}, open(R / "pre_run_verification.json", "w"), indent=2)
     print(json.dumps(checks, indent=1), f"\npre-run ledger ${pre:.5f}; gate {pre + CONSERVATIVE + 1.25:.3f} <= 5.00", flush=True)
@@ -69,8 +69,8 @@ def main() -> int:
     recs = [json.loads(l) for l in open(out_path)]; ids = [r["case_id"] for r in recs]
     verify = {"records_138": len(recs) == 138, "no_duplicates": len(set(ids)) == len(ids), "all_ids": set(ids) == {c["case_id"] for c in cases}, "all_successful": not any(r.get("error_type") for r in recs)}
     json.dump({"spend_usd": state["spend"], "wall_seconds": time.perf_counter() - t_all, "stopped": state["stop"], "successful_calls": sum(not r.get("error_type") for r in recs), "failed_calls": sum(bool(r.get("error_type")) for r in recs),
-               "verify": verify, "pre_run_ledger_usd": pre, "post_run_ledger_usd": reconstruction_spend_so_far(), "completed": not state["stop"] and all(verify.values())}, open(R / "run_E15_wall_seconds.json", "w"), indent=2)
-    print(f"DONE spend ${state['spend']:.4f} stop={state['stop']} verify={verify} ledger ${reconstruction_spend_so_far():.5f}", flush=True); return 0 if all(verify.values()) and not state["stop"] else 2
+               "verify": verify, "pre_run_ledger_usd": pre, "post_run_ledger_usd": final_spend_so_far(), "completed": not state["stop"] and all(verify.values())}, open(R / "run_E15_wall_seconds.json", "w"), indent=2)
+    print(f"DONE spend ${state['spend']:.4f} stop={state['stop']} verify={verify} ledger ${final_spend_so_far():.5f}", flush=True); return 0 if all(verify.values()) and not state["stop"] else 2
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""E17 Stage A: FIRST reconstruction-v2 access to official TEST. Deterministic manifest construction + split verification ONLY. No predictions, no model calls.
+"""E17 Stage A: FIRST final access to official TEST. Deterministic manifest construction + split verification ONLY. No predictions, no model calls.
 Reads test.json (structure/labels for manifest) and never inspects content for difficulty. Selection: plain seeded stratified random sampling within each label."""
 from __future__ import annotations
 import hashlib, json, random, subprocess, sys

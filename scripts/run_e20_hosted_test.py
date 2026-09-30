@@ -10,7 +10,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
-from evaluation.budget import record_spend, reconstruction_spend_so_far  # noqa: E402
+from evaluation.budget import record_spend, final_spend_so_far  # noqa: E402
 from evaluation.structured_output import parse_structured_output  # noqa: E402
 from pipeline.config import settings  # noqa: E402
 from pipeline.evidence_validator import validate_evidence  # noqa: E402
@@ -85,7 +85,7 @@ def main() -> int:
         return 0
 
     gw = ModelGateway(model=c["model"], max_retries=c["retry_limit"], timeout_seconds=c["timeout_seconds"])
-    pre_ledger = reconstruction_spend_so_far()
+    pre_ledger = final_spend_so_far()
     print(f"pre-run ledger ${pre_ledger:.5f}; {len(todo)} cases to run; concurrency {c['max_concurrency']}", flush=True)
 
     state = {"consec": 0, "stop": None, "spend": 0.0, "done": len(done_ids)}
@@ -170,11 +170,11 @@ def main() -> int:
         "successful_calls_total": sum(r.get("cost_usd") is not None for r in recs),
         "failed_calls_total": sum(r.get("cost_usd") is None for r in recs),
         "parse_failures_total": sum(r["parse_status"] == "invalid" for r in recs),
-        "verify": verify, "pre_run_ledger_usd": pre_ledger, "post_run_ledger_usd": reconstruction_spend_so_far(),
+        "verify": verify, "pre_run_ledger_usd": pre_ledger, "post_run_ledger_usd": final_spend_so_far(),
     }
     (D / "results" / "run_E20_wall.json").write_text(json.dumps(wall, indent=2) + "\n")
     print(f"DONE spend_this_run=${state['spend']:.4f} stop={state['stop']} verify={verify} "
-          f"ledger=${reconstruction_spend_so_far():.5f}", flush=True)
+          f"ledger=${final_spend_so_far():.5f}", flush=True)
     return 1 if state["stop"] else 0
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E11 pre-run forecast (reconstruction-v2) -- constructs the EXACT step-1 agent messages for all
+E11 pre-run forecast (final) -- constructs the EXACT step-1 agent messages for all
 15 triggered cases (real control prompt + real requirement + real A2 context, via the same
 pipeline.agent_v2._build_user_prompt function E11's real runner would call) and measures their
 real token counts. Also exercises both tools locally (zero model calls) on the real triggered
@@ -20,7 +20,7 @@ import tiktoken
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
-from evaluation.budget import check_budget_against_ledger, reconstruction_spend_so_far  # noqa: E402
+from evaluation.budget import check_budget_against_ledger, final_spend_so_far  # noqa: E402
 from pipeline.agent_tools_v2 import follow_cross_reference, get_more_candidates  # noqa: E402
 from pipeline.agent_v2 import CONTROL_PROMPT_PATH, _build_user_prompt, cross_reference_to_named_provision_cue  # noqa: E402
 
@@ -171,8 +171,8 @@ def main() -> int:
     print(f"  expected:    ${expected_cost:.4f}")
     print(f"  conservative: ${conservative_cost:.4f}")
 
-    pre_run_ledger = reconstruction_spend_so_far()
-    print(f"\nCurrent reconstruction ledger (read from real ledger, not assumed): ${pre_run_ledger:.4f}")
+    pre_run_ledger = final_spend_so_far()
+    print(f"\nCurrent final ledger (read from real ledger, not assumed): ${pre_run_ledger:.4f}")
     post_run_min = pre_run_ledger + min_cost
     post_run_expected = pre_run_ledger + expected_cost
     post_run_conservative = pre_run_ledger + conservative_cost

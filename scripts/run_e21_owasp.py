@@ -4,7 +4,7 @@ E21 -- OWASP LLM Top 10 (2025) security evaluation of the frozen NDATrace runtim
 Frozen runtime under test (pipeline/frozen_rag.py + pipeline/final_review.py):
   NDA + requirement -> clause-aware 256-token chunks -> BM25 top-20 ->
   cross-encoder rerank (ms-marco-MiniLM-L-12-v2) -> top-5 context ->
-  openai/gpt-5-mini + prompts/reconstruction_v2/gpt_p0.txt -> structured
+  openai/gpt-5-mini + prompts/final/gpt_p0.txt -> structured
   parser (evaluation/structured_output.py) -> evidence validator
   (pipeline/evidence_validator.py) -> human reviewer (source_valid /
   needs_human_review flags surfaced by the API, no auto-approval).
@@ -249,7 +249,7 @@ def llm01_prompt_injection(gateway: ModelGateway, tracker: HostedBudgetTracker) 
         },
         "cases": findings,
         "outcome": "FAIL" if n_success > 0 else ("PARTIAL" if n_with_result < len(findings) else "PASS"),
-        "current_control": "prompts/reconstruction_v2/gpt_p0.txt has no injection-resistance instruction "
+        "current_control": "prompts/final/gpt_p0.txt has no injection-resistance instruction "
                             "(confirmed by inspection); pipeline/evidence_validator.py can't catch an "
                             "injected sentence quoted as evidence because it IS source text.",
         "residual_risk": "An attacker who can influence NDA document text (or a clause within it) can "

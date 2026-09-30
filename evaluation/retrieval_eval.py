@@ -1,5 +1,5 @@
 """
-E06 retrieval optimisation — reusable, LLM-free logic (reconstruction-v2).
+E06 retrieval optimisation — reusable, LLM-free logic (final).
 
 Pure/local functions only: build the evidence-bearing TRAIN universe, run a retrieval
 configuration against it, and score results using the evidence-hit semantics already
@@ -9,7 +9,7 @@ recall_with_ci) — NOT a new evidence definition. No model/API calls anywhere i
 
 Does NOT use the not-yet-frozen classification joint-metric threshold tau — retrieval
 relevance here is exact gold-span overlap only (evaluation.scorer's existing rule), per the
-reconstruction brief's explicit instruction not to substitute one for the other.
+project contract's explicit instruction not to substitute one for the other.
 """
 
 from __future__ import annotations

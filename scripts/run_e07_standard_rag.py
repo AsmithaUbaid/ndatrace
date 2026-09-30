@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E07 Stage B full benchmark (reconstruction-v2) -- ALL 150 TRAIN_ARCH_v1 cases, A2 architecture.
+E07 Stage B full benchmark (final) -- ALL 150 TRAIN_ARCH_v1 cases, A2 architecture.
 
 Frozen configuration (matched to E05 as closely as possible -- do not change without a new
 Stage A/calibration pass):

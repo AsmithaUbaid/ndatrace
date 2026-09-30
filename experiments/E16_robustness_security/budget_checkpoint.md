@@ -20,7 +20,7 @@ Any E16 hosted robustness calls (Stage B) draw from the same $0.638 — every do
 ## Documented final-evaluation plan (verified in docs)
 - `docs/project_contract.md` §14: local-first; no repeated full-dataset hosted runs; estimate before every hosted run.
 - `experiments/E00B_budget_forecast/summary.md` §12–14: the recommended plan was a **300-case stratified TEST subsample × non-rule architectures on ONE hosted model**, with the **full 2,091-case final pass run locally** (local runtime, not dollars, was the constraint: ~12.4 h for three local architectures with Llama 3.2 3B; A1 full-context ~4.5 h).
-- `docs/evaluation_protocol.md` §17/§19–20: TEST = Role C, 2,091 cases (968 E / 220 C / 903 NM), run once after everything is frozen; the current reconstruction-v2 has not touched TEST. (Historical pre-reconstruction T041 used Gemini/Llama; it is not this candidate.)
+- `docs/evaluation_protocol.md` §17/§19–20: TEST = Role C, 2,091 cases (968 E / 220 C / 903 NM), run once after everything is frozen; the current final has not touched TEST. (Historical legacy T041 used Gemini/Llama; it is not this candidate.)
 Note: E00B's "E15 hosted-vs-local" is the OLD numbering; the current E15 is routing.
 
 ## Locally / free-runnable options already supported

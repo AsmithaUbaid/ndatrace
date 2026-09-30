@@ -9,7 +9,7 @@ Hypothesis: not pre-assumed. E08 (Qwen) concluded B (narrow selective agent pote
     model with zero retrieval/agent change. E09 re-derives the agent-justification decision from
     GPT-5-mini's own residual failures, not Qwen's.
 Why this experiment exists: this is the final justification gate before any A3 implementation
-    (Section 7/17 of the reconstruction brief) -- E09 is diagnostic only, not agent
+    (Section 7/17 of the project contract) -- E09 is diagnostic only, not agent
     implementation, tool-policy optimisation, prompt engineering, model selection, or retrieval
     tuning.
 Input dataset/split: the IDENTICAL frozen TRAIN_ARCH_v1 manifest (150 cases) and E08B's own

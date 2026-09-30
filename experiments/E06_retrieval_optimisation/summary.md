@@ -12,8 +12,8 @@ tied almost exactly and BM25 is simpler.
 A retrieval-architecture audit (notebook: `notebooks/NDATrace_Complete_Technical_Tour.ipynb`'s
 "Retrieval architecture: lexical, semantic, hybrid, or reranked?" section) found that hybrid
 retrieval (BM25 + dense fused via Reciprocal Rank Fusion) — the fourth architecture the original
-scope called for alongside lexical/dense/reranked — was never run under reconstruction-v2's
-protocol, only hypothesised from pre-reconstruction (A1) work under a different chunking/
+scope called for alongside lexical/dense/reranked — was never run under final's
+protocol, only hypothesised from legacy (A1) work under a different chunking/
 population. `scripts/run_e06_hybrid_retrieval.py` fills that one gap, reusing the identical
 4,371-case population, clause_256 chunking, hypothesis-only query, and scorer as every other E06
 run — no rerun of anything that already existed.
@@ -160,7 +160,7 @@ corrections reflected in the Stage B results above) and executed.
 
 ## 1–5. Existing retrieval architecture — full audit
 
-| Component | Current implementation | Historical config(s) (hypothesis only) | Reusable in reconstruction-v2? |
+| Component | Current implementation | Historical config(s) (hypothesis only) | Reusable in final? |
 |---|---|---|---|
 | Chunking | `pipeline/chunker.py`: 3 methods — `fixed_size_chunk` (token-window+overlap, unit = **tiktoken cl100k_base tokens**, not chars/words), `clause_aware_chunk` (paragraph/clause-boundary split, merges up to a token budget), `sentence_chunk` (one chunk per sentence/clause fragment, no merging). All track exact `(start_char, end_char)` offsets. | Historical winner: sentence chunking (ADR-002, round 2-3) | Yes — reused as-is, all 3 methods already correct and tested |
 | Embedding | `pipeline/embedder.py`: local `sentence-transformers`, default `all-mpnet-base-v2` (`pipeline/config.py`), L2-normalized, `lru_cache` on both model load and the 17 fixed query embeddings | Historical: mpnet default; round 4 found embedding barely matters **once reranking is applied** | Yes — reused as-is; the "barely matters" finding is historical evidence only, re-checked at R4 under E06's own (pre-reranking) conditions |
@@ -174,9 +174,9 @@ corrections reflected in the Stage B results above) and executed.
 | Caching | `cache/{embeddings,indexes,parsed}/` directories exist (per `docs/experiment_protocol.md`'s repo layout) but are **currently empty** — no caching layer was ever actually wired up in production code | n/a | New for E06 — `evaluation/retrieval_eval.py`'s cache design (section 20) is the first real use of these directories |
 | Rule baseline (A0) | `pipeline/rule_baseline.py::classify_with_span` — a deterministic keyword rule producing one best-match span per hypothesis, not a ranked top-K retriever | Historical: 72.6% precision / 20.4% recall standalone (high-precision, low-recall) | **Not used as R0** — it doesn't produce a ranked list comparable via Evidence Recall@K/MRR the way BM25 does; it's the separate A0 architecture, a different concern from R0's lexical-retrieval-rung question |
 
-**Historical notebooks/scripts found**: `archive/pre_reconstruction/notebooks/04_retrieval_experiments.ipynb`,
-`archive/pre_reconstruction/scripts/sweep_top_k.py`, `archive/pre_reconstruction/scripts/sweep_pool_size.py`, `scripts/compare_*retrieval*.py`,
-`archive/pre_reconstruction/scripts/compare_stronger_rerankers.py`, `data/retrieval_experiment_results.json`,
+**Historical notebooks/scripts found**: `archive/legacy/notebooks/04_retrieval_experiments.ipynb`,
+`archive/legacy/scripts/sweep_top_k.py`, `archive/legacy/scripts/sweep_pool_size.py`, `scripts/compare_*retrieval*.py`,
+`archive/legacy/scripts/compare_stronger_rerankers.py`, `data/retrieval_experiment_results.json`,
 `data/full_retrieval_comparison.json`, `data/top_k_sweep.json`, `data/pool_size_sweep.json`,
 `data/rule_boosted_retrieval.json`, `data/parent_child_retrieval.json`,
 `data/overlapping_chunks_comparison.json`, `data/stronger_reranker_comparison.json` — all
@@ -186,7 +186,7 @@ T-series (historical), summarized in `docs/architecture_decisions/INDEX.md`'s AD
 sentence chunking as the historical winner; mpnet vs. BGE vs. MiniLM "barely differs once
 reranking is applied"; retrieve-20/rerank-L-12/top-7/rule-RRF as the historical production
 config; parent-child and overlapping-window chunking as rejected. **None of these are assumed
-true for reconstruction-v2** — R0-R4 re-derive independently, per
+true for final** — R0-R4 re-derive independently, per
 `docs/evaluation_protocol.md` Part 1's standing rule.
 
 ## 6. NDA-local search — verified in code, not assumed
@@ -286,7 +286,7 @@ an optional addition if a reviewer wants it, not run by default.
 
 ## 14. R3 — top-K candidates
 
-Freeze the winning chunking from R2. Sweep **K = [3, 5, 10]** (the reconstruction brief's own
+Freeze the winning chunking from R2. Sweep **K = [3, 5, 10]** (the project contract's own
 example ladder — a reasonable, low/mid/high spread, not arbitrary). Report Δ overall recall, Δ
 Contradiction recall, Δ precision, Δ MRR, Δ retrieved tokens, Δ latency at each step; look for
 diminishing returns rather than mechanically picking K=10.
@@ -304,7 +304,7 @@ historical record, not as the rule actually applied.
 
 
 **Why justified, not skipped**: the historical "embedding barely matters" finding (ADR-002
-round 4) was measured **after reranking was already in the pipeline** — reconstruction-v2's R0-
+round 4) was measured **after reranking was already in the pipeline** — final's R0-
 R3 explicitly does not use a reranker yet, so whether embedding choice matters *before*
 reranking is a genuinely open, not-yet-answered question for this project. **Candidate**:
 `BAAI/bge-base-en-v1.5` — a different architecture/training lineage from mpnet, **already

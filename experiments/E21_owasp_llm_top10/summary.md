@@ -20,7 +20,7 @@ categories?
   FULL-context arm of the same model+prompt, not this experiment's RAG path. E21 does not claim to
   have independently reproduced it — it ran fresh cases against the actual RAG runtime instead
   (LLM01 below).
-- **No prompt patching**: `prompts/reconstruction_v2/gpt_p0.txt` was not modified during or after
+- **No prompt patching**: `prompts/final/gpt_p0.txt` was not modified during or after
   this evaluation, even where it found a real attack success.
 
 ## Results

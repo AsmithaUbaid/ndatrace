@@ -4,7 +4,7 @@
 exact architecture, decides the model tag, generates and characterizes the retrieval-context
 artifact on `TRAIN_ARCH_v1` (local-only, zero LLM calls — same precedent as every prior
 experiment's Stage A manifest-building step), and proposes the matched E05-vs-E07 statistical
-comparison. Nothing in this document is a reconstruction-v2 classification result yet.
+comparison. Nothing in this document is a final classification result yet.
 
 ## 1. Research question
 
@@ -15,11 +15,11 @@ held constant.
 
 ## 2. Existing RAG runner(s) found in repo — audit
 
-**Found**: `archive/pre_reconstruction/scripts/run_rag_experiment.py` (T-series T024, historical). **Not reusable
+**Found**: `archive/legacy/scripts/run_rag_experiment.py` (T-series T024, historical). **Not reusable
 unmodified**:
 - Uses a **different retrieval configuration entirely** — `Retriever(doc.text,
   chunk_method="sentence")` + `query_rerank_and_boost` (sentence chunking, rule-boosted RRF
-  fusion) — the OLD T-series retrieval decision, not reconstruction-v2's frozen `retrieval_v1`
+  fusion) — the OLD T-series retrieval decision, not final's frozen `retrieval_v1`
   (BM25/clause_256/top-20/rerank/top-5, no rule-boost).
 - Uses a **different classification mechanism** — `pipeline.classifier.classify()` +
   `prompts/classify_v2.txt`, a heavier schema (`label`, `confidence`, `evidence: list[str]`,

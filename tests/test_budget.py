@@ -11,7 +11,7 @@ from evaluation.budget import (
     check_budget_against_ledger,
     estimate_cost,
     load_pricing,
-    reconstruction_spend_so_far,
+    final_spend_so_far,
     record_spend,
 )
 
@@ -81,10 +81,10 @@ def test_check_budget_accounts_for_prior_spend():
     assert result.allowed is False
 
 
-def test_reconstruction_ledger_empty_returns_zero():
+def test_final_ledger_empty_returns_zero():
     with tempfile.TemporaryDirectory() as tmp:
         ledger = Path(tmp) / "ledger.csv"
-        assert reconstruction_spend_so_far(ledger) == 0.0
+        assert final_spend_so_far(ledger) == 0.0
 
 
 def test_record_spend_accumulates_and_is_never_double_counted_with_history():
@@ -97,7 +97,7 @@ def test_record_spend_accumulates_and_is_never_double_counted_with_history():
                       0.0001, "run_a", ledger_path=ledger)
         record_spend("E01", "openrouter", "openai/gpt-5-mini", 700, 20, 0.0007,
                       "run_b", ledger_path=ledger)
-        assert abs(reconstruction_spend_so_far(ledger) - 0.0008) < 1e-9
+        assert abs(final_spend_so_far(ledger) - 0.0008) < 1e-9
 
 
 def test_check_budget_against_ledger_uses_running_ledger_not_historical():

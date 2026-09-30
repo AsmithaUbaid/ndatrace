@@ -90,7 +90,7 @@ export function CaseExplorerTab({ initialRequest = {} }: { initialRequest?: Case
     <div className="space-y-6">
       <header className="relative overflow-hidden rounded-3xl border border-zinc-200 bg-white px-6 py-7 shadow-[0_18px_50px_-34px_rgba(24,24,27,0.4)] sm:px-8">
         <div aria-hidden className="absolute -right-20 -top-24 h-56 w-56 rounded-full bg-amber-100/70 blur-3xl" />
-        <div className="relative"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500">Saved reconstruction outputs</p><h1 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-950">Case Explorer</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600">Inspect genuine TEST outputs or switch to the separate TRAIN agent demo. No architecture is joined across splits.</p><p className="mt-3 text-xs text-zinc-500">{p.cases.matchedCaseCount.toLocaleString()} TEST cases safely matched · {p.cases.browserCaseCount.toLocaleString()} examples loaded for browsing</p></div>
+        <div className="relative"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500">Saved final outputs</p><h1 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-950">Case Explorer</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600">Inspect genuine TEST outputs or switch to the separate TRAIN agent demo. No architecture is joined across splits.</p><p className="mt-3 text-xs text-zinc-500">{p.cases.matchedCaseCount.toLocaleString()} TEST cases safely matched · {p.cases.browserCaseCount.toLocaleString()} examples loaded for browsing</p></div>
       </header>
 
       <div className="grid gap-6 lg:grid-cols-[310px_minmax(0,1fr)]">

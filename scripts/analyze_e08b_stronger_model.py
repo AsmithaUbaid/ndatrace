@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E08B (A2-GPT5mini) analysis (reconstruction-v2) -- Stage B, evaluator-side only.
+E08B (A2-GPT5mini) analysis (final) -- Stage B, evaluator-side only.
 
 Mirrors scripts/analyze_e07_standard_rag.py's structure exactly (same classification/
 structured-output/evidence/joint metrics, same retrieval-aware failure taxonomy) so the two

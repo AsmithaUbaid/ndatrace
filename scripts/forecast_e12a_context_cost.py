@@ -22,7 +22,7 @@ import tiktoken
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
-from evaluation.budget import check_budget_against_ledger, reconstruction_spend_so_far  # noqa: E402
+from evaluation.budget import check_budget_against_ledger, final_spend_so_far  # noqa: E402
 from evaluation.prompt_selection import load_prompt_config  # noqa: E402
 
 E07_DIR = REPO / "experiments/E07_standard_rag"
@@ -143,7 +143,7 @@ def main() -> int:
     print(f"\nProjected candidate 150-case spend -- expected: ${expected_cost:.4f} "
           f"(mean/case ${expected_cost/n:.5f}), conservative: ${conservative_cost:.4f}")
 
-    ledger = reconstruction_spend_so_far()
+    ledger = final_spend_so_far()
     print(f"Current real ledger: ${ledger:.4f}")
     print(f"Projected ledger after run -- expected: ${ledger + expected_cost:.4f}, "
           f"conservative: ${ledger + conservative_cost:.4f}")

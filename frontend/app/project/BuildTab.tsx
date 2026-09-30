@@ -129,7 +129,7 @@ function Reproducibility() {
   return (
     <div className="grid gap-5 lg:grid-cols-[1fr_0.8fr]">
       <div className="rounded-3xl border border-zinc-200 bg-white p-5"><div className="flex flex-wrap items-center justify-between gap-2"><h3 className="font-semibold text-zinc-900">ContractNLI</h3><ProvenanceChip source={p.dataProvenance.source} /></div><p className="mt-2 text-sm text-zinc-500">{data.ndaCount} NDAs · {data.hypotheses} requirements · {data.examples.toLocaleString()} cases</p><div className="mt-5 grid grid-cols-3 gap-2">{(["train", "dev", "test"] as const).map((split) => <div key={split} className="rounded-xl bg-zinc-50 p-3"><p className="text-[9px] font-bold uppercase tracking-wide text-zinc-400">{split}</p><p className="mt-1 text-lg font-semibold tabular-nums text-zinc-900">{data.splits[split].cases.toLocaleString()}</p><p className="text-[10px] text-zinc-500">cases</p></div>)}</div></div>
-      <div className="rounded-3xl border border-amber-200 bg-amber-50/70 p-5"><p className="text-[10px] font-bold uppercase tracking-wide text-amber-900">Evaluation discipline</p><p className="mt-3 text-sm leading-6 text-zinc-700">Gold labels and evidence are withheld from every inference architecture.</p><p className="mt-3 text-xs leading-5 text-zinc-500">{p.dataProvenance.reconstructionV2ProtocolCaveat}</p></div>
+      <div className="rounded-3xl border border-amber-200 bg-amber-50/70 p-5"><p className="text-[10px] font-bold uppercase tracking-wide text-amber-900">Evaluation discipline</p><p className="mt-3 text-sm leading-6 text-zinc-700">Gold labels and evidence are withheld from every inference architecture.</p><p className="mt-3 text-xs leading-5 text-zinc-500">{p.dataProvenance.finalProtocolCaveat}</p></div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Matched paired E07 (Qwen A2) vs. E08B (GPT-5-mini A2) comparison (reconstruction-v2).
+Matched paired E07 (Qwen A2) vs. E08B (GPT-5-mini A2) comparison (final).
 
 Both runs used the IDENTICAL 150 TRAIN_ARCH_v1 cases, identical retrieved context, identical
 prompt/schema/parser/validator -- only the model differs. Produces: the matched metric table,

@@ -100,7 +100,7 @@ for n in (1, 2):
     add("F8", n, b, lambda t, g, gt=gt: (t + "\n" + "\n".join(f"Restated clause {i}. {gt[0]}" for i in range(1, 6)), {"attack_family": "duplicate", "injected_text": None, "instructed_target": None, "canaries": []}))
 
 assert len(pairs) == 20, len(pairs)
-enc = tiktoken.get_encoding("cl100k_base"); SYS = open(REPO / "prompts/reconstruction_v2/gpt_p0.txt", newline="").read()
+enc = tiktoken.get_encoding("cl100k_base"); SYS = open(REPO / "prompts/final/gpt_p0.txt", newline="").read()
 reqs = []
 for p in pairs:
     for v in ("clean", "attack"):
@@ -110,7 +110,7 @@ for p in pairs:
                      "gold_label": x["gold_label"], "gold_span_texts": x["gold_span_texts"], **{k: x[k] for k in x if k not in ("context_text", "gold_label", "gold_span_texts")}, "est_input_tokens": tok})
 P90_OUT, MEAN_OUT = 1229, 733     # E13 FULL output-token p90 / mean
 cons = sum(r["est_input_tokens"] * 0.25e-6 + P90_OUT * 2e-6 for r in reqs); exp = sum(r["est_input_tokens"] * 0.25e-6 + MEAN_OUT * 2e-6 for r in reqs)
-led = sum(float(x["cost_usd"] or 0) for x in __import__("csv").DictReader(open(REPO / "results/budget/reconstruction_spend_ledger.csv")))
+led = sum(float(x["cost_usd"] or 0) for x in __import__("csv").DictReader(open(REPO / "results/budget/final_spend_ledger.csv")))
 FINAL_TEST_CONS = 0.50
 gate = {"ledger": led, "e16_expected": exp, "e16_conservative": cons, "final_test_conservative": FINAL_TEST_CONS, "reserve": 1.25, "sum": led + cons + FINAL_TEST_CONS + 1.25, "plan": 5.00, "pass": led + cons + FINAL_TEST_CONS + 1.25 <= 5.00,
         "n_requests": len(reqs), "max_est_input_tokens": max(r["est_input_tokens"] for r in reqs), "total_est_input_tokens": sum(r["est_input_tokens"] for r in reqs)}

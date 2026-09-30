@@ -7,7 +7,7 @@
       "Contradiction": 95,
       "NotMentioned": 423
     },
-    "reconstruction_v2_E00_E12C_dev_usage": "none (E04 rule baseline, E06 retrieval, E07-E12C all ran on TRAIN; E07/E04 text mentioning DEV describes historical T-series prior art)",
+    "final_v2_E00_E12C_dev_usage": "none (E04 rule baseline, E06 retrieval, E07-E12C all ran on TRAIN; E07/E04 text mentioning DEV describes historical T-series prior art)",
     "historical_150_case_seed42_sample": {
       "cases": 150,
       "docs": 58,

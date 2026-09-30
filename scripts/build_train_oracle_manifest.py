@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Builds TRAIN_ORACLE_v1 -- the frozen E01 Oracle manifest (WBS reconstruction-v2).
+Builds TRAIN_ORACLE_v1 -- the frozen E01 Oracle manifest (WBS final).
 
 Deterministic, document-diverse, class-balanced diagnostic sample from official TRAIN only
 (docs/evaluation_protocol.md Part 1 Role A). Generated ONCE, before any model result exists,

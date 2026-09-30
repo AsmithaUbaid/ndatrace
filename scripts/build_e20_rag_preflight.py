@@ -22,7 +22,7 @@ MAN = OUT / "manifests"
 RES = OUT / "results"
 TEST = REPO / "data/contractnli/test.json"
 SOURCE_MANIFEST = REPO / "experiments/E17_final_test/manifests/TEST_ALL_2091_cases.json"
-SYSTEM_PROMPT = REPO / "prompts/reconstruction_v2/gpt_p0.txt"
+SYSTEM_PROMPT = REPO / "prompts/final/gpt_p0.txt"
 
 TEST_SHA256 = "460267b56052a2dc5aead98eb35eadef9e6734d5723d37b4a9790e410f812387"
 SOURCE_MANIFEST_SHA256 = "8a2f13af814951a5af682ab5acfb79ecd8a2a644f14e1bc7944a364bd5dd6be4"

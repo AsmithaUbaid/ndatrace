@@ -48,11 +48,11 @@
   },
   "case_id_scheme": {
     "frozen_format": "f\"{split}::{document_id}::{hypothesis_id}\"",
-    "status": "frozen for all future reconstruction-v2 manifests, and NOW IMPLEMENTED in evaluation/schemas.py and evaluation/metrics.py._match_predictions_to_golds() -- legacy records (split='') match exactly as before, split-qualified records only match other records with the identical split explicitly set. No manifests generated yet -- this is matching infrastructure ready for when they are."
+    "status": "frozen for all future final manifests, and NOW IMPLEMENTED in evaluation/schemas.py and evaluation/metrics.py._match_predictions_to_golds() -- legacy records (split='') match exactly as before, split-qualified records only match other records with the identical split explicitly set. No manifests generated yet -- this is matching infrastructure ready for when they are."
   },
   "split_role_structure": {
-    "final_decision": "official ContractNLI three-way split used as-is -- TRAIN (Role A: all development/tuning -- Oracle, model screening, prompt selection, retrieval tuning, agent development; fixed TRAIN subsets only for cost/runtime-controlled diagnostics), DEV (Role B: validation and architecture/configuration selection, used only after candidate configs are sufficiently frozen from TRAIN development; freeze the configuration before TEST), TEST (Role C: final held-out benchmark under the reconstruction-v2 protocol, no tuning after viewing results). No fourth operational split.",
+    "final_decision": "official ContractNLI three-way split used as-is -- TRAIN (Role A: all development/tuning -- Oracle, model screening, prompt selection, retrieval tuning, agent development; fixed TRAIN subsets only for cost/runtime-controlled diagnostics), DEV (Role B: validation and architecture/configuration selection, used only after candidate configs are sufficiently frozen from TRAIN development; freeze the configuration before TEST), TEST (Role C: final held-out benchmark under the final protocol, no tuning after viewing results). No fourth operational split.",
     "historical_exposure": "DEV's and TEST's historical exposure is disclosed in docs/data_contamination_register.md as a methodological limitation of the historical T-series work, not treated as disqualifying either split from its standard role.",
-    "test_terminology": "TEST is referred to as 'the final held-out benchmark under the reconstruction-v2 protocol', never as 'blind' or 'perfectly unseen', because historical T-series runs already scored against it (disclosed, not undoable)."
+    "test_terminology": "TEST is referred to as 'the final held-out benchmark under the final protocol', never as 'blind' or 'perfectly unseen', because historical T-series runs already scored against it (disclosed, not undoable)."
   }
 }

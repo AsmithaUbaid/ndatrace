@@ -2,7 +2,7 @@
 
 Precision issues to fix before/while drafting the final report. Items 1–3 are the original
 citation-precision issues flagged in instructor feedback on the Week 3 Problem Statement
-(`PE6201_Project_Problem_Statement_Asmitha.pdf`); items 4–5 were updated after reconstruction-v2
+(`PE6201_Project_Problem_Statement_Asmitha.pdf`); items 4–5 were updated after final
 completed, since the model/architecture identity they describe changed. These are report-writing
 fixes, not code changes — items 1–3's original context is the instructor's Week 3 feedback on the
 Problem Statement's citation precision.
@@ -44,7 +44,7 @@ original Span NLI BERT baseline (best-in-paper: 0.405, DeBERTa)".
 
 ## 4. Pricing — cite the model actually used in the final result, not an intermediate one
 
-**Status update (post-reconstruction-v2): the final report's cost analysis should lead with
+**Status update (post-final): the final report's cost analysis should lead with
 `openai/gpt-5-mini` pricing and the real measured cost of the final TEST run, not Gemini's.**
 
 The history here has two steps, and the final report should reflect the *last* one, not the
@@ -52,32 +52,32 @@ middle one:
 
 1. The original Problem Statement's GPT-5-mini pricing reference ($0.25/M input, $2/M output) was
    flagged by the instructor as not-yet-current at the time.
-2. The pre-reconstruction pipeline's own C01 model bake-off moved to
+2. The legacy pipeline's own C01 model bake-off moved to
    `google/gemini-2.5-flash-lite` for cost/latency reasons — that model was used throughout the
-   **pre-reconstruction** work (T018 onward), but **reconstruction-v2 re-derived the model choice
+   **legacy** work (T018 onward), but **final re-derived the model choice
    independently (E01) and selected `openai/gpt-5-mini`** as the final, selected architecture's
    model. Gemini is not part of the final result and should not be presented as the cost-analysis
    reference point.
 
 **Fix:** cite `openai/gpt-5-mini`'s real, live-verified OpenRouter pricing and the real measured
 total cost of the full n=2,091 final TEST run (**≈$4.23 total, ≈$0.0020/case** — see
-`results/final/reconstruction_v2/gpt_full_test_metrics.json`'s `ops` block, and
+`results/final/v2/gpt_full_test_metrics.json`'s `ops` block, and
 `experiments/E18_business_course_synthesis/` for the full cost-to-serve business analysis). Gemini
-pricing may still be cited as historical context for the pre-reconstruction pipeline (see
+pricing may still be cited as historical context for the legacy pipeline (see
 `docs/architecture_decisions/INDEX.md`'s ADR-001), but must be clearly labeled as such, not as the
 current reference point.
 
 ## 5. Local/hosted comparison — cite Qwen, not Llama/Groq
 
 The Problem Statement's hosted-vs-local commitment ("Llama 3.2 3B Instruct locally") went through
-two substitutions during the **pre-reconstruction** pipeline (local Llama 3.2 3B via Ollama, then
+two substitutions during the **legacy** pipeline (local Llama 3.2 3B via Ollama, then
 a Groq-hosted `openai/gpt-oss-20b` fallback after Llama stopped being available free-tier — see
-`pipeline/model_gateway.py`'s `ModelGateway.groq()`) — neither of these is reconstruction-v2's
+`pipeline/model_gateway.py`'s `ModelGateway.groq()`) — neither of these is final's
 local-model arm.
 
-**Reconstruction-v2's actual local/free-tier comparison is `qwen2.5:7b-instruct` (ctx16k,
+**Final's actual local/free-tier comparison is `qwen2.5:7b-instruct` (ctx16k,
 via Ollama)**, run on the full n=2,091 official TEST set: accuracy 49.9%, macro-F1 0.431, joint
 39.7%, Contradiction recall 25.5%, $0 API cost (local compute/wall-time not monetized — see
-`results/final/reconstruction_v2/qwen_full_test_metrics.json`). The final report's hosted-vs-local
+`results/final/v2/qwen_full_test_metrics.json`). The final report's hosted-vs-local
 section should cite Qwen as the local comparator, not Llama or Groq's `gpt-oss-20b` — those remain
-accurate as pre-reconstruction historical record but are not part of the final result.
+accurate as legacy historical record but are not part of the final result.

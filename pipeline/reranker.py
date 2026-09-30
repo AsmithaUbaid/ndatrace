@@ -22,7 +22,7 @@ from pipeline.retriever import RetrievalResult
 
 # L-12, not L-6: the T023 round-4 comparison (historical) showed the larger
 # cross-encoder genuinely wins (MRR 0.602 vs 0.567 at the same top-5) - not just
-# marginally better, a real step up. Reconstruction-v2 independently re-derived
+# marginally better, a real step up. Final independently re-derived
 # and froze the same model; see docs/experiment_registry.md's E06 row.
 DEFAULT_RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-12-v2"
 

@@ -1,5 +1,5 @@
 """
-E03 controlled prompt selection — reusable, provider-agnostic logic (reconstruction-v2).
+E03 controlled prompt selection — reusable, provider-agnostic logic (final).
 
 Pure functions: build the model-visible user message for one TRAIN_PROMPT_v1 case, and load a
 versioned prompt config. Output parsing and result-record shape are identical to E01's compact

@@ -29,7 +29,7 @@ def test_merge_integrity():
 
 def test_no_credentials_persisted_anywhere_in_e17b():
     needle = "sk-or-v1"
-    files = list(glob.glob(str(E17B / "**/*"), recursive=True)) + [str(REPO / "scripts/run_e17b_hosted_test.py"), str(REPO / "scripts/e17b_build_complement.py"), str(REPO / "scripts/e17b_merge_and_analyze.py"), str(REPO / "results/budget/reconstruction_spend_ledger.csv")]
+    files = list(glob.glob(str(E17B / "**/*"), recursive=True)) + [str(REPO / "scripts/run_e17b_hosted_test.py"), str(REPO / "scripts/e17b_build_complement.py"), str(REPO / "scripts/e17b_merge_and_analyze.py"), str(REPO / "results/budget/final_spend_ledger.csv")]
     for f in files:
         p = Path(f)
         if p.is_file() and p.stat().st_size < 50_000_000:

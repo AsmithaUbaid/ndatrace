@@ -16,7 +16,7 @@ dataset:
   unique_documents: 51
   selection: deterministic, performance-agnostic (same algorithm as prior manifests), no hard-case enrichment
   historical_exposure_disclosure: >
-    DEV is NOT unseen. Reconstruction-v2 (E00-E12C) never touched DEV, but the historical T-series used it heavily: the 150-case seed-42 sample
+    DEV is NOT unseen. Final (E00-E12C) never touched DEV, but the historical T-series used it heavily: the 150-case seed-42 sample
     touched 58/61 DEV documents (Oracle/prompt/RAG/confidence/agent tuning), 55 golden-battery cases (24 docs), and the full 1,037-case rule baseline and
     614-case retrieval experiments touched every document. Document-level disjointness is therefore INFEASIBLE (3 untouched docs). DEV_ARCH_v1 is CASE-level
     disjoint from the 150-case sample and every golden case (48 of its 51 documents were touched by other hypotheses historically). Per docs/data_contamination_register.md
@@ -35,7 +35,7 @@ frozen:
   provider: openrouter
   temperature: 0.0
   request_timeout_seconds: 60  # identical for both arms
-  system_prompt: {file: prompts/reconstruction_v2/gpt_p0.txt, sha1: 3fcc7c95cf1287c292e403f12b307c9d912278ce, identical_both_arms: true}
+  system_prompt: {file: prompts/final/gpt_p0.txt, sha1: 3fcc7c95cf1287c292e403f12b307c9d912278ce, identical_both_arms: true}
   user_template: "Requirement: {hypothesis_text}\n\nNDA context: {context_text}"  # identical both arms
   output_schema: unchanged (inherited label-vs-evidence quirk preserved)
   parser: evaluation.structured_output.parse_structured_output

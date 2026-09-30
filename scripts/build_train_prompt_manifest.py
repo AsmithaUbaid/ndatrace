@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Builds TRAIN_PROMPT_v1 -- the frozen E03 prompt-selection manifest (reconstruction-v2).
+Builds TRAIN_PROMPT_v1 -- the frozen E03 prompt-selection manifest (final).
 
 Deterministic, document-diverse, class-balanced diagnostic sample from official TRAIN only
 (docs/evaluation_protocol.md Part 1 Role A). Generated ONCE, before any prompt result exists,
@@ -9,7 +9,7 @@ per docs/experiment_protocol.md's manifest-generation rule.
 Unlike TRAIN_ORACLE_v1, this manifest carries the FULL NDA document text as context (not gold
 evidence) -- E03 tests classification prompts under a full-context condition, decoupled from
 both Oracle's perfect-evidence condition and from retrieval (no retrieval config has been
-frozen for reconstruction-v2 yet, so using retrieved context here would smuggle in an
+frozen for final yet, so using retrieved context here would smuggle in an
 un-scrutinized retrieval decision).
 
 Local-only: reads data/contractnli/train.json, makes zero model/API calls.

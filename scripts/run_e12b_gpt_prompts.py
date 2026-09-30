@@ -12,7 +12,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
-from evaluation.budget import check_budget_against_ledger, record_spend, reconstruction_spend_so_far  # noqa: E402
+from evaluation.budget import check_budget_against_ledger, record_spend, final_spend_so_far  # noqa: E402
 from evaluation.structured_output import parse_structured_output  # noqa: E402
 from pipeline.evidence_validator import validate_evidence  # noqa: E402
 from pipeline.model_gateway import ModelError, ModelGateway  # noqa: E402
@@ -36,9 +36,9 @@ def main() -> int:
     ctx = json.load(open(D / "TRAIN_GPT_PROMPT_v1_RETRIEVED_retrieval_v1.json"))
     ctx_by = {c["case_id"]: c for c in ctx["cases"]}
     recorded = {l.split()[1]: l.split()[0] for l in open(R / "prompt_hashes_stageA_v1.txt")}
-    prompts = {k: open(REPO / f"prompts/reconstruction_v2/{k}.txt", newline="").read() for k in ORDER}
-    hashes = {k: sha1(REPO / f"prompts/reconstruction_v2/{k}.txt") for k in ORDER}
-    pre = reconstruction_spend_so_far()
+    prompts = {k: open(REPO / f"prompts/final/{k}.txt", newline="").read() for k in ORDER}
+    hashes = {k: sha1(REPO / f"prompts/final/{k}.txt") for k in ORDER}
+    pre = final_spend_so_far()
     gate = check_budget_against_ledger(CONSERVATIVE, PLANNING, RESERVE_FRAC)
     checks = {
         "manifest_150_50_50_50": len(cases) == 150 and man["per_class_case_counts"] == {"Entailment": 50, "Contradiction": 50, "NotMentioned": 50},
@@ -47,7 +47,7 @@ def main() -> int:
         "context_same_ids_order": [c["case_id"] for c in ctx["cases"]] == [c["case_id"] for c in cases],
         "context_top5_only": all(len(c["ranked_chunk_ids"]) <= 5 for c in ctx["cases"]),
         "context_no_gold_leakage": not any(LEAK & set(c) for c in ctx["cases"]),
-        "prompt_hashes_match_stageA": all(hashes[k] == recorded[f"prompts/reconstruction_v2/{k}.txt"] for k in ORDER),
+        "prompt_hashes_match_stageA": all(hashes[k] == recorded[f"prompts/final/{k}.txt"] for k in ORDER),
         "budget_gate_pass": bool(gate.allowed),
         "no_existing_raw_outputs": not any((R / f"run_E12B_{k}_cases.jsonl").exists() for k in ORDER),
     }
@@ -112,9 +112,9 @@ def main() -> int:
         summary[pid] = {"spend_usd": spend, "wall_seconds": time.perf_counter() - t0a}
         print(f"== {pid} done: ${spend:.4f}, {summary[pid]['wall_seconds']/60:.1f} min", flush=True)
     json.dump({"arms": summary, "total_wall_seconds": time.perf_counter() - t_all, "total_spend_usd": grand, "total_calls": 600,
-               "pre_run_ledger_usd": pre, "post_run_ledger_usd": reconstruction_spend_so_far(), "order": ORDER},
+               "pre_run_ledger_usd": pre, "post_run_ledger_usd": final_spend_so_far(), "order": ORDER},
               open(R / "run_E12B_wall_seconds.json", "w"), indent=2)
-    print(f"ALL DONE spend ${grand:.4f}, ledger ${reconstruction_spend_so_far():.4f}", flush=True)
+    print(f"ALL DONE spend ${grand:.4f}, ledger ${final_spend_so_far():.4f}", flush=True)
     return 0
 
 

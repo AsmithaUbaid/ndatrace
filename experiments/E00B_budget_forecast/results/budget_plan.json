@@ -135,14 +135,14 @@
   "hard_budget_gate": {
     "implementation": "evaluation/budget.py::check_budget() -- pure function, no network calls, must be called before any hosted experiment executes",
     "rule": "if actual_spend_so_far + projected_experiment_cost > (planning_budget - reserve): block the run",
-    "actual_spend_source": "evaluation/budget.py::check_budget_against_ledger() reads reconstruction_spend_so_far() from the running ledger below -- NEVER the historical T-series ledger, which is a separate, audit-only record."
+    "actual_spend_source": "evaluation/budget.py::check_budget_against_ledger() reads final_spend_so_far() from the running ledger below -- NEVER the historical T-series ledger, which is a separate, audit-only record."
   },
-  "reconstruction_v2_spend_ledger": {
-    "path": "results/budget/reconstruction_spend_ledger.csv",
-    "status": "READY -- append-only, currently empty (no reconstruction-v2 hosted call has been made yet)",
+  "final_v2_spend_ledger": {
+    "path": "results/budget/final_spend_ledger.csv",
+    "status": "READY -- append-only, currently empty (no final hosted call has been made yet)",
     "current_total_usd": 11.56523795000004,
     "write_function": "evaluation.budget.record_spend(experiment_id, provider, model, input_tokens, output_tokens, cost_usd, run_id) -- call after every real successful hosted call, starting with E01",
-    "read_function": "evaluation.budget.reconstruction_spend_so_far() -- sums cost_usd across every recorded row"
+    "read_function": "evaluation.budget.final_spend_so_far() -- sums cost_usd across every recorded row"
   },
   "answers": {
     "A_hosted_budget_available_usd": 5.0,
@@ -157,7 +157,7 @@
       "E04 rule baseline",
       "E06 retrieval optimisation (no LLM calls)",
       "E09 agent justification analysis (reuses existing predictions)",
-      "the bulk of E12/E14 architecture comparison (local-first per the reconstruction brief)"
+      "the bulk of E12/E14 architecture comparison (local-first per the project contract)"
     ],
     "I_runs_that_would_exceed_safe_budget": "Running the FULL 2,091-case TEST split on 2+ hosted models across all 4 architectures repeatedly (as the historical T-series did across T041-A and T041-B) would approach $1.5-2 per full pass -- affordable once, but NOT to be repeated casually; each hosted TEST-split run should go through the budget gate first.",
     "J_local_runtime_estimate": "Full 2,091-case TEST set, all 3 non-rule local architectures sequentially: ~4.5h (full-context) + ~2.6h (RAG) + ~5.3h (RAG+agent, measured) = ~12.4 hours total if run back-to-back on one machine (real measured per-case means from the n=500 local T041-A run, scaled to 2,091 cases). Rule baseline is near-instant. See runtime_forecast.csv for scenario detail."

@@ -11,8 +11,8 @@ has no server-side logic of its own beyond Next.js routing.
   check (checkbox multi-select, all selected by default). Results show the verdict, explanation,
   exact evidence, and source-clause provenance; results are saved to SQLite.
 - **`/history`** — browse past batch reviews (`GET /results`, `GET /review/{id}`).
-- **`/experiments`** — the reconstruction-v2 final TEST comparison (`GET /experiments`, reads
-  `results/final/reconstruction_v2/`).
+- **`/experiments`** — the final TEST comparison (`GET /experiments`, reads
+  `results/final/v2/`).
 
 `/` and the single-requirement backend endpoint use the same frozen top-5 RAG classifier path.
 The UI uses the batch adapter so one document index can serve multiple selected requirements.
@@ -44,7 +44,7 @@ port; set `NEXT_PUBLIC_API_URL` only to point at a different backend host/port.
 |---|---|
 | `app/page.tsx` | Batch review screen — NDA input, checkbox picker for the 17 requirements, submits to frozen-RAG `POST /review` |
 | `app/history/page.tsx` | Past batch reviews (`GET /results`, `GET /review/{id}`) |
-| `app/experiments/page.tsx` | Reconstruction-v2 final TEST comparison (`GET /experiments`, reads `results/final/reconstruction_v2/`) |
+| `app/experiments/page.tsx` | Final TEST comparison (`GET /experiments`, reads `results/final/v2/`) |
 | `components/RequirementCard.tsx` | One result: verdict, explanation, source-validated evidence, and subtle retrieval provenance |
 | `components/ResultsSummaryBar.tsx`, `components/FilterTabs.tsx` | Batch-review result filtering by verdict/needs-attention |
 | `components/Checkbox.tsx` | Custom-styled checkbox for the requirement picker |

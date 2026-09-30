@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E08B calibration run (reconstruction-v2) -- 8 cases only, NOT the full 150-case diagnostic.
+E08B calibration run (final) -- 8 cases only, NOT the full 150-case diagnostic.
 
 Purpose only: verify the 30s hosted timeout is adequate for A2's actual task shape (retrieved
 context, not Oracle's single-sentence shape), get real GPT-5-mini output-token/cost data for

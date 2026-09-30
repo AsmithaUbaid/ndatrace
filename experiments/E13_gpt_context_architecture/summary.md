@@ -10,7 +10,7 @@ GPT prompt optimisation is closed (GPT-P0 = `classification_prompt_v1` active); 
 | | |
 |---|---|
 | DEV documents / cases | 61 / 1,037 (Entailment 519 · Contradiction 95 · NotMentioned 423) |
-| Reconstruction-v2 (E00–E12C) DEV usage | **none** (E04/E06/E07–E12C all ran on TRAIN; DEV mentions in E04/E07 text describe historical prior art) |
+| Final (E00–E12C) DEV usage | **none** (E04/E06/E07–E12C all ran on TRAIN; DEV mentions in E04/E07 text describe historical prior art) |
 | Historical 150-case seed-42 sample (Oracle/prompt/RAG/confidence/agent tuning) | 150 cases, **58/61 docs** (E 75 · C 14 · NM 61) |
 | Historical golden-battery cases (`data/golden/*`) | 55 unique DEV cases, 24 docs (E 21 · C 16 · NM 18) |
 | Other historical DEV use | full 1,037-case rule baseline and 614 E/C-case retrieval experiments touched every DEV doc (deterministic/free, but they shaped the OLD retrieval config) |

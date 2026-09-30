@@ -1,4 +1,4 @@
-# E05 full-context architecture (reconstruction-v2) -- bakes num_ctx=16384 into the model's
+# E05 full-context architecture (final) -- bakes num_ctx=16384 into the model's
 # own default, since Ollama's OpenAI-compatible /v1/chat/completions endpoint does not honor a
 # per-request options.num_ctx override in the installed Ollama version (0.34.3) -- confirmed
 # via direct curl, see experiments/E05_full_context/summary.md. Build with:

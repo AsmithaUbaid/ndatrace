@@ -27,5 +27,5 @@
 | 6 | Silent failure | Routing safety analysis | R0 (no review): 29.0% silent failure; even R3's 51.3% review load leaves 5.1% unsafe-automated | Fig 9 |
 | 6 | Escalation/guardrails | R1 structural-integrity floor; runtime validator v2 | Guardrails catch source-grounding violations, not confident wrong reasoning | Fig 9-11 |
 | 6 | Prompt injection | E16: 20 pairs, 4/11 injection successes, 2 regressions | Evidence-grounding is not injection-hardening; disclosed, not patched, before TEST | Fig 12 |
-| 6 | Auditability | Append-only ledger, structured logs, frozen manifests/hashes, Decisions Log | Every reconstruction decision and dollar is traceable to a committed artifact | §Governance timeline |
+| 6 | Auditability | Append-only ledger, structured logs, frozen manifests/hashes, Decisions Log | Every final-architecture decision and dollar is traceable to a committed artifact | §Governance timeline |
 | 6 | Eval→production feedback loop | §Feedback loop diagram | Offline eval knows ground truth pre-deployment; production only gets delayed human-resolved labels | §28 diagram |

@@ -9,7 +9,7 @@ Contradiction-Recall/Macro-F1 on exactly that population. Reusing the same 150 c
 architecture comparison the selected prompt now feeds into would mean the prompt was chosen to
 do well on precisely the population being used to judge architecture, a real (if likely mild,
 given P0's decisive margin) selection-bias exposure. A fresh, disjoint set avoids the question
-entirely rather than requiring a judgment call about how much it matters -- reconstruction-v2's
+entirely rather than requiring a judgment call about how much it matters -- final's
 own culture (E00/E01/E03/E04) prefers disclosure-and-avoid over disclosure-and-hope-it's-fine
 when avoiding is this cheap.
 

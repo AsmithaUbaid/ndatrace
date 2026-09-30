@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E06 final matched control (reconstruction-v2): LEXICAL+RERANK vs DENSE+RERANK.
+E06 final matched control (final): LEXICAL+RERANK vs DENSE+RERANK.
 
 Both arms: chunking=clause_256, candidate pool=top-20, reranker=ms-marco-MiniLM-L-12-v2,
 final K=5, identical 4,371-case universe, identical query/scorer/metrics. The ONLY changed

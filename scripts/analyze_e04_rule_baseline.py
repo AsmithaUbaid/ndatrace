@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E04 rule baseline analysis (reconstruction-v2) — Stage B, evaluator-side only.
+E04 rule baseline analysis (final) — Stage B, evaluator-side only.
 
 Computes classification metrics (accuracy, macro-F1, per-class recall, confusion matrix),
 evidence metrics (evidence recall/precision, joint label+evidence correctness, overall and by

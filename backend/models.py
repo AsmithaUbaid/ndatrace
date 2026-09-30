@@ -129,9 +129,9 @@ class ReviewSummary(BaseModel):
 
 
 class FinalTestResult(BaseModel):
-    """One row of the reconstruction-v2 final held-out TEST comparison
+    """One row of the final held-out TEST comparison
     (E17/E17B), read directly from
-    results/final/reconstruction_v2/full_test_comparison.csv - never
+    results/final/v2/full_test_comparison.csv - never
     recomputed, never a live experiment log."""
     system: str
     n: int

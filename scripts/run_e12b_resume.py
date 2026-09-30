@@ -14,7 +14,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
-from evaluation.budget import check_budget_against_ledger, record_spend, reconstruction_spend_so_far  # noqa: E402
+from evaluation.budget import check_budget_against_ledger, record_spend, final_spend_so_far  # noqa: E402
 from evaluation.structured_output import parse_structured_output  # noqa: E402
 from pipeline.evidence_validator import validate_evidence  # noqa: E402
 from pipeline.model_gateway import ModelError, ModelGateway  # noqa: E402
@@ -42,14 +42,14 @@ def main() -> int:
     ctx_by = {c["case_id"]: c for c in json.load(open(D / "TRAIN_GPT_PROMPT_v1_RETRIEVED_retrieval_v1.json"))["cases"]}
     recorded = {l.split()[1]: l.split()[0] for l in open(R / "prompt_hashes_stageA_v1.txt")}
     pids = [a[0] for a in ARMS]
-    prompts = {k: open(REPO / f"prompts/reconstruction_v2/{k}.txt", newline="").read() for k in ["gpt_p0"] + pids}
-    hashes = {k: sha1(REPO / f"prompts/reconstruction_v2/{k}.txt") for k in prompts}
+    prompts = {k: open(REPO / f"prompts/final/{k}.txt", newline="").read() for k in ["gpt_p0"] + pids}
+    hashes = {k: sha1(REPO / f"prompts/final/{k}.txt") for k in prompts}
     p0 = [json.loads(l) for l in open(R / "run_E12B_gpt_p0_cases.jsonl")]
-    pre = reconstruction_spend_so_far(); gate = check_budget_against_ledger(CONSERVATIVE_REMAINING, PLANNING, RESERVE_FRAC)
+    pre = final_spend_so_far(); gate = check_budget_against_ledger(CONSERVATIVE_REMAINING, PLANNING, RESERVE_FRAC)
     checks = {"manifest_seed_1200_150": man["seed"] == 1200 and len(cases) == 150,
               "context_same_ids_order": list(ctx_by) == order, "context_top5": all(len(c["ranked_chunk_ids"]) <= 5 for c in ctx_by.values()),
               "context_no_gold_leakage": not any(LEAK & set(c) for c in ctx_by.values()),
-              "prompt_hashes_match_stageA": all(hashes[k] == recorded[f"prompts/reconstruction_v2/{k}.txt"] for k in prompts),
+              "prompt_hashes_match_stageA": all(hashes[k] == recorded[f"prompts/final/{k}.txt"] for k in prompts),
               "p0_complete_150_order_hash_no_errors": [r["case_id"] for r in p0] == order and {r["prompt_hash"] for r in p0} == {hashes["gpt_p0"]} and not any(r.get("error_type") for r in p0),
               "outage_artifact_preserved": any(R.glob("P1_INTERRUPTED_PROVIDER_OUTAGE_*.jsonl")),
               "no_existing_resume_outputs": not any((R / a[2]).exists() for a in ARMS),
@@ -127,8 +127,8 @@ def main() -> int:
             json.dump({"arms": summary, "total_spend_usd": grand, "completed": False}, open(R / "run_E12B_resume_wall_seconds.json", "w"), indent=2)
             return 2
     json.dump({"arms": summary, "total_wall_seconds": time.perf_counter() - t_all, "total_spend_usd": grand, "pre_resume_ledger_usd": pre,
-               "post_run_ledger_usd": reconstruction_spend_so_far(), "max_concurrency": MAX_CONCURRENCY, "completed": True}, open(R / "run_E12B_resume_wall_seconds.json", "w"), indent=2)
-    print(f"ALL DONE spend ${grand:.4f}, ledger ${reconstruction_spend_so_far():.4f}", flush=True); return 0
+               "post_run_ledger_usd": final_spend_so_far(), "max_concurrency": MAX_CONCURRENCY, "completed": True}, open(R / "run_E12B_resume_wall_seconds.json", "w"), indent=2)
+    print(f"ALL DONE spend ${grand:.4f}, ledger ${final_spend_so_far():.4f}", flush=True); return 0
 
 
 if __name__ == "__main__":

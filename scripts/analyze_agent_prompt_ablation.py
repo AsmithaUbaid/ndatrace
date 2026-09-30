@@ -26,7 +26,7 @@ V1_PATH = REPO / "experiments/E11_selective_agent_evaluation/addendum_selective_
 V2_PATH = RESULTS / "raw_v2.jsonl"
 RETRIEVAL_PATH = REPO / "experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1.json"
 GOLD_PATH = REPO / "experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1_GOLD.json"
-LEDGER_PATH = REPO / "results/budget/reconstruction_spend_ledger.csv"
+LEDGER_PATH = REPO / "results/budget/final_spend_ledger.csv"
 EXPERIMENT_ID = "E11_addendum_agent_prompt_v2_ablation"
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Matched paired E05 (full-context) vs. E07 (standard RAG) comparison (reconstruction-v2).
+Matched paired E05 (full-context) vs. E07 (standard RAG) comparison (final).
 
 Both experiments ran the identical 150 TRAIN_ARCH_v1 cases in identical order, same model
 family, same prompt, same schema, same parser -- only the input-construction architecture
@@ -9,7 +9,7 @@ case-level transition counts, McNemar's exact test, and a paired bootstrap CI on
 differences.
 
 Does NOT declare a winner from raw difference or p-value alone -- reports point estimates, CIs,
-and effect size together, per the reconstruction brief's explicit instruction.
+and effect size together, per the project contract's explicit instruction.
 """
 
 from __future__ import annotations

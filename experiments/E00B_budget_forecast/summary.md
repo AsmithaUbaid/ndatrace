@@ -1,6 +1,6 @@
 # E00B — Budget, Token & Runtime Forecast — Summary
 
-**Result: the planned reconstruction-v2 programme (E01 Oracle + E03 prompt selection + E15
+**Result: the planned final programme (E01 Oracle + E03 prompt selection + E15
 hosted-vs-local comparison) fits comfortably within budget under every scenario tested — the
 real constraint is runtime and a hard external deadline, not dollars.**
 
@@ -10,7 +10,7 @@ real constraint is runtime and a hard external deadline, not dollars.**
 - The historical `.env` value `MAX_BUDGET_USD=6.99` is **not trusted** (stale, dated
   2026-09-22, predates substantial T041 spend) and is **not overwritten** — both values are
   now on record, with the $5 figure used as the live forward planning constraint per the
-  reconstruction brief's explicit instruction.
+  project contract's explicit instruction.
 - Protected reserve: 25% → **$1.25 reserved, $3.75 allowed** for actual forward spend.
 
 ## 2. Historical hosted spend (audit, not subtracted from the $5)
@@ -225,18 +225,18 @@ only uses input/output rates, both unchanged). Re-ran `scripts/build_e00b_foreca
 all corrections: LEAN $0.3001, RECOMMENDED $0.7472, MAXIMUM SAFE $1.1586 — **identical to the
 pre-correction numbers.** Only the pricing metadata, schema, and Gemini/Groq framing changed.
 
-## 17. Running reconstruction-v2 spend ledger — implemented, ready before E01
+## 17. Running final spend ledger — implemented, ready before E01
 
 - `evaluation/budget.py::record_spend(experiment_id, provider, model, input_tokens,
   output_tokens, cost_usd, run_id)` — append-only, writes to
-  `results/budget/reconstruction_spend_ledger.csv`.
-- `evaluation/budget.py::reconstruction_spend_so_far()` — sums the ledger's `cost_usd` column;
+  `results/budget/final_spend_ledger.csv`.
+- `evaluation/budget.py::final_spend_so_far()` — sums the ledger's `cost_usd` column;
   returns `0.0` if nothing has been recorded yet.
 - `evaluation/budget.py::check_budget_against_ledger()` — the real pre-run gate: reads
-  **reconstruction-v2's own spend only** (never the historical T-series ledger) and applies
-  `actual_reconstruction_v2_spend + projected_next_experiment_spend + protected_reserve <=
+  **final's own spend only** (never the historical T-series ledger) and applies
+  `actual_final_v2_spend + projected_next_experiment_spend + protected_reserve <=
   planning_budget`.
-- **Status**: `results/budget/reconstruction_spend_ledger.csv` exists now, header-only, **$0.00
+- **Status**: `results/budget/final_spend_ledger.csv` exists now, header-only, **$0.00
   recorded** — ready for E01 to start appending to. 4 new tests confirm accumulation,
   ledger-based gating, and that historical spend can never be double-counted into it (the
   ledger has no code path that reads `historical_spend.csv`).
@@ -262,9 +262,9 @@ pre-correction numbers.** Only the pricing metadata, schema, and Gemini/Groq fra
    negligible extra cost) but not frozen; needs sign-off before E01's manifest is generated.
 3. **Whether Groq's free-tier gpt-oss-20b should count as one of the "2 hosted" Oracle slots**
    — it is genuinely hosted (not on this machine); its free tier is a rate-limited account
-   condition, not its price. If reconstruction-v2 later commits to relying on that free tier for
+   condition, not its price. If final later commits to relying on that free tier for
    a specific run, that's a model-selection decision to make then. **Not decided here** — kept
-   unresolved per the reconstruction brief's explicit instruction.
+   unresolved per the project contract's explicit instruction.
 
 ## Frozen vs. not-yet-frozen after E00B
 
@@ -281,8 +281,8 @@ pre-correction numbers.** Only the pricing metadata, schema, and Gemini/Groq fra
   argue for more.
 - Live-verified current pricing for the 4 audited models (`configs/pricing/*.yaml`), with
   published vs. effective-assumption rates now explicit.
-- Running reconstruction-v2 spend ledger and gate:
-  `evaluation/budget.py::{record_spend, reconstruction_spend_so_far, check_budget_against_ledger}`,
+- Running final spend ledger and gate:
+  `evaluation/budget.py::{record_spend, final_spend_so_far, check_budget_against_ledger}`,
   ready before E01.
 
 **NOT FROZEN:**

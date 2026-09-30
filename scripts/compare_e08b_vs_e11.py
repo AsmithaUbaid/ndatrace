@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Matched paired A2 (E08B GPT-RAG) vs. A3 (E11 selective agent) comparison (reconstruction-v2).
+Matched paired A2 (E08B GPT-RAG) vs. A3 (E11 selective agent) comparison (final).
 
 Both use the IDENTICAL 150 TRAIN_ARCH_v1 cases; 135 of them are byte-identical (A3 reuses A2
 exactly for non-triggered cases). Produces the matched metric table, case-level transitions

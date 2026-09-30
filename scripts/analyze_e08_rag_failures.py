@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E08 RAG failure analysis (reconstruction-v2) -- diagnostic only, evaluator-side, zero LLM calls.
+E08 RAG failure analysis (final) -- diagnostic only, evaluator-side, zero LLM calls.
 
 Reads ONLY E07's already-saved outputs (no reruns) plus one read-only, deterministic re-query
 of the already-cached retrieval_v1 index (BM25 search + cross-encoder rerank -- both LOCAL,

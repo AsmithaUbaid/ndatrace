@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E05 Stage B calibration run (reconstruction-v2) -- 8 cases only, NOT the full benchmark.
+E05 Stage B calibration run (final) -- 8 cases only, NOT the full benchmark.
 
 Purpose only: verify the fixed context configuration end-to-end, detect truncation/runtime
 failures, estimate real per-case latency at the corrected 60s timeout, and validate structured-

@@ -28,7 +28,7 @@ discarded 1100 draft). Algorithm = TRAIN_PROMPT_v1/TRAIN_ARCH_v1's (sort doc ids
 pool restricted to untouched documents by construction. **Independently re-verified**: 0 document overlap and 0 case overlap with PROMPT, ARCH and
 ORACLE. Selection reads no model output, difficulty, evidence property or exception language; no hard-case enrichment.
 
-## 7-8. Prompts (full text in `prompts/reconstruction_v2/`; each file is the complete effective system prompt)
+## 7-8. Prompts (full text in `prompts/final/`; each file is the complete effective system prompt)
 | Prompt | Chars | Tokens (cl100k) | Added instructions vs P0 | Change |
 |---|---|---|---|---|
 | GPT-P0 | 464 | 118 | 0 | control — **byte-identical** to E08B's effective system prompt (sha1 config hash `dec7527f24c9` reproduced) |
@@ -102,7 +102,7 @@ Risk: longer prompts may change GPT-5-mini's hidden reasoning-token output (assu
 ## 25. Files created/changed
 New: `experiments/E12B_gpt_prompt_optimization/{README.md, config.yaml, summary.md, E12B_gpt_prompt_optimization.ipynb (skeleton),
 TRAIN_GPT_PROMPT_v1.json, TRAIN_GPT_PROMPT_v1_RETRIEVED_retrieval_v1.json, …_GOLD.json, results/{manifest_inspection.json, pre_run_forecast.json}}`,
-`prompts/reconstruction_v2/gpt_p{0,1,2,3}.txt`, `scripts/{build_e12b_manifest.py, generate_e12b_retrieved_context.py, forecast_e12b_prompts.py}`.
+`prompts/final/gpt_p{0,1,2,3}.txt`, `scripts/{build_e12b_manifest.py, generate_e12b_retrieved_context.py, forecast_e12b_prompts.py}`.
 Modified: `docs/experiment_registry.md` (E12B row). No frozen file touched.
 
 ## 26. Unresolved issues

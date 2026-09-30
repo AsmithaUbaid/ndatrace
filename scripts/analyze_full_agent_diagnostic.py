@@ -37,7 +37,7 @@ BASE_PATH = REPO / "experiments/E08B_stronger_model_diagnostic/results/run_E08B_
 RETRIEVAL_PATH = REPO / "experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1.json"
 GOLD_PATH = REPO / "experiments/E07_standard_rag/TRAIN_ARCH_v1_RETRIEVED_retrieval_v1_GOLD.json"
 TRACE_PATH = RESULTS / "raw_agent_traces.jsonl"
-LEDGER_PATH = REPO / "results/budget/reconstruction_spend_ledger.csv"
+LEDGER_PATH = REPO / "results/budget/final_spend_ledger.csv"
 EXPERIMENT_ID = "E11_addendum_full_agent_E1"
 
 LEGAL_CUES = (

@@ -7,7 +7,7 @@ Hypothesis: Reasoning is already strong given perfect evidence -- the real quest
     whether/how much it differs across smaller-local, stronger-local, economical-hosted, and
     stronger-hosted model capability points.
 Why this experiment exists: separates reasoning failure from retrieval failure before any
-    retrieval/prompt/architecture work begins (docs/project_contract.md, reconstruction brief).
+    retrieval/prompt/architecture work begins (docs/project_contract.md, project contract).
 Input dataset/split: TRAIN_ORACLE_v1 (official TRAIN only, 300 cases, 100/100/100 balanced
     diagnostic sample, seed=300)
 Frozen dependencies: prompts/oracle_v1.txt (single baseline prompt, no tuning), compact
@@ -29,7 +29,7 @@ What becomes frozen after this: PENDING (see summary.md's Stage A section for th
 
 ## Stage A vs. Stage B
 
-This experiment has two stages (reconstruction brief section 0):
+This experiment has two stages (project contract section 0):
 - **Stage A (this commit's state): pre-run freeze.** Manifest, prompt, schema, and model
   identifiers proposed and frozen. **No inference performed.**
 - **Stage B (after explicit approval): execution.** Runs all 4 models, logs hosted spend,

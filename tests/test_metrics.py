@@ -67,7 +67,7 @@ BALANCED_GOLDS = [
 
 
 # =========================================================================
-# Case-ID matching / split qualification (reconstruction-v2)
+# Case-ID matching / split qualification (final)
 # =========================================================================
 
 def test_match_legacy_records_without_split_still_match():
@@ -280,7 +280,7 @@ def test_joint_correctness_passes_at_tau_boundary():
 
 
 def test_joint_correctness_not_mentioned_empty_evidence_passes():
-    """Correct NotMentioned + no evidence claimed -> joint PASS (E00 sanity case, reconstruction-v2)."""
+    """Correct NotMentioned + no evidence claimed -> joint PASS (E00 sanity case, final)."""
     golds = [gold("d", "h1", "NotMentioned")]
     preds = [pred("d", "h1", "NotMentioned", spans=[])]
     assert joint_label_evidence_correctness(preds, golds) == 1.0
@@ -289,7 +289,7 @@ def test_joint_correctness_not_mentioned_empty_evidence_passes():
 def test_joint_correctness_not_mentioned_fabricated_evidence_fails():
     """Correct NotMentioned label but evidence was still returned/claimed -> joint FAIL.
     ContractNLI provides zero gold evidence for NotMentioned by definition, so any claimed
-    evidence here is fabricated, not grounded (E00 sanity case, reconstruction-v2 correction —
+    evidence here is fabricated, not grounded (E00 sanity case, final correction —
     previously any correct-NotMentioned label passed regardless of claimed evidence)."""
     golds = [gold("d", "h1", "NotMentioned")]
     preds = [pred("d", "h1", "NotMentioned", spans=[3])]  # fabricated/spurious citation
@@ -489,7 +489,7 @@ def test_contradiction_recall_with_ci_ignores_other_classes():
 
 
 def test_recall_with_ci_is_generic_across_classes():
-    """recall_with_ci() works for any class, not just Contradiction (reconstruction-v2:
+    """recall_with_ci() works for any class, not just Contradiction (final:
     a generic function replaces the need for a bespoke not_mentioned_recall_with_ci())."""
     golds = [
         gold("d1", "h1", "NotMentioned"), gold("d1", "h2", "NotMentioned"),

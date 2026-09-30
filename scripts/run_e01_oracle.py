@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-E01 Oracle runner (reconstruction-v2) — Stage B only. NOT executed during Stage A prep.
+E01 Oracle runner (final) — Stage B only. NOT executed during Stage A prep.
 
 Runs the frozen TRAIN_ORACLE_v1 manifest through one model (local, Groq, or OpenRouter-hosted)
 using the frozen prompts/oracle_v1.txt prompt and compact {"label": ...} schema. Before any
-hosted call, checks the reconstruction-v2 budget gate (evaluation.budget.check_budget_against_ledger)
+hosted call, checks the final budget gate (evaluation.budget.check_budget_against_ledger)
 and refuses to proceed if it would exceed the protected reserve. Records every successful
 hosted call to the running spend ledger (evaluation.budget.record_spend) — never the
 historical T-series ledger.

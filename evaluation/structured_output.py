@@ -1,5 +1,5 @@
 """
-Deterministic structured-output parser for E05/E07 (reconstruction-v2).
+Deterministic structured-output parser for E05/E07 (final).
 
 Motivation: E05's calibration found that qwen2.5:7b-instruct sometimes emits a well-formed
 `{"label": ..., "evidence": [...]}` object followed by trailing free-text commentary (once in

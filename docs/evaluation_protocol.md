@@ -1,6 +1,6 @@
 # Evaluation Protocol
 
-This document has two parts. **Part 1 (below) is the reconstruction-v2 protocol** — the live,
+This document has two parts. **Part 1 (below) is the final protocol** — the live,
 binding rules for E00 onward. **Part 2 ("Historical (T-series) Evaluation Practice")** is the
 original evaluation-protocol document, preserved unmodified as historical disclosure — it
 describes a different, already-completed evaluation regime and is not rewritten or reconciled
@@ -9,7 +9,7 @@ split), Part 1 governs all new work; Part 2 stands only as a record of what happ
 
 ---
 
-# Part 1 — Reconstruction-v2 Evaluation Protocol
+# Part 1 — Final Evaluation Protocol
 
 Produced by E00 (`experiments/E00_dataset_validation/`), local-only, no model calls. Audit
 findings behind every claim below are in `experiments/E00_dataset_validation/results/` and
@@ -24,7 +24,7 @@ with evidence-span annotation. Local copy: `data/contractnli/{train,dev,test}.js
 
 ## 2. Official split policy
 
-Reconstruction-v2 uses ContractNLI's own train/dev/test partition as-is. **No re-splitting.**
+Final uses ContractNLI's own train/dev/test partition as-is. **No re-splitting.**
 Verified directly (E00, zero API calls): zero document-ID overlap and zero filename overlap
 between every pair of splits (train↔dev, train↔test, dev↔test).
 
@@ -34,30 +34,30 @@ between every pair of splits (train↔dev, train↔test, dev↔test).
 | dev | 61 | 1,037 | 519 | 95 | 423 |
 | test | 123 | 2,091 | 968 | 220 | 903 |
 
-The **TEST split is reconstruction-v2's final held-out benchmark under this protocol** — not
+The **TEST split is final's final held-out benchmark under this protocol** — not
 described as "perfectly unseen" or "blind" in an absolute sense, because it isn't: historical
 T-series runs already scored against it (T041-A/B, the rule-baseline-full-test run, the
 hosted-comparison run — see `docs/data_contamination_register.md`). That prior exposure is a real,
-disclosed methodological limitation, not something reconstruction-v2 can undo. What reconstruction-
-v2 *can* guarantee, and does: **TEST is not accessed at all during reconstruction-v2 tuning** — not
+disclosed methodological limitation, not something final can undo. What the final
+architecture *can* guarantee, and does: **TEST is not accessed at all during final tuning** — not
 for model selection, prompt selection, retrieval tuning, chunk-size/top-K/reranker selection,
 routing-threshold selection, agent-tool selection, failure-driven prompt changes, or deciding
 whether A3 earns its place. Prior TEST-split knowledge may motivate a hypothesis but must never be
-cited to justify a reconstruction-v2 config choice (§18). Any report of reconstruction-v2's final
-numbers must use the phrase **"final held-out benchmark under the reconstruction-v2 protocol,"**
+cited to justify a final config choice (§18). Any report of final's final
+numbers must use the phrase **"final held-out benchmark under the final protocol,"**
 not "blind" or "unseen," precisely because of this disclosed prior exposure.
 
 ## 3. Data roles
 
-Reconstruction-v2 uses the **official ContractNLI three-way split as-is** — TRAIN / DEV / TEST —
+Final uses the **official ContractNLI three-way split as-is** — TRAIN / DEV / TEST —
 with **no fourth operational split**. An earlier draft of this document considered carving a
 separate held-out subset out of TRAIN for validation, reasoning that DEV's historical exposure
 disqualified it from that role; that idea was **rejected**. DEV's historical exposure is real and
 stays disclosed in the contamination register as a methodological limitation, but it does not
-change DEV's *role*: DEV is still where reconstruction-v2 performs its own validation/architecture
+change DEV's *role*: DEV is still where final performs its own validation/architecture
 selection, done independently of what historical T-series decisions happened to use it for. The
 premise that historical exposure disqualifies a split from its role would, taken to its
-conclusion, also disqualify TEST (which has real historical exposure too) — reconstruction-v2
+conclusion, also disqualify TEST (which has real historical exposure too) — final
 instead disqualifies *historical outcomes* from influencing new decisions (§18's standing rule),
 not the *splits themselves* from their standard roles.
 
@@ -74,14 +74,14 @@ Role structure:
   **frozen** — not repeatedly tuned case-by-case against DEV. A DEV failure motivates going back to
   a Role-A TRAIN experiment, not a direct patch against DEV until it passes. **Historical exposure
   disclosed, not treated as disqualifying**: DEV was used adaptively across Oracle/prompt/RAG/
-  confidence/agent experiments historically (`docs/data_contamination_register.md`) — reconstruction-
-  v2's own DEV-based selection is a new, independent pass, and any report of it states this history
+  confidence/agent experiments historically (`docs/data_contamination_register.md`) — the final
+  architecture's own DEV-based selection is a new, independent pass, and any report of it states this history
   plainly rather than implying DEV is untouched.
-- **Role C — Final evaluation.** Source: official **TEST**. Not accessed during reconstruction-v2
+- **Role C — Final evaluation.** Source: official **TEST**. Not accessed during final
   tuning (§2). Run only after model, prompt, retrieval config, routing policy, agent policy, and
   scoring code are all frozen from Role B. No tuning after seeing results. Historical exposure
   disclosed (§2, `docs/data_contamination_register.md`) — described as "the final held-out
-  benchmark under the reconstruction-v2 protocol," never as "blind" or "perfectly unseen." A code
+  benchmark under the final protocol," never as "blind" or "perfectly unseen." A code
   defect discovered after a TEST run gets documented, fixed, and the prior run marked **INVALID**
   — never silently replaced (§20; already demonstrated once historically, see the T041
   joint-metric bug in `docs/architecture_decisions/INDEX.md` ADR-010).
@@ -90,7 +90,7 @@ Role structure:
 
 A small, fixed set of reused manifests, not a new random subset per experiment:
 
-- **TRAIN_WORKING** — fixed reconstruction development universe, document-level sample from
+- **TRAIN_WORKING** — fixed final development universe, document-level sample from
   TRAIN (Role A), sized for cost/runtime control, not as a validation substitute.
 - **TRAIN_ORACLE** — fixed stratified subset of `TRAIN_WORKING`, reused by all four Oracle models
   (2 local + 2 hosted) — not a new sample per model.
@@ -112,7 +112,7 @@ Any custom subset drawn from TRAIN samples whole documents first, then includes 
 document's hypothesis cases — never scatters cases from one NDA across differently-purposed
 partitions. Audited: the historical AV01/PVAL01 sets already do this correctly; the historical
 150-case dev sample does not (case-level stratified sampling, no document-first step) — see
-`docs/data_contamination_register.md` §2. Reconstruction-v2 manifests follow the AV01/PVAL01
+`docs/data_contamination_register.md` §2. Final manifests follow the AV01/PVAL01
 pattern, not the 150-case sample's pattern.
 
 ## 6. Stratification serves a purpose, not a default
@@ -143,8 +143,8 @@ its gated script was deleted as dead code; see `tests/test_data_leakage.py`'s mo
 
 ## 8. Case identity — FROZEN
 
-**Canonical reconstruction-v2 case ID: `f"{split}::{document_id}::{hypothesis_id}"`.** All future
-reconstruction-v2 manifests (`TRAIN_WORKING`, `TRAIN_ORACLE`, `TRAIN_PROMPT`, and direct use of
+**Canonical final case ID: `f"{split}::{document_id}::{hypothesis_id}"`.** All future
+final manifests (`TRAIN_WORKING`, `TRAIN_ORACLE`, `TRAIN_PROMPT`, and direct use of
 official `DEV`/`TEST`) must use this scheme. `document_id` is ContractNLI's own integer
 `id` field; `hypothesis_id` is the fixed `"nda-N"` key from the 17-entry `labels` dict (confirmed
 identical 17 keys across all three splits). No manifests are generated yet, so nothing currently
@@ -222,7 +222,7 @@ it relied on, as span/clause IDs, not merely "the answer is somewhere in what th
 backfill) that full-context's evidence = "all span indices in the document," on the reasoning that
 seeing everything means nothing can be missed. That conflates *access* to evidence with
 *identification* of evidence, and makes A1's joint score collapse to plain label accuracy by
-construction — not a meaningful joint measurement. Rejected for reconstruction-v2.
+construction — not a meaningful joint measurement. Rejected for final.
 
 **Implementation consequence, documented but not built this phase** (would touch
 `pipeline/classifier.py`/`pipeline/rule_baseline.py`/`pipeline/orchestrator.py`, explicitly out of
@@ -406,7 +406,7 @@ run on the full set once. Actual cost/runtime forecasting is E00B's job, not thi
 
 See `docs/data_contamination_register.md` for the full historical inventory and per-experiment
 TEST/DEV touch table. Standing rule adopted here: prior TEST-split knowledge may motivate a
-reconstruction-v2 hypothesis but must never be cited to justify a reconstruction-v2 config choice.
+final hypothesis but must never be cited to justify a final config choice.
 
 ## 19. Freeze-before-test rule
 
@@ -428,9 +428,9 @@ kept alongside the corrected one) — this section formalizes that precedent as 
 - Official split roles — the standard ContractNLI three-way split, no fourth operational split
   invented: **TRAIN** (Role A, development/tuning), **DEV** (Role B, validation/architecture
   selection), **TEST** (Role C, final evaluation) (§3).
-- TEST access policy — not touched during reconstruction-v2 tuning, disclosed historical exposure
+- TEST access policy — not touched during final tuning, disclosed historical exposure
   noted as a methodological limitation, referred to as "the final held-out benchmark under the
-  reconstruction-v2 protocol," never as "blind" or "perfectly unseen" (§2, §3, §19–20).
+  final protocol," never as "blind" or "perfectly unseen" (§2, §3, §19–20).
 - Case ID scheme — `f"{split}::{document_id}::{hypothesis_id}"` (§8) — for all future manifests,
   **now implemented** in `evaluation/schemas.py` (`Prediction.split`, `GoldCase.split`, both
   default `""`) and `evaluation/metrics.py`'s `_case_key()`/`_match_predictions_to_golds()`: a
@@ -478,7 +478,7 @@ kept alongside the corrected one) — this section formalizes that precedent as 
 # Part 2 — Historical (T-series) Evaluation Practice
 
 Unmodified below (this section's own header is the only addition — no body text below has been
-edited). Describes the evaluation regime actually used before reconstruction-v2, not the protocol
+edited). Describes the evaluation regime actually used before final, not the protocol
 in Part 1 above. Preserved as disclosure per `docs/data_contamination_register.md`.
 
 ## Dataset roles
@@ -529,7 +529,7 @@ What was genuinely locked before T041-B and not changed based on its results:
 - Routing: rule-agreement-based ACCEPT/REVIEW (ADR-005), with the decoupled independent signal
   fix already in place (ADR-006)
 - Agent: 5 tools, bounded ReAct loop (ADR-007)
-- Evaluation scripts: `archive/pre_reconstruction/scripts/run_final_test_evaluation.py`
+- Evaluation scripts: `archive/legacy/scripts/run_final_test_evaluation.py`
 
 **A real qualification that remains, correctly stated rather than overstated**: T041-B is not a
 pristine first exposure to the test split — T041-A had already scored a 500-case subsample of the
@@ -593,13 +593,13 @@ rate.
      subsample of the same split before T041-B ran (see the Freeze protocol section for why this
      is disclosed rather than treated as invalidating).
   2. **Joint label+evidence correctness was broken in the code that executed both phases.**
-     Fixed and fully backfilled (`archive/pre_reconstruction/scripts/backfill_joint_metric.py --write`, re-run
+     Fixed and fully backfilled (`archive/legacy/scripts/backfill_joint_metric.py --write`, re-run
      against all 7 T041 result files — zero LLM/API calls, retrieval is deterministic). All three
      hosted T041-B files (full 2,091-case set) now carry a corrected, trustworthy joint value:
      full-context 0.812 (matching accuracy, as it must for full-context), RAG 0.754, RAG+agent
      0.747. The local-Llama files (T041-A-scale, `sample_size: 500`) are also now corrected: rule
      0.494, full-context 0.492, RAG 0.524, RAG+agent 0.532. **Every one of these corrected values is
-     a post-hoc backfilled metric** (`archive/pre_reconstruction/scripts/backfill_joint_metric.py`, applied after the fact to
+     a post-hoc backfilled metric** (`archive/legacy/scripts/backfill_joint_metric.py`, applied after the fact to
      already-saved predictions), not something the original run computed correctly — that provenance
      should always be stated alongside the number, not silently presented as if the run itself got
      it right the first time. Result files: the three hosted files now live in `results/final/`; the

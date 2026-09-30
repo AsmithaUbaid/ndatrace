@@ -1,6 +1,6 @@
  #!/usr/bin/env python3
 """
-E11 (reconstruction-v2) -- A3 (selective agent) analysis, evaluator-side only. Mirrors
+E11 (final) -- A3 (selective agent) analysis, evaluator-side only. Mirrors
 scripts/analyze_e08b_stronger_model.py's classification/evidence/joint metric methodology exactly
 (same joint_success()/evidence_to_span_indices()/retrieval_contains_gold() functions), applied to
 the full 150-row A3 result table built by scripts/run_e11_selective_agent.py.

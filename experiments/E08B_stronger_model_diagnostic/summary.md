@@ -3,7 +3,7 @@
 **No GPT-5 mini call has been made. No Qwen call has been made. `retrieval_v1` and
 `classification_prompt_v1` are read-only inputs.** This document audits the current GPT-5 mini
 provider/pricing configuration, verifies the frozen A2 input artifact's integrity, reads the
-real reconstruction-v2 spend ledger, applies the existing pre-run budget gate, projects the
+real final spend ledger, applies the existing pre-run budget gate, projects the
 150-case cost using real historical output-token data, and proposes the full matched-comparison,
 E08-bucket-recovery, and statistical analysis plan for Stage B.
 
@@ -31,7 +31,7 @@ GPT-specific prompt, no P3, no new instructions.
 **Critical, historically-confirmed cost behavior**: GPT-5 mini bills hidden reasoning tokens as
 output tokens (found independently during T009, `docs/architecture_decisions/INDEX.md`'s ADR-001,
 and restated in this
-model's own pricing file). Real E01 Oracle data (300 real calls, this reconstruction-v2
+model's own pricing file). Real E01 Oracle data (300 real calls, this final
 lineage) shows output tokens ranging **43-1,118**, mean **149.9**, median **124.0** — a long
 right tail. A2's task (full 3-way classification from ~5 retrieved chunks) is structurally
 harder than Oracle's single-evidence-sentence decision, so reasoning-token usage could plausibly
@@ -50,7 +50,7 @@ existing frozen artifact only, per explicit instruction.
 
 Using the identical system prompt (`classification_prompt_v1` + the same additive evidence
 instruction used in E05/E07) and the identical `"Retrieved NDA excerpts:"` wrapper, `cl100k_base`
-approximation (consistent with every other reconstruction-v2 token estimate — GPT-5 mini's own
+approximation (consistent with every other final token estimate — GPT-5 mini's own
 tokenizer will differ slightly, a disclosed approximation, not exact):
 
 | Statistic | Tokens |
@@ -65,8 +65,8 @@ Matches E07's own real measured Qwen-tokenizer distribution closely (mean 1,176.
 
 ## 5. Budget gate (real ledger, existing gate function, applied directly)
 
-Read via `evaluation.budget.reconstruction_spend_so_far()` (not assumed): **current
-reconstruction-v2 spend = $0.1178** — entirely E01 Oracle's 300 real `openai/gpt-5-mini` calls
+Read via `evaluation.budget.final_spend_so_far()` (not assumed): **current
+final spend = $0.1178** — entirely E01 Oracle's 300 real `openai/gpt-5-mini` calls
 (historical T-series spend is a separate ledger, never summed here, per the module's own
 "don't double-count" rule).
 
@@ -75,7 +75,7 @@ reconstruction-v2 spend = $0.1178** — entirely E01 Oracle's 300 real `openai/g
 | Planning budget | $5.00 |
 | Protected reserve (25%) | $1.25 |
 | **Allowed budget** | **$3.75** |
-| Reconstruction spend so far | $0.1178 |
+| Final spend so far | $0.1178 |
 | **Available headroom** | **$3.6322** |
 
 **Projected 150-case cost** (real frozen A2 token distribution, not Oracle's shape, for input;

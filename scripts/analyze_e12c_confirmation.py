@@ -123,13 +123,13 @@ def main():
     json.dump(out, open(R / "e12c_analysis.json", "w"), indent=1, default=str)
     for k in SC: json.dump(SC[k], open(R / f"run_E12C_gpt_{k}.json", "w"), indent=1, default=str)
     if outcome.startswith("A"):
-        src = REPO / "prompts/reconstruction_v2/gpt_p3.txt"; dst = REPO / "prompts/reconstruction_v2/classification_prompt_gpt_v1.txt"
+        src = REPO / "prompts/final/gpt_p3.txt"; dst = REPO / "prompts/final/classification_prompt_gpt_v1.txt"
         shutil.copyfile(src, dst); import hashlib
-        json.dump({"name": "classification_prompt_gpt_v1", "byte_identical_copy_of": "prompts/reconstruction_v2/gpt_p3.txt", "sha1": hashlib.sha1(open(dst, "rb").read()).hexdigest(),
+        json.dump({"name": "classification_prompt_gpt_v1", "byte_identical_copy_of": "prompts/final/gpt_p3.txt", "sha1": hashlib.sha1(open(dst, "rb").read()).hexdigest(),
                    "confirmation_manifests": ["TRAIN_GPT_PROMPT_v1 (E12B)", "TRAIN_GPT_PROMPT_CONFIRM_v1 (E12C)"], "E12B": recapB, "E12C": recapC,
                    "pooled_joint": [pooled["joint_p0_of_300"], pooled["joint_p3_of_300"]], "rationale": outcome,
                    "status": "frozen prompt artifact; NOT a final architecture; classification_prompt_v1 (Qwen-selected P0) remains unchanged"},
-                  open(REPO / "prompts/reconstruction_v2/classification_prompt_gpt_v1.meta.json", "w"), indent=2)
+                  open(REPO / "prompts/final/classification_prompt_gpt_v1.meta.json", "w"), indent=2)
     print(json.dumps({"band": band, "guards": guards, "net": net, "E12B": recapB, "E12C": recapC, "pooled": {k: pooled[k] for k in ("joint_p0_of_300", "joint_p3_of_300", "net")},
                       "pooled_boot": pooled["stratified_bootstrap"], "direction": direction}, indent=1, default=str)); print(outcome)
 

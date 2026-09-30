@@ -38,10 +38,10 @@ manifest:
   gold_side_file: TRAIN_GPT_PROMPT_v1_RETRIEVED_retrieval_v1_GOLD.json  # scorer only, never model-facing
 
 prompts:  # files hold the FULL effective system prompt (evidence line included); no runtime concatenation
-  gpt_p0: {file: prompts/reconstruction_v2/gpt_p0.txt, role: control, note: "byte-identical to E08B's effective system prompt (sha1 config hash dec7527f24c9 verified)"}
-  gpt_p1: {file: prompts/reconstruction_v2/gpt_p1.txt, change: "compact label definitions only"}
-  gpt_p2: {file: prompts/reconstruction_v2/gpt_p2.txt, change: "P1 definitions + 6-step decision order (no chain-of-thought requested)"}
-  gpt_p3: {file: prompts/reconstruction_v2/gpt_p3.txt, change: "P1 definitions + 4 guidance rules from established failure themes (Contradiction-vs-NotMentioned precision, governing exceptions, evidence directness, no invented provisions); written before any E12B result; no case IDs/gold/examples"}
+  gpt_p0: {file: prompts/final/gpt_p0.txt, role: control, note: "byte-identical to E08B's effective system prompt (sha1 config hash dec7527f24c9 verified)"}
+  gpt_p1: {file: prompts/final/gpt_p1.txt, change: "compact label definitions only"}
+  gpt_p2: {file: prompts/final/gpt_p2.txt, change: "P1 definitions + 6-step decision order (no chain-of-thought requested)"}
+  gpt_p3: {file: prompts/final/gpt_p3.txt, change: "P1 definitions + 4 guidance rules from established failure themes (Contradiction-vs-NotMentioned precision, governing exceptions, evidence directness, no invented provisions); written before any E12B result; no case IDs/gold/examples"}
   no_few_shot: true
   no_chain_of_thought: true
   max_prompts_including_control: 4
