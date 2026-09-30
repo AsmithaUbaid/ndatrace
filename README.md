@@ -120,7 +120,7 @@ Current controls include an injection guard, request-length limits, enforced cos
 
 Residual risks remain: injection detection is incomplete; authentication and data-governance controls are not production-complete; per-process limits are not distributed controls; and semantic errors cannot all be detected automatically. This prototype does not claim OWASP compliance.
 
-See [E21](experiments/E21_owasp_llm_top10/summary.md) and [E22](experiments/E22_targeted_security_remediation/summary.md).
+See [E21](experiments/E21_owasp_llm_top10/summary.md) and [E22](experiments/E22_targeted_security_remediation/summary.md). [E23](experiments/E23_injection_guard_live_check/summary.md) is a single-case live-fire confirmation of the guard, run through the real production path with a real hosted call.
 
 ## 8. Important agent correction
 
