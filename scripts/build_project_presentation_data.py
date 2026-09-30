@@ -65,6 +65,8 @@ e12a = load_json("experiments/E12A_static_context_expansion/results/e12a_analysi
 e12c = load_json("experiments/E12C_gpt_prompt_confirmation/results/e12c_analysis.json")
 e21_report = load_json("experiments/E21_owasp_llm_top10/results/final_report.json")
 e22_report = load_json("experiments/E22_targeted_security_remediation/results/final_report.json")
+e22_injection = load_json("experiments/E22_targeted_security_remediation/results/llm01_prompt_injection.json")
+e22_consumption = load_json("experiments/E22_targeted_security_remediation/results/llm10_unbounded_consumption.json")
 
 # Chunk-size and top-K sweeps (E06 rounds 2/3) — real saved per-config recall/MRR, used to show
 # WHY clause-256 and top-5 were selected, not just the final config.
@@ -85,7 +87,7 @@ for req in [gpt_metrics, qwen_metrics, rule_metrics, cost_summary, contradiction
             robustness_summary, routing_summary, e20_report,
             e06_bm25, e06_mpnet, e06_bge, e06_rerank, e06_hybrid,
             e03_failure, e06_failure, e09_ceiling, e12a, e12c,
-            e21_report, e22_report,
+            e21_report, e22_report, e22_injection, e22_consumption,
             e11_selective, e11_full_agent, e11_prompt_v2, e11_tool_usage,
             e06_r2_clause256, e06_r2_fixed512, e06_r2_sentence, e06_r3_k3, e06_r3_k10]:
     assert req, "canonical artifact loaded empty"
@@ -390,6 +392,26 @@ OVERVIEW_CASE_KEY = start_here.get("contradictionSuccess") or start_here.get("si
 # failure on the same requirement text as "1::nda-19" moves here instead of being the hero.
 OVERVIEW_FAILURE_CASE_KEY = start_here.get("retrievalMiss") or start_here.get("honestFailure")
 
+# Fail closed if the primary product example ever stops satisfying the frozen
+# evaluator. Matching above is by TEST split + document ID + hypothesis ID.
+showcase_case = next(c for c in cases if case_key(c["docId"], c["hypothesisId"]) == OVERVIEW_CASE_KEY)
+showcase_rag = showcase_case["architectures"]["rag"]
+showcase_full = showcase_case["architectures"].get("full_context")
+assert showcase_case["split"] == "TEST"
+assert showcase_case["goldLabel"] in {"Contradiction", "Entailment"}
+assert showcase_rag["classificationCorrect"] is True
+assert showcase_rag["sourceValid"] is True
+assert showcase_rag["goldEvidenceOverlap"] is True
+assert showcase_rag["jointPass"] is True and showcase_rag["l1Pass"] is True and showcase_rag["l2Pass"] is True
+SHOWCASE_VALIDATION = {
+    "caseId": showcase_case["caseId"], "split": showcase_case["split"],
+    "documentId": showcase_case["docId"], "hypothesisId": showcase_case["hypothesisId"],
+    "goldLabel": showcase_case["goldLabel"], "ragPredictedLabel": showcase_rag["predictedLabel"],
+    "ragSourceValid": showcase_rag["sourceValid"], "ragEvidenceCorrect": showcase_rag["goldEvidenceOverlap"],
+    "ragJointPass": showcase_rag["jointPass"], "ragL1Pass": showcase_rag["l1Pass"], "ragL2Pass": showcase_rag["l2Pass"],
+    "matchedFullResult": bool(showcase_full),
+}
+
 CASE_POPULATION_NOTE = (
     "Reconstruction-era population only: Rule (E17) / FULL-context (E17+E17B) / RAG (E20), all "
     "real per-case runs on the full official TEST split (n=2,091 shared by all three). No "
@@ -668,7 +690,7 @@ data = {
             "conclusion": "The answer was no for the tested designs, across three separate evaluations of increasing tool use. Rejected — not in the current runtime. See \"Why more autonomy did not earn its place\" below for the full progression.",
             "operatingImpact": ["More calls", "More latency", "More control-failure modes", "No net value in tested design"],
             "metrics": {"recoveries": 1, "regressions": 1, "netJoint": 0, "toolInvocations": 0},
-            "pipeline": ["top-5 RAG context", "GPT-5-mini controller", "up to 2 tool calls (follow_cross_reference / get_definition / get_more_candidates)", "conclude"],
+            "pipeline": ["top-5 RAG context", "GPT-5-mini controller", "up to 2 tool calls (FOLLOW_CROSS_REFERENCE / GET_MORE_CANDIDATES)", "conclude"],
             "config": [
                 {"key": "max steps", "value": "3", "source": src("E10", "docs/experiment_registry.md", "design freeze, no model calls")},
                 {"key": "max tool calls", "value": "2", "source": src("E10", "docs/experiment_registry.md", "design freeze")},
@@ -936,6 +958,7 @@ data = {
         "featured": FEATURED_CASES,
         "overviewCaseKey": OVERVIEW_CASE_KEY,
         "overviewFailureCaseKey": OVERVIEW_FAILURE_CASE_KEY,
+        "showcaseValidation": SHOWCASE_VALIDATION,
         "items": cases_out,
         "agentDemoCases": agent_demo_cases,
     },
@@ -974,7 +997,7 @@ data = {
         {"name": "API", "does": "POST /api/review, POST /review, /history", "runtimeOrExperimentOnly": "Runtime", "lineage": "E19"},
         {"name": "UI", "does": "Reviewer app + this presentation route", "runtimeOrExperimentOnly": "Runtime", "lineage": "E19"},
         {"name": "Evaluation harness", "does": "Joint metric, McNemar, Wilson CIs, taxonomy", "runtimeOrExperimentOnly": "Experiment-only (offline)", "lineage": "E17/E17B/E20"},
-        {"name": "Experimental agent", "does": "3-tool bounded ReAct loop over RAG context", "runtimeOrExperimentOnly": "Experiment-only, rejected", "lineage": "E09-E11"},
+        {"name": "Experimental agent", "does": "Two-tool bounded investigation over RAG context", "runtimeOrExperimentOnly": "Experiment-only, rejected", "lineage": "E09-E11"},
     ],
 
     "auditableMechanisms": [
@@ -1121,7 +1144,7 @@ data["causalStory"] = {
         "source": src("E12A", "experiments/E12A_static_context_expansion/results/e12a_analysis.json", "TRAIN_ARCH_v1 n=150, paired"),
     },
     "agent": {
-        "why": "Test the narrow hypothesis that dynamic clause expansion can recover the small residue that static top-5 filtering misses.",
+        "why": "Could dynamic investigation recover the residual failures and earn its added complexity?",
         "residual": {"n": 39, "reasoning": 26, "retrievalFiltering": 6, "dynamic": e09_ceiling["ORACLE_AGENT_OPPORTUNITY_CEILING"]["n_dynamic_cases"]},
         "ceilings": {"static": e09_ceiling["STATIC_PIPELINE_OPPORTUNITY_CEILING"]["joint_success_uplift_pp"], "agent": round(e09_ceiling["ORACLE_AGENT_OPPORTUNITY_CEILING"]["joint_success_uplift_pp"], 2)},
         "design": {"flow": ["Assess top-5", "FOLLOW_CROSS_REFERENCE or GET_MORE_CANDIDATES", "Reassess", "FINAL"], "limits": ["max 3 steps", "max 2 tool calls", "duplicate-call stop", "token/context cap", "time and cost cap", "safe fallback"]},
@@ -1141,6 +1164,25 @@ data["causalStory"] = {
             "whyV2": "The first controller may have been suppressing tool use, so V2 removed the strong 'conclude immediately' bias and required the agent to check for unresolved references and missing evidence before finalizing.",
         },
         "quality": [{"name": name, "joint": round(e11_prompt_v2["arms"][key]["joint"] * 100, 1)} for name, key in [("Base RAG", "base"), ("Agent V1", "v1"), ("Agent V2", "v2")]],
+        "comparison": [
+            {
+                "name": name,
+                "role": role,
+                "population": "TRAIN_ARCH_v1 · matched n=150",
+                "accuracy": round(e11_prompt_v2["arms"][key]["accuracy"] * 100, 1),
+                "joint": round(e11_prompt_v2["arms"][key]["joint"] * 100, 1),
+                "contradictionRecall": round(e11_prompt_v2["arms"][key]["recall"]["Contradiction"] * 100, 1),
+                "toolUse": None if key == "base" else round(e11_prompt_v2["operations"][key]["tool_use_rate"] * 100, 1),
+                "usefulRecoveries": None if key == "base" else ("0/2" if key == "v1" else "0/30"),
+                "incrementalCost": None if key == "base" else e11_prompt_v2["operations"][key]["cost_per_case_usd"],
+                "incrementalLatency": None if key == "base" else round(e11_prompt_v2["operations"][key]["mean_incremental_latency_seconds"], 2),
+                "inputTokens": None if key == "base" else e11_prompt_v2["operations"][key]["input_tokens"],
+                "outputTokens": None if key == "base" else e11_prompt_v2["operations"][key]["output_tokens"],
+                "modelCalls": None if key == "base" else e11_prompt_v2["operations"][key]["hosted_calls"],
+            }
+            for name, role, key in [("Base RAG", "Control", "base"), ("Agent V1", "Tested configuration", "v1"), ("Agent V2", "Investigation encouraged", "v2")]
+        ],
+        "evaluationNote": "Agent investigation was evaluated by tool-mediated recovery and final task success, not by a directly comparable static Recall@5 metric.",
         "learned": "Tool underuse was partly a prompt problem, but it was not the main bottleneck: V2 increased tool use from 1.3% to 20% without producing a useful recovery.",
         "next": "Reject the agent and keep the deterministic RAG runtime with human review.",
         "takeaway": {
@@ -1162,6 +1204,48 @@ data["causalTimeline"] = [
     {"id": "E11 V1→V2", "question": "Was agent tool underuse a controller-prompt problem?", "result": "Tool use rose from 1.3% to 20%.", "failure": "0 useful recoveries; Joint fell from 75.3% base to 68.7% V2.", "learned": "Underuse was partly prompt-sensitive, but agency was not the main bottleneck.", "next": "Reject A3."},
     {"id": "E20", "question": "Which architecture should the prototype ship?", "result": "FULL was the stronger quality reference; RAG reduced context/cost and returned ranked provenance.", "failure": "Neither removes the need for human authority.", "learned": "The quality-reference configuration and the shipped runtime architecture can be different.", "next": "Ship deterministic top-5 RAG with reviewer verification."},
 ]
+
+data["securityStory"] = {
+    "process": ["OWASP LLM Top 10", "E21 baseline", "Targeted remediation", "E22 verification"],
+    "processNote": "10/10 OWASP LLM categories were assessed. Findings were converted into concrete engineering controls and re-tested only where implementation changed.",
+    "baselineLabel": "Baseline before E22 controls",
+    "remediations": [
+        {
+            "id": "LLM10", "name": "Unbounded consumption", "before": e22_report["targeted_results"]["LLM10"]["baseline"], "after": e22_report["targeted_results"]["LLM10"]["targeted_regression"],
+            "controls": ["NDA max length", "Requirement max length", "Per-request cost ceiling", "Cumulative budget enforcement", "Rate limit", "Concurrency cap"],
+            "verification": [f"{len(e22_consumption['checks'])}/{len(e22_consumption['checks'])} local checks passed", "0 hosted calls for rejected requests"],
+            "residual": e22_report["targeted_results"]["LLM10"]["residual_risk"],
+        },
+        {
+            "id": "LLM01", "name": "Prompt injection", "before": e22_report["targeted_results"]["LLM01"]["baseline"], "after": e22_report["targeted_results"]["LLM01"]["targeted_regression"],
+            "controls": ["Deterministic guard over retrieved context", "Case/whitespace normalization", "security_review_required flag", "Mandatory human-review flag", "No autonomous acceptance"],
+            "verification": [
+                f"{e22_injection['local_regression']['false_positive_check']['flagged']}/{e22_injection['local_regression']['false_positive_check']['total']} false positives",
+                f"{e22_injection['local_regression']['e16_f1_f4_attack_detection']['detected']}/{e22_injection['local_regression']['e16_f1_f4_attack_detection']['total']} E16 attacks detected",
+                "Both previously successful E16 attacks detected",
+                f"{e22_injection['hosted_confirmation']['n_correct']}/{e22_injection['hosted_confirmation']['n_total']} hosted confirmation cases correct",
+                f"${e22_injection['hosted_confirmation']['spend_usd']:.6f} finalized hosted confirmation spend",
+            ],
+            "residual": "Coverage remains incomplete: 7/11 broader E16 attack formulations were not detected.",
+        },
+    ],
+    "architecture": ["Input limits", "Retrieval", "Injection guard", "Model", "Structured parser", "Evidence validator", "Security review flag", "Human review"],
+    "controlZones": [
+        {"label": "Before model", "items": ["Input bounds", "Rate/concurrency controls", "Budget guard"]},
+        {"label": "Around model", "items": ["Bounded context", "No write tools", "No external web access"]},
+        {"label": "After model", "items": ["Structured parser", "Evidence validation", "Human-review flag"]},
+    ],
+    "proved": [
+        {"label": "Controlled", "items": ["Bounded input", "Bounded spend", "Bounded concurrency", "Structured output", "Read-only agent tools", "Source validation"]},
+        {"label": "Improved", "items": ["Prompt-injection detection", "Supply-chain exposure reduced", "Runtime budget enforcement"]},
+        {"label": "Remains human-gated", "items": ["Prompt-injection edge cases", "Semantic misinformation", "Sensitive information governance"]},
+    ],
+    "decision": "E21 was used to find real weaknesses, not to claim compliance. E22 converted the two strongest actionable findings into runtime controls: resource exhaustion moved to PASS under targeted verification, while prompt injection improved to PARTIAL and remains human-gated.",
+    "posture": "Suitable as a reviewer-assist prototype with explicit human oversight. Not yet positioned as an unattended legal decision system.",
+    "ships": ["Resource guards", "Injection guard", "Evidence validation", "Bounded context", "Human-review flag"],
+    "doesNotShip": ["Autonomous legal approval", "Unrestricted agents", "Unattended processing of flagged content"],
+    "source": src("E21/E22", "experiments/E22_targeted_security_remediation/results/final_report.json", "E21 immutable baseline; E22 targeted retest of changed controls only"),
+}
 
 data["retrievalDesign"] = {
     "question": "Can retrieval reliably find the right clause?",
@@ -1262,7 +1346,7 @@ data["timeline"] = [
     ]},
     {"phase": "Agent justification", "experiments": [
         {"id": "E09", "name": "Agent justification after stronger model", "question": "With GPT-5-mini, is an agent still justified?", "changed": "Manually reviewed all 39 residual failures, zero model calls", "evidence": "Only 1/39 is a genuinely dynamic case an agent could fix", "decision": "A3 NOT JUSTIFIED"},
-        {"id": "E10", "name": "Bounded selective-agent design", "question": "If tested anyway (course completeness), what should it look like?", "changed": "Froze a 3-tool, hard-bounded agent design", "evidence": "Design frozen before any model call", "decision": "Frozen for E11, no reversal of E09"},
+        {"id": "E10", "name": "Bounded selective-agent design", "question": "If tested anyway (course completeness), what should it look like?", "changed": "Froze a minimal, hard-bounded design; the final E11 interface exposed two top-level tools", "evidence": "Design frozen before any model call", "decision": "Frozen for E11, no reversal of E09"},
         {"id": "E11", "name": "Selective-agent empirical evaluation", "question": "Does the frozen agent actually help?", "changed": "15 real GPT-5-mini calls through the agent path", "evidence": "+0.67pp accuracy, 0 tool calls invoked, joint success unchanged", "decision": "A3 CONFIRMS E09 NO-GO — reject"},
     ]},
     {"phase": "Architecture finalization", "experiments": [
@@ -1457,3 +1541,4 @@ data["charts"] = {
 OUT.parent.mkdir(parents=True, exist_ok=True)
 OUT.write_text(json.dumps(data, indent=2, default=str))
 print(f"Wrote {OUT} ({OUT.stat().st_size / 1024:.0f} KB), {len(cases_out)} cases, {len(data['timeline'])} timeline phases")
+print("Showcase validation:", json.dumps(SHOWCASE_VALIDATION, sort_keys=True))

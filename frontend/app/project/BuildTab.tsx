@@ -11,7 +11,7 @@ export function BuildTab() {
     <div>
       <header className="relative overflow-hidden rounded-3xl border border-zinc-200 bg-white px-6 py-7 shadow-[0_18px_50px_-34px_rgba(24,24,27,0.4)] sm:px-8">
         <div aria-hidden className="absolute -right-20 -top-24 h-56 w-56 rounded-full bg-sky-100/70 blur-3xl" />
-        <div className="relative"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500">Implementation view</p><h1 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-950">Build & Architecture</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600">A technical view of the frozen runtime, controls, ownership boundaries, and reproducibility trail.</p></div>
+        <div className="relative"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500">Implementation view</p><h1 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-950">System Design</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600">A technical view of the frozen runtime, controls, ownership boundaries, and reproducibility trail.</p></div>
       </header>
 
       <Section eyebrow="Runtime" title="The implementation stack">
@@ -46,7 +46,7 @@ export function BuildTab() {
         <IntendedUse />
       </Section>
 
-      <Section eyebrow="Developer details" title="Files and full experiment log">
+      <Section eyebrow="Technical appendix" title="Implementation references">
         <DeveloperDetails />
       </Section>
     </div>
@@ -85,6 +85,7 @@ function SmallestSlice() {
       <p className="mt-4 rounded-2xl bg-zinc-900 px-4 py-3 text-sm leading-6 text-zinc-200">
         A real NDA requirement returns a valid label and source-grounded evidence that the reviewer can inspect.
       </p>
+      <p className="mt-3 text-xs text-zinc-500">Reproducible smallest slice · <code className="rounded bg-zinc-100 px-1.5 py-0.5">experiments/E00_smallest_slice/</code></p>
     </div>
   );
 }
@@ -113,12 +114,15 @@ function ModuleInventory() {
 function Controls() {
   return (
     <div className="grid gap-5 lg:grid-cols-2">
-      <div className="rounded-3xl border border-emerald-200 bg-emerald-50/60 p-5"><p className="text-[10px] font-bold uppercase tracking-wide text-emerald-800">Guardrails</p><ul className="mt-4 space-y-3 text-sm text-zinc-700"><li>✓ Structured output parser</li><li>✓ Verbatim evidence-source validation</li><li>✓ Human final authority</li><li>✓ No agent in the live path</li><li>✓ Bounded top-5 classifier context</li></ul></div>
+      <div className="lg:col-span-2 grid gap-4 md:grid-cols-3"><ControlZone title="Pre-model" items={["Input length bounds", "Per-request and cumulative budget guard", "Rate limit", "Concurrency cap"]} tone="sky" /><ControlZone title="Model boundary" items={["Bounded top-5 context", "GPT-5-mini + frozen P0", "No agent in the live runtime", "No external search or write tools"]} tone="amber" /><ControlZone title="Post-model" items={["Structured output parser", "Verbatim evidence validator", "security_review_required", "Human final authority"]} tone="emerald" /></div>
       <div className="rounded-3xl border border-sky-200 bg-sky-50/60 p-5"><p className="text-[10px] font-bold uppercase tracking-wide text-sky-800">Observability</p><ul className="mt-4 space-y-3 text-sm text-zinc-700"><li>Review-level latency</li><li>Review-level API cost</li><li>Model and trace identifier</li><li>Retrieved clause provenance</li><li>Source-validation state</li></ul></div>
+      <div className="rounded-3xl border border-amber-200 bg-amber-50/60 p-5"><p className="text-[10px] font-bold uppercase tracking-wide text-amber-900">E22 security state</p><ul className="mt-4 space-y-3 text-sm text-zinc-700"><li>✓ Injection guard flags suspicious retrieved text</li><li>✓ Flagged content requires human review</li><li>✓ Resource controls verified locally</li><li>△ Injection coverage remains partial</li></ul></div>
       <div className="lg:col-span-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{p.auditableMechanisms.map((item) => <div key={item.name} className="rounded-2xl border border-zinc-200 bg-white p-4"><p className="text-[10px] font-bold uppercase tracking-wide text-zinc-400">{item.name}</p><p className="mt-2 text-xl font-semibold text-zinc-900">{item.value}{item.unit && <span className="ml-1 text-xs font-normal text-zinc-500">{item.unit}</span>}</p><div className="mt-2"><ProvenanceChip source={item.source} /></div></div>)}</div>
     </div>
   );
 }
+
+function ControlZone({ title, items, tone }: { title: string; items: string[]; tone: "sky"|"amber"|"emerald" }) { const cls={sky:"border-sky-200 bg-sky-50/60 text-sky-800",amber:"border-amber-200 bg-amber-50/60 text-amber-900",emerald:"border-emerald-200 bg-emerald-50/60 text-emerald-800"}[tone]; return <div className={`rounded-3xl border p-5 ${cls}`}><p className="text-[10px] font-bold uppercase tracking-wide">{title}</p><ul className="mt-4 space-y-2 text-sm text-zinc-700">{items.map((item)=><li key={item}>✓ {item}</li>)}</ul></div>; }
 
 function Reproducibility() {
   const data = p.dataProvenance.contractnli;
@@ -147,7 +151,7 @@ function DeveloperDetails() {
       <Expandable summary={<span className="text-sm font-medium text-zinc-700">Build / rent evidence references</span>}>
         <div className="space-y-2">{p.buildVsBuy.map((row) => <div key={row.layer} className="rounded-xl border border-zinc-200 bg-white p-3"><p className="text-xs font-semibold text-zinc-700">{row.layer}</p><p className="mt-1 font-mono text-[10px] text-zinc-400">{row.evidence}</p></div>)}</div>
       </Expandable>
-      <Expandable summary={<span className="text-sm font-medium text-zinc-700">Full experiment log</span>}>
+      <Expandable summary={<span className="text-sm font-medium text-zinc-700">Experiment ledger · technical appendix</span>}>
         <div className="space-y-6">{p.timeline.map((phase) => <div key={phase.phase}><h3 className="mb-2 text-[10px] font-bold uppercase tracking-wide text-zinc-400">{phase.phase}</h3><div className="space-y-2">{phase.experiments.map((item) => <details key={item.id} className="rounded-xl border border-zinc-200 bg-white p-3"><summary className="cursor-pointer text-xs font-medium text-zinc-700"><span className="mr-2 font-mono text-sky-700">{item.id}</span>{item.name}</summary><dl className="mt-3 space-y-2 text-xs"><Field label="Question" value={item.question} /><Field label="Changed" value={item.changed} /><Field label="Evidence" value={item.evidence} /><Field label="Decision" value={item.decision} /></dl></details>)}</div></div>)}</div>
       </Expandable>
     </div>

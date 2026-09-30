@@ -133,10 +133,13 @@ pattern, not the 150-case sample's pattern.
 | **Model must never receive** | gold label, gold evidence | — |
 | **Oracle exception** | requirement + **gold evidence** | gold label (hidden from model, used only to score) |
 
-Verified this is already enforced in code, not just policy: `scripts/run_oracle_experiment.py`'s
-`build_oracle_context()` raises `RuntimeError` unless `settings.oracle_mode` is explicitly set
-`True` by that script alone — a real guard against gold evidence leaking into a non-Oracle call
-(this is eval case 090, Category 8, "data leakage prevention").
+The live Oracle experiment (`scripts/run_e01_oracle.py`, `evaluation/oracle.py`) is a dedicated,
+separate code path from `pipeline/final_review.py` (the production classification path) — gold
+evidence is only ever constructed inside `evaluation/oracle.py`'s own Oracle-specific context
+builder, never inside a production module. `tests/test_data_leakage.py` enforces this by grepping
+every production module for gold-evidence identifiers. (An earlier, now-deleted design used an
+explicit `settings.oracle_mode` config flag as a runtime gate instead — removed 2026-09-29 when
+its gated script was deleted as dead code; see `tests/test_data_leakage.py`'s module docstring.)
 
 ## 8. Case identity — FROZEN
 

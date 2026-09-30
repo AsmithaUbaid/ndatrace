@@ -6,9 +6,9 @@ import { CaseExplorerTab } from "./CaseExplorerTab";
 import { BuildTab } from "./BuildTab";
 
 const TABS = [
-  { id: "overview", label: "Overview & Story" },
+  { id: "overview", label: "Story" },
   { id: "cases", label: "Case Explorer" },
-  { id: "build", label: "Build & Architecture" },
+  { id: "build", label: "System Design" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];

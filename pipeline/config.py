@@ -33,15 +33,16 @@ class Settings(BaseSettings):
     # "openrouter/" prefix, that's a litellm routing convention, not what
     # OpenRouter's own REST API expects in the request body.
     #
-    # Chosen via a model bake-off (C01, 2026-09-22): same 150-case Oracle
-    # sample, same harness, scored against gpt-5-mini. Gemini won on a
-    # weighted scorecard - 12x cheaper, 6x faster, tied on risk-sensitive
-    # recall (1.000 both), ~1.4pt lower accuracy (96.7% vs 95.3%). See
-    # docs/architecture_decisions/INDEX.md's ADR-001 (historical) and
-    # docs/experiment_registry.md's E01 row (reconstruction-v2 model selection).
+    # This is the single source of truth for the shipped model.
+    # pipeline/final_review.py (the production runtime) reads this value
+    # instead of hardcoding a model string. Gemini was an earlier,
+    # pre-reconstruction default (see docs/decisions.md ADR-001, historical) -
+    # the reconstruction-v2 architecture (docs/architecture_decisions/INDEX.md,
+    # docs/experiment_registry.md's E01 row) selected openai/gpt-5-mini as the
+    # frozen production model (FULL-context GPT-5-mini + P0 prompt).
     default_model: str = Field(
-        default="google/gemini-2.5-flash-lite",
-        description="Default LLM model identifier",
+        default="openai/gpt-5-mini",
+        description="Default LLM model identifier (production runtime model)",
     )
     temperature: float = Field(default=0.0, ge=0.0, le=2.0)
     max_retries: int = Field(default=3, ge=0)
@@ -75,21 +76,18 @@ class Settings(BaseSettings):
     chunk_size: int = Field(default=512, ge=64)
     chunk_overlap: int = Field(default=50, ge=0)
 
-    # --- Agent ---
+    # --- Agent (EXPERIMENTAL CONFIG ONLY) ---
+    # The selective agent (E09-E11) was tested and rejected - it is not part of
+    # the shipped runtime (pipeline/final_review.py never reads these values).
+    # Kept only so E11/E21's saved experiment scripts (scripts/run_e21_owasp.py,
+    # pipeline/agent_v2.py) remain reproducible. Do not wire these into
+    # production review flows.
     agent_max_steps: int = Field(default=5, ge=1)
     agent_max_tokens: int = Field(default=3000, ge=100)
     agent_max_seconds: int = Field(default=30, ge=1)
 
     # --- Confidence / Abstention ---
     confidence_threshold: float = Field(default=0.7, ge=0.0, le=1.0)
-
-    # --- Safety gates ---
-    # Must be explicitly set True to feed gold evidence into a classifier
-    # call (Oracle-style). Never flip this in production code - only
-    # scripts/run_oracle_experiment.py sets it, and only for the duration
-    # of that script (WBS T026, eval case 090 - "Oracle experiment gated
-    # by explicit config flag").
-    oracle_mode: bool = Field(default=False)
 
     # --- Paths ---
     data_dir: str = Field(default="data/contractnli")

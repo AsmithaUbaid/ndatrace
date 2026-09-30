@@ -184,15 +184,12 @@ export default function ReviewPage() {
   }, [result, filter]);
 
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-10 px-4 py-10 sm:px-6">
-      <header>
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Review an NDA
-        </h1>
-        <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-          Paste an NDA and pick the standard confidentiality requirements to check. Each result comes
-          with a clear result and the exact source clause it was based on, not just a verdict.
-        </p>
+    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-4 py-10 sm:px-6">
+      <header className="relative overflow-hidden rounded-3xl border border-zinc-200 bg-white px-6 py-8 shadow-[0_18px_50px_-36px_rgba(24,24,27,0.45)] sm:px-8">
+        <div aria-hidden className="absolute -right-20 -top-24 h-56 w-56 rounded-full bg-sky-100/70 blur-3xl" />
+        <div className="relative"><p className="text-[11px] font-bold uppercase tracking-[0.16em] text-sky-700">NDATrace</p><h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl">Evidence-grounded NDA review</h1>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-600">Review confidentiality requirements against the source agreement.</p>
+        <div className="mt-6 grid overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50/70 sm:grid-cols-3">{[["01","Provide NDA"],["02","Choose requirements"],["03","Review results"]].map(([n,label])=><div key={n} className="flex items-center gap-3 border-b border-zinc-200 px-4 py-3 last:border-0 sm:border-b-0 sm:border-r sm:last:border-r-0"><span className="font-mono text-xs font-bold text-zinc-400">{n}</span><span className="text-sm font-medium text-zinc-800">{label}</span></div>)}</div></div>
       </header>
 
       {stage === "error" && !result && (
@@ -237,7 +234,7 @@ export default function ReviewPage() {
           <div className="flex flex-col gap-2">
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-zinc-300 bg-white px-4 py-6 text-center shadow-sm hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-zinc-500"
+              className="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-2xl border border-dashed border-sky-300 bg-sky-50/40 px-4 py-8 text-center hover:border-sky-500 hover:bg-sky-50"
             >
               <input
                 ref={fileInputRef}
@@ -260,7 +257,7 @@ export default function ReviewPage() {
                 </span>
               ) : (
                 <span className="text-sm text-zinc-500 dark:text-zinc-400">
-                  Click to choose a PDF, or drop one here
+                  Choose a PDF
                 </span>
               )}
             </div>
@@ -278,7 +275,7 @@ export default function ReviewPage() {
           </div>
         )}
 
-        <div className="overflow-hidden rounded-lg border border-zinc-300 bg-white shadow-sm focus-within:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus-within:border-zinc-400">
+        <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm focus-within:border-sky-400 focus-within:ring-2 focus-within:ring-sky-100">
           <textarea
             id="nda-text"
             className="min-h-[200px] w-full resize-y border-0 p-3 font-mono text-sm text-zinc-900 focus:outline-none dark:text-zinc-100"
@@ -333,7 +330,7 @@ export default function ReviewPage() {
             {allSelected ? "Clear all" : "Select all"}
           </button>
         </div>
-        <div className="grid max-h-64 grid-cols-1 gap-1.5 overflow-y-auto rounded-lg border border-zinc-200 bg-white p-2.5 shadow-sm sm:grid-cols-2 dark:border-zinc-700 dark:bg-zinc-900">
+        <div className="grid max-h-64 grid-cols-1 gap-1.5 overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-3 shadow-sm sm:grid-cols-2">
           {stage === "loading-hypotheses" && (
             <p className="col-span-2 p-2 text-sm text-zinc-400 dark:text-zinc-500">
               Loading requirements&hellip;
@@ -360,13 +357,13 @@ export default function ReviewPage() {
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 text-[11px] font-semibold text-white dark:bg-zinc-100 dark:text-zinc-900">
               3
             </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Run the review</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Review results</span>
           </div>
         </div>
         <button
           onClick={handleSubmit}
           disabled={stage === "reviewing" || ndaText.trim().length === 0 || selected.size === 0}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-zinc-900 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:bg-zinc-300 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300 dark:disabled:bg-zinc-700 dark:disabled:text-zinc-400"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-zinc-900 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:bg-zinc-300"
         >
           {stage === "reviewing" && (
             <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/40 border-t-white dark:border-zinc-900/30 dark:border-t-zinc-900" />
@@ -377,7 +374,7 @@ export default function ReviewPage() {
         </button>
         {stage === "reviewing" && (
           <div
-            className="rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+            className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 shadow-sm"
             aria-live="polite"
             aria-atomic="true"
           >

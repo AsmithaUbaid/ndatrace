@@ -335,6 +335,30 @@ a certification of the runtime and not a claim of production security. <span cla
 is a reviewer aid, not a legal decision system</span> — the human reviewer is the final authority
 on every verdict.</p>
 
+<h2>LIMITATIONS</h2>
+<ul>
+<li><strong>Dataset scope.</strong> All measured results are on ContractNLI, a curated corpus of
+short, English-language NDAs. No generalization to messy real-world contracts (scanned PDFs,
+non-English text, inconsistent formatting, 50&ndash;100 page enterprise agreements) has been
+measured.</li>
+<li><strong>No reliable automatic semantic-uncertainty routing.</strong> E15 tested several
+deterministic and confidence-based routing policies; none reliably isolated errors without either
+missing a large share of failures or flagging an unacceptable share of correct results. No
+routing/abstention policy is active in the shipped runtime.</li>
+<li><strong>Residual prompt-injection risk.</strong> E16/E21/E22 found the system is not fully
+prompt-injection-hardened; 4 of 11 controlled adversarial cases succeeded at baseline, and E22's
+targeted remediation improved but did not eliminate this risk (still PARTIAL).</li>
+<li><strong>No autonomous legal decision-making.</strong> The system produces a checkable label and
+cited evidence for a human reviewer to confirm or overrule; it never auto-approves or
+auto-rejects an NDA, and is not a substitute for legal judgment.</li>
+<li><strong>Excessive-agency risk is avoided by exclusion, not by a hardened deployed control.</strong>
+The selective agent was tested and rejected (&sect;7) and is not present in the live runtime.</li>
+<li><strong>Business savings are modeled, not realized.</strong> The cost-to-serve figures (&sect;9)
+are a scenario model (C_total = C_AI + (1&nbsp;&minus;&nbsp;p_joint) &times; C_human) built from
+measured API cost and an assumed human-review rate/time, not observed production savings from an
+actual deployment.</li>
+</ul>
+
 <h2><span class="num">Evidence map</span></h2>
 <table class="evmap">
 <tr><th>Question</th><th>Evidence</th></tr>
@@ -352,7 +376,7 @@ on every verdict.</p>
 
 <div class="decision-grid">
   <div class="decision-card"><div class="tag baseline">Rule</div><div class="val">Baseline</div></div>
-  <div class="decision-card"><div class="tag benchmark">FULL-context GPT-5-mini</div><div class="val">Strongest measured benchmark configuration</div></div>
+  <div class="decision-card"><div class="tag benchmark">FULL-context GPT-5-mini</div><div class="val">Quality reference (strongest measured Joint result)</div></div>
   <div class="decision-card"><div class="tag retained">RAG top-5</div><div class="val">Retained prototype/runtime architecture</div></div>
   <div class="decision-card"><div class="tag rejected">Selective agent</div><div class="val">Tested and rejected</div></div>
   <div class="decision-card"><div class="tag rejected">Automatic routing/abstention</div><div class="val">Not adopted</div></div>
@@ -376,10 +400,20 @@ on every verdict.</p>
 run in this path (<a href="docs/architecture.md">docs/architecture.md</a>).</p>
 </div>
 
+<h2>CONCLUSION</h2>
+<p>The shipped runtime is bounded top-5 RAG on GPT-5-mini with the frozen P0 prompt, a structured
+parser, and an evidence validator (&sect;11) &mdash; not FULL-context, which is retained as the
+<strong>quality reference</strong> (strongest measured Joint result, &sect;5&ndash;6) rather than
+the served configuration, given RAG's bounded-cost/context profile. The selective agent was tested
+(&sect;7) and <strong>rejected</strong>: it added orchestration cost without a demonstrated quality
+benefit. No automatic confidence-based routing is active (&sect;10); the <strong>human reviewer is
+the final authority</strong> on every verdict, aided by a checkable label and cited, source-verified
+evidence rather than a black-box output.</p>
 <p style="margin-top:1.4em;">The project's strongest finding is not that one architecture wins
 every metric. It is that evidence-grounded review requires measuring the label and the evidence
 together, and that additional architectural complexity should be retained only when it improves
-that joint outcome enough to justify its cost and failure surface.</p>
+that joint outcome enough to justify its cost and failure surface. This is an evidence-based
+trade-off, not a claim of a finished, production-ready system (&sect;12, Limitations).</p>
 
 <footer>
 <p><strong>References</strong></p>

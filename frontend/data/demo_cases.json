@@ -1,0 +1,53 @@
+{
+  "_note": "5-8 minute demo seed cases. Every entry below references a real saved case already present in frontend/data/project-presentation.json (built by scripts/build_project_presentation_data.py) or a real saved experiment artifact — nothing here is a synthetic happy-path fabricated for the demo. Use with docs/demo_script.md.",
+  "cases": [
+    {
+      "role": "clean_rag_success",
+      "label": "Real successful RAG case",
+      "split": "TEST",
+      "documentId": "2",
+      "hypothesisId": "nda-19",
+      "caseId": "test::2::nda-19",
+      "sourceExperiment": "E17B / E20 (frontend/data/project-presentation.json: cases.items, caseKey 2::nda-19)",
+      "why": "All three saved systems (Rule, FULL, RAG) reach the expected label; FULL and RAG also supply evaluable, source-verified evidence."
+    },
+    {
+      "role": "retrieval_limited_failure",
+      "label": "Real retrieval-limited failure",
+      "split": "TEST",
+      "documentId": "1",
+      "hypothesisId": "nda-19",
+      "caseId": "test::1::nda-19",
+      "sourceExperiment": "E17B / E20 (frontend/data/project-presentation.json: cases.items, caseKey 1::nda-19)",
+      "why": "FULL succeeds with the whole NDA visible, while the relevant gold span is absent from RAG's final top-5 — an honest, disclosed residual-failure example, not a synthetic happy path."
+    },
+    {
+      "role": "contradiction_success",
+      "label": "Real Contradiction success",
+      "split": "TEST",
+      "documentId": "1",
+      "hypothesisId": "nda-2",
+      "caseId": "test::1::nda-2",
+      "sourceExperiment": "E17B / E20 (frontend/data/project-presentation.json: cases.items, caseKey 1::nda-2)",
+      "why": "A real Contradiction case where both FULL and RAG pair the correct label with gold-overlapping evidence."
+    },
+    {
+      "role": "deterministic_security_escalation",
+      "label": "Real deterministic/security escalation case",
+      "split": "n/a (synthetic adversarial fixture, per E21's own methodology)",
+      "testId": "E21-LLM01-04",
+      "sourceExperiment": "E21 (experiments/E21_owasp_llm_top10/results/final_report.json)",
+      "why": "An injection-style attack (evidence_padding_request) that bypassed the evidence-boundary control at E21 baseline — the case that motivated E22's injection guard and mandatory security_review_required escalation flag."
+    },
+    {
+      "role": "agent_experiment_case",
+      "label": "Real agent experiment case",
+      "split": "TRAIN",
+      "documentId": "160",
+      "hypothesisId": "nda-10",
+      "caseId": "train::160::nda-10",
+      "sourceExperiment": "E11 (frontend/data/project-presentation.json: cases.agentDemoCases)",
+      "why": "A saved, structured agent trace (action / tool name / result metadata / final decision, no hidden chain-of-thought) showing why the selective agent was tested and rejected. EXPERIMENTAL ONLY — not in the shipped runtime."
+    }
+  ]
+}

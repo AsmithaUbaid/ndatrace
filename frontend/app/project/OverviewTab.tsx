@@ -99,7 +99,7 @@ export function OverviewTab({ onNavigateToCases }: { onNavigateToCases: (request
       </Section>
 
       <ChapterDivider number="04" title="Can this operate?" />
-      <Section id="security" eyebrow="Security" title="What blocks production deployment?">
+      <Section id="security" eyebrow="Security & governance" title="We tested the system before trusting it">
         <SecuritySection />
       </Section>
 
@@ -189,7 +189,7 @@ function HeroMetric({ tone, value, label, source }: { tone: "sky" | "amber"; val
 
 function StoryNavigation() {
   return (
-    <nav className="sticky top-[57px] z-30 -mx-4 mt-5 overflow-x-auto border-y border-zinc-200/80 bg-[#faf9f7]/95 px-4 py-2 backdrop-blur-xl sm:-mx-6 sm:px-6" aria-label="Project story navigation">
+    <nav className="mt-5 overflow-x-auto rounded-2xl border border-zinc-200 bg-white/70 px-3 py-2" aria-label="Project story chapters">
       <div className="mx-auto flex w-max min-w-full justify-start gap-1 lg:justify-center">
         {STORY_NAV.map(([id, label]) => (
           <a key={id} href={`#${id}`} className="shrink-0 rounded-full px-3 py-1.5 text-xs font-medium text-zinc-500 hover:bg-white hover:text-zinc-900">
@@ -367,16 +367,17 @@ function PromptSelection() {
         ))}
       </div>
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <ChartShell title="More instruction weakened Contradiction handling" subtitle={charts.promptComparison.population}>
+        <ChartShell title="On this controlled Qwen prompt experiment, more instruction weakened Contradiction handling" subtitle={charts.promptComparison.population}>
           <div className="space-y-4">
             {story.metrics.map((row) => <div key={row.id}><MetricBar label={`${row.id} · Contradiction recall`} value={row.contradictionRecall} tone={row.id === "P0" ? "amber" : "zinc"} /><p className="text-right text-[10px] text-zinc-400">Macro-F1 {row.macroF1.toFixed(3)}</p></div>)}
           </div>
         </ChartShell>
         <div className="rounded-3xl border border-zinc-200 bg-white p-5">
           <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-zinc-400">P0 failure analysis · 88 errors</p>
-          <div className="mt-4 grid grid-cols-2 gap-3"><SmallFinding label="Retrieval-limited" value={`${story.failure.retrievalLimited}`} /><SmallFinding label="Reasoning / prompt-limited" value={`${story.failure.reasoningPromptLimited}`} /></div>
+          <div className="mt-4 grid grid-cols-2 gap-3"><SmallFinding label="Retrieval-limited" value={`${story.failure.retrievalLimited}`} /><SmallFinding label="Not retrieval-limited" value={`${story.failure.reasoningPromptLimited}`} /></div>
           <p className="mt-4 text-sm leading-6 text-zinc-700"><strong>{story.failure.carveoutIndicator} of {story.failure.nonRetrievalContradictionFailures}</strong> non-retrieval-limited Contradiction failures contained an exception or carve-out indicator.</p>
           <p className="mt-2 text-xs leading-5 text-zinc-500">{story.failure.caveat}</p>
+          <p className="mt-3 text-xs leading-5 text-zinc-600">82 of 88 errors remained even when relevant evidence was available; this motivated investigation of model and decision limitations rather than assuming retrieval was the dominant bottleneck.</p>
           <ProvenanceChip source={story.source} />
         </div>
       </div>
@@ -573,8 +574,10 @@ function OverviewFailurePointer({ onSeeCase }: { onSeeCase: (request?: CaseExplo
 }
 
 function MiniCaseSystem({ name, sub, result, tone, emphasis }: { name: string; sub?: string; result: { predictedLabel: string | null; evidence: string[]; l1Pass: boolean; l2Pass: boolean }; tone: "sky" | "amber"; emphasis?: boolean }) {
-  return <div className={`rounded-2xl border p-4 ${tone === "sky" ? "border-sky-200 bg-sky-50/60" : "border-amber-300 bg-amber-50/70"} ${emphasis ? "shadow-sm ring-1 ring-amber-300" : "opacity-90"}`}><div className="flex items-center justify-between"><div><h4 className="font-semibold text-zinc-900">{name}</h4>{sub && <p className="text-[9px] font-bold uppercase tracking-wide text-zinc-400">{sub}</p>}</div><VerdictPill label={result.predictedLabel} /></div><div className="mt-3 flex gap-2"><EvalBadge level="L1" pass={result.l1Pass} /><EvalBadge level="L2" pass={result.l2Pass} /></div><p className="mt-3 line-clamp-4 text-xs leading-5 text-zinc-600">{result.evidence[0] ?? "No evidence returned."}</p></div>;
+  return <div className={`rounded-2xl border p-4 ${tone === "sky" ? "border-sky-200 bg-sky-50/60" : "border-amber-300 bg-amber-50/70"} ${emphasis ? "shadow-sm ring-1 ring-amber-300" : "opacity-90"}`}><div className="flex items-center justify-between"><div><h4 className="font-semibold text-zinc-900">{name}</h4>{sub && <p className="text-[9px] font-bold uppercase tracking-wide text-zinc-400">{sub}</p>}</div><VerdictPill label={result.predictedLabel} /></div>{emphasis ? <div className="mt-4 space-y-2"><EvalMeaning title="L1 Structure" pass={result.l1Pass} text="Valid output and source-grounded evidence" /><EvalMeaning title="L2 Semantics" pass={result.l2Pass} text="Correct against human gold" /></div> : <div className="mt-3 flex gap-2"><EvalBadge level="L1" pass={result.l1Pass} /><EvalBadge level="L2" pass={result.l2Pass} /></div>}<p className="mt-3 text-[10px] font-bold uppercase tracking-wide text-zinc-400">Returned evidence</p><p className="mt-1 line-clamp-5 text-xs leading-5 text-zinc-600">{result.evidence[0] ?? "No evidence returned."}</p></div>;
 }
+
+function EvalMeaning({ title, pass, text }: { title: string; pass: boolean; text: string }) { return <div className={`rounded-xl px-3 py-2 ${pass ? "bg-emerald-50 text-emerald-900" : "bg-rose-50 text-rose-900"}`}><p className="text-[10px] font-bold uppercase tracking-wide">{title} {pass ? "✓" : "×"}</p><p className="mt-0.5 text-[10px] leading-4 opacity-75">{text}</p></div>; }
 
 function FailureAnalysis({ onSeeCases }: { onSeeCases: (request?: CaseExplorerRequest) => void }) {
   const c = charts.failureBreakdown;
@@ -607,7 +610,7 @@ function TransitionCases({ onSeeCase }: { onSeeCase: (request?: CaseExplorerRequ
   const retrievalCase = lookup(retrievalFeature?.caseKey);
   const reasoningCase = lookup(reasoningFeature?.caseKey);
   return <div className="grid gap-4 md:grid-cols-2">
-    <TransitionCase title="Prompt failure · evidence present, label missed" badge="E03" requirement={promptCase.requirement} evidence={promptCase.evidence} outcome={`${promptCase.prediction} → gold ${promptCase.goldLabel}`} l1={null} l2={false} failureType="Reasoning / prompt-limited" why={promptCase.why} />
+    <TransitionCase title="Model decision failure · evidence present, label missed" badge="E03" requirement={promptCase.requirement} evidence={promptCase.evidence} outcome={`${promptCase.prediction} → gold ${promptCase.goldLabel}`} l1={null} l2={false} failureType="Not retrieval-limited" why="Relevant evidence was available, so this case motivated investigation of model and decision limitations rather than assuming retrieval was the dominant bottleneck." />
     {retrievalCase && <TransitionCase title="Retrieval failure · gold fell outside top-5" badge="E20" requirement={retrievalCase.requirement} evidence={retrievalCase.goldEvidence[0] ?? "No gold span"} outcome={`RAG ${retrievalCase.architectures.rag.predictedLabel} → gold ${retrievalCase.goldLabel}`} l1={retrievalCase.architectures.rag.l1Pass} l2={retrievalCase.architectures.rag.l2Pass} failureType="Retrieval-limited" why={retrievalFeature?.why ?? "The saved top-5 omitted the relevant gold span."} onOpen={() => onSeeCase({ caseKey: retrievalFeature?.caseKey })} />}
     {reasoningCase && <TransitionCase title="Reasoning failure · right evidence, wrong label" badge="E20" requirement={reasoningCase.requirement} evidence={reasoningCase.architectures.rag.evidence[0] ?? reasoningCase.goldEvidence[0] ?? "No evidence"} outcome={`RAG ${reasoningCase.architectures.rag.predictedLabel} → gold ${reasoningCase.goldLabel}`} l1={reasoningCase.architectures.rag.l1Pass} l2={reasoningCase.architectures.rag.l2Pass} failureType="Reasoning / classification" why={reasoningFeature?.why ?? "The relevant evidence reached the model, but the semantic label was wrong."} onOpen={() => onSeeCase({ caseKey: reasoningFeature?.caseKey })} />}
     {agentCase && <TransitionCase title="Agent failure · tool called, no recovery" badge="E11 V2" requirement={agentCase.requirement} evidence={agentCase.agent.steps[0]?.result?.results?.[0]?.text ?? "Additional candidates were returned."} outcome={`${agentCase.agent.steps[0]?.action ?? "Tool"} → final ${agentCase.agent.prediction} · gold ${agentCase.goldLabel}`} l1={agentCase.agent.l1Pass} l2={agentCase.agent.l2Pass} failureType="Dynamic retrieval did not recover outcome" why={agentCase.why} />}
@@ -693,7 +696,11 @@ function AgentExperiments() {
   const story = p.causalStory.agent;
   return (
     <div className="space-y-7">
-      <div className="rounded-3xl border border-zinc-200 bg-white p-5"><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-zinc-400">Bounded controller design</p><Pipeline steps={story.design.flow} /><div className="mt-4 flex flex-wrap gap-2">{story.design.limits.map((limit) => <span key={limit} className="rounded-full bg-zinc-100 px-3 py-1 text-[11px] font-medium text-zinc-600">{limit}</span>)}</div></div>
+      <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
+        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-sky-700">Question</p>
+        <h3 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950">Did dynamic investigation earn its added complexity?</h3>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-zinc-600">Only a minority of residual failures were retrieval-fixable, so agent investigation had a narrow plausible target. The comparison below uses the same 150-case TRAIN_ARCH_v1 agent-evaluation population for every arm—never the final 2,091-case TEST result.</p>
+      </div>
       <div className="grid gap-3 md:grid-cols-3">
         <AgentStage number="1" title="Selective V1" headline={`${story.v1.selectiveRouted} / 150 routed`} detail={`${story.v1.selectiveToolCalls} tool calls`} caption={story.v1.stage1Caption} />
         <AgentStage number="2" title="Full-agent V1" headline={`${story.v1.fullToolCases} / ${story.v1.fullN} used tools`} detail="1.3% tool use" caption={story.v1.stage2Caption} />
@@ -701,17 +708,36 @@ function AgentExperiments() {
       </div>
       <div className="grid gap-4 lg:grid-cols-2"><Callout eyebrow="What V1 could mean" text={story.v1.hypotheses.join(" — or — ")} /><Callout eyebrow="What changed in V2" text={story.v2.change} /></div>
       <Callout eyebrow="Why V2?" text={story.v2.whyV2} />
+      <div className="overflow-x-auto rounded-3xl border border-zinc-200 bg-white shadow-sm">
+        <table className="w-full min-w-[860px] text-left text-sm">
+          <thead className="border-b border-zinc-200 bg-zinc-50 text-[10px] uppercase tracking-wide text-zinc-500"><tr><th className="px-5 py-3">Configuration</th><th className="px-3 py-3">Accuracy</th><th className="px-3 py-3">Joint</th><th className="px-3 py-3">Contradiction recall</th><th className="px-3 py-3">Tool use</th><th className="px-3 py-3">Useful recovery</th><th className="px-3 py-3">Incremental cost</th><th className="px-5 py-3">Incremental latency</th></tr></thead>
+          <tbody>{story.comparison.map((row) => <tr key={row.name} className={`border-b border-zinc-100 last:border-0 ${row.name === "Base RAG" ? "bg-sky-50/40" : ""}`}><td className="px-5 py-4"><strong className="text-zinc-900">{row.name}</strong><span className="mt-0.5 block text-[10px] text-zinc-400">{row.role} · matched n=150</span></td><td className="px-3 py-4">{row.accuracy}%</td><td className="px-3 py-4 font-semibold">{row.joint}%</td><td className="px-3 py-4">{row.contradictionRecall}%</td><td className="px-3 py-4">{row.toolUse === null ? "—" : `${row.toolUse}%`}</td><td className="px-3 py-4">{row.usefulRecoveries ?? "—"}</td><td className="px-3 py-4">{row.incrementalCost === null ? "—" : `+$${row.incrementalCost.toFixed(6)}/case`}</td><td className="px-5 py-4">{row.incrementalLatency === null ? "—" : `+${row.incrementalLatency.toFixed(2)}s`}</td></tr>)}</tbody>
+        </table>
+        <p className="border-t border-zinc-100 px-5 py-3 text-xs leading-5 text-zinc-500">{story.evaluationNote}</p>
+      </div>
+      <details className="rounded-2xl border border-zinc-200 bg-white px-5 py-4">
+        <summary className="cursor-pointer text-xs font-semibold text-zinc-700">Saved operational totals</summary>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {story.comparison.filter((row) => row.modelCalls !== null).map((row) => <div key={row.name} className="rounded-2xl bg-zinc-50 p-4"><p className="text-xs font-semibold text-zinc-900">{row.name}</p><p className="mt-2 text-xs leading-5 text-zinc-500">{row.modelCalls} model calls · {row.inputTokens?.toLocaleString()} input tokens · {row.outputTokens?.toLocaleString()} output tokens · {((row.inputTokens ?? 0) + (row.outputTokens ?? 0)).toLocaleString()} total tokens</p></div>)}
+        </div>
+        <p className="mt-3 text-[11px] text-zinc-400">Base-RAG operational totals are unavailable in these incremental-agent ledgers, so they are not inferred.</p>
+      </details>
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="rounded-3xl border border-zinc-200 bg-white p-5"><p className="text-[10px] font-bold uppercase tracking-wide text-zinc-400">Tool use → useful recovery</p><div className="mt-4 grid grid-cols-2 gap-3"><SmallFinding label="Agent V1" value="1.3% → 0/2" /><SmallFinding label="Agent V2" value="20% → 0/30" /></div></div>
+        <div className="rounded-3xl border border-amber-200 bg-amber-50/60 p-5"><p className="text-[10px] font-bold uppercase tracking-wide text-amber-700">Cost of autonomy</p><div className="mt-4 grid grid-cols-2 gap-3"><SmallFinding label="Agent V1" value="+$0.001515 · +5.87s" /><SmallFinding label="Agent V2" value="+$0.002659 · +10.36s" /></div></div>
+      </div>
       <div className="grid gap-6 lg:grid-cols-[1fr_0.8fr]">
         <ChartShell title="Joint success after adding agent behavior" subtitle={charts.agentComparison.population}>
           <div className="space-y-4">{story.quality.map((row) => <MetricBar key={row.name} label={row.name} value={row.joint} tone={row.name === "Base RAG" ? "sky" : "rose"} />)}</div>
         </ChartShell>
         <div className="rounded-3xl border border-rose-200 bg-rose-50 p-6">
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-rose-700">Big takeaway</p>
-          <p className="mt-3 text-3xl font-semibold text-zinc-950">{story.takeaway.toolUsePct}% tool use.</p>
-          <p className="mt-1 text-3xl font-semibold text-zinc-950">{story.takeaway.usefulRecoveries} useful recoveries.</p>
+          <p className="mt-3 text-3xl font-semibold text-zinc-950">Tool use increased.</p>
+          <p className="mt-1 text-3xl font-semibold text-zinc-950">Value did not.</p>
           <p className="mt-4 text-sm leading-6 text-zinc-600">{story.takeaway.body}</p>
           <p className="mt-2 text-sm leading-6 text-zinc-600">{story.takeaway.conclusion}</p>
-          <div className="mt-5 inline-flex rounded-full bg-rose-700 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white">Reject agent</div>
+          <div className="mt-5 inline-flex rounded-full bg-rose-700 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white">Reject tested agent</div>
+          <p className="mt-3 text-xs leading-5 text-zinc-500">This conclusion applies to the tested two-tool retrieval-agent design on this matched 150-case evaluation, not to agents in general.</p>
         </div>
       </div>
       <div className="grid gap-3 sm:grid-cols-4"><SmallFinding label="V2 tool calls" value={`${story.v2.getMore} GET_MORE · ${story.v2.follow} FOLLOW`} /><SmallFinding label="Outcome proxy" value={`${story.v2.useful} useful · ${story.v2.neutral} neutral · ${story.v2.harmful} harmful`} /><SmallFinding label="Fallbacks" value={`${story.v2.fallbacks}`} /><SmallFinding label="Stops" value={`${story.v2.duplicateStops} duplicate · ${story.v2.invalidStops} invalid · ${story.v2.maxToolStops} max-tool`} /></div>
@@ -743,10 +769,16 @@ function RoutingReview() {
 
 function SecuritySection() {
   const s = charts.securitySummary;
+  const story = p.securityStory;
   return (
-    <div className="space-y-6">
-      <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-        <ChartShell title="E21 OWASP LLM Top 10 baseline" subtitle="Ten categories assessed; status is not a security score">
+    <div className="space-y-8">
+      <p className="-mt-2 max-w-3xl text-sm leading-6 text-zinc-600">Security evaluation was treated as an engineering experiment, not a compliance checkbox.</p>
+      <div className="rounded-3xl border border-sky-200 bg-gradient-to-br from-white to-sky-50/70 p-5 shadow-sm">
+        <Pipeline steps={story.process} />
+        <p className="mt-4 text-center text-sm leading-6 text-zinc-600">{story.processNote}</p>
+      </div>
+
+      <ChartShell title="E21 security baseline" subtitle={`${story.baselineLabel} · Ten categories assessed; status is not a compliance score`}>
           <div className="mb-5 grid grid-cols-3 gap-3">
             <SecurityCount label="Pass" count={s.baseline.counts.PASS} tone="emerald" />
             <SecurityCount label="Partial" count={s.baseline.counts.PARTIAL} tone="amber" />
@@ -755,25 +787,43 @@ function SecuritySection() {
           <div className="grid gap-2 sm:grid-cols-2">
             {s.baseline.categories.map((row) => <SecurityRow key={row.owasp_id} id={row.owasp_id} name={row.category} status={row.result} />)}
           </div>
-        </ChartShell>
-        <div className="space-y-4">
-          <SecurityBlocker title="Prompt injection" lines={[`E16: ${s.e16PromptInjection.successes}/${s.e16PromptInjection.attempts} injection-style attacks succeeded`, `E21 current RAG: ${s.e21PromptInjection.successes}/${s.e21PromptInjection.attempts} fresh attacks succeeded`]} />
-          <SecurityBlocker title="Unbounded consumption" lines={["Budget setting was not enforced", "Request, input, concurrency, and rate limits were missing at E21 baseline"]} />
-        </div>
-      </div>
-      <div className="rounded-3xl border border-sky-200 bg-sky-50/70 p-5">
-        <div className="flex flex-wrap items-center justify-between gap-2"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-800">Targeted remediation · E22</p><ProvenanceChip source={s.remediation.source} /></div>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <RemediationItem title="Prompt injection" value={s.remediation.items.LLM01.targeted_regression} />
-          <RemediationItem title="Unbounded consumption" value={s.remediation.items.LLM10.targeted_regression} />
-        </div>
-        <p className="mt-4 text-sm text-zinc-600">{s.remediation.story}</p>
-      </div>
+          <p className="mt-5 text-xs leading-5 text-zinc-500">E21 remains immutable. E22 did not rerun all ten categories: only LLM01 and LLM10 were targeted for verification, with limited LLM03 dependency remediation. All other assessments retain their E21 status.</p>
+      </ChartShell>
+
       <div>
-        <div className="mb-3"><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-rose-700">Real saved security cases</p><h3 className="mt-1 text-lg font-semibold text-zinc-950">Source-valid does not mean safe</h3></div>
+        <div className="mb-4"><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-700">Targeted remediation · E22</p><h3 className="mt-1 text-2xl font-semibold tracking-tight text-zinc-950">What changed after the security review?</h3></div>
+        <div className="grid gap-5 lg:grid-cols-2">{story.remediations.map((item) => <SecurityRemediation key={item.id} item={item} />)}</div>
+        <div className="mt-4 overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+          <div className="grid grid-cols-[1.2fr_0.7fr_0.15fr_0.7fr] gap-3 border-b border-zinc-100 bg-zinc-50 px-4 py-2 text-[10px] font-bold uppercase tracking-wide text-zinc-400"><span>Finding</span><span>E21</span><span /><span>E22</span></div>
+          {story.remediations.map((item) => <div key={item.id} className="grid grid-cols-[1.2fr_0.7fr_0.15fr_0.7fr] items-center gap-3 border-b border-zinc-100 px-4 py-3 text-xs last:border-0"><span className="font-medium text-zinc-800">{item.name}</span><SecurityStatus value={item.before} /><span className="text-zinc-300">→</span><SecurityStatus value={item.after} /></div>)}
+        </div>
+      </div>
+
+      <div className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm">
+        <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-sky-700">Security architecture</p>
+        <h3 className="mt-1 text-lg font-semibold text-zinc-950">Controls surround the model</h3>
+        <div className="mt-4"><Pipeline steps={story.architecture} /></div>
+        <div className="mt-5 grid gap-3 md:grid-cols-3">{story.controlZones.map((zone) => <div key={zone.label} className="rounded-2xl bg-zinc-50 p-4"><p className="text-[10px] font-bold uppercase tracking-wide text-zinc-500">{zone.label}</p><ul className="mt-2 space-y-1 text-xs text-zinc-600">{zone.items.map((item) => <li key={item}>✓ {item}</li>)}</ul></div>)}</div>
+      </div>
+
+      <div>
+        <div className="mb-3"><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-amber-700">Saved E21 adversarial fixtures</p><h3 className="mt-1 text-2xl font-semibold tracking-tight text-zinc-950">Why source validation alone is not enough</h3><p className="mt-2 text-sm leading-6 text-zinc-600">These adversarial fixtures demonstrate why provenance checks and content-safety controls must be separate.</p></div>
         <div className="grid gap-4 lg:grid-cols-2">
           {s.examples.map((example) => <SecurityExample key={example.testId} example={example} />)}
         </div>
+        <p className="mt-4 rounded-2xl border border-amber-200 bg-amber-50/70 px-4 py-3 text-sm leading-6 text-zinc-700">This finding motivated E22&apos;s injection guard and mandatory human-review flag.</p>
+      </div>
+
+      <div>
+        <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-zinc-400">What the security work proved</p>
+        <div className="mt-3 grid gap-4 md:grid-cols-3">{story.proved.map((group, index) => <div key={group.label} className={`rounded-3xl border p-5 ${index === 0 ? "border-emerald-200 bg-emerald-50/60" : index === 1 ? "border-sky-200 bg-sky-50/60" : "border-amber-200 bg-amber-50/60"}`}><h3 className="text-sm font-bold uppercase tracking-wide text-zinc-800">{group.label}</h3><ul className="mt-3 space-y-2 text-xs leading-5 text-zinc-600">{group.items.map((item) => <li key={item}>✓ {item}</li>)}</ul></div>)}</div>
+      </div>
+
+      <div className="rounded-3xl border border-zinc-200 bg-zinc-950 p-6 text-white">
+        <div className="flex flex-wrap items-center justify-between gap-2"><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-400">Security decision</p><ProvenanceChip source={story.source} /></div>
+        <p className="mt-3 max-w-4xl text-sm leading-6 text-zinc-200">{story.decision}</p>
+        <p className="mt-4 rounded-2xl bg-white/10 px-4 py-3 text-sm font-medium leading-6 text-white"><span className="text-emerald-300">Current security posture · </span>{story.posture}</p>
+        <div className="mt-5 grid gap-5 sm:grid-cols-2"><SecurityDecisionList title="What ships" items={story.ships} positive /><SecurityDecisionList title="What does not ship" items={story.doesNotShip} /></div>
       </div>
     </div>
   );
@@ -813,48 +863,47 @@ const COST_LINE_COLOR: Record<string, string> = { Manual: "#a1a1aa", Rule: "#717
 
 function CostToServeCurve() {
   const c = charts.costAtScaleCurve;
-  const width = 640;
-  const height = 260;
-  const padL = 56;
-  const padB = 32;
-  const padT = 16;
-  const padR = 16;
+  const width = 760;
+  const height = 330;
+  const padL = 70;
+  const padB = 45;
+  const padT = 24;
+  const padR = 112;
   const innerW = width - padL - padR;
   const innerH = height - padT - padB;
   const maxY = Math.max(...c.series.flatMap((s) => s.costPerVolume));
   const x = (i: number) => padL + (i / (c.volumes.length - 1)) * innerW;
   const y = (v: number) => padT + innerH - (v / maxY) * innerH;
   const midIndex = c.volumes.indexOf(500);
+  const reference = c.series.map((s) => ({ ...s, at500: s.costPerVolume[midIndex] }));
+  const linePath = (values: number[]) => values.map((v, i) => `${i === 0 ? "M" : "L"} ${x(i)} ${y(v)}`).join(" ");
   return (
-    <ChartShell title="Human fallback dominates the economics" subtitle={c.population}>
-      <div className="mb-3 inline-flex rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-amber-800">Modeled scenario · not realized production savings</div>
-      <p className="mb-4 text-xs text-zinc-500">17 requirements / NDA · 5 min human review / failed requirement · $40/hour human review</p>
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-full" role="img" aria-label="Annual modeled cost vs. NDA volume by system">
-        {[0, 0.25, 0.5, 0.75, 1].map((t) => (
-          <line key={t} x1={padL} x2={width - padR} y1={padT + innerH * t} y2={padT + innerH * t} stroke="#f4f4f5" strokeWidth={1} />
-        ))}
-        {c.volumes.map((v, i) => (
-          <text key={v} x={x(i)} y={height - 8} textAnchor="middle" className="fill-zinc-400" style={{ fontSize: 10 }}>{v}</text>
-        ))}
-        <text x={8} y={padT + 4} className="fill-zinc-400" style={{ fontSize: 10 }}>${formatThousands(maxY)}</text>
-        <text x={8} y={padT + innerH} className="fill-zinc-400" style={{ fontSize: 10 }}>$0</text>
-        {c.series.map((s) => (
-          <polyline key={s.name} fill="none" stroke={COST_LINE_COLOR[s.name] ?? "#a1a1aa"} strokeWidth={2} points={s.costPerVolume.map((v, i) => `${x(i)},${y(v)}`).join(" ")} />
-        ))}
-        {c.series.map((s) => (
-          <circle key={`${s.name}-mid`} cx={x(midIndex)} cy={y(s.costPerVolume[midIndex])} r={3.5} fill={COST_LINE_COLOR[s.name] ?? "#a1a1aa"} />
-        ))}
-      </svg>
-      <div className="mt-3 flex flex-wrap gap-4 text-[11px] text-zinc-500">
-        {c.series.map((s) => (
-          <span key={s.name} className="inline-flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full" style={{ background: COST_LINE_COLOR[s.name] ?? "#a1a1aa" }} />
-            {s.name} · at 500 ≈ ${formatThousands(s.costPerVolume[midIndex])}
-          </span>
-        ))}
+    <div className="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-[0_18px_50px_-36px_rgba(24,24,27,0.45)]">
+      <div className="border-b border-zinc-100 px-5 py-5 sm:px-6">
+        <div className="flex flex-wrap items-start justify-between gap-3"><div><h3 className="text-lg font-semibold tracking-tight text-zinc-950">At enterprise review volumes, human fallback drives the economics</h3><p className="mt-1 max-w-3xl text-xs leading-5 text-zinc-500">{c.population}</p></div><span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-amber-800">Modeled · not realized savings</span></div>
+        <p className="mt-3 text-xs text-zinc-500">17 requirements per NDA · 5 minutes human review per failed requirement · $40/hour</p>
       </div>
-      <p className="mt-3 text-[10px] uppercase tracking-wide text-zinc-400">x-axis: annual NDA volume</p>
-    </ChartShell>
+      <div className="grid gap-0 xl:grid-cols-[minmax(0,1fr)_250px]">
+        <div className="min-w-0 p-4 sm:p-6">
+          <svg viewBox={`0 0 ${width} ${height}`} className="w-full" role="img" aria-label="Expected annual review cost by NDA volume and review system">
+            <rect x={x(midIndex) - 18} y={padT} width={36} height={innerH} rx={10} fill="#fafafa" />
+            {[0, 0.25, 0.5, 0.75, 1].map((t) => { const value=maxY*(1-t); return <g key={t}><line x1={padL} x2={width-padR} y1={padT+innerH*t} y2={padT+innerH*t} stroke="#e4e4e7" strokeWidth={1} /><text x={padL-12} y={padT+innerH*t+4} textAnchor="end" fill="#a1a1aa" style={{fontSize:10}}>{value===0?"$0":`$${formatThousands(value)}`}</text></g>; })}
+            <line x1={x(midIndex)} x2={x(midIndex)} y1={padT} y2={padT+innerH} stroke="#d4d4d8" strokeDasharray="4 5" />
+            <text x={x(midIndex)} y={padT-8} textAnchor="middle" fill="#71717a" style={{fontSize:9,fontWeight:700}}>REFERENCE · 500</text>
+            {c.volumes.map((v,i)=><g key={v}><line x1={x(i)} x2={x(i)} y1={padT+innerH} y2={padT+innerH+5} stroke="#d4d4d8" /><text x={x(i)} y={height-12} textAnchor="middle" fill="#a1a1aa" style={{fontSize:10}}>{v.toLocaleString()}</text></g>)}
+            {c.series.map((s)=><path key={s.name} d={linePath(s.costPerVolume)} fill="none" stroke={COST_LINE_COLOR[s.name]??"#a1a1aa"} strokeWidth={s.name==="FULL"||s.name==="RAG"?3:2.4} strokeLinecap="round" strokeLinejoin="round" opacity={s.name==="Manual"?0.75:1} />)}
+            {c.series.map((s)=><g key={`${s.name}-points`}>{s.costPerVolume.map((v,i)=><circle key={i} cx={x(i)} cy={y(v)} r={i===midIndex?5:2.5} fill="white" stroke={COST_LINE_COLOR[s.name]??"#a1a1aa"} strokeWidth={i===midIndex?3:2} />)}<text x={width-padR+12} y={y(s.costPerVolume.at(-1)??0)+4} fill={COST_LINE_COLOR[s.name]??"#71717a"} style={{fontSize:10,fontWeight:700}}>{s.name} · ${formatThousands(s.costPerVolume.at(-1)??0)}</text></g>)}
+            <text x={padL+innerW/2} y={height-1} textAnchor="middle" fill="#a1a1aa" style={{fontSize:9,fontWeight:600}}>ANNUAL NDA VOLUME</text>
+          </svg>
+        </div>
+        <aside className="border-t border-zinc-100 bg-zinc-50/60 p-5 xl:border-l xl:border-t-0">
+          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-zinc-400">At 500 NDAs / year</p>
+          <div className="mt-4 space-y-2.5">{reference.map((row)=><div key={row.name} className={`rounded-xl border px-3 py-2.5 ${row.name==="FULL"?"border-sky-200 bg-sky-50":row.name==="RAG"?"border-amber-200 bg-amber-50":"border-zinc-200 bg-white"}`}><div className="flex items-center justify-between gap-3"><span className="inline-flex items-center gap-2 text-xs font-medium text-zinc-700"><span className="h-2 w-2 rounded-full" style={{background:COST_LINE_COLOR[row.name]??"#a1a1aa"}} />{row.name}</span><strong className="text-sm tabular-nums text-zinc-950">${formatThousands(row.at500)}</strong></div></div>)}</div>
+          <div className="mt-5 rounded-2xl bg-zinc-900 p-4 text-white"><p className="text-[10px] font-bold uppercase tracking-wide text-zinc-400">What matters</p><p className="mt-2 text-xs leading-5 text-zinc-200">Inference is a small part of total cost. Joint failures—and the human review they trigger—drive the modeled difference.</p></div>
+          <p className="mt-4 text-[10px] leading-4 text-zinc-400">Expected review economics under project assumptions, not guaranteed ROI or realized customer savings.</p>
+        </aside>
+      </div>
+    </div>
   );
 }
 
@@ -969,9 +1018,10 @@ function AgentStage({ number, title, headline, detail, caption }: { number: stri
 function RoutingStat({ label, value }: { label: string; value: number }) { return <div className="mt-3"><div className="flex justify-between text-[10px] text-zinc-500"><span>{label}</span><span>{value}%</span></div><div className="mt-1 h-1.5 rounded-full bg-white"><div className="h-full rounded-full bg-sky-500" style={{ width: `${value}%` }} /></div></div>; }
 function SecurityCount({ label, count, tone }: { label: string; count: number; tone: "emerald" | "amber" | "rose" }) { const cls={emerald:"bg-emerald-50 text-emerald-800",amber:"bg-amber-50 text-amber-900",rose:"bg-rose-50 text-rose-800"}[tone]; return <div className={`rounded-2xl p-4 text-center ${cls}`}><div className="text-2xl font-semibold">{count}</div><div className="text-[10px] font-bold uppercase tracking-wide">{label}</div></div>; }
 function SecurityRow({ id, name, status }: { id: string; name: string; status: string }) { const cls=status==="PASS"?"bg-emerald-100 text-emerald-800":status==="FAIL"?"bg-rose-100 text-rose-800":"bg-amber-100 text-amber-900"; return <div className="flex items-center justify-between gap-3 rounded-xl border border-zinc-100 px-3 py-2"><div><span className="text-[10px] text-zinc-400">{id}</span><p className="text-xs font-medium text-zinc-700">{name}</p></div><span className={`rounded-full px-2 py-1 text-[9px] font-bold ${cls}`}>{status}</span></div>; }
-function SecurityBlocker({ title, lines }: { title: string; lines: string[] }) { return <div className="rounded-3xl border border-rose-200 bg-rose-50 p-5"><div className="inline-flex rounded-full bg-rose-700 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">Fail</div><h3 className="mt-3 text-lg font-semibold text-zinc-950">{title}</h3><ul className="mt-3 space-y-2 text-sm leading-5 text-zinc-600">{lines.map((line) => <li key={line} className="flex gap-2"><span className="text-rose-500">×</span>{line}</li>)}</ul></div>; }
-function SecurityExample({ example }: { example: (typeof charts.securitySummary.examples)[number] }) { return <article className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm"><div className="flex flex-wrap items-center justify-between gap-2"><div><p className="text-[10px] font-bold uppercase tracking-wide text-zinc-400">{example.testId} · {example.family.replaceAll("_", " ")}</p><p className="mt-1 text-xs text-zinc-500">{example.population}</p></div><div className="flex gap-2"><EvalBadge level="L1" pass={example.l1Pass} /><span className={`rounded-full px-2.5 py-1 text-[10px] font-bold ${example.securityPass ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"}`}>Security {example.securityPass ? "PASS" : "FAIL"}</span></div></div><p className="mt-4 text-[10px] font-bold uppercase tracking-wide text-zinc-400">Malicious document text</p><blockquote className="mt-2 rounded-xl bg-rose-50 p-3 font-mono text-xs leading-5 text-zinc-700">{example.maliciousClause}</blockquote><div className="mt-3 rounded-xl bg-zinc-50 p-3"><p className="text-xs font-semibold text-zinc-800">System returned · {example.prediction}</p><p className="mt-1 text-xs leading-5 text-zinc-500">{example.attackOutcome}</p></div></article>; }
-function RemediationItem({ title, value }: { title: string; value: string }) { return <div className="rounded-2xl bg-white p-4"><p className="text-xs font-medium text-zinc-500">{title}</p><p className="mt-1 text-sm font-semibold text-zinc-900">{value}</p></div>; }
+function SecurityStatus({ value }: { value: string }) { const cls=value==="PASS"?"bg-emerald-100 text-emerald-800":value==="FAIL"?"bg-rose-100 text-rose-800":"bg-amber-100 text-amber-900"; return <span className={`w-fit rounded-full px-2.5 py-1 text-[10px] font-bold ${cls}`}>{value}</span>; }
+function SecurityRemediation({ item }: { item: (typeof p.securityStory.remediations)[number] }) { const positive=item.after==="PASS"; return <article className={`rounded-3xl border p-5 ${positive?"border-emerald-200 bg-emerald-50/45":"border-amber-200 bg-amber-50/45"}`}><div className="flex items-start justify-between gap-3"><div><p className="font-mono text-xs font-bold text-zinc-400">{item.id}</p><h4 className="mt-1 text-lg font-semibold text-zinc-950">{item.name}</h4></div><div className="flex items-center gap-2"><SecurityStatus value={item.before} /><span className="text-zinc-300">→</span><SecurityStatus value={item.after} /></div></div><div className="mt-5 grid gap-4 sm:grid-cols-2"><div><p className="text-[10px] font-bold uppercase tracking-wide text-zinc-400">Controls added</p><ul className="mt-2 space-y-1.5 text-xs leading-5 text-zinc-700">{item.controls.map((line)=><li key={line}>✓ {line}</li>)}</ul></div><div><p className="text-[10px] font-bold uppercase tracking-wide text-zinc-400">Verification</p><ul className="mt-2 space-y-1.5 text-xs leading-5 text-zinc-700">{item.verification.map((line)=><li key={line}>✓ {line}</li>)}</ul></div></div><p className="mt-4 rounded-xl bg-white/80 px-3 py-2 text-xs leading-5 text-zinc-600"><strong>Residual risk:</strong> {item.residual}</p></article>; }
+function SecurityExample({ example }: { example: (typeof charts.securitySummary.examples)[number] }) { return <article className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm"><div className="flex flex-wrap items-start justify-between gap-2"><div><p className="inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wide text-amber-900">Adversarial security fixture</p><p className="mt-2 text-[10px] font-bold uppercase tracking-wide text-zinc-400">{example.testId} · {example.family.replaceAll("_", " ")}</p><p className="mt-1 text-xs text-zinc-500">Saved E21 adversarial fixture · {example.population}</p></div><div className="flex gap-2"><EvalBadge level="L1" pass={example.l1Pass} /><span className={`rounded-full px-2.5 py-1 text-[10px] font-bold ${example.securityPass ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"}`}>Security {example.securityPass ? "PASS" : "FAIL"}</span></div></div><div className="mt-4 grid gap-2 sm:grid-cols-2"><p className="rounded-xl bg-emerald-50 p-3 text-[11px] leading-5 text-emerald-900"><strong>L1 PASS:</strong> returned evidence genuinely came from the submitted document.</p><p className="rounded-xl bg-rose-50 p-3 text-[11px] leading-5 text-rose-900"><strong>Security FAIL:</strong> the purpose-built document contained malicious instructions that influenced model behavior.</p></div><p className="mt-4 text-[10px] font-bold uppercase tracking-wide text-zinc-400">Malicious fixture text</p><blockquote className="mt-2 rounded-xl bg-rose-50 p-3 font-mono text-xs leading-5 text-zinc-700">{example.maliciousClause}</blockquote><div className="mt-3 rounded-xl bg-zinc-50 p-3"><p className="text-xs font-semibold text-zinc-800">System returned · {example.prediction}</p><p className="mt-1 text-xs leading-5 text-zinc-500">{example.attackOutcome}</p></div></article>; }
+function SecurityDecisionList({ title, items, positive=false }: { title: string; items: string[]; positive?: boolean }) { return <div><p className={`text-[10px] font-bold uppercase tracking-wide ${positive?"text-emerald-300":"text-amber-300"}`}>{title}</p><ul className="mt-2 space-y-1.5 text-xs text-zinc-300">{items.map((item)=><li key={item}>{positive?"✓":"—"} {item}</li>)}</ul></div>; }
 function CostBar({ label, value, max }: { label: string; value: number; max: number }) { return <div><div className="mb-2 flex justify-between text-sm"><span className="font-medium text-zinc-700">{label}</span><span className="font-semibold tabular-nums text-zinc-900">${value.toFixed(2)}</span></div><div className="h-4 overflow-hidden rounded-md bg-zinc-100"><div className={`h-full rounded-md ${label === "RAG" ? "bg-amber-500" : label === "FULL" ? "bg-sky-500" : "bg-zinc-400"}`} style={{ width: `${(value / max) * 100}%` }} /></div></div>; }
 function Checklist({ title, items, tone, icon }: { title: string; items: readonly string[]; tone: "emerald" | "rose"; icon: string }) { return <div className={`rounded-3xl border p-6 ${tone === "emerald" ? "border-emerald-200 bg-emerald-50/70" : "border-rose-200 bg-rose-50/70"}`}><h3 className={`text-sm font-bold uppercase tracking-wide ${tone === "emerald" ? "text-emerald-800" : "text-rose-800"}`}>{title}</h3><ul className="mt-5 space-y-3">{items.map((item) => <li key={item} className="flex gap-3 text-sm text-zinc-700"><span className={tone === "emerald" ? "text-emerald-600" : "text-rose-600"}>{icon}</span>{item}</li>)}</ul></div>; }
 function Legend({ color, label }: { color: string; label: string }) { return <span className="inline-flex items-center gap-1.5"><span className={`h-2 w-2 rounded-full ${color}`} />{label}</span>; }

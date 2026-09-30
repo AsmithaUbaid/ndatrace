@@ -28,8 +28,11 @@ from pipeline.evidence_validator import validate_evidence
 from pipeline.frozen_rag import FrozenRagRetriever, RetrievedChunk, join_context
 from pipeline.injection_guard import detect_suspicious_instructions
 from pipeline.model_gateway import ModelError, ModelGateway
+from pipeline.config import settings
 
-MODEL = "openai/gpt-5-mini"
+# Single source of truth: pipeline/config.py's settings.default_model
+# (default "openai/gpt-5-mini", see that file's comment for the ADR trail).
+MODEL = settings.default_model
 MODEL_MAX_RETRIES = 1
 MODEL_TIMEOUT_SECONDS = 60
 PROMPT_PATH = Path(__file__).resolve().parent.parent / "prompts/reconstruction_v2/gpt_p0.txt"

@@ -120,8 +120,12 @@ table), plus `docs/architecture.md` §2, for the full record of what was tried a
    confirms a quote came from the document, not that the document's content is trustworthy.
 3. **No selective-review/abstention policy was adopted** (E15) — every deterministic routing
    policy tested either left a large share of failures silently unreviewed or required an
-   unacceptable review workload. The runtime evidence validator remains a structural
-   source-integrity check only, not a general uncertainty detector.
+   unacceptable review workload. Automatic uncertainty routing was evaluated but not adopted
+   because the tested signal did not reliably isolate errors. The prototype escalates
+   deterministic/security failures (E22's injection guard), but it cannot automatically detect
+   every semantically wrong verdict — human review therefore remains mandatory. The runtime
+   evidence validator remains a structural source-integrity check only, not a general uncertainty
+   detector.
 4. **A known, systematic weakness in exception/carve-out clause reconciliation**, originally found
    in the pre-reconstruction golden battery (hand-built negative test cases found a 100% failure
    rate, 4/4, on documents where a specific exception clause overrides an apparent general rule) —
@@ -156,7 +160,7 @@ agent; see `docs/architecture.md`.
 
 ## Where to look for more detail
 
-- `docs/experiment_registry.md` — the reconstruction-v2 experiment ledger (E00–E20), with per-experiment status and artifact paths
+- `docs/experiment_registry.md` — the reconstruction-v2 experiment ledger (E00–E22), with per-experiment status and artifact paths
 - `docs/architecture_decisions/INDEX.md` — reconstruction-v2 ADRs (ADR-012: E20's quality-reference-vs-production-oriented FULL/RAG finding) plus the historical ADR-001–ADR-011 status table
 - `docs/architecture.md` — current implementation, traced directly from code
 - `docs/evaluation_case_design.md` — the regression/robustness/security test taxonomy

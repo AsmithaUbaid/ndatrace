@@ -4,7 +4,7 @@ Status: **Completed reconstruction-v2; retained as the precommitted project cont
 document froze the project's definition before reconstruction work began (E00 onward) and is kept
 unmodified as the record of what was committed to in advance — reconstruction-v2 (E00–E19) is now
 complete and its final result is documented in `docs/architecture.md`/`docs/experiment_registry.md`.
-It superseded ad hoc framing in `CLAUDE.md`/planning-doc prose where the two conflicted — see
+It superseded ad hoc framing in local planning prose where the two conflicted — see
 Contradictions section at the end.
 
 ## 1. Problem Definition
@@ -208,7 +208,7 @@ This repository is **not** at the pre-reconstruction stage the source instructio
 
 1. **Project maturity mismatch.** The instructions frame this as defining a contract
    "before any reconstruction work begins," with repository reconstruction as a not-yet-
-   started Part 2. In reality, per `CLAUDE.md`, the project has already: built the full
+   started Part 2. In reality, the project had already built the full
    pipeline, run Oracle (B04), selected a model (Gemini 2.5 Flash Lite) via an ADR, run all
    nine rounds of retrieval experiments, frozen the architecture (RAG + selective agent,
    T031, 2026-09-23), built backend + frontend, run performance/reliability tests, and run

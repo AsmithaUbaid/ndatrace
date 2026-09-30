@@ -30,6 +30,8 @@ export type RequirementResult = {
   source_valid: boolean | null;
   needs_human_review: boolean;
   review_reason: string | null;
+  security_review_required: boolean;
+  security_flags: string[];
   sources: RetrievedChunk[];
   retrieved_chunks: RetrievedChunk[];
   agent_used: boolean;
@@ -68,6 +70,8 @@ export type FinalReviewResponse = {
   source_valid: boolean | null;
   needs_human_review: boolean;
   review_reason: string | null;
+  security_review_required: boolean;
+  security_flags: string[];
   model: string;
   latency_ms: number | null;
   input_tokens: number | null;

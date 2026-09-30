@@ -65,6 +65,11 @@ achieved higher quality.
 - **E15 did not establish a sufficiently effective general selective-routing policy.** Every
   routing signal tested either left a large share of failures unreviewed or required an
   unacceptable review workload; no ACCEPT/REVIEW or ACCEPT/ABSTAIN policy is active in this path.
+  Automatic uncertainty routing was evaluated but not adopted because the tested signal did not
+  reliably isolate errors. The prototype escalates deterministic/security failures (parse errors,
+  invalid labels, unsupported quotes, E22's prompt-injection guard) via the `security_review_required`
+  flag, but it cannot automatically detect every semantically wrong verdict. Human review therefore
+  remains mandatory on every case, not just flagged ones.
 - **The human reviewer remains the final authority.** This system produces a checkable label plus
   cited evidence for a reviewer to confirm or overrule — it does not auto-approve or auto-reject
   an NDA.

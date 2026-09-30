@@ -91,6 +91,13 @@ export function RequirementCard({ r }: { r: RequirementResult }) {
           </p>
         )}
 
+        {r.security_review_required && (
+          <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-900">
+            <p className="font-bold uppercase tracking-wide">Security review required</p>
+            <p className="mt-1 leading-5">Potential instruction-like content was detected in the submitted agreement. Do not accept this result without human review.</p>
+          </div>
+        )}
+
         {(r.explanation || r.label === "NotMentioned") && (
           <p className="mt-4 text-sm leading-6 text-[#4b5563]">
             {r.label === "NotMentioned" ? NOT_MENTIONED_MESSAGE : r.explanation}

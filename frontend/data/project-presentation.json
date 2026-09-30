@@ -472,7 +472,7 @@
       "pipeline": [
         "top-5 RAG context",
         "GPT-5-mini controller",
-        "up to 2 tool calls (follow_cross_reference / get_definition / get_more_candidates)",
+        "up to 2 tool calls (FOLLOW_CROSS_REFERENCE / GET_MORE_CANDIDATES)",
         "conclude"
       ],
       "config": [
@@ -1222,7 +1222,7 @@
           "id": "E10",
           "name": "Bounded selective-agent design",
           "question": "If tested anyway (course completeness), what should it look like?",
-          "changed": "Froze a 3-tool, hard-bounded agent design",
+          "changed": "Froze a minimal, hard-bounded design; the final E11 interface exposed two top-level tools",
           "evidence": "Design frozen before any model call",
           "decision": "Frozen for E11, no reversal of E09"
         },
@@ -1376,6 +1376,20 @@
     ],
     "overviewCaseKey": "1::nda-2",
     "overviewFailureCaseKey": "1::nda-19",
+    "showcaseValidation": {
+      "caseId": "test::1::nda-2",
+      "split": "TEST",
+      "documentId": "1",
+      "hypothesisId": "nda-2",
+      "goldLabel": "Contradiction",
+      "ragPredictedLabel": "Contradiction",
+      "ragSourceValid": true,
+      "ragEvidenceCorrect": true,
+      "ragJointPass": true,
+      "ragL1Pass": true,
+      "ragL2Pass": true,
+      "matchedFullResult": true
+    },
     "items": [
       {
         "caseId": "test::1::nda-1",
@@ -72646,7 +72660,7 @@
     },
     {
       "name": "Experimental agent",
-      "does": "3-tool bounded ReAct loop over RAG context",
+      "does": "Two-tool bounded investigation over RAG context",
       "runtimeOrExperimentOnly": "Experiment-only, rejected",
       "lineage": "E09-E11"
     }
@@ -73060,7 +73074,7 @@
       }
     },
     "agent": {
-      "why": "Test the narrow hypothesis that dynamic clause expansion can recover the small residue that static top-5 filtering misses.",
+      "why": "Could dynamic investigation recover the residual failures and earn its added complexity?",
       "residual": {
         "n": 39,
         "reasoning": 26,
@@ -73130,6 +73144,54 @@
           "joint": 68.7
         }
       ],
+      "comparison": [
+        {
+          "name": "Base RAG",
+          "role": "Control",
+          "population": "TRAIN_ARCH_v1 \u00b7 matched n=150",
+          "accuracy": 78.7,
+          "joint": 75.3,
+          "contradictionRecall": 76.0,
+          "toolUse": null,
+          "usefulRecoveries": null,
+          "incrementalCost": null,
+          "incrementalLatency": null,
+          "inputTokens": null,
+          "outputTokens": null,
+          "modelCalls": null
+        },
+        {
+          "name": "Agent V1",
+          "role": "Tested configuration",
+          "population": "TRAIN_ARCH_v1 \u00b7 matched n=150",
+          "accuracy": 78.0,
+          "joint": 73.3,
+          "contradictionRecall": 70.0,
+          "toolUse": 1.3,
+          "usefulRecoveries": "0/2",
+          "incrementalCost": 0.0015146816666666667,
+          "incrementalLatency": 5.87,
+          "inputTokens": 214369,
+          "outputTokens": 86805,
+          "modelCalls": 152
+        },
+        {
+          "name": "Agent V2",
+          "role": "Investigation encouraged",
+          "population": "TRAIN_ARCH_v1 \u00b7 matched n=150",
+          "accuracy": 74.0,
+          "joint": 68.7,
+          "contradictionRecall": 74.0,
+          "toolUse": 20.0,
+          "usefulRecoveries": "0/30",
+          "incrementalCost": 0.002658506666666667,
+          "incrementalLatency": 10.36,
+          "inputTokens": 355792,
+          "outputTokens": 154914,
+          "modelCalls": 189
+        }
+      ],
+      "evaluationNote": "Agent investigation was evaluated by tool-mediated recovery and final task success, not by a directly comparable static Recall@5 metric.",
       "learned": "Tool underuse was partly a prompt problem, but it was not the main bottleneck: V2 increased tool use from 1.3% to 20% without producing a useful recovery.",
       "next": "Reject the agent and keep the deterministic RAG runtime with human review.",
       "takeaway": {
@@ -73206,6 +73268,144 @@
       "next": "Ship deterministic top-5 RAG with reviewer verification."
     }
   ],
+  "securityStory": {
+    "process": [
+      "OWASP LLM Top 10",
+      "E21 baseline",
+      "Targeted remediation",
+      "E22 verification"
+    ],
+    "processNote": "10/10 OWASP LLM categories were assessed. Findings were converted into concrete engineering controls and re-tested only where implementation changed.",
+    "baselineLabel": "Baseline before E22 controls",
+    "remediations": [
+      {
+        "id": "LLM10",
+        "name": "Unbounded consumption",
+        "before": "FAIL",
+        "after": "PASS",
+        "controls": [
+          "NDA max length",
+          "Requirement max length",
+          "Per-request cost ceiling",
+          "Cumulative budget enforcement",
+          "Rate limit",
+          "Concurrency cap"
+        ],
+        "verification": [
+          "17/17 local checks passed",
+          "0 hosted calls for rejected requests"
+        ],
+        "residual": "per-process only (single FastAPI worker); no distributed rate limiting"
+      },
+      {
+        "id": "LLM01",
+        "name": "Prompt injection",
+        "before": "FAIL",
+        "after": "PARTIAL",
+        "controls": [
+          "Deterministic guard over retrieved context",
+          "Case/whitespace normalization",
+          "security_review_required flag",
+          "Mandatory human-review flag",
+          "No autonomous acceptance"
+        ],
+        "verification": [
+          "0/32 false positives",
+          "4/11 E16 attacks detected",
+          "Both previously successful E16 attacks detected",
+          "5/5 hosted confirmation cases correct",
+          "$0.005992 finalized hosted confirmation spend"
+        ],
+        "residual": "Coverage remains incomplete: 7/11 broader E16 attack formulations were not detected."
+      }
+    ],
+    "architecture": [
+      "Input limits",
+      "Retrieval",
+      "Injection guard",
+      "Model",
+      "Structured parser",
+      "Evidence validator",
+      "Security review flag",
+      "Human review"
+    ],
+    "controlZones": [
+      {
+        "label": "Before model",
+        "items": [
+          "Input bounds",
+          "Rate/concurrency controls",
+          "Budget guard"
+        ]
+      },
+      {
+        "label": "Around model",
+        "items": [
+          "Bounded context",
+          "No write tools",
+          "No external web access"
+        ]
+      },
+      {
+        "label": "After model",
+        "items": [
+          "Structured parser",
+          "Evidence validation",
+          "Human-review flag"
+        ]
+      }
+    ],
+    "proved": [
+      {
+        "label": "Controlled",
+        "items": [
+          "Bounded input",
+          "Bounded spend",
+          "Bounded concurrency",
+          "Structured output",
+          "Read-only agent tools",
+          "Source validation"
+        ]
+      },
+      {
+        "label": "Improved",
+        "items": [
+          "Prompt-injection detection",
+          "Supply-chain exposure reduced",
+          "Runtime budget enforcement"
+        ]
+      },
+      {
+        "label": "Remains human-gated",
+        "items": [
+          "Prompt-injection edge cases",
+          "Semantic misinformation",
+          "Sensitive information governance"
+        ]
+      }
+    ],
+    "decision": "E21 was used to find real weaknesses, not to claim compliance. E22 converted the two strongest actionable findings into runtime controls: resource exhaustion moved to PASS under targeted verification, while prompt injection improved to PARTIAL and remains human-gated.",
+    "posture": "Suitable as a reviewer-assist prototype with explicit human oversight. Not yet positioned as an unattended legal decision system.",
+    "ships": [
+      "Resource guards",
+      "Injection guard",
+      "Evidence validation",
+      "Bounded context",
+      "Human-review flag"
+    ],
+    "doesNotShip": [
+      "Autonomous legal approval",
+      "Unrestricted agents",
+      "Unattended processing of flagged content"
+    ],
+    "source": {
+      "experimentId": "E21/E22",
+      "sourcePath": "experiments/E22_targeted_security_remediation/results/final_report.json",
+      "population": "E21 immutable baseline; E22 targeted retest of changed controls only",
+      "measured": "measured",
+      "note": ""
+    }
+  },
   "retrievalDesign": {
     "question": "Can retrieval reliably find the right clause?",
     "chain": [

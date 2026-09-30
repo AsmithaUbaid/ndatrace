@@ -8,7 +8,7 @@ def check_imports():
     required = [
         "fastapi", "uvicorn", "pydantic", "openai", "tiktoken",
         "sentence_transformers", "faiss", "numpy", "pandas",
-        "sqlalchemy", "httpx", "dotenv", "tqdm", "rich",
+        "httpx", "dotenv", "tqdm", "rich",
     ]
     missing = []
     for pkg in required:
