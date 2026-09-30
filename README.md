@@ -20,7 +20,17 @@ Each requirement receives one of three labels:
 
 The reviewer sees the verdict, a concise explanation, and verbatim evidence when evidence is required. NDATrace is a reviewer aid, not an autonomous legal decision-maker.
 
-## 2. Final decision at a glance
+**Human authority is recorded, not just implied.** Every result carries a needs-human-review flag, and the reviewer records **Approve**, **Override**, or **Reject** with an optional note against it (`POST /review/{id}/items/{id}/decision`, persisted append-only in `review_decisions`). This closes the gap between the project's standing human-review promise (`docs/project_contract.md` §10) and what the backend actually records — before this, a human could disagree with a result, but nothing captured that they had.
+
+## 2. Business problem and persona
+
+Legal operations teams spend hours per NDA checking it against standard confidentiality requirements, because supporting or conflicting evidence is often paraphrased or scattered across clauses and exceptions. Vendor survey data (LegalOn Technologies, 2025, n=286 — cited as vendor research, not independently verified) reports 52% of organizations handle 101–1,000 contracts a year at 2–4 hours of review each; for a team handling 500 contracts, a 30% reduction in review effort is roughly 450 staff-hours a year. That figure motivates the problem; it is not evidence this project measured.
+
+**Persona:** Tina, a legal operations analyst who is not a lawyer. She needs to know, for each requirement, whether the NDA satisfies it, contradicts it, or is silent — and to see the exact clause before she acts on that answer. NDATrace does not approve or reject NDAs; it retrieves evidence, classifies each requirement, and hands the decision to Tina, who records Approve / Override / Reject against the result (§1).
+
+A keyword search misses paraphrase; a general-purpose LLM given the whole document can reason but gives Tina no way to verify where its answer came from. NDATrace is narrower than either.
+
+## 3. Final decision at a glance
 
 | Component | Final role |
 | --- | --- |
@@ -32,7 +42,7 @@ The reviewer sees the verdict, a concise explanation, and verbatim evidence when
 
 The shipped review path is the frozen RAG pipeline. FULL is retained as the strongest measured quality reference, not as the prototype runtime.
 
-## 3. Final test result
+## 4. Final test result
 
 Official ContractNLI **TEST** split, **n = 2,091**. The Rule values below are TEST results, not TRAIN results.
 
@@ -46,13 +56,13 @@ On paired cases, the FULL–RAG classification difference was not significant (`
 
 For scale, a deterministic [majority-class TEST sanity check](experiments/E04B_majority_baseline/README.md) reaches 46.3% accuracy and 0% Joint. It is a trivial baseline, not an architecture rung.
 
-## 4. Why RAG is the prototype
+## 5. Why RAG is the prototype
 
 FULL achieved the higher Joint score. RAG was selected for the prototype because it uses bounded context, returns a clause-level evidence path, reduced mean input tokens by **50.4%**, and reduced raw API inference cost by **16.8%** in the matched E20 TEST run.
 
 This is an engineering trade-off, not a claim that RAG outperformed FULL on overall quality.
 
-## 5. Final architecture
+## 6. Final architecture
 
 ```mermaid
 flowchart LR
@@ -88,18 +98,24 @@ flowchart LR
 
 See [the architecture guide](docs/architecture.md) and [architecture decisions](docs/architecture_decisions/INDEX.md).
 
-## 6. What we tested and rejected
+## 7. Experiments: what we tested and why
 
-| Question | Decision |
-| --- | --- |
-| Would prompt variants reliably beat P0? | No variant justified replacing frozen P0. |
-| Would static context expansion justify its added context? | No; keep top-5. |
-| Would a targeted agent recover residual failures? | No; added investigation did not create enough recovery value. |
-| Would automatic confidence routing safely reduce work? | Tested, not adopted. |
+Twenty-four numbered experiments (E00–E23) form the evidence trail; these are the ones that materially shaped the final architecture:
 
-The causal experiment story is available in the app at `/project`. Exact protocols, artifacts, and decisions are indexed in the [experiment registry](docs/experiment_registry.md).
+| Experiment | Question | Measured finding | Decision |
+| --- | --- | --- | --- |
+| Rule baseline (E04) | Does keyword matching suffice? | 59.0% accuracy / 50.1% Joint, full TEST n=2,091 | Insufficient; justified an LLM |
+| Oracle (E01) | Model or retrieval bottleneck? | 90.6% macro-F1 given gold evidence (n=300) | Model not the bottleneck; invest in retrieval + prompting |
+| Prompt selection (E03) | Which prompt classifies best? | Minimal (P0) beat elaborated prompts on Contradiction recall and macro-F1 | Froze P0 |
+| Retrieval optimization (E06) | Does dense/hybrid beat BM25? | All converge to ~92% Recall@5 once reranked | Froze BM25 + reranker (simplest, tied) |
+| Matched FULL vs RAG (E17/E20) | Does RAG match FULL's quality? | FULL wins Joint (p=0.0047); accuracy not significantly different | Kept RAG for cost/context-scaling; gap disclosed |
+| Selective agent (E11) | Do extra tools recover mistakes? | Zero tool calls used; net Joint benefit 0.0pp | Rejected; not in runtime |
+| Auto review-routing (E15) | Can the system self-flag uncertainty? | No policy reached ≤40% review workload and <10% residual error together | Rejected; every case routes to a human |
+| Injection guard live check (E23) | Does the guard hold on a real adversarial call? | Model did not comply; guard fired correctly (1 real hosted call) | Confirms E16/E22, not a new coverage claim |
 
-## 7. Security posture
+The causal experiment story is available in the app at `/project`. Exact protocols, artifacts, and decisions for all 24 experiments are indexed in the [experiment registry](docs/experiment_registry.md).
+
+## 8. Security posture
 
 E21 was a baseline assessment, not the current post-remediation state:
 
@@ -122,7 +138,7 @@ Residual risks remain: injection detection is incomplete; authentication and dat
 
 See [E21](experiments/E21_owasp_llm_top10/summary.md) and [E22](experiments/E22_targeted_security_remediation/summary.md). [E23](experiments/E23_injection_guard_live_check/summary.md) is a single-case live-fire confirmation of the guard, run through the real production path with a real hosted call.
 
-## 8. Important agent correction
+## 9. Important agent correction
 
 The agent experiment exposed only two targeted, read-only tools:
 
@@ -133,7 +149,7 @@ It had no web search, filesystem access, external database access, write actions
 
 **The agent is experimental and is not in the live runtime.** Saved E10/E11 artifacts remain for reproducibility.
 
-## 9. Cost-to-serve
+## 10. Cost-to-serve and trade-offs
 
 The modeled workflow uses:
 
@@ -143,7 +159,7 @@ C_total = C_AI + (1 - p_joint) × C_human
 
 API cost is not total workflow cost: failed Joint cases still require human handling. All business figures are **MODELED scenarios**, not realized production savings. Assumptions and sensitivity analysis are documented in [E18](experiments/E18_business_course_synthesis/summary.md).
 
-## 10. Limitations
+## 11. Limitations
 
 - ContractNLI is a proxy dataset; performance on real enterprise NDA distributions is not established.
 - Long-document and organizational distribution shift remain open risks.
@@ -153,7 +169,7 @@ API cost is not total workflow cost: failed Joint cases still require human hand
 - A human remains the final authority.
 
 
-## 11. Prerequisites and installation
+## 12. Prerequisites and installation
 
 - Python 3.12 (verified with 3.12.14).
 - Node.js 20.9 or newer (the Next.js requirement; verified here with Node 26.9.0) and npm.
@@ -182,7 +198,7 @@ The live RAG path uses the public `cross-encoder/ms-marco-MiniLM-L-12-v2` rerank
 
 `.env.example` contains safe placeholders. Set `OPENROUTER_API_KEY` only when a billed call is intended, and choose `MAX_BUDGET_USD` for your own local run. Use `python scripts/verify_environment.py --require-api-key` before a live call.
 
-## 12. Run the application
+## 13. Run the application
 
 ### Backend
 
@@ -217,14 +233,14 @@ npm run build
 
 Standard automated tests make **zero paid hosted calls**. Some retrieval tests load the two public Hugging Face models named above, so prefetch them before testing offline. If Turbopack cannot create a local worker in a restricted sandbox, the supported fallback `npx next build --webpack` performs the same production build check.
 
-## 13. Repository map
+## 14. Repository map
 
 ```text
 pipeline/      Frozen RAG runtime, retrieval, parsing, and validation
 backend/       FastAPI endpoints and persisted review history
 frontend/      Next.js reviewer interface and Project Story
 evaluation/    Metrics, evaluators, schemas, and harnesses
-experiments/   Frozen E00–E22 protocols, outputs, and analyses
+experiments/   Frozen E00–E23 protocols, outputs, and analyses
 data/          Public-dataset instructions and tracked regression fixtures
 results/       Canonical cross-experiment result tables
 scripts/       Setup, offline analysis, experiment, and report utilities
@@ -233,16 +249,52 @@ tests/         Unit, integration, robustness, and leakage checks
 reports/       Current report draft plus preserved earlier versions
 ```
 
-Historical T-series materials are archived and retained as evidence; the active final program is E00–E22. ADR-001 through ADR-011 are historical. ADR-012 is the current final benchmark/product decision.
+Historical T-series materials are archived and retained as evidence; the active final program is E00–E23. ADR-001 through ADR-011 are historical. ADR-012 is the current final benchmark/product decision.
 
-## 14. Reproduce saved research results
+## 15. Reproduce and verify
 
-Downloading ContractNLI is required because its license permits redistribution by source but the raw split files are intentionally not tracked. The following commands are offline with respect to hosted LLMs: they recompute metrics from tracked predictions and the downloaded public dataset. They may rewrite their tracked summary files deterministically, so `git diff --exit-code` is the integrity check.
+**One command, after installation (§12):**
 
 ```bash
 source .venv/bin/activate
-bash scripts/download_data.sh
+python scripts/verify_reproducibility.py
+```
 
+This is the actual check, not a description of one — it runs and asserts, exits non-zero on any
+failure:
+
+1. ContractNLI present and SHA-256 checksum-verified against the frozen release.
+2. The full `pytest` suite (433 tests, zero paid calls).
+3. Every offline analysis script that recomputes metrics from saved predictions (majority
+   baseline, E17/E17B TEST merge, E20 RAG comparison, E11 agent, E15 routing, E18 business
+   synthesis).
+4. `git diff --exit-code` on everything those scripts wrote — proves the recomputation is
+   byte-for-byte identical to what's committed, not just "the script didn't crash."
+5. The actual FastAPI backend, started in-process (no separate server, no paid calls):
+   `/health`, `/hypotheses`, `/experiments`, `/experiments/e20` all asserted to return real,
+   correctly-shaped data read from the files step 4 just verified.
+
+Sample output:
+
+```text
+============================================================
+REPRODUCIBILITY CHECK SUMMARY
+============================================================
+  [PASS] 1. Dataset present and checksum-verified
+  [PASS] 2. Full test suite (zero paid calls)
+  [PASS] 3. Offline analysis scripts recompute without error
+  [PASS] 4. Recomputed results match committed files exactly (git diff --exit-code)
+  [PASS] 5. Backend serves real computed data (in-process, no paid calls)
+============================================================
+ALL CHECKS PASSED
+```
+
+This reproduces scoring, cost calculations, and live API behavior from saved predictions; it does
+**not** rerun the paid inference that created those predictions. Live experiment runners remain
+available for provenance but must not be invoked casually. The individual analysis commands step 3
+runs are listed below if you want to run one in isolation:
+
+```bash
 python experiments/E04B_majority_baseline/run_majority_baseline.py
 python scripts/e17_analyze_final_test.py --metrics
 python scripts/e17b_merge_and_analyze.py
@@ -250,22 +302,11 @@ python scripts/analyze_e20_rag_test.py
 python scripts/analyze_e11_selective_agent.py
 python scripts/analyze_e15_validation.py
 python scripts/e18_business_analysis.py
-
-git diff --exit-code -- \
-  experiments/E04B_majority_baseline \
-  experiments/E11_selective_agent_evaluation/results \
-  experiments/E15_review_routing/results \
-  experiments/E17_final_test/results \
-  experiments/E17B_full_test_completion/results \
-  experiments/E18_business_course_synthesis/results \
-  experiments/E20_final_rag_test/results
 ```
-
-This reproduces scoring and cost calculations from saved predictions; it does **not** rerun the paid inference that created those predictions. Live experiment runners remain available for provenance but must not be invoked casually.
 
 - [Smallest working slice](experiments/E00_smallest_slice/README.md) — one input through retrieval, one model call, parsing, validation, and reviewer output.
 - [Technical Tour notebook](notebooks/NDATrace_Complete_Technical_Tour.ipynb) — executable walkthrough using saved artifacts by default.
-- [Experiment registry](docs/experiment_registry.md) — canonical E00–E22 ledger.
+- [Experiment registry](docs/experiment_registry.md) — canonical E00–E23 ledger.
 - [Evaluation protocol](docs/evaluation_protocol.md) — split, metric, and evidence rules.
 - [Architecture decisions](docs/architecture_decisions/INDEX.md) — frozen decisions and rationale.
 - [E21 security baseline](experiments/E21_owasp_llm_top10/summary.md) — original 10-category assessment.
@@ -275,7 +316,7 @@ The Technical Tour defaults to saved outputs and zero hosted calls. Enable any l
 
 Report renderers refuse to overwrite an existing artifact by default. Use a new path such as `python scripts/render_final_report_html.py --output /tmp/ndatrace-report.html`; `--force` is required to replace a named report intentionally.
 
-## 15. Known prototype limitations
+## 16. Known prototype limitations
 
 - No authentication or authorization; saved evidence/history is local plaintext SQLite.
 - Permissive development CORS and in-process rate/concurrency controls are not production infrastructure.
@@ -284,6 +325,6 @@ Report renderers refuse to overwrite an existing artifact by default. Use a new 
 - Provider availability, provider pricing, the external dataset URL, and public model downloads are external dependencies.
 - Use only public or synthetic NDA text in this prototype. It is not approved for confidential production documents.
 
-## 16. Project context
+## 17. Project context
 
 NDATrace was developed for NTU PE6201 Emerging AI Technologies using the [ContractNLI](https://stanfordnlp.github.io/contract-nli/) dataset. It is an evidence-grounded reviewer-assist prototype, not legal advice or a production approval system.

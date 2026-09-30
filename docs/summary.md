@@ -160,7 +160,7 @@ agent; see `docs/architecture.md`.
 
 ## Where to look for more detail
 
-- `docs/experiment_registry.md` — the final experiment ledger (E00–E22), with per-experiment status and artifact paths
+- `docs/experiment_registry.md` — the final experiment ledger (E00–E23), with per-experiment status and artifact paths
 - `docs/architecture_decisions/INDEX.md` — final ADRs (ADR-012: E20's quality-reference-vs-production-oriented FULL/RAG finding) plus the historical ADR-001–ADR-011 status table
 - `docs/architecture.md` — current implementation, traced directly from code
 - `docs/evaluation_case_design.md` — the regression/robustness/security test taxonomy
