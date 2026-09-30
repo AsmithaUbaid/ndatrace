@@ -3,8 +3,9 @@
 Code that was part of reconstruction-v2's runtime at some point but has since been superseded by
 a later refactor within reconstruction-v2 itself (not pre-reconstruction history — that lineage,
 `archive/pre_reconstruction/` and `archive/legacy_experiments/`, was itself deleted in the
-2026-09-29 legacy cleanup pass, per `legacy_delete_manifest.md` — confirmed zero code imports at
-the time, doc-citation-only). Kept for provenance, not imported by any current code.
+2026-09-29 legacy cleanup pass — confirmed zero code imports at the time, doc-citation-only; see
+`audit/00_modification_log.md` for the resolution record). Kept for provenance, not imported by
+any current code.
 
 ## `orchestrator.py` (deleted 2026-09-28)
 
