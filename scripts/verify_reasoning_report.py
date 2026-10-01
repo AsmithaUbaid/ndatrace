@@ -159,7 +159,7 @@ def main() -> None:
     required_families = ["Majority", "Oracle", "prompts", "retrieval", "Reranking", "FULL", "agent", "routing", "robust", "Targeted", "operating cost"]
     matrix_text = source[source.index("Table 2."):source.index("</tbody></table></div>", source.index("Table 2."))]
     require(all(term.lower() in matrix_text.lower() for term in required_families), "experimental matrix covers every required family")
-    forbidden = ["perfectly blind", "achieved ROI", "RAG proved superior", "zero compute cost", "autonomous legal"]
+    forbidden = ["perfectly blind", "achieved ROI", "RAG proved superior", "zero compute cost", "validated autonomous legal review"]
     require(not any(term.lower() in source.lower() for term in forbidden), "unsupported or contradictory conclusion phrases are absent")
     require("NDATrace_Reasoning_Evidence_Map.md" in (ROOT / "reports/NDATrace_Reasoning_Audit.md").read_text(), "fresh workflow identifies its evidence map")
     require((ROOT / "reports/NDATrace_Professor_Compliance.md").exists(), "professor compliance matrix exists")

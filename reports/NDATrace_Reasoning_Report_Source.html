@@ -14,7 +14,7 @@ h2{font:700 29px/1.2 Georgia,serif;color:var(--navy);border-bottom:2px solid var
 p.analysis{margin:0 0 15px} figure{margin:22px 0 25px;break-inside:avoid} figure img{display:block;width:100%;height:auto;border:1px solid var(--line)} figcaption,.table-title{font-size:13px;color:var(--muted)} figcaption{margin-top:7px}.table-title{font-weight:700;color:var(--navy);margin:19px 0 7px;text-transform:uppercase;letter-spacing:.04em}
 .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;break-inside:avoid} table{width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.35} th{background:var(--navy);color:white;text-align:left;font-weight:700;padding:8px 9px;vertical-align:bottom} td{padding:7px 9px;border-top:1px solid var(--line);vertical-align:top} tbody tr:nth-child(even){background:#f8fafc}.num{text-align:right;white-space:nowrap}.status-fail{color:#9b2c2c;font-weight:700}.status-pass{color:#0f766e;font-weight:700}.note{background:#fff7ed;border-left:4px solid var(--orange);padding:12px 15px;margin:18px 0;font-size:14px}.split{display:grid;grid-template-columns:1fr 1fr;gap:16px}.compact td,.compact th{padding:6px 8px}.references,.report-note{font-size:12px;color:var(--muted)}code{font:12px ui-monospace,SFMono-Regular,Menlo,monospace}.page-break{display:none}
 @media(max-width:800px){main{width:100%;margin:0;padding:28px 18px;box-shadow:none}h1{font-size:36px}.split{grid-template-columns:1fr}table{min-width:720px}}
-@media print{@page{size:A4;margin:14mm 12mm}body{background:white;font-size:10.3pt}main{width:auto;margin:0;padding:0;box-shadow:none}header{margin-bottom:20px}h1{font-size:30pt}h2{font-size:18pt;margin-top:28px}h3{font-size:11pt}p.analysis{orphans:3;widows:3}figure,.table-wrap{break-inside:avoid}figure{margin:12px 0}table{font-size:7.7pt}.page-break{display:block;break-before:page}.references,.report-note{font-size:8pt}}
+@media print{@page{size:A4;margin:14mm 12mm}body{background:white;font-size:10.3pt}main{width:auto;margin:0;padding:0;box-shadow:none}header{margin-bottom:20px}h1{font-size:30pt}h2{font-size:18pt;margin-top:28px}h3{font-size:11pt}p.analysis{orphans:3;widows:3}figure,.table-wrap{break-inside:avoid}.table-wrap.allow-break{break-inside:auto;overflow:visible}thead{display:table-header-group}tr{break-inside:avoid}figure{margin:12px 0}table{font-size:7.7pt}.page-break{display:block;break-before:page}.references,.report-note{font-size:8pt}}
 </style>
 </head>
 <body><main>
@@ -47,7 +47,7 @@ p.analysis{margin:0 0 15px} figure{margin:22px 0 25px;break-inside:avoid} figure
 
 <section id="s3"><h2>3. The complete experimental journey</h2>
 <div class="table-title">Table 2. Experimental matrix - evidence organised by decision, not chronology</div>
-<div class="table-wrap"><table><thead><tr><th>Research question</th><th>Compared configurations</th><th>Important measured finding</th><th>Final decision</th></tr></thead><tbody>
+<div class="table-wrap allow-break"><table><thead><tr><th>Research question</th><th>Compared configurations</th><th>Important measured finding</th><th>Final decision</th></tr></thead><tbody>
 <tr><td>What is the cheap floor?</td><td>Majority and keyword Rule; TEST n=2,091</td><td>Majority: 46.3% accuracy, 0 Joint. Rule: 59.0% accuracy, 50.1% Joint, 16.8% contradiction recall</td><td>Retain Rule as a comparator, not the product</td></tr>
 <tr><td>Oracle: is the ceiling retrieval or reasoning?</td><td>Four models with gold evidence; balanced TRAIN n=300</td><td>GPT macro-F1 0.906 / C recall 82%; Qwen 0.638 / 30%</td><td>Use GPT-5-mini; reasoning remains a bottleneck even with perfect evidence</td></tr>
 <tr><td>Do richer prompts help?</td><td>Minimal vs definitions vs procedure; Qwen TRAIN n=150; later GPT controls</td><td>Qwen minimal led macro-F1 (0.507) and C recall (22%); extra structure worsened C→NM errors. GPT variants did not justify changing the frozen prompt</td><td>Freeze the minimal prompt</td></tr>
@@ -65,7 +65,7 @@ p.analysis{margin:0 0 15px} figure{margin:22px 0 25px;break-inside:avoid} figure
 
 <section id="s4"><h2>4. The unexpected architecture result and metric critique</h2>
 <div class="table-title">Table 3. Unified architecture comparison</div>
-<div class="table-wrap"><table class="compact"><thead><tr><th>Population / metric</th><th class="num">Rule</th><th class="num">FULL</th><th class="num">RAG</th></tr></thead><tbody>
+<div class="table-wrap allow-break"><table class="compact"><thead><tr><th>Population / metric</th><th class="num">Rule</th><th class="num">FULL</th><th class="num">RAG</th></tr></thead><tbody>
 <tr><td><strong>Official TEST - n=2,091</strong></td><td></td><td></td><td></td></tr>
 <tr><td>Accuracy</td><td class="num">59.0%</td><td class="num">77.6%</td><td class="num">76.8%</td></tr>
 <tr><td>Macro-F1</td><td class="num">0.479</td><td class="num">0.727</td><td class="num">0.723</td></tr>
@@ -73,8 +73,8 @@ p.analysis{margin:0 0 15px} figure{margin:22px 0 25px;break-inside:avoid} figure
 <tr><td>Contradiction recall</td><td class="num">16.8%</td><td class="num">75.5%</td><td class="num">77.3%</td></tr>
 <tr><td>NotMentioned recall</td><td class="num">90.5%</td><td class="num">62.7%</td><td class="num">63.2%</td></tr>
 <tr><td>Risk-sensitive recall (C/NM mean)</td><td class="num">53.6%</td><td class="num">69.1%</td><td class="num">70.3%</td></tr>
-<tr><td>Mean input tokens / API cost</td><td class="num">n/a / $0*</td><td class="num">2,279 / $0.00202</td><td class="num">1,131 / $0.00168</td></tr>
-<tr><td>Mean latency</td><td class="num">0.06 ms*</td><td class="num">7.31 s</td><td class="num">7.14 s</td></tr>
+<tr><td>Mean input tokens / API cost</td><td class="num">n/a / $0 API</td><td class="num">2,279 / $0.00202</td><td class="num">1,131 / $0.00168</td></tr>
+<tr><td>Mean latency</td><td class="num">0.06 ms local</td><td class="num">7.31 s</td><td class="num">7.14 s</td></tr>
 <tr><td><strong>Targeted DEV - n=49 (diagnostic, not pooled)</strong></td><td></td><td></td><td></td></tr>
 <tr><td>Accuracy / Macro-F1</td><td class="num">51.0% / 0.457</td><td class="num">73.5% / 0.720</td><td class="num">71.4% / 0.708</td></tr>
 <tr><td>Joint / Contradiction recall</td><td class="num">44.9% / 13.3%</td><td class="num">73.5% / 46.7%</td><td class="num">67.3% / 53.3%</td></tr>
@@ -144,7 +144,7 @@ p.analysis{margin:0 0 15px} figure{margin:22px 0 25px;break-inside:avoid} figure
 <tr><td>Prompt injection</td><td>4/11 patterns succeeded; source-valid text can still be hostile</td><td>Pattern flag, quarantine, limits</td><td><strong>Research 4:</strong> broader adaptive attack evaluation</td></tr>
 <tr><td>Enterprise controls</td><td>Prototype logs decisions but is not production-governed</td><td>Public data only</td><td><strong>Production:</strong> identity, access, retention and monitoring</td></tr>
 </tbody></table></div>
-<p class="analysis">The hardest engineering task was separating evidence access from interpretation. Oracle evidence, retrieval diagnostics and case-level traces let me distinguish missing clauses from wrong reasoning, but Joint still compresses several mechanisms into one score. Controlled comparison was another difficulty: changing model, prompt, context and population together would have made the architecture verdict uninterpretable, so I froze layers and disclosed historical exposure rather than claiming a perfectly blind lineage. Budget controls forced forecasts, compact outputs and bounded runs, while latency made every extra call operationally visible.</p>
+<p class="analysis">The hardest engineering task was separating evidence access from interpretation. Oracle evidence, retrieval diagnostics and case-level traces let me distinguish missing clauses from wrong reasoning, but Joint still compresses several mechanisms into one score. Controlled comparison was another difficulty: changing model, prompt, context and population together would have made the architecture verdict uninterpretable, so I froze layers and disclosed historical exposure rather than overstating evaluation blindness. Budget controls forced forecasts, compact outputs and bounded runs, while latency made every extra call operationally visible.</p>
 <p class="analysis">Important problems remain unresolved. Exception clauses still defeat the strongest architecture; the agent's non-use of tools explains its rejection but not how to build a useful investigator; routing signals do not isolate semantic risk; and a source-valid quotation can contain adversarial instructions. Resource limits contained cost and denial-of-service exposure, but they did not make document instructions trustworthy. My priorities therefore separate research from production: improve exception reasoning and multi-span evidence first, validate on longer agreements and with reviewers next, then expand security testing. Identity, confidentiality controls and monitoring are prerequisites for deployment, not substitutes for better evidence.</p>
 </section>
 

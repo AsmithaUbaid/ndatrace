@@ -1,0 +1,52 @@
+PASS  published HTML exactly matches the fresh authoritative source
+PASS  previous report is preserved and differs from the redesign
+PASS  fresh report does not depend on the former editable source
+PASS  exactly eight required numbered sections
+PASS  all ten report tables have explicit titles
+PASS  all four figures have captions
+PASS  analytical prose count 1109 is within 1,200 +/-15%
+PASS  inclusive numbered-section count 2445 transparently includes tables and captions
+PASS  Rule official quality values match canonical TEST artifacts
+PASS  FULL official quality values match canonical TEST artifacts
+PASS  RAG official quality values match canonical TEST artifacts
+PASS  official TEST population is explicit
+PASS  original RAG-versus-FULL target result recomputes to +1.2 points
+PASS  supplementary RAG-versus-Rule result recomputes to +16.6 points
+PASS  historical target is preserved and correctly failed
+PASS  targeted DEV remains a separate 49-case block
+PASS  targeted rule metrics match executed analysis
+PASS  targeted full metrics match executed analysis
+PASS  targeted rag metrics match executed analysis
+PASS  targeted notebook contains eight executed code cells
+PASS  agent trace set confirms 15 triggers and zero tool calls
+PASS  agent Joint transition and incremental cost are disclosed
+PASS  saved agent comparison confirms zero net Joint change
+PASS  R1 routing workload/capture/residual values recompute
+PASS  R2 routing workload/capture/residual values recompute
+PASS  R3 routing workload/capture/residual values recompute
+PASS  official failure categories sum exactly to 576
+PASS  failure figure contains every canonical count
+PASS  FULL output tokens recompute to approximately 727
+PASS  RAG output tokens recompute to approximately 701
+PASS  token, cost and latency values match official artifacts
+PASS  stacked cost totals match declared formula
+PASS  cost figure distinguishes excluded fixed cost and hypothetical rework
+PASS  fresh figure exists and is non-trivial: architecture.svg
+PASS  fresh source references architecture.svg
+PASS  fresh figure exists and is non-trivial: quality.svg
+PASS  fresh source references quality.svg
+PASS  fresh figure exists and is non-trivial: failure_distribution.svg
+PASS  fresh source references failure_distribution.svg
+PASS  fresh figure exists and is non-trivial: cost_to_serve.svg
+PASS  fresh source references cost_to_serve.svg
+PASS  all local report image links resolve
+PASS  no former report figures are reused
+PASS  experimental matrix covers every required family
+PASS  unsupported or contradictory conclusion phrases are absent
+PASS  fresh workflow identifies its evidence map
+PASS  professor compliance matrix exists
+
+ALL FRESH-REPORT CHECKS PASSED (offline; zero model calls)
+Analytical prose count: 1109
+Inclusive Sections 1-8 count: 2445
+Counting note: inclusive count includes headings, table cells and captions; references and metadata are excluded.
