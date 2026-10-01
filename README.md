@@ -10,7 +10,11 @@
 ![Tests](https://img.shields.io/badge/Tests-433%20passing-22C55E)
 ![Status](https://img.shields.io/badge/Status-Academic%20prototype-6B7280)
 
-[Persona](#tinas-problem) · [What it does](#what-ndatrace-does) · [In action](#see-ndatrace-in-action) · [Architecture](#high-level-architecture) · [Metrics](#metrics-targeted-vs-reached) · [Design decisions](#key-design-decisions) · [Quick start](#quick-start) · [Reproducibility](#reproducibility) · [Data & evals](#data-and-evals) · [Repo map](#repository-map) · [Limitations](#limitations) · [Deliverables](#project-deliverables)
+![NDATrace demo: one NDA requirement from input to reviewer decision](docs/screenshots/demo_case.gif)
+
+One NDA requirement from input → retrieved evidence → verdict → reviewer decision.
+
+[Persona](#tinas-problem) · [What it does](#what-ndatrace-does) · [Architecture](#high-level-architecture) · [Metrics](#metrics-targeted-vs-reached) · [Design decisions](#key-design-decisions) · [Quick start](#quick-start) · [Reproducibility](#reproducibility) · [Data & evals](#data-and-evals) · [Repo map](#repository-map) · [Limitations](#limitations) · [Deliverables](#project-deliverables)
 
 </div>
 
@@ -54,19 +58,6 @@ on its own.
 
 Built and evaluated on [ContractNLI](https://stanfordnlp.github.io/contract-nli/), a public NDA
 benchmark. That's not a claim of performance on real confidential enterprise contracts.
-
-## See NDATrace in action
-
-There's no screen recorder available in this working environment, so these aren't captured yet —
-listed here instead of faked:
-
-| Asset | Status |
-| --- | --- |
-| `docs/screenshots/demo_case.gif` — one real case end to end (input → run → result → evidence → decision) | Not yet captured |
-| `docs/screenshots/01-input.png`, `02-results.png`, `03-decision.png` | Not yet captured |
-
-To capture these: run the app ([Quick start](#quick-start)), submit one NDA and requirement, and
-record the input → verdict → evidence → Approve/Override/Reject flow.
 
 ## High-level architecture
 
@@ -135,8 +126,8 @@ significance testing. Source: `experiments/E20_final_rag_test/results/E20_final_
 
 ![FULL vs RAG, four headline metrics](docs/images/full_vs_rag_dumbbell.png)
 
-FULL's Joint-correctness edge is the only statistically significant gap (McNemar p=0.0047).
-Accuracy isn't significantly different (p=0.217). More detail in
+**Takeaway:** FULL's Joint-correctness edge is the only statistically significant gap (McNemar
+p=0.0047); accuracy isn't significantly different (p=0.217). More detail in
 [`experiments/E20_final_rag_test/summary.md`](experiments/E20_final_rag_test/summary.md).
 
 ### What's measured, what's not
@@ -150,6 +141,10 @@ Modeled, not measured, and kept separate: an illustrative human-review-cost scen
 [`experiments/E18_business_course_synthesis/summary.md`](experiments/E18_business_course_synthesis/summary.md).
 It's labeled as a scenario there and isn't foregrounded here, so the two kinds of claim don't get
 confused.
+
+A reviewer-time pilot to actually measure the time question is designed and ready
+([`experiments/E24_reviewer_time_pilot/`](experiments/E24_reviewer_time_pilot/)), but has not
+been run — no reviewer-time number exists yet, measured or otherwise.
 
 ## Key design decisions
 
@@ -167,29 +162,28 @@ workload and an acceptable error rate, so every result still routes to a human.
 
 ![Quality vs. cost, all four measured systems](docs/images/quality_cost_frontier.png)
 
+**Takeaway:** Rule → RAG → FULL is the real Pareto frontier; the local Qwen comparator is
+strictly dominated (same $0 cost, lower Joint correctness).
+
 Trade-offs made, explicitly:
 
-- **Quality for cost/scale.** RAG was picked knowing FULL scores 2.1 Joint points higher, on the
-  bet that bounded context matters more at real document lengths than on ContractNLI's short
-  NDAs.
+- **Quality for cost/scale.** RAG was retained as the prototype runtime because it provides
+  bounded context and lower measured inference cost, while accepting a measured 2.1-point
+  Joint-correctness gap to FULL. Long-document scalability remains untested.
 - **Simplicity over capability.** The agent and auto-routing were rejected after measuring them,
   not before. Both added real cost and earned nothing back on this data.
-- **Precision over recall.** BM25 plus a reranker beat dense/hybrid retrieval on quality, and BM25
-  needs no vector index to operate.
+- **Operational simplicity over retrieval complexity.** BM25 plus a reranker tied dense/hybrid
+  retrieval on quality, and BM25 needs no vector index to operate.
 
 ![Where RAG actually fails](docs/images/failure_pareto.png)
 
-Retrieval isn't the bottleneck. Only 10% of RAG's failures are retrieval-limited; 78% are
-reasoning errors on evidence it already found. Full breakdown in
+**Takeaway:** Retrieval was not the dominant failure source in E20 — only 10% of RAG's failures
+are retrieval-limited; 78% are reasoning errors on evidence it already found. Full breakdown in
 [`docs/failure_analysis.md`](docs/failure_analysis.md), with one real case walked through step
 by step in [`examples/case_failure/`](examples/case_failure/).
 
-What I owned end to end: the retrieval/reranking pipeline and its chunking strategy, the
-evaluation harness and all 24 experiment scripts, the reviewer decision API
-(`backend/routes/review.py`), the injection guard, and the reproducibility harness
-(`scripts/verify_reproducibility.py`).
-
-The full 24-experiment ledger (E00–E23), each with its question, finding, and decision, is in
+The full experiment ledger (E00–E23, frozen, plus E24 prepared but not yet run), each with its
+question, finding, and decision, is in
 [`docs/experiment_registry.md`](docs/experiment_registry.md).
 
 ## Quick start
@@ -283,7 +277,7 @@ Frontend checks: `cd frontend && npx tsc --noEmit && npm test && npm run build`.
 | --- | --- |
 | Dataset | [ContractNLI](https://stanfordnlp.github.io/contract-nli/): 607 NDAs, 17 fixed requirements, 10,319 examples. TEST split: 2,091 examples, 123 documents. Explainer: [`data/README.md`](data/README.md). |
 | Evals | An offline scoring harness that knows gold labels, kept separate from a runtime validator that never sees them. Explainer: [`evaluation/README.md`](evaluation/README.md), protocol: [`docs/evaluation_protocol.md`](docs/evaluation_protocol.md). |
-| Experiments | 24 numbered, frozen experiments (E00–E23), each with its question, finding, and decision, in [`docs/experiment_registry.md`](docs/experiment_registry.md). |
+| Experiments | 24 numbered, frozen experiments (E00–E23), plus E24 prepared but not yet run, each with its question, finding, and decision, in [`docs/experiment_registry.md`](docs/experiment_registry.md). |
 | Failure analysis | What RAG actually gets wrong and what that implies for future work: [`docs/failure_analysis.md`](docs/failure_analysis.md). |
 | Worked examples | One real correct case and one real failure case, walked through every pipeline stage: [`examples/case_success/`](examples/case_success/), [`examples/case_failure/`](examples/case_failure/). |
 | Architecture decisions | Every frozen choice and the evidence behind it: [`docs/architecture_decisions/INDEX.md`](docs/architecture_decisions/INDEX.md). |
@@ -301,7 +295,7 @@ pipeline/      Frozen RAG runtime: chunking, retrieval, reranking, parsing, vali
 backend/       FastAPI endpoints, persisted review history, reviewer decision API
 frontend/      Next.js reviewer interface and Project Story
 evaluation/    Metrics, evaluators, schemas, and harnesses
-experiments/   Frozen E00–E23 protocols, outputs, and analyses
+experiments/   Frozen E00–E23 protocols, outputs, and analyses, plus E24 (prepared, not yet run)
 examples/      One worked success case and one worked failure case
 notebooks/     Executable Technical Tour (saved artifacts by default)
 data/          Public-dataset instructions and tracked regression fixtures
@@ -339,3 +333,8 @@ NTU PE6201 (Emerging AI Technologies) end-of-course project.
 NDATrace was developed for NTU PE6201 using the
 [ContractNLI](https://stanfordnlp.github.io/contract-nli/) dataset. It's an evidence-grounded
 reviewer-assist prototype, not legal advice or a production approval system.
+
+**Author note.** Built end to end by one author: the retrieval/reranking pipeline and its
+chunking strategy, the evaluation harness and all 24 experiment scripts, the reviewer decision
+API (`backend/routes/review.py`), the injection guard, and the reproducibility harness
+(`scripts/verify_reproducibility.py`).

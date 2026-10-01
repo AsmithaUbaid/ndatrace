@@ -181,12 +181,6 @@ export default function ReviewPage() {
         <div className="mt-6 grid overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50/70 sm:grid-cols-3">{[["01","Provide NDA"],["02","Choose requirements"],["03","Review results"]].map(([n,label])=><div key={n} className="flex items-center gap-3 border-b border-zinc-200 px-4 py-3 last:border-0 sm:border-b-0 sm:border-r sm:last:border-r-0"><span className="font-mono text-xs font-bold text-zinc-400">{n}</span><span className="text-sm font-medium text-zinc-800">{label}</span></div>)}</div></div>
       </header>
 
-      <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-800 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-300">
-        This is an academic prototype with no authentication or access control. Use sample or
-        synthetic agreements (e.g. the pre-filled example below) — do not paste real confidential
-        documents.
-      </p>
-
       {stage === "error" && !result && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
           {error}

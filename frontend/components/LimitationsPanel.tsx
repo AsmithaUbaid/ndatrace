@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 const ITEMS = [
+  "This is an academic prototype with no authentication or access control — use sample or synthetic agreements, not real confidential documents.",
   "This is a reviewer aid, not legal advice.",
   "Final approval or rejection remains with a human.",
   "The model can misinterpret clauses even when relevant evidence is present.",
