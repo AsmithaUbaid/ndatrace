@@ -44,6 +44,16 @@ uncertain ones first, and records her decision. She's never asked to trust the s
 shown what it's based on. No review-time or productivity claim is made here; see
 [What's measured](#whats-measured-whats-not).
 
+### Why not an existing tool
+
+Commercial contract-review products (Ironclad, Luminance, Kira, among others) already support
+AI-assisted review. Their open challenge, and the proposal's stated reason for building this
+instead of buying it, is handling incomplete, conflicting, or ambiguous evidence: whether to
+answer, search further, or escalate to a human. NDATrace is narrower than any of these products
+on purpose. It covers one task (confidentiality requirement classification against ContractNLI's
+17 fixed hypotheses) and treats "cite the clause, let a human verify it, or flag for review" as
+the actual deliverable, not a feature bolted onto a broader platform.
+
 ## What NDATrace does
 
 It labels an NDA against each of 17 fixed confidentiality requirements as Entailment,
@@ -53,8 +63,44 @@ on its own.
 
 | | |
 | --- | --- |
-| **Input** | An NDA (pasted or uploaded) plus one or more of 17 fixed confidentiality requirements |
-| **Output** | Per requirement: label, the exact cited clause (verbatim, never paraphrased), a short explanation, and any review/security flags |
+| **Input** | One NDA (pasted or uploaded), checked against one or more of the 17 fixed confidentiality requirements |
+| **Output** | One verdict per requirement checked: label, the exact cited clause (verbatim, never paraphrased), a short explanation, and any review/security flags |
+
+One NDA is never checked against more than these 17 requirements, and each requirement is scored
+independently, so partial selections (just the 3 that matter for this deal) work the same way a
+full 17-requirement run does:
+
+```mermaid
+flowchart LR
+    NDA(["One NDA"])
+    R1["Requirement 1"]
+    R2["Requirement 2"]
+    DOTS["..."]
+    R17["Requirement 17"]
+    PIPE["Pipeline<br/><i>(retrieve → classify → validate,<br/>see below)</i>"]
+    V1["Verdict 1"]
+    V2["Verdict 2"]
+    VDOTS["..."]
+    V17["Verdict 17"]
+
+    NDA --> R1 & R2 & DOTS & R17
+    R1 --> PIPE
+    R2 --> PIPE
+    DOTS --> PIPE
+    R17 --> PIPE
+    PIPE --> V1 & V2 & VDOTS & V17
+
+    classDef dim fill:#f8fafc,stroke:#94a3b8,stroke-width:1px,color:#64748b;
+    classDef io fill:#eff6ff,stroke:#3b82f6,stroke-width:1.5px,color:#1e3a5f;
+    classDef pipe fill:#fff7ed,stroke:#f97316,stroke-width:1.5px,color:#7c2d12;
+    class NDA,R1,R2,R17 io;
+    class DOTS,VDOTS dim;
+    class PIPE pipe;
+    class V1,V2,V17 io;
+```
+
+Each requirement goes through retrieval and classification independently (one model call per
+requirement); nothing about Requirement 1's evidence or verdict influences Requirement 2's.
 
 Built and evaluated on [ContractNLI](https://stanfordnlp.github.io/contract-nli/), a public NDA
 benchmark. That's not a claim of performance on real confidential enterprise contracts.
@@ -117,8 +163,8 @@ matches `pipeline/frozen_rag.py` and `pipeline/final_review.py` directly.
 
 | | Metric | Target | Reached (measured) | Status |
 | --- | --- | --- | --- | --- |
-| Primary | Risk-sensitive recall gain, RAG over **Rule-based (non-AI baseline)** | ≥ 5.0 points | **+16.6 points** (53.6% → 70.3%) | ✅ Met, by a wide margin |
-| Secondary | Joint correctness (label + evidence), FULL vs. RAG | Required to be measured and disclosed | 74.6% (FULL) / 72.5% (RAG), n=2,091 | ✅ Reported as measured |
+| Primary | Joint correctness (label + evidence), FULL vs. RAG | Required to be measured and disclosed | 74.6% (FULL) / 72.5% (RAG), n=2,091 | ✅ Reported as measured |
+| Secondary | Risk-sensitive recall gain, RAG over **Rule-based (non-AI baseline)** | ≥ 5.0 points | **+16.6 points** (53.6% → 70.3%) | ✅ Met, by a wide margin |
 | Secondary | Contradiction recall, reported separately (not averaged away) | Required, not fixed | 75.5% (FULL) / 77.3% (RAG) | ✅ Reported separately |
 
 Official ContractNLI TEST split, n = 2,091, all three systems on the identical population.
@@ -183,7 +229,10 @@ findings.
 
 ## Key design decisions
 
-Four architectures were built and measured against each other, not assumed:
+### The architecture ladder
+
+Start at the cheapest rung, make each escalation earn itself: four architectures were built and
+measured against each other, not assumed, in order.
 
 | Alternative | Verdict |
 | --- | --- |
@@ -219,6 +268,24 @@ by step in [`examples/case_failure/`](examples/case_failure/).
 
 The full 24-experiment ledger (E00–E23), each with its question, finding, and decision, is in
 [`docs/experiment_registry.md`](docs/experiment_registry.md).
+
+### Build vs. buy, by layer
+
+What's rented, what's reused off the shelf, and what's actually owned engineering, compared
+against what the proposal originally planned for each layer:
+
+| Layer | Decision | Proposed (Problem Statement) | Final |
+| --- | --- | --- | --- |
+| Compute / model | Rent | OpenRouter-hosted GPT-5-mini + local Llama 3.2 3B | OpenRouter-hosted GPT-5-mini; local comparator moved to Qwen2.5-7B (Llama 3.2 3B dropped, see [`docs/citation_fixes.md`](docs/citation_fixes.md) item 5) |
+| Data | Own | ContractNLI + custom preprocessing/index | Unchanged |
+| Vector store | Use existing | FAISS locally | Not used in the frozen path: production retrieval is BM25-only (E06 found dense/hybrid earned nothing once reranking was added) |
+| Embedding model | Use existing | sentence-transformers/all-mpnet-base-v2 | Kept for the (unused-in-production) dense-retrieval comparison only |
+| Retrieval, orchestration, evals | Build | Chunking, indexing, top-K retrieval, evidence mapping, reviewer decision API, evaluation harness | Unchanged, this is the project-specific logic |
+| Serving / interface | Build | Streamlit | **Next.js + FastAPI, not Streamlit as originally proposed.** Streamlit was the Week-3 plan for a quick demo UI; the reviewer decision API (Approve/Override/Reject, append-only audit trail) needed a real backend, so the interface became a proper frontend/backend split instead of a single Streamlit script. |
+
+The model and standard libraries are rented or reused; the retrieval pipeline, evaluation
+harness, reviewer decision API, injection guard, and reproducibility harness are owned,
+project-specific engineering.
 
 ## Quick start
 
@@ -261,13 +328,23 @@ the product, not proving it.
 
 ```bash
 # A: one command: dataset checksum, full pytest (433 tests), every offline analysis
-# script, byte-for-byte drift check, and in-process backend checks
+# script, byte-for-byte drift check, and in-process backend checks. No API key needed.
 python scripts/verify_reproducibility.py
 
 # B: one real NDA through the real pipeline (pipeline/frozen_rag.py + final_review.py)
-python experiments/E00_smallest_slice/run_smallest_slice.py          # dry-run, $0
+python experiments/E00_smallest_slice/run_smallest_slice.py          # dry-run, $0, no key needed
 python experiments/E00_smallest_slice/run_smallest_slice.py --live   # one real call, ~$0.002
 ```
+
+`--live` is the only command on this page that calls a hosted model. It needs your own
+`OPENROUTER_API_KEY` in `.env` (see [Quick start](#quick-start)); nothing else in this section
+requires a key, and A never makes a network call at all.
+
+C has no copy-paste command on purpose: it means re-running a full experiment at TEST scale
+(for example `python scripts/run_e20_hosted_test.py`, the script behind the 2,091-case headline
+result), which costs real money (E20's own run was $3.52) and takes close to an hour. If you want
+to verify it yourself rather than trust the saved output, the script is there, but it's not
+something to run casually or as a routine check.
 
 <details>
 <summary>Sample output: A</summary>
@@ -395,6 +472,7 @@ tests/         Unit, integration, robustness, and leakage checks
 | Semantic classification correctness | A separate question. Source-valid evidence doesn't mean the label is correct. |
 | Prompt-injection detection | Partial, not solved. 4 of 11 tested attack patterns still bypass the guard (E16). |
 | Human verification | Every result is shown for review; nothing auto-finalizes. |
+| OWASP LLM Top 10 (2025) | Assessed in full (E21): 3 PASS, 5 PARTIAL, 2 FAIL across all 10 categories. Both FAILs remediated (E22): unbounded consumption now PASS (real cost/rate limits enforced), prompt injection raised to PARTIAL (detection below the pre-declared ≥8/11 bar, reported honestly rather than rounded up). No production authentication (LLM02) remains unremediated. |
 
 No authentication: scoped to public or synthetic NDA text only, not approved for confidential
 documents. ContractNLI is a public benchmark, not evidence of performance on long (50–100 page)
