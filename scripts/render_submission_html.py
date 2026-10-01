@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render the editable final-report Markdown source as a polished HTML document."""
+"""Render the HTML-only final-report source as a polished analytical document."""
 from __future__ import annotations
 
 import html
@@ -7,15 +7,43 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "reports/NDATrace_Final_Report.md"
+SOURCE = ROOT / "reports/NDATrace_Final_Report_HTML.md"
 TARGET = ROOT / "reports/NDATrace_Final_Report.html"
 
 
 def inline(value: str) -> str:
     value = html.escape(value, quote=False)
+    value = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", value)
     value = re.sub(r"`([^`]+)`", r"<code>\1</code>", value)
     value = re.sub(r"\[([^]]+)]\(([^)]+)\)", r'<a href="\2">\1</a>', value)
     return value
+
+
+def prose_word_count(markdown: str) -> int:
+    """Count report prose only: exclude headings, tables, figures/captions, refs and audit appendix."""
+    body = markdown.split("<!-- report-body-start -->", 1)[1].split("<!-- report-body-end -->", 1)[0]
+    paragraphs: list[str] = []
+    current: list[str] = []
+    for line in body.splitlines():
+        stripped = line.strip()
+        excluded = (
+            not stripped
+            or stripped.startswith("#")
+            or stripped.startswith("|")
+            or stripped.startswith("![")
+            or (stripped.startswith("*") and stripped.endswith("*"))
+            or stripped.startswith("<!--")
+        )
+        if excluded:
+            if current:
+                paragraphs.append(" ".join(current))
+                current.clear()
+        else:
+            current.append(stripped)
+    if current:
+        paragraphs.append(" ".join(current))
+    plain = re.sub(r"[`*_\[\]()]", " ", " ".join(paragraphs))
+    return len(re.findall(r"\b[\w$%+.-]+\b", plain))
 
 
 def render(markdown: str) -> str:
@@ -23,6 +51,7 @@ def render(markdown: str) -> str:
     output: list[str] = []
     paragraph: list[str] = []
     table: list[list[str]] = []
+    list_items: list[str] = []
 
     def flush_paragraph() -> None:
         if paragraph:
@@ -34,28 +63,46 @@ def render(markdown: str) -> str:
             return
         header, *rows = table
         rows = [row for row in rows if not all(set(cell) <= {"-", ":"} for cell in row)]
-        output.append("<div class=\"table-wrap\"><table><thead><tr>")
+        table_class = "metrics" if header and header[0] == "Metric" else ""
+        output.append(f'<div class="table-wrap"><table class="{table_class}"><thead><tr>')
         output.extend(f"<th>{inline(cell)}</th>" for cell in header)
         output.append("</tr></thead><tbody>")
         for row in rows:
-            output.append("<tr>")
+            group = len(row) > 1 and all(not cell for cell in row[1:])
+            output.append('<tr class="group-row">' if group else "<tr>")
             output.extend(f"<td>{inline(cell)}</td>" for cell in row)
             output.append("</tr>")
         output.append("</tbody></table></div>")
         table.clear()
 
+    def flush_list() -> None:
+        if list_items:
+            output.append('<ul class="limitations">')
+            output.extend(f"<li>{inline(item)}</li>" for item in list_items)
+            output.append("</ul>")
+            list_items.clear()
+
     for line in lines:
         if line.startswith("|"):
             flush_paragraph()
+            flush_list()
             table.append([cell.strip() for cell in line.strip("|").split("|")])
             continue
-        flush_table()
         stripped = line.strip()
+        if stripped.startswith("- "):
+            flush_paragraph()
+            flush_table()
+            list_items.append(stripped[2:])
+            continue
+        flush_table()
+        flush_list()
         if not stripped:
             flush_paragraph()
         elif stripped == "<!-- pagebreak -->":
             flush_paragraph()
             output.append('<div class="page-break" aria-hidden="true"></div>')
+        elif stripped.startswith("<!--") and stripped.endswith("-->"):
+            flush_paragraph()
         elif line.startswith("# "):
             flush_paragraph()
             output.append(f"<h1>{inline(line[2:])}</h1>")
@@ -79,6 +126,7 @@ def render(markdown: str) -> str:
             paragraph.append(stripped)
     flush_paragraph()
     flush_table()
+    flush_list()
     return "\n".join(output)
 
 
@@ -135,6 +183,11 @@ p { margin: 0 0 14px; }
   color: var(--muted);
   font-size: 14px;
 }
+.word-count {
+  margin: -14px 0 28px;
+  color: var(--muted);
+  font-size: 12px;
+}
 .caption {
   margin: -4px 0 22px;
   color: var(--muted);
@@ -163,6 +216,11 @@ th:last-child, td:last-child { border-right: 0; }
 tbody tr:last-child td { border-bottom: 0; }
 th { color: var(--navy); background: #eef3f8; text-align: left; font-size: 12px; letter-spacing: .02em; }
 tbody tr:nth-child(even) { background: #fafbfd; }
+.group-row td { background: #e7eef6; color: var(--navy); font-weight: 700; }
+.metrics th:not(:first-child), .metrics td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+strong { color: var(--navy); }
+.limitations { margin: 8px 0 0; padding-left: 22px; }
+.limitations li { margin: 0 0 7px; }
 code { padding: .12em .3em; border-radius: 3px; background: #eef3f8; font-size: .88em; overflow-wrap: anywhere; }
 a { color: var(--blue); }
 .page-break { height: 1px; margin: 0; }
@@ -179,13 +237,22 @@ a { color: var(--blue); }
   h2 { font-size: 14pt; margin-top: 20pt; }
   .page-break { break-before: page; }
   figure, .table-wrap { break-inside: avoid; }
+  .limitations { font-size: 8.5pt; line-height: 1.28; }
+  .limitations li { margin-bottom: 2px; }
   a { color: inherit; text-decoration: none; }
 }
 """
 
 
 def main() -> None:
-    body = render(SOURCE.read_text(encoding="utf-8"))
+    markdown = SOURCE.read_text(encoding="utf-8")
+    count = prose_word_count(markdown)
+    body = render(markdown)
+    body = body.replace(
+        '</p>\n<h2>1. Problem and business significance</h2>',
+        f'</p>\n<p class="word-count">Word count: {count:,} words (main prose only; headings, tables, captions, references and audit notes excluded).</p>\n<h2>1. Problem and business significance</h2>',
+        1,
+    )
     document = f"""<!doctype html>
 <html lang="en">
 <head>

@@ -40,7 +40,7 @@ based on.
 
 Today she reads the whole NDA clause by clause to make sure nothing was missed. With NDATrace
 she gets a verdict per requirement, each with its supporting clause, reviews the flagged or
-uncertain ones first, and records her decision. She's never asked to trust the system — she's
+uncertain ones first, and records her decision. She's never asked to trust the system; she's
 shown what it's based on. No review-time or productivity claim is made here; see
 [What's measured](#whats-measured-whats-not).
 
@@ -137,16 +137,16 @@ p=0.0047); accuracy isn't significantly different (p=0.217). More detail in
 | Population | Rule | FULL | RAG |
 | --- | ---: | ---: | ---: |
 | **2,091-case official TEST benchmark** (headline numbers above) | 59.0% acc / 50.1% joint | 77.6% acc / 74.6% joint | 76.8% acc / 72.5% joint |
-| **49-case targeted evaluation** (E24 — golden + negative + evidence-quality battery, deliberately includes the hardest known case family) | 51.0% acc / 44.9% joint | 73.5% acc / 73.5% joint | 71.4% acc / 67.3% joint |
+| **49-case targeted evaluation** (E24: golden + negative + evidence-quality battery, deliberately includes the hardest known case family) | 51.0% acc / 44.9% joint | 73.5% acc / 73.5% joint | 71.4% acc / 67.3% joint |
 
 The targeted set is a regression check on cases this project already hand-curated to be hard, run
-against the current architecture for the first time — not a second benchmark, and lower numbers
+against the current architecture for the first time. It's not a second benchmark, and lower numbers
 here don't revise the TEST result above. It surfaced findings the TEST-scale numbers can't: the
 exception/carve-out weakness documented in ADR-011 persists today (3 of 4 known cases still
 fail); one case (038) was traced to the exact clause FULL over-weighted and RAG's narrower
-context avoided — direct evidence that full-document access isn't strictly safer than retrieval;
+context avoided: direct evidence that full-document access isn't strictly safer than retrieval,
 and RAG's two evidence-grounding failures (correct label, insufficient cited evidence) were
-diagnosed down to exact gold-span coverage, not just scored pass/fail — both are retrieval
+diagnosed down to exact gold-span coverage, not just scored pass/fail. Both are retrieval
 coverage gaps, not pure model errors. Full case-level detail:
 [`experiments/E24_targeted_evaluation/summary.md`](experiments/E24_targeted_evaluation/summary.md).
 
@@ -154,33 +154,31 @@ coverage gaps, not pure model errors. Full case-level detail:
 
 NDATrace measures inference cost and model quality directly: RAG runs $0.00168/case, FULL
 $0.00202/case (`experiments/E20_final_rag_test/results/E20_final_report.json`). End-to-end
-reviewer time savings have not been measured in this project — no productivity study was run. No
-sources are compared for this app, this is a modeled, explicit scenario, not a result.
+reviewer time savings have not been measured in this project; no productivity study was run.
+What follows is a modeled, explicit scenario, not a result.
 
-Business impact is therefore modeled using a published contract-review-time benchmark and
-explicit scenario assumptions, kept in three separate, clearly labeled categories:
+Business impact is modeled using a published contract-review-time benchmark plus explicit
+scenario assumptions, kept in three separate, clearly labeled categories:
 
 | Category | What it is |
 | --- | --- |
-| **Measured by NDATrace** | Inference cost/case, input tokens, latency — all read from saved run artifacts. |
-| **Externally sourced baseline** | LegalOn Technologies, *2025 State of Contracting Survey* (n=286, published 15 Jan 2025): 52% of organizations handle 101–1,000 contracts/year at 2–4 hours of review per contract. Vendor research (LegalOn sells AI contract review software) — not independently verified academic evidence. [Source](https://www.legalontech.com/press-releases/2025-survey), citation review: [`docs/citation_fixes.md`](docs/citation_fixes.md). |
+| **Measured by NDATrace** | Inference cost/case, input tokens, latency. All read from saved run artifacts. |
+| **Externally sourced baseline** | LegalOn Technologies, *2025 State of Contracting Survey* (n=286, published 15 Jan 2025): 52% of organizations handle 101–1,000 contracts/year at 2–4 hours of review per contract. Vendor research (LegalOn sells AI contract review software), not independently verified academic evidence. [Source](https://www.legalontech.com/press-releases/2025-survey), citation review: [`docs/citation_fixes.md`](docs/citation_fixes.md). |
 | **Modeled / illustrative** | Assumed effort-reduction percentage, assumed hourly rate, resulting hours and labor-cost scenarios. Explicit assumptions, not fitted to any target. |
 
-**Scenario example** (midpoint of the published 2–4 hour range → 3 hours/contract; 500
-contracts/year; $40/hour — all stated assumptions, not measurements):
+![What a modeled effort reduction is worth, at 500 contracts/year](docs/images/business_economics_scenario.png)
 
-| Assumed effort reduction | Hours saved/year | Modeled labor savings/year |
-| --- | ---: | ---: |
-| 10% | 150 | $6,000 |
-| 20% | 300 | $12,000 |
-| 30% | 450 | $18,000 |
+**Takeaway:** labor cost scales linearly with the assumed reduction rate by construction (it's a
+formula, not a model fit); the point of the chart is the absolute scale ($6,000 to $18,000/year
+at this volume), not the shape. Baseline: 3 hours/contract (midpoint of the published 2 to 4 hour
+range), 500 contracts/year, $40/hour. Every one of those three numbers is a stated assumption.
 
-Formula, fully transparent: `annual_hours = contracts/year × baseline_hours/contract`;
-`hours_saved = annual_hours × assumed_reduction_rate`; `labor_savings = hours_saved × assumed_hourly_rate`.
+Formula, fully transparent: `annual_hours = contracts/year × baseline_hours/contract`,
+`hours_saved = annual_hours × assumed_reduction_rate`, `labor_savings = hours_saved × assumed_hourly_rate`.
 Reproduce or change the assumptions: `python scripts/business_economics_scenario.py`.
 
 No productivity study was conducted. These numbers show potential economic scale under stated
-assumptions, not a realized or proven ROI — treat the percentages as illustrative inputs, not
+assumptions, not a realized or proven ROI. Treat the percentages as illustrative inputs, not
 findings.
 
 ## Key design decisions
@@ -214,7 +212,7 @@ Trade-offs made, explicitly:
 
 ![Where RAG actually fails](docs/images/failure_pareto.png)
 
-**Takeaway:** Retrieval was not the dominant failure source in E20 — only 10% of RAG's failures
+**Takeaway:** Retrieval was not the dominant failure source in E20. Only 10% of RAG's failures
 are retrieval-limited; 78% are reasoning errors on evidence it already found. Full breakdown in
 [`docs/failure_analysis.md`](docs/failure_analysis.md), with one real case walked through step
 by step in [`examples/case_failure/`](examples/case_failure/).
@@ -262,17 +260,17 @@ the product, not proving it.
 | C. Rerun large-scale paid inference | Real API cost | Not part of normal verification, not done casually. |
 
 ```bash
-# A — one command: dataset checksum, full pytest (433 tests), every offline analysis
+# A: one command: dataset checksum, full pytest (433 tests), every offline analysis
 # script, byte-for-byte drift check, and in-process backend checks
 python scripts/verify_reproducibility.py
 
-# B — one real NDA through the real pipeline (pipeline/frozen_rag.py + final_review.py)
+# B: one real NDA through the real pipeline (pipeline/frozen_rag.py + final_review.py)
 python experiments/E00_smallest_slice/run_smallest_slice.py          # dry-run, $0
 python experiments/E00_smallest_slice/run_smallest_slice.py --live   # one real call, ~$0.002
 ```
 
 <details>
-<summary>Sample output — A</summary>
+<summary>Sample output: A</summary>
 
 ```text
 ============================================================
@@ -303,12 +301,12 @@ python scripts/e18_business_analysis.py
 ```
 
 Each one recomputes its experiment's metrics from saved predictions, zero model calls. Listed
-here so this isn't a black box — see `scripts/verify_reproducibility.py`'s `ANALYSIS_SCRIPTS`.
+here so this isn't a black box; see `scripts/verify_reproducibility.py`'s `ANALYSIS_SCRIPTS`.
 
 </details>
 
 <details>
-<summary>Sample output — B (dry-run)</summary>
+<summary>Sample output: B (dry-run)</summary>
 
 ```json
 {
@@ -329,7 +327,7 @@ Frontend checks: `cd frontend && npx tsc --noEmit && npm test && npm run build`.
 
 | | |
 | --- | --- |
-| Dataset | [ContractNLI](https://stanfordnlp.github.io/contract-nli/) (Koreeda & Manning, EMNLP 2021 Findings), CC BY 4.0, a public benchmark — not confidential company contracts. 607 NDAs, 10,319 examples across the official train/dev/test roles; TEST (2,091 examples, 123 documents) is reserved for the one-time final evaluation. Download + checksum-verify: `bash scripts/download_data.sh`; files live in `data/contractnli/`. |
+| Dataset | [ContractNLI](https://stanfordnlp.github.io/contract-nli/) (Koreeda & Manning, EMNLP 2021 Findings), CC BY 4.0, a public benchmark, not confidential company contracts. 607 NDAs, 10,319 examples across the official train/dev/test roles; TEST (2,091 examples, 123 documents) is reserved for the one-time final evaluation. Download + checksum-verify: `bash scripts/download_data.sh`; files live in `data/contractnli/`. |
 | Evals | An offline scoring harness that knows gold labels, kept separate from a runtime validator that never sees them. |
 | Experiments | 24 numbered, frozen experiments (E00–E23), each with its question, finding, and decision. |
 
@@ -358,7 +356,7 @@ numbers come from the official TEST evaluation under the documented final protoc
 [Metrics](#metrics-targeted-vs-reached) above).
 
 Pass/fail results for every row above are in
-[`docs/test_coverage_summary.md`](docs/test_coverage_summary.md) — **measured against the legacy
+[`docs/test_coverage_summary.md`](docs/test_coverage_summary.md). **Measured against the legacy
 pipeline (RAG + selective agent), not the current final architecture** (GPT-5-mini + FULL); that
 distinction is called out in the summary itself and repeated here so it isn't lost in a link.
 

@@ -161,35 +161,52 @@ def frontier():
 
 
 def cost_sensitivity():
-    im = canvas(790)
+    # Scenario model from E18: C_total = V * [C_AI + (1-p_success) * C_H].
+    # C_AI is measured from E20. V, review minutes, hourly rate and p_success
+    # are deliberately varied assumptions, not observed automation behaviour.
+    im = Image.new("RGB", (1800, 820), WHITE)
     d = ImageDraw.Draw(im)
     text(d, (70, 35), "Cost-to-serve sensitivity", 42, NAVY, True)
-    text(d, (70, 90), "Illustrative 1,000-case scenario; Joint is a proxy, not measured review avoidance", 25, MUTED)
-    left, top, right, bottom = 160, 155, 1470, 650
-    ymax = 3000
-    for amount in (0, 1000, 2000, 3000):
-        y = bottom - amount / ymax * (bottom - top)
-        d.line((left, y, right, y), fill=GRID, width=2)
-        text(d, (left - 18, y), f"${amount:,}", 20, MUTED, anchor="rm")
-    for review in (0, 2, 4, 6, 8, 10):
-        x = left + review / 10 * (right - left)
-        d.line((x, top, x, bottom), fill=GRID, width=2)
-        text(d, (x, bottom + 23), f"${review}", 20, MUTED, anchor="mt")
-    series = [("FULL", FULL, NAVY), ("RAG", RAG, TEAL)]
-    for name, data, color in series:
-        points = []
-        for step in range(101):
-            review = step / 10
-            total = 1000 * (data["cost_per_case"] + (1 - data["joint"]) * review)
-            x = left + review / 10 * (right - left)
-            y = bottom - total / ymax * (bottom - top)
-            points.append((x, y))
-        d.line(points, fill=color, width=6)
-        x, y = points[-1]
-        text(d, (x - 20, y - (24 if name == "FULL" else -24)), name, 23, color, True, "rm")
-    text(d, (left, top - 20), "Modelled total cost for 1,000 cases (USD)", 21, MUTED, True, "ls")
-    text(d, ((left + right) / 2, 720), "Assumed human-review cost per case", 23, INK, anchor="mm")
-    text(d, (70, 762), "Formula: 1,000 x [measured AI cost + (1 - Joint) x assumed review cost].", 21, MUTED)
+    text(d, (70, 90), "RAG measured AI cost; review time, hourly rate, volume and successful-review rate are assumptions", 25, MUTED)
+    volumes = [100, 1000, 8000]
+    review_scenarios = [
+        ("1 min @ $20/h", 1 / 60 * 20, BLUE),
+        ("5 min @ $40/h", 5 / 60 * 40, TEAL),
+        ("10 min @ $75/h", 10 / 60 * 75, AMBER),
+    ]
+    panel_w, gap = 500, 45
+    top, bottom = 210, 650
+    for panel, volume in enumerate(volumes):
+        left = 105 + panel * (panel_w + gap)
+        right = left + panel_w
+        ymax = volume * (RAG["cost_per_case"] + review_scenarios[-1][1])
+        text(d, ((left + right) / 2, 165), f"{volume:,} cases", 27, NAVY, True, "mm")
+        for frac in (0, .25, .5, .75, 1):
+            y = bottom - frac * (bottom - top)
+            d.line((left, y, right, y), fill=GRID, width=2)
+            if panel == 0:
+                text(d, (left - 14, y), f"${frac * ymax:,.0f}", 18, MUTED, anchor="rm")
+        for success in (0, .25, .5, .75, 1):
+            x = left + success * (right - left)
+            d.line((x, top, x, bottom), fill=GRID, width=2)
+            text(d, (x, bottom + 22), f"{success:.0%}", 18, MUTED, anchor="mt")
+        for label_value, review_cost, color in review_scenarios:
+            points = []
+            for step in range(101):
+                success = step / 100
+                total = volume * (RAG["cost_per_case"] + (1 - success) * review_cost)
+                x = left + success * (right - left)
+                y = bottom - total / ymax * (bottom - top)
+                points.append((x, y))
+            d.line(points, fill=color, width=5)
+        text(d, ((left + right) / 2, 700), "Assumed successful-review rate", 20, INK, anchor="mm")
+    text(d, (72, 188), "Modelled operating cost (USD)", 20, MUTED, True)
+    legend_x = 255
+    for label_value, _, color in review_scenarios:
+        d.line((legend_x, 765, legend_x + 42, 765), fill=color, width=6)
+        text(d, (legend_x + 52, 765), label_value, 20, INK, anchor="lm")
+        legend_x += 420
+    text(d, (70, 805), "Formula: volume x [measured RAG AI cost + (1 - assumed success) x assumed human-review cost].", 19, MUTED)
     im.save(OUT / "submission_cost_sensitivity.png", optimize=True)
 
 
