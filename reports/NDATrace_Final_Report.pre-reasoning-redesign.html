@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Ubaidulla Asmitha">
+  <title>NDATrace - Does Additional AI Complexity Earn Its Place?</title>
+  <style>
+:root {
+  --navy: #19324d;
+  --blue: #3568ac;
+  --teal: #138a83;
+  --amber: #c57a2d;
+  --ink: #18243a;
+  --muted: #5c6b82;
+  --line: #d9e0e8;
+  --paper: #ffffff;
+  --canvas: #edf1f5;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--canvas);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+}
+main {
+  width: min(960px, calc(100% - 32px));
+  margin: 32px auto;
+  padding: 64px 76px;
+  background: var(--paper);
+  box-shadow: 0 12px 40px rgba(25, 50, 77, .12);
+}
+h1 {
+  max-width: 820px;
+  margin: 0 0 8px;
+  color: var(--navy);
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.08;
+  letter-spacing: -.025em;
+}
+h2 {
+  margin: 34px 0 10px;
+  padding-top: 6px;
+  color: var(--navy);
+  font-size: 22px;
+  line-height: 1.25;
+  break-after: avoid;
+}
+h3 {
+  margin: 22px 0 8px;
+  color: var(--navy);
+  font-size: 16px;
+  line-height: 1.3;
+  break-after: avoid;
+}
+p { margin: 0 0 14px; }
+.byline {
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 14px;
+}
+.word-count {
+  margin: -14px 0 28px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.caption {
+  margin: -4px 0 22px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+figure {
+  margin: 22px 0 10px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfd;
+  break-inside: avoid;
+}
+figure img { display: block; width: 100%; height: auto; }
+.table-wrap {
+  margin: 18px 0 24px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  break-inside: avoid;
+}
+table { width: 100%; border-collapse: collapse; font-size: 13px; line-height: 1.35; }
+th, td { padding: 9px 10px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); vertical-align: top; }
+th:last-child, td:last-child { border-right: 0; }
+tbody tr:last-child td { border-bottom: 0; }
+th { color: var(--navy); background: #eef3f8; text-align: left; font-size: 12px; letter-spacing: .02em; }
+tbody tr:nth-child(even) { background: #fafbfd; }
+.group-row td { background: #e7eef6; color: var(--navy); font-weight: 700; }
+.metrics th:not(:first-child), .metrics td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+strong { color: var(--navy); }
+.limitations { margin: 8px 0 0; padding-left: 22px; }
+.limitations li { margin: 0 0 7px; }
+code { padding: .12em .3em; border-radius: 3px; background: #eef3f8; font-size: .88em; overflow-wrap: anywhere; }
+a { color: var(--blue); }
+.page-break { height: 1px; margin: 0; }
+@media (max-width: 700px) {
+  main { width: 100%; margin: 0; padding: 34px 22px; box-shadow: none; }
+  body { background: var(--paper); }
+  table { min-width: 620px; }
+}
+@media print {
+  @page { size: A4; margin: 16mm 17mm; }
+  body { background: #fff; font-size: 10pt; line-height: 1.42; }
+  main { width: auto; margin: 0; padding: 0; box-shadow: none; }
+  h1 { font-size: 24pt; }
+  h2 { font-size: 14pt; margin-top: 20pt; }
+  h3 { font-size: 11pt; margin-top: 14pt; }
+  .page-break { break-before: page; }
+  figure, .table-wrap { break-inside: avoid; }
+  .limitations { font-size: 8.5pt; line-height: 1.28; }
+  .limitations li { margin-bottom: 2px; }
+  a { color: inherit; text-decoration: none; }
+}
+</style>
+</head>
+<body>
+<main>
+<h1>NDATrace: Does Additional AI Complexity Earn Its Place?</h1>
+<p class="byline">Ubaidulla Asmitha | PE6201 Emerging AI Technologies | Final analytical report | 1 October 2026</p>
+<p class="word-count">Word count: 1,378 words (main prose only; headings, tables, captions, references and audit notes excluded).</p>
+<h2>1. Problem and business significance</h2>
+<p>Tina, an enterprise legal-operations analyst, reviews vendor NDAs against 17 confidentiality requirements before lawyer approval. Today that means keyword search over unindexed prose, with no standard evidence trail; a misread clause stays invisible until a dispute surfaces it. NDATrace classifies each requirement as Entailment, Contradiction or NotMentioned and returns its supporting clause, shifting the reviewer's task from re-reading whole documents to verifying specific, checkable claims — a change in the task, not yet a proven time saving. A correct label based on the wrong clause is not a defensible result, so the system assists Tina rather than approving, rejecting or negotiating on its own. A vendor survey of 286 legal professionals reported that 52% of organisations handle 101-1,000 contracts annually and most spend 2-4 hours per contract [1], motivating the workload; NDATrace has not measured productivity savings against it.</p>
+<h2>2. Proposed solution and architecture</h2>
+<p>I implemented a hybrid system because semantic interpretation and operational control require different mechanisms. Deterministic software performs clause-aware chunking, retrieval, reranking, schema parsing, evidence-source validation, injection flagging and resource limits; GPT-5-mini performs the bounded semantic classification (Figure 1). The reviewer receives the label, verbatim evidence and flags, then records the final decision. Renting the model avoided training and serving infrastructure; building the retrieval, evaluation and workflow layers preserved control over project-specific evidence semantics and reviewer authority. This division makes model outputs checkable without implying that a valid quotation guarantees a correct interpretation.</p>
+<figure><img src="figures/submission_architecture.png" alt="Deployed NDATrace architecture"></figure>
+<p class="caption">Figure 1. Frozen prototype path: 256-token chunks, BM25 top-20, cross-encoder top-5, GPT-5-mini, deterministic controls and mandatory human review.</p>
+<div class="table-wrap"><table class=""><thead><tr>
+<th>Layer</th>
+<th>Build / rent / use</th>
+<th>Actual prototype decision</th>
+</tr></thead><tbody>
+<tr>
+<td>Compute</td>
+<td>Rent</td>
+<td>OpenRouter-hosted inference; local Ollama retained for the measured comparator</td>
+</tr>
+<tr>
+<td>Model</td>
+<td>Rent</td>
+<td>GPT-5-mini; avoid training and model-serving overhead</td>
+</tr>
+<tr>
+<td>Data and retrieval</td>
+<td>Use + build</td>
+<td>Public ContractNLI; build per-document BM25/reranking pipeline using existing libraries/models</td>
+</tr>
+<tr>
+<td>Orchestration</td>
+<td>Build</td>
+<td>One bounded classification path; no agent loop or automatic confidence gate</td>
+</tr>
+<tr>
+<td>Evaluation</td>
+<td>Build</td>
+<td>Gold-aware offline harness separated from the gold-blind runtime validator</td>
+</tr>
+<tr>
+<td>Serving</td>
+<td>Build</td>
+<td>FastAPI, Next.js evidence display, review history and recorded reviewer decisions</td>
+</tr>
+<tr>
+<td>Governance</td>
+<td>Build / incomplete</td>
+<td>Guards, limits and human authority exist; enterprise identity and access controls do not</td>
+</tr>
+</tbody></table></div>
+<h2>3. Experimental methodology and progression</h2>
+<p>I assigned the official ContractNLI splits before comparison: TRAIN for component development, DEV for validation, and TEST for the final frozen evaluation. Gold labels and evidence were withheld from inference and used only for scoring. A prior superseded lineage had partially observed TEST, so I describe the final split as not tuned against in this re-derived sequence rather than perfectly blind. The final official population contains 2,091 requirement-document cases; the separate 49-case curated DEV battery concentrates known difficult mechanisms and is not a second benchmark. Each experiment changed one decision layer or supplied a diagnostic: Oracle evidence separated retrieval from reasoning, controlled prompts and retrieval sweeps froze simple components, and later comparisons tested whether RAG, an agent or automatic routing earned added complexity. The decisive FULL/RAG comparison held model, prompt, evaluator and case population constant and used paired significance tests. Two problems were caught before they could silently distort a headline metric: an exact-substring evidence evaluator initially miscounted valid paraphrased citations as failures, hardened before the TEST run; and a local inference server silently ignored a context-length setting, which calibration caught before it could make the full-context baseline look permanently weaker than it is. The eight rows below shaped the final architecture; the complete sequence is in the appendix table that follows.</p>
+<div class="table-wrap"><table class=""><thead><tr>
+<th>Experiment / research question</th>
+<th>Key measured finding</th>
+<th>Architectural decision or lesson</th>
+</tr></thead><tbody>
+<tr>
+<td>Oracle: what remains difficult with gold evidence?</td>
+<td>On 300 balanced TRAIN cases, GPT-5-mini reached 0.906 macro-F1 and 82% Contradiction recall; local Qwen reached 0.638 and 30%</td>
+<td>Use the hosted model for final semantic quality; evidence access is not the only bottleneck</td>
+</tr>
+<tr>
+<td>Model selection: local or hosted?</td>
+<td>Hosted GPT-5-mini had the strongest reasoning ceiling; local Qwen remained a zero-API-cost comparator</td>
+<td>Rent the stronger model; disclose provider dependency and measured cost</td>
+</tr>
+<tr>
+<td>Prompt engineering: does more instruction help?</td>
+<td>On 150 retrieved-context TRAIN cases, the minimal prompt led on macro-F1 (0.507 vs 0.448/0.403) and Contradiction recall (22% vs 6%/2%)</td>
+<td>Freeze the minimal prompt</td>
+</tr>
+<tr>
+<td>Retrieval optimisation: which evidence path?</td>
+<td>On 4,371 TRAIN cases, BM25, dense and hybrid candidate generation converged near 92.2% Recall@5 after reranking; BM25 and dense differed on one case</td>
+<td>Freeze simpler BM25 top-20 plus cross-encoder top-5</td>
+</tr>
+<tr>
+<td>FULL versus RAG: does bounded context preserve quality?</td>
+<td>On matched TEST, RAG cut input tokens 50.4% and API cost 16.8%, but FULL led Joint correctness by 2.2 points</td>
+<td>Keep FULL as quality reference; serve RAG as an explicit efficiency trade-off</td>
+</tr>
+<tr>
+<td>Selective agent: do tools recover failures?</td>
+<td>Fifteen escalations produced zero tool calls and 0.0-point net Joint gain, with $0.0218 added spend</td>
+<td>Reject the tested agent from runtime</td>
+</tr>
+<tr>
+<td>Confidence routing: can errors be isolated cheaply?</td>
+<td>The strongest policy reviewed 51.4% of 138 DEV cases yet left 10.4% residual Joint error, missing both provisional targets</td>
+<td>Keep every case subject to human review</td>
+</tr>
+<tr>
+<td>Robustness and security: do controls withstand attacks?</td>
+<td>Four of 11 injection-pattern pairs succeeded; later guards caught known attacks but only 4/11 patterns, while resource-limit tests passed</td>
+<td>Quarantine detected patterns, retain human review and disclose residual injection risk</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table class=""><thead><tr>
+<th>Full experiment sequence (appendix)</th>
+<th>Question it answered</th>
+<th>Outcome</th>
+</tr></thead><tbody>
+<tr>
+<td>Dataset and split validation</td>
+<td>Are the official splits usable as-is?</td>
+<td>Confirmed; no rebuild needed</td>
+</tr>
+<tr>
+<td>Budget and runtime forecast</td>
+<td>Can the planned run sequence stay inside budget?</td>
+<td>Forecast built and approved before any paid call</td>
+</tr>
+<tr>
+<td>Majority-class baseline</td>
+<td>What does a trivial always-Entailment guess score?</td>
+<td>46.3% accuracy, 0% Joint; a floor, not an architecture rung</td>
+</tr>
+<tr>
+<td>Oracle reasoning ceiling</td>
+<td>With gold evidence handed to the model, what is still hard?</td>
+<td>Contradiction reasoning is the bottleneck even with perfect evidence</td>
+</tr>
+<tr>
+<td>Model screening</td>
+<td>Is a separate model bake-off needed?</td>
+<td>No; the Oracle run already answered it</td>
+</tr>
+<tr>
+<td>Prompt selection</td>
+<td>Does more explicit instruction help?</td>
+<td>No; the minimal prompt wins on every priority metric</td>
+</tr>
+<tr>
+<td>Rule baseline</td>
+<td>What can a $0 keyword baseline reach?</td>
+<td>48.2% joint; sets the non-AI floor</td>
+</tr>
+<tr>
+<td>Full-context baseline (local model)</td>
+<td>What does a local model do with the whole document?</td>
+<td>28.0% joint; a context-window truncation bug was found and fixed first</td>
+</tr>
+<tr>
+<td>Retrieval optimisation</td>
+<td>Which retrieval setup is both accurate and simple?</td>
+<td>BM25 top-20 plus reranking; dense embeddings add nothing once reranking exists</td>
+</tr>
+<tr>
+<td>Standard RAG (local model)</td>
+<td>Does bounded retrieval beat full context on a local model?</td>
+<td>Directionally yes on every metric, not significant at this sample size</td>
+</tr>
+<tr>
+<td>RAG failure analysis</td>
+<td>What is actually wrong when RAG fails?</td>
+<td>Mostly reasoning limits, not retrieval; a narrow agent opportunity looks plausible but unconfirmed</td>
+</tr>
+<tr>
+<td>Stronger hosted model diagnostic</td>
+<td>Does a stronger model close the gap alone?</td>
+<td>Yes, sharply (joint 33%-&gt;74%), with zero retrieval or agent change</td>
+</tr>
+<tr>
+<td>Agent justification after stronger model</td>
+<td>Does the agent opportunity survive a stronger model?</td>
+<td>Mostly no; only 1 of 39 residual failures passes a strict dynamic-information test</td>
+</tr>
+<tr>
+<td>Bounded selective-agent design</td>
+<td>What is the cheapest real test of that one-case opportunity?</td>
+<td>A 3-tool, hard-capped agent frozen before any run</td>
+</tr>
+<tr>
+<td>Selective-agent empirical evaluation</td>
+<td>Does the frozen agent recover any value in practice?</td>
+<td>No; net Joint change is zero (see the agent table below)</td>
+</tr>
+<tr>
+<td>Static context expansion</td>
+<td>Would a larger fixed context window help instead of an agent?</td>
+<td>Small, inconclusive gain at real added cost; not adopted</td>
+</tr>
+<tr>
+<td>GPT-specific prompt tuning</td>
+<td>Does a GPT-tuned prompt beat the frozen minimal one?</td>
+<td>Near-tie, one case short of the adoption threshold</td>
+</tr>
+<tr>
+<td>Confirmation re-test of that near-tie</td>
+<td>Does the near-tie replicate on a fresh sample?</td>
+<td>No; direction reverses. Minimal prompt kept</td>
+</tr>
+<tr>
+<td>Full-context vs RAG (GPT, DEV sample)</td>
+<td>Which architecture is stronger on a held-out sample?</td>
+<td>FULL wins on the predeclared rule; first signal of a real quality cost to bounded context</td>
+</tr>
+<tr>
+<td>Evidence evaluator hardening</td>
+<td>Is the evidence-matching logic itself trustworthy?</td>
+<td>A mapping bug was found and fixed before the TEST run, not after</td>
+</tr>
+<tr>
+<td>Runtime validator alignment</td>
+<td>Does the live validator match the hardened evaluator?</td>
+<td>Aligned; no live code path was affected</td>
+</tr>
+<tr>
+<td>Human review routing</td>
+<td>Can cheap signals safely cut the review workload?</td>
+<td>No; the best policy still missed both the workload and error targets</td>
+</tr>
+<tr>
+<td>Robustness and security validation</td>
+<td>Do the guardrails survive adversarial input?</td>
+<td>Partially; 4 of 11 attack patterns still succeed, disclosed rather than hidden</td>
+</tr>
+<tr>
+<td>Final TEST evaluation (sample)</td>
+<td>Does a 150-case sample match the eventual full result?</td>
+<td>Yes, within noise; superseded by the full run below</td>
+</tr>
+<tr>
+<td>Full TEST completion</td>
+<td>What is the final, full-population result?</td>
+<td>Headline number for this report: 77.6% accuracy, 74.6% joint on all 2,091 cases</td>
+</tr>
+<tr>
+<td>Business and cost synthesis</td>
+<td>What does this mean for cost and the course deliverable?</td>
+<td>Offline synthesis only; no new model calls</td>
+</tr>
+<tr>
+<td>Final product integration</td>
+<td>Does the product run the frozen architecture end to end?</td>
+<td>Yes; frontend and backend wired to the final pipeline</td>
+</tr>
+<tr>
+<td>Final RAG vs FULL comparator (TEST)</td>
+<td>How does RAG compare to FULL on the identical final population?</td>
+<td>FULL's Joint edge is statistically significant; RAG is a disclosed efficiency trade-off</td>
+</tr>
+<tr>
+<td>OWASP LLM Top 10 assessment</td>
+<td>Where does the system stand against the standard security checklist?</td>
+<td>4 pass, 6 partial, 0 fail after remediation; real gaps disclosed, not claimed solved</td>
+</tr>
+<tr>
+<td>Targeted security remediation</td>
+<td>Can the two failing categories be fixed?</td>
+<td>Partially; one closes fully, one improves honestly short of its own bar</td>
+</tr>
+<tr>
+<td>Injection guard live-fire check</td>
+<td>Does the shipped guard actually fire on a real adversarial call?</td>
+<td>Yes, on this one scenario; not a new coverage claim</td>
+</tr>
+<tr>
+<td>Targeted evaluation (curated battery)</td>
+<td>How does the current architecture do on the hardest hand-picked cases?</td>
+<td>Lower in absolute terms by design, same FULL-ahead pattern as TEST; surfaces a persistent exception-handling weakness</td>
+</tr>
+</tbody></table></div>
+<h3>Why the tested agent was rejected</h3>
+<div class="table-wrap"><table class=""><thead><tr>
+<th>Stage</th>
+<th>Question</th>
+<th>Finding</th>
+</tr></thead><tbody>
+<tr>
+<td>Initial failure diagnostic</td>
+<td>Could a narrow agent plausibly recover RAG's failures?</td>
+<td>41% of errors looked agent-fixable by a runtime cue, but 49% were plain reasoning failures with no agent fix</td>
+</tr>
+<tr>
+<td>Reassessment after a stronger model</td>
+<td>Does that opportunity survive switching to the stronger hosted model?</td>
+<td>Almost entirely no: of 39 residual failures, only 1 (2.6%) passed a strict, pre-declared dynamic-information-acquisition test</td>
+</tr>
+<tr>
+<td>Bounded design freeze</td>
+<td>What is the cheapest real test of that single-case opportunity?</td>
+<td>A 3-tool agent, hard capped at 3 steps and $0.01/case, triggered only by the one validated cue</td>
+</tr>
+<tr>
+<td>Empirical test of the frozen design</td>
+<td>Does the built agent recover value in practice?</td>
+<td>15 of 150 cases were routed to it; it never invoked its own tools, including on the case it was built for. One recovery, one regression, net zero, for $0.0218 spent</td>
+</tr>
+</tbody></table></div>
+<p>This table is the project's standard for adopting complexity in practice: freeze a bounded design before seeing outcomes, then adopt only if it clears a predeclared bar. It did not say agents cannot help NDA review in general, only that this narrowly-triggered design did not, on the one opportunity the diagnostics could find; the static alternative, a larger fixed context window, was tested separately and also not adopted.</p>
+<h2>4. Quality evaluation and architecture trade-offs</h2>
+<p>Classification accuracy asks only whether the label is right. Joint correctness additionally requires sufficient gold-evidence overlap, so it exposes answers that sound right but cannot be substantiated. On official TEST, FULL achieved 77.6% accuracy and 74.6% Joint correctness; RAG achieved 76.8% and 72.5%. Their accuracy difference was not significant (paired McNemar p=0.217), while FULL's Joint advantage was significant (p=0.0047). The wider label-to-Joint drop for RAG shows why accuracy alone obscures evidence coverage and selection weaknesses. FULL therefore remains the strongest evidence-grounded quality reference, although neither architecture reaches a level that supports unsupervised legal decisions. Joint correctness is itself a project choice, not a law: its 50% gold-span-overlap threshold is predeclared but arbitrary, and a different threshold could shift both architectures' absolute numbers without necessarily changing the ranking — an untested sensitivity, flagged as a real gap.</p>
+<p>The original Problem Statement (Section 7) specifies the success criterion as a minimum five-percentage-point improvement in risk-sensitive recall over FULL-context LLM processing. Measured against FULL, the gain is only +1.2 points (Table 2), so the originally proposed target was not achieved; measured against the rule-based, non-AI baseline named separately in the Problem Statement, RAG shows a +16.6-point gain over a cheap deterministic floor — both reported rather than one chosen to look favorable. RAG was nevertheless retained as the bounded-context prototype: it halves input context, lowers measured inference cost, and its narrower retrieved context avoided a distractor clause that FULL did not (case 038, Section 5) — efficiency and individual-case benefits, not evidence that RAG met the original target or is the stronger architecture overall. The curated results point the same direction on Joint correctness but are too small for a significance claim.</p>
+<div class="table-wrap"><table class="metrics"><thead><tr>
+<th>Metric</th>
+<th>Rule</th>
+<th>FULL</th>
+<th>RAG</th>
+</tr></thead><tbody>
+<tr class="group-row">
+<td><strong>Official TEST benchmark - 2,091 cases</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Accuracy</td>
+<td>59.0%</td>
+<td>77.6%</td>
+<td>76.8%</td>
+</tr>
+<tr>
+<td>Macro-F1</td>
+<td>0.479</td>
+<td>0.727</td>
+<td>0.723</td>
+</tr>
+<tr>
+<td>Joint correctness</td>
+<td>50.1%</td>
+<td>74.6%</td>
+<td>72.5%</td>
+</tr>
+<tr>
+<td>Contradiction recall</td>
+<td>16.8%</td>
+<td>75.5%</td>
+<td>77.3%</td>
+</tr>
+<tr>
+<td>NotMentioned recall</td>
+<td>90.5%</td>
+<td>62.7%</td>
+<td>63.2%</td>
+</tr>
+<tr>
+<td>Risk-sensitive recall (C/NM mean)</td>
+<td>53.6%</td>
+<td>69.1%</td>
+<td>70.3%</td>
+</tr>
+<tr class="group-row">
+<td><strong>Curated development evaluation - 49 cases</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Accuracy</td>
+<td>51.0%</td>
+<td>73.5%</td>
+<td>71.4%</td>
+</tr>
+<tr>
+<td>Macro-F1</td>
+<td>0.457</td>
+<td>0.720</td>
+<td>0.708</td>
+</tr>
+<tr>
+<td>Joint correctness</td>
+<td>44.9%</td>
+<td>73.5%</td>
+<td>67.3%</td>
+</tr>
+<tr>
+<td>Contradiction recall</td>
+<td>13.3%</td>
+<td>46.7%</td>
+<td>53.3%</td>
+</tr>
+<tr>
+<td>Golden / ordinary (n=30): accuracy / Joint</td>
+<td>60.0% / 56.7%</td>
+<td>80.0% / 80.0%</td>
+<td>76.7% / 73.3%</td>
+</tr>
+<tr>
+<td>Difficult / negative (n=15): accuracy / Joint</td>
+<td>46.7% / 33.3%</td>
+<td>53.3% / 53.3%</td>
+<td>53.3% / 46.7%</td>
+</tr>
+</tbody></table></div>
+<figure><img src="figures/submission_quality.png" alt="Accuracy and Joint correctness"></figure>
+<p class="caption">Figure 2. Official TEST comparison. Accuracy alone obscures evidence-selection failures; the curated DEV scores are deliberately excluded from this population-level chart.</p>
+<h2>5. Failure analysis and robustness</h2>
+<p>Aggregate performance does not explain mechanism. On official TEST, 448 of RAG's 576 non-Joint cases were reasoning or classification failures despite retrievable gold evidence; 59 were evidence-selection failures, 55 retrieval-limited and 14 parser/source-validity failures. The curated diagnosis complements those population counts without estimating frequencies. In cases 007 and 043, RAG omitted some gold spans from retrieval and failed to cite some that were present. Cases 034, 039 and 040 show that both architectures still misread documented exception clauses. In case 038, FULL over-weighted a permissive distractor that RAG did not retrieve. Case 001 raises a substantive annotation concern. More context or retrieval depth alone is therefore not a general remedy.</p>
+<div class="table-wrap"><table class=""><thead><tr>
+<th>Verified mechanism</th>
+<th>Case-level observation</th>
+<th>Engineering implication</th>
+</tr></thead><tbody>
+<tr>
+<td>Partial retrieval plus incomplete evidence selection</td>
+<td>Cases 007 and 043: some gold spans absent from top-five context and some retrieved spans left uncited</td>
+<td>Measure retrieval coverage and multi-span citation separately</td>
+</tr>
+<tr>
+<td>Exception / carve-out interpretation</td>
+<td>Cases 034, 039 and 040 failed under both FULL and RAG</td>
+<td>Build an independent exception-reasoning evaluation before changing prompts</td>
+</tr>
+<tr>
+<td>Distractor-clause interference</td>
+<td>Case 038: FULL followed a permissive clause; narrower RAG context supported the correct contradiction</td>
+<td>Selective context can help in individual cases, not establish population superiority</td>
+</tr>
+<tr>
+<td>Annotation ambiguity</td>
+<td>Case 001's annotated evidence is substantively debatable</td>
+<td>Audit benchmark ground truth alongside model errors</td>
+</tr>
+</tbody></table></div>
+<figure><img src="figures/submission_failures.png" alt="RAG failure distribution"></figure>
+<p class="caption">Figure 3. Canonical official TEST taxonomy; denominator is exactly 576 non-Joint RAG cases. Targeted case mechanisms are not mixed into these counts.</p>
+<p>In the small robustness study, Joint correctness fell from 85% on clean inputs to 75% under attack, and source-validity checks did not stop injected text from becoming valid quoted evidence. Length caps, spend ceilings, rate limits and a pattern guard now constrain resource use and quarantine detected instructions, but detection covered only 4 of 11 known patterns — detection, model resistance and human review remain distinct, incomplete safeguards.</p>
+<h2>6. Cost-to-serve and business trade-offs</h2>
+<p>RAG's mean output tokens barely changed, approximately 727 to 701 (Table 4); the input-token and cost savings below come from context, not generation. Because FULL retains higher Joint correctness, selecting the cheaper inference path could increase potential review work; model price alone cannot establish lower operating cost.</p>
+<div class="table-wrap"><table class=""><thead><tr>
+<th>Measure</th>
+<th>FULL</th>
+<th>RAG</th>
+</tr></thead><tbody>
+<tr>
+<td>Mean input tokens per case</td>
+<td>2,279</td>
+<td>1,131</td>
+</tr>
+<tr>
+<td>Mean output tokens per case</td>
+<td>727</td>
+<td>701</td>
+</tr>
+<tr>
+<td>Measured API inference cost per case</td>
+<td>$0.00202</td>
+<td>$0.00168</td>
+</tr>
+<tr>
+<td>Mean latency</td>
+<td>7.31 s</td>
+<td>7.14 s</td>
+</tr>
+<tr>
+<td>Official TEST Joint correctness</td>
+<td>74.6%</td>
+<td>72.5%</td>
+</tr>
+</tbody></table></div>
+<figure><img src="figures/submission_frontier.png" alt="Quality-cost frontier"></figure>
+<p class="caption">Figure 4. Measured API inference economics on the same 2,091 TEST cases. Rule, RAG and FULL are comparable; local compute cost is not monetised.</p>
+<div class="table-wrap"><table class=""><thead><tr>
+<th>Cost-model input</th>
+<th>Value used</th>
+<th>Evidence status</th>
+</tr></thead><tbody>
+<tr>
+<td>Common volume</td>
+<td>1,000 requirement reviews</td>
+<td>Scenario input</td>
+</tr>
+<tr>
+<td>Base verification</td>
+<td>5 minutes per case</td>
+<td>Assumption; applied to every architecture</td>
+</tr>
+<tr>
+<td>Reviewer rate</td>
+<td>$40 per hour</td>
+<td>Assumption reused from saved business scenario</td>
+</tr>
+<tr>
+<td>Derived verification cost</td>
+<td>$3.33 per case</td>
+<td>5/60 x $40</td>
+</tr>
+<tr>
+<td>FULL / RAG API cost</td>
+<td>$0.00202 / $0.00168 per case</td>
+<td>Measured on official TEST</td>
+</tr>
+<tr>
+<td>Rule API cost</td>
+<td>$0; local compute not monetised</td>
+<td>Measured API spend only</td>
+</tr>
+<tr>
+<td>Incremental rework</td>
+<td>Omitted</td>
+<td>No defensible non-overlapping estimate</td>
+</tr>
+<tr>
+<td>Fixed operating cost</td>
+<td>Omitted</td>
+<td>Not measured; must be added for deployment planning</td>
+</tr>
+</tbody></table></div>
+<p>At this scale the $3.33 verification cost per case (no case skips review) dwarfs the sub-cent API difference between architectures (Rule $3,333.33, FULL $3,335.36, RAG $3,335.02 at 1,000 cases); a bar chart of these totals was omitted as visually indistinguishable and misleading. The table above states the same numbers.</p>
+<figure><img src="figures/submission_cost_sensitivity.png" alt="Cost-to-serve sensitivity"></figure>
+<p class="caption">Figure 5. Hypothetical RAG operating scenarios across review time/rate, volume and assumed successful-review rate. AI cost is measured; every other operating input is an explicit assumption.</p>
+<p>The sensitivity model shows how review time, hourly cost, volume and the assumed share of cases avoiding fallback can dominate sub-cent inference. Joint correctness is shown only as a possible quality proxy, not a validated automation rate. The deployed prototype requires human verification for every case, so its current operating model adds measured inference cost to the existing review process rather than automatically avoiding review. If workload does not fall, potential labour savings disappear; if it falls only slightly, quality-related rework can outweigh the small RAG price advantage. No workplace study, realised saving or ROI is claimed.</p>
+<h2>7. Governance, limitations and prioritised improvements</h2>
+<p>NDATrace remains a reviewer-assistance prototype because its largest failure class is incorrect interpretation, not merely missing retrieval. It also has incomplete multi-span evidence, benchmark ambiguity, partial injection detection and no validation on confidential enterprise NDAs. Neither the tested agent nor confidence routing (Section 3) earned control over reviewer access, so every result remains subject to human verification. I would prioritise exception and polarity reasoning first, since it is the dominant failure family, then multi-span citation, then retrieval depth. Security and access controls are deployment prerequisites, not accuracy enhancements. The improvements below are proposals tied to observed mechanisms, not demonstrated benefits. ContractNLI is public, uses fixed requirements and ordinary-length NDAs, so its scores cannot establish performance on an organisation's templates, risk tolerance, jurisdictions or long confidential agreements.</p>
+<div class="table-wrap"><table class=""><thead><tr>
+<th>Observed risk</th>
+<th>Implemented safeguard</th>
+<th>Next proposed improvement</th>
+</tr></thead><tbody>
+<tr>
+<td>Scattered or missing evidence</td>
+<td>BM25 top-20, reranking and visible sources</td>
+<td>Test coverage on longer documents and cross-references</td>
+</tr>
+<tr>
+<td>Incomplete evidence selection</td>
+<td>Joint metric, verbatim validation and human verification</td>
+<td>Evaluate multi-span citation recall independently</td>
+</tr>
+<tr>
+<td>Contractual exceptions</td>
+<td>Mandatory human review</td>
+<td>Build a larger independent exception/polarity set</td>
+</tr>
+<tr>
+<td>Prompt injection</td>
+<td>Pattern guard, quarantine flag and resource limits</td>
+<td>Broaden novel attack coverage; separate detection from resistance testing</td>
+</tr>
+<tr>
+<td>Incorrect automatic escalation</td>
+<td>No confidence gate; every case remains reviewable</td>
+<td>Validate stronger signals before selective automation</td>
+</tr>
+<tr>
+<td>Sensitive enterprise documents</td>
+<td>Prototype restricted to public data</td>
+<td>Add authentication, access control, confidentiality and provider assessment</td>
+</tr>
+</tbody></table></div>
+<h2>8. Conclusion</h2>
+<p>Additional AI complexity did not consistently deliver additional value. Hosted semantic classification substantially improved on keyword rules. Retrieval halved input context and reduced measured inference cost, but FULL retained stronger overall Joint correctness. The tested selective agent added no net evidence-grounded benefit, and confidence routing did not justify selective autonomous processing. The evidence therefore supports bounded reviewer assistance, not autonomous review. NDATrace remains a prototype with explicit human authority and known interpretation, evidence and security limitations; human verification is necessary.</p>
+<h2>References</h2>
+<p>[1] LegalOn Technologies and In-House Connect. "2025 State of Contracting Survey," 15 January 2025. Vendor research; LegalOn sells contract-review software. https://www.legalontech.com/press-releases/2025-survey.</p>
+<p>[2] Yuta Koreeda and Christopher D. Manning. "ContractNLI: A Dataset for Document-level Natural Language Inference for Contracts." Findings of EMNLP 2021, pp. 1907-1919. https://aclanthology.org/2021.findings-emnlp.164/.</p>
+<h2>Report evidence map</h2>
+<div class="table-wrap"><table class=""><thead><tr>
+<th>Report item</th>
+<th>Canonical source</th>
+<th>Population / status</th>
+</tr></thead><tbody>
+<tr>
+<td>Architecture and Figure 1</td>
+<td><code>pipeline/frozen_rag.py</code>; <code>pipeline/final_review.py</code>; <code>docs/architecture.md</code></td>
+<td>Current interactive runtime, source-verified</td>
+</tr>
+<tr>
+<td>Table 1 and appendix experiment table - experimental progression</td>
+<td>All 31 experiment summaries; <code>docs/experiment_registry.md</code></td>
+<td>Mixed diagnostic populations, identified in each row</td>
+</tr>
+<tr>
+<td>Agent investigation table</td>
+<td><code>experiments/E08_rag_failure_analysis/summary.md</code>; <code>experiments/E09_agent_justification/summary.md</code>; <code>experiments/E10_agent_design/summary.md</code>; <code>experiments/E11_selective_agent_evaluation/summary.md</code></td>
+<td>Matched 150-case TRAIN_ARCH_v1 population for the empirical stage</td>
+</tr>
+<tr>
+<td>Table 2 and Figure 2 - quality</td>
+<td><code>experiments/E20_final_rag_test/results/E20_final_report.json</code>; <code>results/final/v2/full_test_comparison.csv</code>; <code>experiments/E24_targeted_evaluation/results/e24_analysis.json</code></td>
+<td>Official TEST n=2,091 kept separate from curated DEV n=49</td>
+</tr>
+<tr>
+<td>Table 3 and Figure 3 - failures</td>
+<td><code>experiments/E20_final_rag_test/results/E20_final_report.json</code>; <code>experiments/E24_targeted_evaluation/summary.md</code></td>
+<td>TEST taxonomy n=576 failures; small case-level DEV diagnosis</td>
+</tr>
+<tr>
+<td>Table 4 and Figure 4 - measured economics</td>
+<td>Official TEST artifacts above; FULL output tokens recomputed from the two saved hosted prediction files</td>
+<td>Matched TEST n=2,091; measured inference only</td>
+</tr>
+<tr>
+<td>Table 5 - current cost model</td>
+<td>Official TEST costs; <code>results/business_economics_scenario.json</code>; explicit inputs stated in the table</td>
+<td>Current workflow; 1,000-case scenario; human verification applied to all systems; no chart (see Section 6)</td>
+</tr>
+<tr>
+<td>Figure 5 - sensitivity</td>
+<td><code>experiments/E18_business_course_synthesis/summary.md</code>; <code>results/business_economics_scenario.json</code></td>
+<td>Hypothetical selective-review scenarios; not deployed behaviour</td>
+</tr>
+<tr>
+<td>Table 6 - governance</td>
+<td><code>docs/failure_analysis.md</code>; routing, robustness and security summaries; <code>docs/production_backlog.md</code></td>
+<td>Safeguards measured where stated; improvements are proposals</td>
+</tr>
+</tbody></table></div>
+<h2>Quality-control summary</h2>
+<p>The final HTML is generated from this editable source. Offline verification recomputes official and targeted metrics from saved artifacts, checks population labels, tokens, costs, failures, cost-model arithmetic and local links, validates five figure files, checks that internal experiment identifiers do not appear in the main narrative, and confirms the declared word count. The targeted notebook contains eight executed code cells and saved outputs. No paid inference or frozen-result modification was performed for this report.</p>
+<h2>Remaining methodological and submission limitations</h2>
+<ul class="limitations">
+<li>The official TEST split was not tuned against in the final re-derived sequence, but a superseded earlier lineage had partially observed it; the report does not call it perfectly blind.</li>
+<li>The curated 49-case DEV battery was designed to be difficult and cannot establish statistical significance or population failure rates.</li>
+<li>The economic model is hypothetical because review-time reduction, enterprise operating cost and safe automation rate were not measured.</li>
+<li>Long confidential enterprise contracts, authentication, distributed controls and novel adversarial attacks remain unvalidated.</li>
+<li>The HTML links to local figure files in <code>reports/figures/</code>; keep that folder beside the report when moving it.</li>
+</ul>
+</main>
+</body>
+</html>

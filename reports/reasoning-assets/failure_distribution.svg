@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="650" viewBox="0 0 1500 650">
+<rect width="1500" height="650" fill="#FFFFFF"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#172033}.title{font-size:40px;font-weight:700;fill:#17324D}.subtitle{font-size:22px;fill:#5B667A}.label{font-size:20px}.small{font-size:17px;fill:#5B667A}.value{font-size:20px;font-weight:700}.section{font-size:17px;font-weight:700;letter-spacing:1px}</style>
+<text class="title" x="60" y="62">RAG residual failures are mostly interpretive</text>
+<text class="subtitle" x="60" y="103">Official TEST: 576 mutually exclusive non-Joint cases</text>
+<text class="label" x="60" y="209">Reasoning / classification</text>
+<rect x="480" y="180" width="820" height="42" rx="7" fill="#D8E0E8"/>
+<rect x="480" y="180" width="820.0" height="42" rx="7" fill="#17324D"/>
+<text class="value" x="1315.0" y="209" fill="#17324D">448 (77.8%)</text>
+<text class="label" x="60" y="304">Evidence selection</text>
+<rect x="480" y="275" width="820" height="42" rx="7" fill="#D8E0E8"/>
+<rect x="480" y="275" width="108.0" height="42" rx="7" fill="#2563A6"/>
+<text class="value" x="603.0" y="304" fill="#2563A6">59 (10.2%)</text>
+<text class="label" x="60" y="399">Retrieval-limited</text>
+<rect x="480" y="370" width="820" height="42" rx="7" fill="#D8E0E8"/>
+<rect x="480" y="370" width="100.7" height="42" rx="7" fill="#C65D21"/>
+<text class="value" x="595.7" y="399" fill="#C65D21">55 (9.5%)</text>
+<text class="label" x="60" y="494">Parser / source validity</text>
+<rect x="480" y="465" width="820" height="42" rx="7" fill="#D8E0E8"/>
+<rect x="480" y="465" width="25.6" height="42" rx="7" fill="#5B667A"/>
+<text class="value" x="520.6" y="494" fill="#5B667A">14 (2.4%)</text>
+<text class="small" x="60" y="610">Targeted cases explain mechanisms; they do not change these population frequencies.</text>
+</svg>

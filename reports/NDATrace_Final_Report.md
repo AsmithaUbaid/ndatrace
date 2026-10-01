@@ -39,7 +39,7 @@ I fixed dataset roles, scored against annotated labels and evidence, and introdu
 
 ## 4. Quality evaluation and architecture trade-offs
 
-The official TEST benchmark is the primary evidence. Both LLM architectures materially outperform the rule baseline. FULL achieved 77.6% accuracy and 74.6% Joint correctness; RAG achieved 76.8% and 72.5%. The accuracy difference was not statistically significant (paired McNemar p=0.217), while FULL's 2.2-point Joint advantage was significant (p=0.0047). RAG's case is therefore bounded context and efficiency, not superior overall quality. Its contradiction recall was slightly higher on TEST, but the proposal's original risk-sensitive recall improvement target of at least five points was not reached.
+The official TEST benchmark is the primary evidence. Both LLM architectures materially outperform the rule baseline. FULL achieved 77.6% accuracy and 74.6% Joint correctness; RAG achieved 76.8% and 72.5%. The accuracy difference was not statistically significant (paired McNemar p=0.217), while FULL's 2.2-point Joint advantage was significant (p=0.0047). RAG's case is therefore bounded context and efficiency, not superior overall quality. Its contradiction recall was slightly higher on TEST. The original Problem Statement specifies the risk-sensitive recall target (>=5 points) against FULL-context LLM processing: RAG's gain is only +1.2 points (69.1% to 70.3%), so the originally proposed target was not achieved. Measured against the project's own non-AI baseline, the rule-based classifier, RAG's gain is +16.6 points (53.6% to 70.3%); both comparisons are reported rather than one silently chosen.
 
 | Metric | Rule | FULL | RAG |
 | --- | ---: | ---: | ---: |

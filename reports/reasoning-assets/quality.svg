@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="700" viewBox="0 0 1500 700">
+<rect width="1500" height="700" fill="#FFFFFF"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#172033}.title{font-size:40px;font-weight:700;fill:#17324D}.subtitle{font-size:22px;fill:#5B667A}.label{font-size:20px}.small{font-size:17px;fill:#5B667A}.value{font-size:20px;font-weight:700}.section{font-size:17px;font-weight:700;letter-spacing:1px}</style>
+<text class="title" x="60" y="62">Classification is not evidence-grounded correctness</text>
+<text class="subtitle" x="60" y="103">Official ContractNLI TEST, identical 2,091-case population</text>
+<line x1="315.0" y1="170" x2="315.0" y2="590" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="315.0" y="625" text-anchor="middle">0%</text>
+<line x1="532.0" y1="170" x2="532.0" y2="590" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="532.0" y="625" text-anchor="middle">20%</text>
+<line x1="749.0" y1="170" x2="749.0" y2="590" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="749.0" y="625" text-anchor="middle">40%</text>
+<line x1="966.0" y1="170" x2="966.0" y2="590" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="966.0" y="625" text-anchor="middle">60%</text>
+<line x1="1183.0" y1="170" x2="1183.0" y2="590" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="1183.0" y="625" text-anchor="middle">80%</text>
+<line x1="1400.0" y1="170" x2="1400.0" y2="590" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="1400.0" y="625" text-anchor="middle">100%</text>
+<text x="60" y="253" font-size="25" font-weight="700" fill="#2563A6">Rule</text>
+<text class="small" x="170" y="229">Accuracy</text>
+<rect x="315" y="205" width="640.3" height="31" rx="5" fill="#2563A6"/>
+<text class="value" x="967.3" y="229" fill="#2563A6">59.0%</text>
+<text class="small" x="170" y="275">Joint</text>
+<rect x="315" y="251" width="543.3" height="31" rx="5" fill="#C65D21"/>
+<text class="value" x="870.3" y="275" fill="#C65D21">50.1%</text>
+<text x="60" y="383" font-size="25" font-weight="700" fill="#17324D">FULL</text>
+<text class="small" x="170" y="359">Accuracy</text>
+<rect x="315" y="335" width="842.2" height="31" rx="5" fill="#17324D"/>
+<text class="value" x="1169.2" y="359" fill="#17324D">77.6%</text>
+<text class="small" x="170" y="405">Joint</text>
+<rect x="315" y="381" width="809.5" height="31" rx="5" fill="#C65D21"/>
+<text class="value" x="1136.5" y="405" fill="#C65D21">74.6%</text>
+<text x="60" y="513" font-size="25" font-weight="700" fill="#0F766E">RAG</text>
+<text class="small" x="170" y="489">Accuracy</text>
+<rect x="315" y="465" width="832.8" height="31" rx="5" fill="#0F766E"/>
+<text class="value" x="1159.8" y="489" fill="#0F766E">76.8%</text>
+<text class="small" x="170" y="535">Joint</text>
+<rect x="315" y="511" width="786.1" height="31" rx="5" fill="#C65D21"/>
+<text class="value" x="1113.1" y="535" fill="#C65D21">72.5%</text>
+<text class="small" x="60" y="673">Joint requires the correct label and sufficient annotated-evidence overlap; it is stricter, but not a legal-adequacy judgment.</text>
+</svg>

@@ -6,7 +6,10 @@ import csv
 import json
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+try:
+    from PIL import Image, ImageDraw, ImageFont
+except ModuleNotFoundError:
+    Image = ImageDraw = ImageFont = None
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "reports/figures"
@@ -27,7 +30,6 @@ MUTED = "#5C6B82"
 GRID = "#DDE5EE"
 PALE = "#F4F7FA"
 WHITE = "#FFFFFF"
-
 
 def font(size: int, bold: bool = False):
     candidates = [
@@ -68,10 +70,14 @@ def architecture():
             if i < 3:
                 d.line((cx + 150, y + 78, centers[i + 1] - 155, y + 78), fill=MUTED, width=3)
                 d.polygon([(centers[i + 1] - 155, y + 78), (centers[i + 1] - 171, y + 69), (centers[i + 1] - 171, y + 87)], fill=MUTED)
-    d.line((1345, 300, 1345, 345), fill=MUTED, width=3)
-    d.polygon([(1345, 345), (1336, 329), (1354, 329)], fill=MUTED)
-    d.line((1345, 470, 1160, 515), fill=MUTED, width=3)
-    d.polygon([(1160, 515), (1172, 501), (1177, 520)], fill=MUTED)
+    def elbow(x_from, y_from, x_to, y_to, bend_y):
+        d.line((x_from, y_from, x_from, bend_y), fill=MUTED, width=3)
+        d.line((x_from, bend_y, x_to, bend_y), fill=MUTED, width=3)
+        d.line((x_to, bend_y, x_to, y_to), fill=MUTED, width=3)
+        d.polygon([(x_to, y_to), (x_to - 9, y_to - 16), (x_to + 9, y_to - 16)], fill=MUTED)
+
+    elbow(1345, 300, 250, 395, 322)
+    elbow(1345, 470, 250, 565, 492)
     im.save(OUT / "submission_architecture.png", optimize=True)
 
 
@@ -142,18 +148,18 @@ def frontier():
         d.line((x, top, x, bottom), fill=GRID, width=2)
         text(d, (x, bottom + 23), f"${cost:.4f}", 19, MUTED, anchor="mt")
     pts = [
-        ("Rule", float(RULE["api_cost_usd"]), float(RULE["joint"]), BLUE, (30, -34)),
-        ("RAG", RAG["cost_per_case"], RAG["joint"], TEAL, (-35, -45)),
-        ("FULL", FULL["cost_per_case"], FULL["joint"], NAVY, (35, 30)),
+        ("Rule", float(RULE["api_cost_usd"]), float(RULE["joint"]), BLUE, (26, 0), "lm"),
+        ("RAG", RAG["cost_per_case"], RAG["joint"], TEAL, (-35, -45), "mm"),
+        ("FULL", FULL["cost_per_case"], FULL["joint"], NAVY, (35, 30), "mm"),
     ]
     coords = []
-    for name, cost, joint, color, offset in pts:
+    for name, cost, joint, color, offset, anchor in pts:
         x = left + cost / .0025 * (right - left)
         y = bottom - (joint * 100 - 35) / 50 * (bottom - top)
         coords.append((x, y))
         d.ellipse((x - 16, y - 16, x + 16, y + 16), fill=color, outline=WHITE, width=4)
         dx, dy = offset
-        text(d, (x + dx, y + dy), f"{name}: {joint:.1%} | ${cost:.5f}", 22, color, True, "mm")
+        text(d, (x + dx, y + dy), f"{name}: {joint:.1%} | ${cost:.5f}", 22, color, True, anchor)
     d.line(coords, fill=MUTED, width=4)
     text(d, (left, top - 20), "Joint correctness (%)", 21, MUTED, True, "ls")
     text(d, ((left + right) / 2, 710), "Measured API cost per case", 23, INK, anchor="mm")
@@ -164,7 +170,7 @@ def cost_sensitivity():
     # Scenario model from E18: C_total = V * [C_AI + (1-p_success) * C_H].
     # C_AI is measured from E20. V, review minutes, hourly rate and p_success
     # are deliberately varied assumptions, not observed automation behaviour.
-    im = Image.new("RGB", (1800, 820), WHITE)
+    im = Image.new("RGB", (1800, 845), WHITE)
     d = ImageDraw.Draw(im)
     text(d, (70, 35), "Cost-to-serve sensitivity", 42, NAVY, True)
     text(d, (70, 90), "RAG measured AI cost; review time, hourly rate, volume and successful-review rate are assumptions", 25, MUTED)
@@ -200,7 +206,7 @@ def cost_sensitivity():
                 points.append((x, y))
             d.line(points, fill=color, width=5)
         text(d, ((left + right) / 2, 700), "Assumed successful-review rate", 20, INK, anchor="mm")
-    text(d, (72, 188), "Modelled operating cost (USD)", 20, MUTED, True)
+    text(d, (105, 145), "Modelled operating cost (USD)", 20, MUTED, True, "ls")
     legend_x = 255
     for label_value, _, color in review_scenarios:
         d.line((legend_x, 765, legend_x + 42, 765), fill=color, width=6)
@@ -211,9 +217,10 @@ def cost_sensitivity():
 
 
 if __name__ == "__main__":
-    architecture()
-    quality()
-    failures()
-    frontier()
-    cost_sensitivity()
+    if Image is not None:
+        architecture()
+        quality()
+        failures()
+        frontier()
+        cost_sensitivity()
     print(f"Wrote submission figures to {OUT}")

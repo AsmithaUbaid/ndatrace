@@ -10,7 +10,7 @@ Tina, an enterprise legal-operations analyst, reviews vendor NDAs against 17 con
 
 ## 2. Proposed solution and architecture
 
-I implemented a hybrid system because semantic interpretation and operational control require different mechanisms. Deterministic software performs clause-aware chunking, retrieval, reranking, schema parsing, evidence-source validation, injection flagging and resource limits; GPT-5-mini performs the bounded semantic classification (Figure 1). The reviewer receives the label, verbatim evidence and flags, then records the final decision. Renting the model avoided training and serving infrastructure; building retrieval, evaluation and workflow preserved control over project-specific evidence semantics and reviewer authority, making model outputs checkable without implying a valid quotation guarantees a correct interpretation.
+I implemented a hybrid system because semantic interpretation and operational control require different mechanisms. Deterministic software performs clause-aware chunking, retrieval, reranking, schema parsing, evidence-source validation, injection flagging and resource limits; GPT-5-mini performs the bounded semantic classification (Figure 1). The reviewer receives the label, verbatim evidence and flags, then records the final decision. Renting the model avoided training and serving infrastructure; building the retrieval, evaluation and workflow layers preserved control over project-specific evidence semantics and reviewer authority. This division makes model outputs checkable without implying that a valid quotation guarantees a correct interpretation.
 
 ![Deployed NDATrace architecture](figures/submission_architecture.png)
 
@@ -27,15 +27,6 @@ I implemented a hybrid system because semantic interpretation and operational co
 | Governance | Build / incomplete | Guards, limits and human authority exist; enterprise identity and access controls do not |
 
 ## 3. Experimental methodology and progression
-
-Each rung of architecture below had to earn its place with a measured result, or it was not adopted.
-
-| Rung | Status | Measured result | Why |
-| --- | --- | --- | --- |
-| Rule (deterministic keywords) | Baseline | 59.0% accuracy, TEST | Cheap and fast, but semantic coverage, especially Contradiction, was insufficient |
-| FULL context | Reference | 74.6% Joint, TEST — strongest measured result | Kept as the quality reference; not served interactively |
-| RAG (bounded retrieval) | Adopted | 72.5% Joint, TEST, same population as FULL | Classification stayed close, Joint fell modestly, cost and input volume dropped; serves as the interactive prototype runtime |
-| Selective agent | Rejected | 0% useful tool-recovery rate across three separate evaluations | No, for every tested design, at increasing levels of tool access |
 
 I assigned the official ContractNLI splits before comparison: TRAIN for component development, DEV for validation, and TEST for the final frozen evaluation. Gold labels and evidence were withheld from inference and used only for scoring. A prior superseded lineage had partially observed TEST, so I describe the final split as not tuned against in this re-derived sequence rather than perfectly blind. The final official population contains 2,091 requirement-document cases; the separate 49-case curated DEV battery concentrates known difficult mechanisms and is not a second benchmark. Each experiment changed one decision layer or supplied a diagnostic: Oracle evidence separated retrieval from reasoning, controlled prompts and retrieval sweeps froze simple components, and later comparisons tested whether RAG, an agent or automatic routing earned added complexity. The decisive FULL/RAG comparison held model, prompt, evaluator and case population constant and used paired significance tests. Two problems were caught before they could silently distort a headline metric: an exact-substring evidence evaluator initially miscounted valid paraphrased citations as failures, hardened before the TEST run; and a local inference server silently ignored a context-length setting, which calibration caught before it could make the full-context baseline look permanently weaker than it is. The eight rows below shaped the final architecture; the complete sequence is in the appendix table that follows.
 
@@ -98,9 +89,9 @@ This table is the project's standard for adopting complexity in practice: freeze
 
 ## 4. Quality evaluation and architecture trade-offs
 
-Classification accuracy asks only whether the label is right. Joint correctness additionally requires sufficient gold-evidence overlap, so it exposes answers that sound right but cannot be substantiated. On official TEST, FULL achieved 77.6% accuracy and 74.6% Joint correctness; RAG achieved 76.8% and 72.5%. Their accuracy difference was not significant (paired McNemar p=0.217), while FULL's Joint advantage was significant (p=0.0047). The wider label-to-Joint drop for RAG shows why accuracy alone obscures evidence coverage and selection weaknesses; FULL remains the strongest evidence-grounded quality reference, though neither architecture supports unsupervised legal decisions. Joint correctness is itself a project choice, not a law: its 50% gold-span-overlap threshold is predeclared but arbitrary, and a different threshold could shift both architectures' absolute numbers without necessarily changing the ranking — an untested sensitivity, flagged as a real gap.
+Classification accuracy asks only whether the label is right. Joint correctness additionally requires sufficient gold-evidence overlap, so it exposes answers that sound right but cannot be substantiated. On official TEST, FULL achieved 77.6% accuracy and 74.6% Joint correctness; RAG achieved 76.8% and 72.5%. Their accuracy difference was not significant (paired McNemar p=0.217), while FULL's Joint advantage was significant (p=0.0047). The wider label-to-Joint drop for RAG shows why accuracy alone obscures evidence coverage and selection weaknesses. FULL therefore remains the strongest evidence-grounded quality reference, although neither architecture reaches a level that supports unsupervised legal decisions. Joint correctness is itself a project choice, not a law: its 50% gold-span-overlap threshold is predeclared but arbitrary, and a different threshold could shift both architectures' absolute numbers without necessarily changing the ranking — an untested sensitivity, flagged as a real gap.
 
-The original Problem Statement (Section 7) specifies the success criterion as a minimum five-percentage-point improvement in risk-sensitive recall over FULL-context LLM processing. Measured against FULL, RAG's risk-sensitive recall moved from 69.1% to 70.3%, only +1.2 points, so the originally proposed target was not achieved; measured against the rule-based, non-AI baseline named separately in the Problem Statement, RAG improved from 53.6% to 70.3%, a +16.6-point gain over a cheap deterministic floor — both reported rather than one chosen to look favorable. RAG was nevertheless retained as the bounded-context prototype: it halves input context, lowers measured inference cost, and its narrower retrieved context avoided a distractor clause that FULL did not (case 038, Section 5) — efficiency and individual-case benefits, not evidence that RAG met the original target or is the stronger architecture overall. The curated results point the same direction on Joint correctness but are too small for a significance claim.
+The original Problem Statement (Section 7) specifies the success criterion as a minimum five-percentage-point improvement in risk-sensitive recall over FULL-context LLM processing. Measured against FULL, the gain is only +1.2 points (Table 2), so the originally proposed target was not achieved; measured against the rule-based, non-AI baseline named separately in the Problem Statement, RAG shows a +16.6-point gain over a cheap deterministic floor — both reported rather than one chosen to look favorable. RAG was nevertheless retained as the bounded-context prototype: it halves input context, lowers measured inference cost, and its narrower retrieved context avoided a distractor clause that FULL did not (case 038, Section 5) — efficiency and individual-case benefits, not evidence that RAG met the original target or is the stronger architecture overall. The curated results point the same direction on Joint correctness but are too small for a significance claim.
 
 | Metric | Rule | FULL | RAG |
 | --- | ---: | ---: | ---: |
@@ -125,7 +116,7 @@ The original Problem Statement (Section 7) specifies the success criterion as a 
 
 ## 5. Failure analysis and robustness
 
-Aggregate performance does not explain mechanism. On official TEST, 448 of RAG's 576 non-Joint cases were reasoning or classification failures despite retrievable gold evidence; 59 were evidence-selection failures, 55 retrieval-limited and 14 parser/source-validity failures. In cases 007 and 043, RAG omitted some gold spans from retrieval and failed to cite some that were present. Cases 034, 039 and 040 show that both architectures still misread documented exception clauses. In case 038, FULL over-weighted a permissive distractor that RAG did not retrieve. Case 001 raises a substantive annotation concern. More context or retrieval depth alone is not a general remedy.
+Aggregate performance does not explain mechanism. On official TEST, 448 of RAG's 576 non-Joint cases were reasoning or classification failures despite retrievable gold evidence; 59 were evidence-selection failures, 55 retrieval-limited and 14 parser/source-validity failures. The curated diagnosis complements those population counts without estimating frequencies. In cases 007 and 043, RAG omitted some gold spans from retrieval and failed to cite some that were present. Cases 034, 039 and 040 show that both architectures still misread documented exception clauses. In case 038, FULL over-weighted a permissive distractor that RAG did not retrieve. Case 001 raises a substantive annotation concern. More context or retrieval depth alone is therefore not a general remedy.
 
 | Verified mechanism | Case-level observation | Engineering implication |
 | --- | --- | --- |
@@ -138,11 +129,11 @@ Aggregate performance does not explain mechanism. On official TEST, 448 of RAG's
 
 *Figure 3. Canonical official TEST taxonomy; denominator is exactly 576 non-Joint RAG cases. Targeted case mechanisms are not mixed into these counts.*
 
-In the small robustness study, Joint correctness fell from 85% on clean inputs to 75% under attack, and source-validity checks did not stop injected text from becoming valid quoted evidence. Length caps, spend ceilings, rate limits and a pattern guard now constrain resource use, but detection covered only 4 of 11 known patterns — detection, model resistance and human review remain distinct, incomplete safeguards.
+In the small robustness study, Joint correctness fell from 85% on clean inputs to 75% under attack, and source-validity checks did not stop injected text from becoming valid quoted evidence. Length caps, spend ceilings, rate limits and a pattern guard now constrain resource use and quarantine detected instructions, but detection covered only 4 of 11 known patterns — detection, model resistance and human review remain distinct, incomplete safeguards.
 
 ## 6. Cost-to-serve and business trade-offs
 
-RAG reduced mean input tokens from 2,279 to 1,131 and API cost from $0.00202 to $0.00168 per case (16.8% lower), while mean output tokens barely changed, approximately 727 to 701 — the savings come from context, not generation. Because FULL retains higher Joint correctness, selecting the cheaper inference path could increase potential review work; model price alone cannot establish lower operating cost.
+RAG's mean output tokens barely changed, approximately 727 to 701 (Table 4); the input-token and cost savings below come from context, not generation. Because FULL retains higher Joint correctness, selecting the cheaper inference path could increase potential review work; model price alone cannot establish lower operating cost.
 
 | Measure | FULL | RAG |
 | --- | ---: | ---: |
@@ -170,6 +161,7 @@ RAG reduced mean input tokens from 2,279 to 1,131 and API cost from $0.00202 to 
 At this scale the $3.33 verification cost per case (no case skips review) dwarfs the sub-cent
 API difference between architectures (Rule $3,333.33, FULL $3,335.36, RAG $3,335.02 at 1,000
 cases); a bar chart of these totals was omitted as visually indistinguishable and misleading.
+The table above states the same numbers.
 
 ![Cost-to-serve sensitivity](figures/submission_cost_sensitivity.png)
 
@@ -179,7 +171,7 @@ The sensitivity model shows how review time, hourly cost, volume and the assumed
 
 ## 7. Governance, limitations and prioritised improvements
 
-NDATrace remains a reviewer-assistance prototype because its largest failure class is incorrect interpretation, not merely missing retrieval. It also has incomplete multi-span evidence, benchmark ambiguity, partial injection detection and no validation on confidential enterprise NDAs. Neither the tested agent nor confidence routing (Section 3) earned control over reviewer access, so every result remains subject to human verification. I would prioritise exception and polarity reasoning first, since it is the dominant failure family, then multi-span citation, then retrieval depth. Security and access controls are deployment prerequisites, not accuracy enhancements; the improvements below are proposals tied to observed mechanisms, not demonstrated benefits. ContractNLI's fixed requirements and ordinary-length NDAs cannot establish performance on an organisation's own templates, risk tolerance, jurisdictions or long confidential agreements.
+NDATrace remains a reviewer-assistance prototype because its largest failure class is incorrect interpretation, not merely missing retrieval. It also has incomplete multi-span evidence, benchmark ambiguity, partial injection detection and no validation on confidential enterprise NDAs. Neither the tested agent nor confidence routing (Section 3) earned control over reviewer access, so every result remains subject to human verification. I would prioritise exception and polarity reasoning first, since it is the dominant failure family, then multi-span citation, then retrieval depth. Security and access controls are deployment prerequisites, not accuracy enhancements. The improvements below are proposals tied to observed mechanisms, not demonstrated benefits. ContractNLI is public, uses fixed requirements and ordinary-length NDAs, so its scores cannot establish performance on an organisation's templates, risk tolerance, jurisdictions or long confidential agreements.
 
 | Observed risk | Implemented safeguard | Next proposed improvement |
 | --- | --- | --- |
@@ -192,7 +184,7 @@ NDATrace remains a reviewer-assistance prototype because its largest failure cla
 
 ## 8. Conclusion
 
-Additional AI complexity did not consistently deliver additional value. Hosted semantic classification substantially improved on keyword rules. Retrieval halved input context and reduced measured inference cost, but FULL retained stronger overall Joint correctness. The tested selective agent added no net evidence-grounded benefit, and confidence routing did not justify selective autonomous processing. The evidence supports bounded reviewer assistance, not autonomous review, from a prototype with explicit human authority and known interpretation, evidence and security limitations.
+Additional AI complexity did not consistently deliver additional value. Hosted semantic classification substantially improved on keyword rules. Retrieval halved input context and reduced measured inference cost, but FULL retained stronger overall Joint correctness. The tested selective agent added no net evidence-grounded benefit, and confidence routing did not justify selective autonomous processing. The evidence therefore supports bounded reviewer assistance, not autonomous review. NDATrace remains a prototype with explicit human authority and known interpretation, evidence and security limitations; human verification is necessary.
 
 <!-- report-body-end -->
 
@@ -207,7 +199,6 @@ Additional AI complexity did not consistently deliver additional value. Hosted s
 | Report item | Canonical source | Population / status |
 | --- | --- | --- |
 | Architecture and Figure 1 | `pipeline/frozen_rag.py`; `pipeline/final_review.py`; `docs/architecture.md` | Current interactive runtime, source-verified |
-| Architecture ladder table | `results/final/v2/rule_full_test_metrics.json`; `results/final/v2/gpt_full_test_metrics.json`; `experiments/E20_final_rag_test/results/E20_final_report.json`; `experiments/E11_selective_agent_evaluation/summary.md` | Rule/FULL/RAG on TEST n=2,091; agent on TRAIN_ARCH_v1 n=150 |
 | Table 1 and appendix experiment table - experimental progression | All 31 experiment summaries; `docs/experiment_registry.md` | Mixed diagnostic populations, identified in each row |
 | Agent investigation table | `experiments/E08_rag_failure_analysis/summary.md`; `experiments/E09_agent_justification/summary.md`; `experiments/E10_agent_design/summary.md`; `experiments/E11_selective_agent_evaluation/summary.md` | Matched 150-case TRAIN_ARCH_v1 population for the empirical stage |
 | Table 2 and Figure 2 - quality | `experiments/E20_final_rag_test/results/E20_final_report.json`; `results/final/v2/full_test_comparison.csv`; `experiments/E24_targeted_evaluation/results/e24_analysis.json` | Official TEST n=2,091 kept separate from curated DEV n=49 |

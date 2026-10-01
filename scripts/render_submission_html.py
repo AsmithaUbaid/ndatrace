@@ -103,12 +103,15 @@ def render(markdown: str) -> str:
             output.append('<div class="page-break" aria-hidden="true"></div>')
         elif stripped.startswith("<!--") and stripped.endswith("-->"):
             flush_paragraph()
-        elif line.startswith("# "):
+        elif line.startswith("### "):
             flush_paragraph()
-            output.append(f"<h1>{inline(line[2:])}</h1>")
+            output.append(f"<h3>{inline(line[4:])}</h3>")
         elif line.startswith("## "):
             flush_paragraph()
             output.append(f"<h2>{inline(line[3:])}</h2>")
+        elif line.startswith("# "):
+            flush_paragraph()
+            output.append(f"<h1>{inline(line[2:])}</h1>")
         elif line.startswith("!["):
             flush_paragraph()
             match = re.match(r"!\[([^]]*)]\(([^)]+)\)", line)
@@ -175,6 +178,13 @@ h2 {
   line-height: 1.25;
   break-after: avoid;
 }
+h3 {
+  margin: 22px 0 8px;
+  color: var(--navy);
+  font-size: 16px;
+  line-height: 1.3;
+  break-after: avoid;
+}
 p { margin: 0 0 14px; }
 .byline {
   margin-bottom: 28px;
@@ -235,6 +245,7 @@ a { color: var(--blue); }
   main { width: auto; margin: 0; padding: 0; box-shadow: none; }
   h1 { font-size: 24pt; }
   h2 { font-size: 14pt; margin-top: 20pt; }
+  h3 { font-size: 11pt; margin-top: 14pt; }
   .page-break { break-before: page; }
   figure, .table-wrap { break-inside: avoid; }
   .limitations { font-size: 8.5pt; line-height: 1.28; }

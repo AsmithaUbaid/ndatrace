@@ -164,13 +164,15 @@ matches `pipeline/frozen_rag.py` and `pipeline/final_review.py` directly.
 | | Metric | Target | Reached (measured) | Status |
 | --- | --- | --- | --- | --- |
 | Primary | Joint correctness (label + evidence), FULL vs. RAG | Required to be measured and disclosed | 74.6% (FULL) / 72.5% (RAG), n=2,091 | ✅ Reported as measured |
-| Secondary | Risk-sensitive recall gain, RAG over **Rule-based (non-AI baseline)** | ≥ 5.0 points | **+16.6 points** (53.6% → 70.3%) | ✅ Met, by a wide margin |
+| Secondary | Risk-sensitive recall gain, RAG over **FULL-context LLM** (Problem Statement Section 7's stated baseline) | ≥ 5.0 points | **+1.2 points** (69.1% → 70.3%) | ❌ Not achieved |
+| Secondary | Risk-sensitive recall gain, RAG over **Rule-based (non-AI baseline)**, reported separately | Not the original target | **+16.6 points** (53.6% → 70.3%) | Large gain over a cheap floor, not the pre-registered criterion |
 | Secondary | Contradiction recall, reported separately (not averaged away) | Required, not fixed | 75.5% (FULL) / 77.3% (RAG) | ✅ Reported separately |
 
 Official ContractNLI TEST split, n = 2,091, all three systems on the identical population.
 Source: `experiments/E20_final_rag_test/results/E20_final_report.json`,
-`results/final/v2/full_test_comparison.csv`. Rule-based keyword retrieval is the project's
-non-AI baseline (Problem Statement Section 4) and the target's comparison point.
+`results/final/v2/full_test_comparison.csv`. The Problem Statement (Section 7) names FULL-context
+LLM processing as the comparison point for this target; the rule-based baseline (Section 4) is a
+separate, non-AI floor reported alongside it rather than substituted for it.
 
 ![FULL vs RAG, four headline metrics](docs/images/full_vs_rag_dumbbell.png)
 
@@ -472,12 +474,46 @@ tests/         Unit, integration, robustness, and leakage checks
 | Semantic classification correctness | A separate question. Source-valid evidence doesn't mean the label is correct. |
 | Prompt-injection detection | Partial, not solved. 4 of 11 tested attack patterns still bypass the guard (E16). |
 | Human verification | Every result is shown for review; nothing auto-finalizes. |
-| OWASP LLM Top 10 | Assessed in full against the 2025 edition (E21, run before the 2026 edition existed): 3 PASS, 5 PARTIAL, 2 FAIL across all 10 categories. Both FAILs remediated (E22): unbounded consumption now PASS (real cost/rate limits enforced), prompt injection raised to PARTIAL (detection below the pre-declared ≥8/11 bar, reported honestly rather than rounded up). No production authentication (Sensitive Information Disclosure, LLM02 in both editions) remains unremediated. The 2026 edition reorders and renames some categories but tests the same ten risks; mapping: [`docs/owasp_2026_mapping.md`](docs/owasp_2026_mapping.md). |
+| OWASP LLM Top 10 | Assessed in full against the 2026 edition (E21): 3 PASS, 5 PARTIAL, 2 FAIL across all 10 categories at baseline. Both FAILs remediated (E22): Unbounded Consumption (LLM06) now PASS (real cost/rate limits enforced), Prompt Injection (LLM01) raised to PARTIAL (detection below the pre-declared ≥8/11 bar, reported honestly rather than rounded up). No production authentication (Sensitive Information Disclosure, LLM02) remains unremediated. Full category-by-category results: [`docs/owasp_2026_mapping.md`](docs/owasp_2026_mapping.md). |
 
 No authentication: scoped to public or synthetic NDA text only, not approved for confidential
 documents. ContractNLI is a public benchmark, not evidence of performance on long (50–100 page)
 real enterprise contracts. No production deployment, no production-readiness claim, no complete
 prompt-injection protection claim.
+
+## Future path
+
+What's complete, for this course submission: a frozen RAG runtime scored against the full TEST
+split, the original FULL-context risk-sensitive recall target measured and disclosed as not
+achieved (+1.2pp vs. the required ≥5.0pp, with a separate +16.6pp gain over the rule-based
+baseline also reported), a 49-case targeted re-check on the current
+architecture (E24), a security assessment against all 10 OWASP LLM Top 10 categories with the two
+baseline FAILs remediated, and a reviewer-facing frontend + API over the frozen pipeline. What's
+deliberately left open, grounded in findings already in this repository rather than speculative:
+
+- **Exception/carve-out clause reasoning is the dominant remaining failure mode, not retrieval.**
+  77.8% of TEST failures are reasoning errors on clauses the model already has in context, most
+  often negation and conditional language ("unless," "provided that") — found independently across
+  E03, E04, E17, and reconfirmed in E24 (3 of 4 ADR-011 exception cases still fail under the
+  current architecture). The next highest-leverage experiment is prompt- or training-level work
+  targeted at polarity/exception handling specifically, not more retrieval tuning
+  ([`docs/failure_analysis.md`](docs/failure_analysis.md)).
+- **RAG's evidence-selection failures on partial-retrieval-coverage cases (E24 cases 007, 043)
+  are an n=2 finding, not a validated pattern.** A dedicated experiment with a larger scattered-evidence
+  case set is needed before concluding anything general about RAG's citation behavior under partial
+  retrieval coverage.
+- **The golden/negative battery's difficulty tiers ("easy"/"medium"/"hard") were assigned under the
+  legacy pipeline and are not re-validated for the current architecture** — E24 case 001 surfaced
+  one disagreement between the stored tier and the current architecture's actual behavior;
+  systematically re-auditing tier labels is unstarted.
+- **Long, real-world-scale NDAs (50–100 pages) are untested.** ContractNLI documents are short;
+  nothing here measures retrieval or reasoning quality on contracts an order of magnitude longer.
+- **Production authentication remains the one unremediated OWASP finding (LLM02).** `GET /results`
+  and `GET /review/{id}` have no auth; this is a known, disclosed gap, not an oversight, and would
+  be the first fix before any non-local deployment.
+- **The business-economics scenario's assumptions (handoff rate, time saved per review) are modeled
+  from an external survey, not measured on this system.** A real reviewer time-motion study would
+  replace the modeled inputs with measured ones.
 
 ## Project deliverables
 
