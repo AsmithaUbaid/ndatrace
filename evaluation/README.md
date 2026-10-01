@@ -26,6 +26,18 @@ listed below directly, e.g. `python scripts/analyze_e20_rag_test.py`.
 in the root README's ["Metrics: targeted vs. reached"](../README.md#key-results) table — not
 duplicated here to avoid two copies drifting apart.
 
+## Checked-in eval case battery
+
+The regression/robustness/behavioural case files this harness scores live in `data/golden/`
+(golden, negative, injection, LLM-behaviour, agent, confidence, evidence-quality — 76 cases
+total), not in this directory. Design rationale per category: `docs/evaluation_case_design.md`.
+Pass/fail results exist for every category in `docs/test_coverage_summary.md`, but those numbers
+were measured against the **legacy pipeline** (RAG + selective agent), not the current final
+architecture — read that distinction before citing any number from it. These case files are
+development-time regression/robustness checks, not the project's headline benchmark; the headline
+numbers are the official ContractNLI TEST results this harness's `harness.py`/`metrics.py`
+compute (see `../README.md`'s Metrics section).
+
 ## Core harness
 
 | Module | What it does |

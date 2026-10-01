@@ -23,11 +23,16 @@ regression test cases" set that predates the current, larger case collection):
 | `golden_cases.json` | 30 | Benchmark/regression — ordinary cases |
 | `negative_cases.json` | 15 | Regression — wrong-behaviour-catching |
 | `injection_cases.json` | 11 | Robustness — prompt injection (grew from 10 to 11 after a real vulnerability was found in production use, see `../docs/architecture_decisions/INDEX.md` ADR-004) |
-| `llm_behaviour_cases.json` | 10 | LLM output-quality behaviour |
-| `agent_cases.json` | 10 | Selective-agent behaviour |
-| `confidence_cases.json` | 5 | Confidence/abstention calibration |
-| `evidence_quality_cases.json` | 5 | Evidence-quality checks |
+| `llm_behaviour_cases.json` | 7 | LLM output-quality behaviour |
+| `agent_cases.json` | 7 | Selective-agent behaviour |
+| `confidence_cases.json` | 2 | Confidence/abstention calibration |
+| `evidence_quality_cases.json` | 4 | Evidence-quality checks |
 | `logging_security_cases.json` | 5 | Logging/security checks |
+
+Counts for `llm_behaviour_cases.json`/`agent_cases.json`/`confidence_cases.json`/`evidence_quality_cases.json`
+were corrected from an earlier 10/10/5/5 after 10 entries with no real `doc_id`/`hypothesis_id`
+(aggregate statistics or code-level guarantees, not re-runnable single-case tests) were removed —
+see `../docs/evaluation_case_design.md`'s "Correction" note for the full accounting.
 
 **Legacy note:** an earlier, smaller 12-case regression set (referenced in older project notes) was
 superseded by the current 30-case `golden_cases.json` battery — the old set was never checked into

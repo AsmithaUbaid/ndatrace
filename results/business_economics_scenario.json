@@ -1,0 +1,44 @@
+{
+  "measured_by_ndatrace": {
+    "rag_cost_per_case_usd": 0.00168,
+    "full_cost_per_case_usd": 0.00202,
+    "source": "experiments/E20_final_rag_test/results/E20_final_report.json"
+  },
+  "externally_sourced_baseline": {
+    "source_name": "LegalOn Technologies, \"2025 State of Contracting Survey\"",
+    "source_type": "vendor research (LegalOn sells AI contract review software) -- not independently verified academic evidence",
+    "publication_date": "2025-01-15",
+    "sample_size": 286,
+    "population": "legal professionals surveyed by LegalOn Technologies",
+    "exact_published_claim": "52% of organizations handle 101-1,000 contracts annually, at 2-4 hours of review time per contract",
+    "url": "https://www.legalontech.com/press-releases/2025-survey",
+    "baseline_hours_per_contract_used_below": 3.0,
+    "baseline_derivation": "midpoint of the published 2-4 hour range -- not itself a published point estimate"
+  },
+  "modeled_scenario": {
+    "contracts_per_year_assumption": 500,
+    "hourly_rate_assumption_usd": 40.0,
+    "formula": "annual_hours = contracts_per_year * baseline_hours_per_contract; hours_saved = annual_hours * assumed_reduction_rate; labor_savings = hours_saved * assumed_hourly_rate",
+    "rows": [
+      {
+        "assumed_reduction_rate": 0.1,
+        "annual_hours_baseline": 1500.0,
+        "hours_saved": 150.0,
+        "modeled_labor_savings_usd": 6000.0
+      },
+      {
+        "assumed_reduction_rate": 0.2,
+        "annual_hours_baseline": 1500.0,
+        "hours_saved": 300.0,
+        "modeled_labor_savings_usd": 12000.0
+      },
+      {
+        "assumed_reduction_rate": 0.3,
+        "annual_hours_baseline": 1500.0,
+        "hours_saved": 450.0,
+        "modeled_labor_savings_usd": 18000.0
+      }
+    ]
+  },
+  "disclosure": "No productivity study was conducted by this project. The hours/cost figures above are scenario outputs of explicit assumptions applied to a published external baseline, not realized or measured results. Purpose: show potential economic scale, not prove ROI."
+}

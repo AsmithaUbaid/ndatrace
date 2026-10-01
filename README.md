@@ -10,9 +10,13 @@
 ![Tests](https://img.shields.io/badge/Tests-433%20passing-22C55E)
 ![Status](https://img.shields.io/badge/Status-Academic%20prototype-6B7280)
 
-![NDATrace demo: one NDA requirement from input to reviewer decision](docs/screenshots/demo_case.gif)
+<p align="center">
+  <img src="docs/screenshots/demo_case.gif"
+       alt="NDATrace end-to-end NDA review demo"
+       width="900">
+</p>
 
-One NDA requirement from input → retrieved evidence → verdict → reviewer decision.
+*One NDA requirement from input → retrieved evidence → verdict → reviewer decision.*
 
 [Persona](#tinas-problem) · [What it does](#what-ndatrace-does) · [Architecture](#high-level-architecture) · [Metrics](#metrics-targeted-vs-reached) · [Design decisions](#key-design-decisions) · [Quick start](#quick-start) · [Reproducibility](#reproducibility) · [Data & evals](#data-and-evals) · [Repo map](#repository-map) · [Limitations](#limitations) · [Deliverables](#project-deliverables)
 
@@ -132,19 +136,36 @@ p=0.0047); accuracy isn't significantly different (p=0.217). More detail in
 
 ### What's measured, what's not
 
-Measured: API inference cost, and nothing else. RAG runs $0.00168/case, FULL $0.00202/case.
+NDATrace measures inference cost and model quality directly: RAG runs $0.00168/case, FULL
+$0.00202/case (`experiments/E20_final_rag_test/results/E20_final_report.json`). End-to-end
+reviewer time savings have not been measured in this project — no productivity study was run. No
+sources are compared for this app, this is a modeled, explicit scenario, not a result.
 
-Not measured: reviewer time savings. No productivity or labor-cost claim is made anywhere in
-this repository.
+Business impact is therefore modeled using a published contract-review-time benchmark and
+explicit scenario assumptions, kept in three separate, clearly labeled categories:
 
-Modeled, not measured, and kept separate: an illustrative human-review-cost scenario lives in
-[`experiments/E18_business_course_synthesis/summary.md`](experiments/E18_business_course_synthesis/summary.md).
-It's labeled as a scenario there and isn't foregrounded here, so the two kinds of claim don't get
-confused.
+| Category | What it is |
+| --- | --- |
+| **Measured by NDATrace** | Inference cost/case, input tokens, latency — all read from saved run artifacts. |
+| **Externally sourced baseline** | LegalOn Technologies, *2025 State of Contracting Survey* (n=286, published 15 Jan 2025): 52% of organizations handle 101–1,000 contracts/year at 2–4 hours of review per contract. Vendor research (LegalOn sells AI contract review software) — not independently verified academic evidence. [Source](https://www.legalontech.com/press-releases/2025-survey), citation review: [`docs/citation_fixes.md`](docs/citation_fixes.md). |
+| **Modeled / illustrative** | Assumed effort-reduction percentage, assumed hourly rate, resulting hours and labor-cost scenarios. Explicit assumptions, not fitted to any target. |
 
-A reviewer-time pilot to actually measure the time question is designed and ready
-([`experiments/E24_reviewer_time_pilot/`](experiments/E24_reviewer_time_pilot/)), but has not
-been run — no reviewer-time number exists yet, measured or otherwise.
+**Scenario example** (midpoint of the published 2–4 hour range → 3 hours/contract; 500
+contracts/year; $40/hour — all stated assumptions, not measurements):
+
+| Assumed effort reduction | Hours saved/year | Modeled labor savings/year |
+| --- | ---: | ---: |
+| 10% | 150 | $6,000 |
+| 20% | 300 | $12,000 |
+| 30% | 450 | $18,000 |
+
+Formula, fully transparent: `annual_hours = contracts/year × baseline_hours/contract`;
+`hours_saved = annual_hours × assumed_reduction_rate`; `labor_savings = hours_saved × assumed_hourly_rate`.
+Reproduce or change the assumptions: `python scripts/business_economics_scenario.py`.
+
+No productivity study was conducted. These numbers show potential economic scale under stated
+assumptions, not a realized or proven ROI — treat the percentages as illustrative inputs, not
+findings.
 
 ## Key design decisions
 
@@ -182,8 +203,7 @@ are retrieval-limited; 78% are reasoning errors on evidence it already found. Fu
 [`docs/failure_analysis.md`](docs/failure_analysis.md), with one real case walked through step
 by step in [`examples/case_failure/`](examples/case_failure/).
 
-The full experiment ledger (E00–E23, frozen, plus E24 prepared but not yet run), each with its
-question, finding, and decision, is in
+The full 24-experiment ledger (E00–E23), each with its question, finding, and decision, is in
 [`docs/experiment_registry.md`](docs/experiment_registry.md).
 
 ## Quick start
@@ -254,6 +274,24 @@ ALL CHECKS PASSED
 </details>
 
 <details>
+<summary>Which 7 scripts step 3 runs</summary>
+
+```bash
+python experiments/E04B_majority_baseline/run_majority_baseline.py
+python scripts/e17_analyze_final_test.py --metrics
+python scripts/e17b_merge_and_analyze.py
+python scripts/analyze_e20_rag_test.py
+python scripts/analyze_e11_selective_agent.py
+python scripts/analyze_e15_validation.py
+python scripts/e18_business_analysis.py
+```
+
+Each one recomputes its experiment's metrics from saved predictions, zero model calls. Listed
+here so this isn't a black box — see `scripts/verify_reproducibility.py`'s `ANALYSIS_SCRIPTS`.
+
+</details>
+
+<details>
 <summary>Sample output — B (dry-run)</summary>
 
 ```json
@@ -275,18 +313,48 @@ Frontend checks: `cd frontend && npx tsc --noEmit && npm test && npm run build`.
 
 | | |
 | --- | --- |
-| Dataset | [ContractNLI](https://stanfordnlp.github.io/contract-nli/): 607 NDAs, 17 fixed requirements, 10,319 examples. TEST split: 2,091 examples, 123 documents. Explainer: [`data/README.md`](data/README.md). |
-| Evals | An offline scoring harness that knows gold labels, kept separate from a runtime validator that never sees them. Explainer: [`evaluation/README.md`](evaluation/README.md), protocol: [`docs/evaluation_protocol.md`](docs/evaluation_protocol.md). |
-| Experiments | 24 numbered, frozen experiments (E00–E23), plus E24 prepared but not yet run, each with its question, finding, and decision, in [`docs/experiment_registry.md`](docs/experiment_registry.md). |
-| Failure analysis | What RAG actually gets wrong and what that implies for future work: [`docs/failure_analysis.md`](docs/failure_analysis.md). |
-| Worked examples | One real correct case and one real failure case, walked through every pipeline stage: [`examples/case_success/`](examples/case_success/), [`examples/case_failure/`](examples/case_failure/). |
-| Architecture decisions | Every frozen choice and the evidence behind it: [`docs/architecture_decisions/INDEX.md`](docs/architecture_decisions/INDEX.md). |
+| Dataset | [ContractNLI](https://stanfordnlp.github.io/contract-nli/) (Koreeda & Manning, EMNLP 2021 Findings), CC BY 4.0, a public benchmark — not confidential company contracts. 607 NDAs, 10,319 examples across the official train/dev/test roles; TEST (2,091 examples, 123 documents) is reserved for the one-time final evaluation. Download + checksum-verify: `bash scripts/download_data.sh`; files live in `data/contractnli/`. |
+| Evals | An offline scoring harness that knows gold labels, kept separate from a runtime validator that never sees them. |
+| Experiments | 24 numbered, frozen experiments (E00–E23), each with its question, finding, and decision. |
 
 Gold labels and evidence are withheld from the model at inference time and scored only
 afterward. The TEST split wasn't tuned against during this project's own development, though a
 superseded earlier run did score it once; that's disclosed in
 [`docs/data_contamination_register.md`](docs/data_contamination_register.md) and not described
 as "blind."
+
+### Evaluation cases checked into the repo
+
+| Eval set | Cases | Purpose | File |
+| --- | ---: | --- | --- |
+| Golden / ordinary | 30 | Representative regression cases across Entailment, Contradiction and NotMentioned | `data/golden/golden_cases.json` |
+| Negative / hard cases | 15 | Known difficult behaviours such as exceptions, conflicting clauses, misleading wording and long documents | `data/golden/negative_cases.json` |
+| Prompt injection | 11 | Robustness against instruction override, role spoofing, output-format spoofing and related attacks | `data/golden/injection_cases.json` |
+| LLM behaviour | 7 | Model-output and reasoning-behaviour checks | `data/golden/llm_behaviour_cases.json` |
+| Agent behaviour | 7 | Selective-agent behaviour checks | `data/golden/agent_cases.json` |
+| Confidence / abstention | 2 | Confidence and escalation-behaviour checks | `data/golden/confidence_cases.json` |
+| Evidence quality | 4 | Evidence-quality and source-grounding checks | `data/golden/evidence_quality_cases.json` |
+
+These checked-in cases are regression, robustness and behavioural evals used to catch known
+failure modes during development; they are not treated as the project's unbiased headline
+benchmark. Most are drawn from ContractNLI DEV, with some synthetic security cases. Final quality
+numbers come from the official TEST evaluation under the documented final protocol (see
+[Metrics](#metrics-targeted-vs-reached) above).
+
+Pass/fail results for every row above are in
+[`docs/test_coverage_summary.md`](docs/test_coverage_summary.md) — **measured against the legacy
+pipeline (RAG + selective agent), not the current final architecture** (GPT-5-mini + FULL); that
+distinction is called out in the summary itself and repeated here so it isn't lost in a link.
+
+- Data explainer: [`data/README.md`](data/README.md)
+- Eval-case design: [`docs/evaluation_case_design.md`](docs/evaluation_case_design.md)
+- Eval harness explainer: [`evaluation/README.md`](evaluation/README.md)
+- Final evaluation protocol: [`docs/evaluation_protocol.md`](docs/evaluation_protocol.md)
+- Data/split contamination disclosure: [`docs/data_contamination_register.md`](docs/data_contamination_register.md)
+- Experiment registry: [`docs/experiment_registry.md`](docs/experiment_registry.md)
+- Failure analysis: [`docs/failure_analysis.md`](docs/failure_analysis.md)
+- Worked examples (one real success, one real failure case): [`examples/case_success/`](examples/case_success/), [`examples/case_failure/`](examples/case_failure/)
+- Architecture decisions: [`docs/architecture_decisions/INDEX.md`](docs/architecture_decisions/INDEX.md)
 
 ## Repository map
 
@@ -295,7 +363,7 @@ pipeline/      Frozen RAG runtime: chunking, retrieval, reranking, parsing, vali
 backend/       FastAPI endpoints, persisted review history, reviewer decision API
 frontend/      Next.js reviewer interface and Project Story
 evaluation/    Metrics, evaluators, schemas, and harnesses
-experiments/   Frozen E00–E23 protocols, outputs, and analyses, plus E24 (prepared, not yet run)
+experiments/   Frozen E00–E23 protocols, outputs, and analyses
 examples/      One worked success case and one worked failure case
 notebooks/     Executable Technical Tour (saved artifacts by default)
 data/          Public-dataset instructions and tracked regression fixtures
