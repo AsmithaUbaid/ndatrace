@@ -64,10 +64,11 @@ usable fully offline. Real dataset-derived numbers:
 ## 5. Compact vs. verbose cost difference
 
 - **Instructor-cited figures (644 in / 449 out / $0.001059 / 9.21s) were located locally**
-  (`docs/archive/initial_project_plan.md` section 22.2) — but verified to be **the
-  instructor's own estimate, based on a GPT-5-mini example from the Week 3 submission, not
-  this project's own measured NDATrace data.** Not found anywhere in this project's actual
-  result files under those values. Reported accurately, not treated as a project fact.
+  (section 22.2 of the original project planning document, since removed from the repository —
+  see git history) — but verified to be **the instructor's own estimate, based on a GPT-5-mini
+  example from the Week 3 submission, not this project's own measured NDATrace data.** Not found
+  anywhere in this project's actual result files under those values. Reported accurately, not
+  treated as a project fact.
 - **This project's own real measured data** (T024 RAG, Gemini, v2 prompt, n=150): mean input
   853.6 tokens, mean output 116.1 tokens, mean cost $0.0001318/call — very different from the
   instructor's cited figures, consistent with this project having switched to a

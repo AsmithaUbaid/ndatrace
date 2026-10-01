@@ -1,6 +1,6 @@
 """
 Data leakage prevention checks (WBS T026-adjacent, Category 8 of
-NDATrace_100_eval_cases.md, eval cases 086-090). Deterministic code
+docs/evaluation_case_design.md, eval cases 086-090). Deterministic code
 checks, $0 cost - no LLM calls.
 
 Case 088 (test/dev split leakage) is already covered by

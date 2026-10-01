@@ -1,0 +1,61 @@
+{
+  "source": {
+    "experiment": "E20_final_rag_test",
+    "case_id": "test::77::nda-20",
+    "run_id": "e20_final_rag_test",
+    "artifacts": [
+      "experiments/E20_final_rag_test/results/run_E20_rag_cases.jsonl",
+      "experiments/E20_final_rag_test/manifests/TEST_ALL_2091_RAG_retrieval_v1.json",
+      "experiments/E20_final_rag_test/manifests/TEST_ALL_2091_GOLD_SCORER_ONLY.json",
+      "data/contractnli/test.json (document_id 77)"
+    ],
+    "note": "Pulled verbatim from the real, frozen TEST run used for the final report -- one real failure among the 576 non-Joint RAG cases, not a constructed example."
+  },
+  "input": {
+    "document_file_name": "Confidentiality_Agreement_1.pdf",
+    "document_tokens_cl100k": 617,
+    "requirement_id": "nda-20",
+    "requirement_text": "Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information."
+  },
+  "retrieval": {
+    "method": "BM25 top-20 -> cross-encoder rerank (ms-marco-MiniLM-L-12-v2) -> top-5",
+    "gold_evidence_present_in_retrieved_context": true,
+    "context_given_to_model": "9. At the end of the contract the receiving party shall return the confidential information and any possibly extant copies after receipt of a written request, provided that this is technically feasible and does not violate the retention obligations. As an alternative to that, the receiving party can also ensure in writing the destruction of the received documentation if that is technically feasible.\n10. The confidential information will be provided as is. The disclosing party does not assume any warranty for the correctness, completeness or usability of the confidential information.\n11. The parties agree that for this agreement German law applies excluding the United Nations Convention on Contracts for the International Sale of Goods. The legal venue for all disputes arising from this agreement is the head office of the company Helukabel in Hemmingen.\nHemmingen, ___________ _____________________\nPlace, Date\n_________________________ _____________________\nHelu Kabel GmbH Buyer\n\n---\n\n6. The confidentiality agreement does not apply to statements of the company Helukabel in its catalogues, datasheets and on the homepage and also not to information which\na) the receiving party was already aware of or which was developed by the disclosing party itself independent of the disclosure,\nb) is publicly known without this agreement having been broken,\nc) was received by a third party without infringement of this or any other confidentiality agreement.\n7. If the recipient is forced to expose the confidential information due to a legal regulation, a legally valid judgement or a non-disputable official decision or decree in part or in whole, it shall immediately inform the owner of the confidential information in writing so that the owner can take measures to protect the confidential information.\n8. This agreement becomes effective with the signatures of both parties and is valid for three years. It is tacitly extended by one year if it is not terminated three months before its expiration.\n\n---\n\nConfidentiality Agreement\nbetween\nHelu Kabel GmbH\nDieselstraße 8-12\n71282 Hemmingen\n-Supplier-\nand\n[COMPANY]\n[CONTACT PERSON]\n[ADDRESS]\n[POSTCODE, CITY]\n[COUNTRY]\n-Buyer-\n1. The parties maintain a supply relationship. In the frame of this cooperation, confidential information also be exchanged.\n2. Every contract party can disclose confidential information to the other contract party orally or in writing. If the disclosure is in writing, the disclosing party will mark the confidential documents with the additional terms “Confidential” or “Liable to Secrecy” so that it is apparent to the other party which information is especially in need to protection.\n3. The contract parties are obligated to preclude disclosure of confidential information to third parties. The parties will entrust confidential information solely to those employees, consultants and third party companies which are concerned with the processing of the order and which are legally or contractually obligated to secrecy.\n4. To the extent that technical drawings of certain third-party companies are not to be made known, the buyer must point this fact out on its own initiative.\n5. All confidential information remains the property of the disclosing contract party.",
+    "note": "The clause the gold label is based on (clause 9) IS inside the retrieved top-5 context -- this is NOT a retrieval-limited failure."
+  },
+  "model_output": {
+    "model": "openai/gpt-5-mini",
+    "prompt": "GPT-P0 (frozen, prompts/final/gpt_p0.txt)",
+    "parse_status": "strict",
+    "predicted_label": "Entailment",
+    "predicted_evidence": [
+      "At the end of the contract the receiving party shall return the confidential information and any possibly extant copies after receipt of a written request, provided that this is technically feasible and does not violate the retention obligations.",
+      "As an alternative to that, the receiving party can also ensure in writing the destruction of the received documentation if that is technically feasible."
+    ],
+    "cost_usd": 0.0019855
+  },
+  "runtime_validation": {
+    "validator": "pipeline/evidence_validator.py (RUNTIME_EVIDENCE_VALIDATOR_V2)",
+    "checked_against": "the exact context_text shown above, not the full document",
+    "verbatim_quotes": 2,
+    "hallucinated_quotes": 0,
+    "label_evidence_consistent": true,
+    "is_valid": true,
+    "meaning": "This is the key point of this example: the runtime validator PASSES this case. Both quotes are real, exact, in-context text -- there is no hallucination and nothing for a source-grounding check to catch. The failure is a reasoning error, not a sourcing error, and the runtime layer has no way to detect it."
+  },
+  "offline_scoring": {
+    "gold_label": "Contradiction",
+    "gold_evidence_span_index": 30,
+    "gold_evidence_text": "9. At the end of the contract the receiving party shall return the confidential information and any possibly extant copies after receipt of a written request, provided that this is technically feasible and does not violate the retention obligations. ",
+    "label_correct": false,
+    "joint_correct": false,
+    "scored_by": "evaluation/evidence_matching.py (evidence_evaluator_v2), offline only -- the model never saw this gold data"
+  },
+  "failure_category": "reasoning_classification",
+  "failure_category_source": "experiments/E20_final_rag_test/results/E20_final_report.json's failure_taxonomy (448/576 non-Joint RAG cases fall in this category; this case was manually re-checked against that taxonomy's rule: gold_evidence_present_in_retrieved_context == true, so it is excluded from retrieval_limited by definition).",
+  "why_it_failed": "The model quoted exactly the right clause (clause 9) but misread its polarity. Clause 9 is a mandatory return/destroy obligation -- the receiving party MUST return or destroy the information, full stop. The model appears to have read 'return OR destroy' as offering the receiving party a choice that implicitly permits retention in the meantime, and classified the requirement ('may retain some Confidential Information') as Entailment. The correct reading is the opposite: an unconditional return/destroy duty directly contradicts a claim that retention is permitted. This is the same systematic pattern documented in docs/experiment_registry.md's E17 entry: 9/10 of E17's C-to-E failures had evidence that overlapped the gold span -- the right clause, wrong polarity judgment -- not a missing-evidence problem.",
+  "reviewer_decision": {
+    "available": false,
+    "note": "This case comes from the offline E20 TEST evaluation run (2,091 cases, scored in bulk), not from a live reviewed session through the backend's reviewer decision API. In the live product, this case's needs_human_review flag and cited evidence would have been shown to a reviewer for exactly this kind of check -- the whole reason the system ships with mandatory human review rather than an automatic approval gate."
+  }
+}

@@ -5,8 +5,9 @@ system-level behavioural cases designed for NDATrace. These categories serve **d
 purposes and are evaluated separately** — they are not one homogeneous benchmark, and a single
 "pass rate" across all of them would not be meaningful.
 
-This is a reorganized version of the original `NDATrace_100_eval_cases.md` (kept in the repository
-root, unmodified, for historical reference). The original document's stated purpose —
+This is a reorganized version of the original `NDATrace_100_eval_cases.md`, a pre-implementation
+design document that has since been superseded by this file and removed (its content is folded in
+below; see git history for the original). That document's stated purpose —
 *"These 100 cases define correct before any code is written"* — should be read narrowly: it
 described the intent to hand-design cases early, not that these cases constitute an unbiased
 statistical benchmark, or that they were all built and run before any code existed. In practice,
@@ -56,9 +57,9 @@ sections"), so a pass rate here answers "did we break something we already knew 
 accurate is the system in general." That broader question is answered by the dev-sample and
 test-split experiments in `docs/experiment_registry.md`.
 
-**Real execution status (`archive/legacy/scripts/run_golden_battery_cases.py`):** these case files
-were built by selecting real dev-split documents + gold labels only — the original build scripts
-made zero pipeline calls. The very first real run against the current production pipeline found:
+**Real execution status:** these case files were built by selecting real dev-split documents +
+gold labels only — the original build script (since removed; see git history) made zero pipeline
+calls at build time. The very first real run against the current production pipeline found:
 
 - **Category 1 (30 ordinary cases): 24/30 = 80.0%**
 - **Category 2 (15 negative/wrong-behaviour cases): 10/15 = 66.7%**, and surfaced a genuine,
@@ -68,10 +69,28 @@ made zero pipeline calls. The very first real run against the current production
   accuracy seen on the general 150-case dev sample — expected, since these cases were deliberately
   chosen to be hard, not average.
 
-Full case tables (Entailment/Contradiction/Not Mentioned tiers for Category 1; misleading-wording/
-wrong-section-evidence/conflicting-clauses/keyword-absence/long-document families for Category 2)
-are preserved verbatim in `NDATrace_100_eval_cases.md` sections "CATEGORY 1" and "CATEGORY 2" —
-not duplicated here to avoid drift between two copies of the same table.
+### Category 1 — Entailment, Contradiction, Not Mentioned (10 cases each)
+
+| Tier | Entailment | Contradiction | Not Mentioned |
+|---|---|---|---|
+| Easy | Single clause directly states requirement; common confidentiality language; different NDA structure | Clause directly denies requirement (explicit carve-out); "shall not" language; explicit exclusion list | Requirement topic completely absent; very short NDA with limited scope; standard NDA missing one common clause |
+| Medium | Different wording/synonyms; legal jargon; requirement split across two sentences | Exception sub-clause negates main clause; time-limited vs. perpetual requirement; scope limitation vs. broad requirement | Related but different concept present; similar wording, different legal meaning; mentioned in recitals but not operative clauses |
+| Hard | Evidence scattered across sections; buried in a nested sub-clause; implied by combination of clauses; longest NDA in dataset | Implicit through defined terms; only visible reading two clauses together; buried in a schedule/appendix reference; shortest NDA in dataset | Partially addressed but not fully; keyword present but wrong context; long NDA with no matching clause; superficially comprehensive but skips this requirement |
+
+Each case expects the gold label, and for Entailment/Contradiction, evidence overlapping the gold
+span; detection is gold-label match (plus evidence-span match where evidence is expected).
+
+### Category 2 — Negative cases, non-injection (15 cases)
+
+Designed to expose specific wrong behaviours, grouped by family:
+
+| Family | What it catches | Example |
+|---|---|---|
+| Misleading wording (4) | Conditional "may" misread as obligatory "shall"; future tense misread as current obligation; double negatives misread as positive; a limiting "except as required by law" carve-out missed | — |
+| Wrong-section evidence (3) | Retriever matching a keyword in the definitions section or a non-binding recital instead of the operative clause; matching on a heading instead of clause body | — |
+| Conflicting clauses (3) | Picking one of two conflicting clauses and ignoring the other; using a superseded clause instead of its amendment; a general clause masking a specific exception | — |
+| Keyword absence (3) | Rule-based/keyword search failing on synonyms, legal jargon, or abbreviations that an LLM should still resolve correctly | — |
+| Very long document (2) | Retrieval degrading with document length; only the first of several relevant clauses being found | — |
 
 ---
 
@@ -104,8 +123,8 @@ writeup, including the second, independent bug (missing per-hypothesis error iso
 the same review pass.
 
 **A real numbering collision, disclosed rather than silently fixed:** `data/golden/
-injection_cases.json` assigns this new case the ID `056`, but the original
-`NDATrace_100_eval_cases.md` already used `056` as the first ID of Category 4 (LLM behaviour). The
+injection_cases.json` assigns this new case the ID `056`, but the original pre-implementation
+planning document already used `056` as the first ID of Category 4 (LLM behaviour). The
 two case sets are in separate JSON files and never actually collide in practice, but the ID `056`
 is not unique across the full catalogue as currently built (76 cases across Categories 1–7 after the
 correction above). Left as-is rather than
@@ -239,7 +258,20 @@ real `doc_id`/`hypothesis_id`); their findings remain documented here rather tha
 ## Deferred-to-production backlog (67 cases, not built)
 
 The original planning document also listed 67 additional cases explicitly deferred past the
-project's scope (parsing edge cases, frontend integration, performance at scale, graceful
-degradation, budget auto-stop, determinism/consistency checks, etc.). These were never built and
-are not claimed as complete anywhere in this repository — see the full list preserved in
-`NDATrace_100_eval_cases.md`'s "DEFERRED TO PRODUCTION" section.
+project's scope. These were never built and are not claimed as complete anywhere in this
+repository:
+
+- Document parsing edge cases (empty, 100+ clauses, nested sub-clauses, tables, headers)
+- Chunking edge cases (single chunk, oversized clause, no clause markers)
+- Embedding edge cases (duplicate text, single chunk index, 500 chunk index)
+- Model gateway (model switching, empty response, truncated JSON, expired API key)
+- Explanation depth (clause references, fabrication check, NM explanation quality)
+- Persistence stress (SQLite save/load, server restart, concurrent writes, unicode)
+- Frontend integration (upload flow, 17-result display, evidence highlights, error states, loading)
+- Reproducibility (cross-machine, config snapshots, requirements.txt, Docker Compose)
+- Performance at scale (memory leaks, largest NDA, index rebuild, log file growth)
+- Comparison fairness (same examples, same prompts, same pricing)
+- Graceful degradation (internet down, FAISS corrupt, SQLite locked)
+- Multi-requirement interaction (shared clauses, context window degradation)
+- Budget auto-stop (auto-halt at threshold, per-request cap, session tracking)
+- Consistency (temperature determinism, rephrased hypothesis, requirement order, whitespace)

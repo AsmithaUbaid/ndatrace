@@ -157,9 +157,11 @@ def build_token_estimates() -> dict:
 # =========================================================================
 # 3. Historical explanation-cost finding (T019, already computed, re-cited
 #    not re-derived) + the instructor's cited 644/449/$0.001059 figures --
-#    verified against local records: found in docs/archive/initial_project_plan.md
-#    as the INSTRUCTOR's estimate (based on a GPT-5-mini example), NOT this
-#    project's own measured data. Reported as such, not silently treated as fact.
+#    verified against local records (originally found in section 22.2 of the
+#    initial project planning document, since removed from the repository,
+#    see git history) as the INSTRUCTOR's estimate (based on a GPT-5-mini
+#    example), NOT this project's own measured data. Reported as such, not
+#    silently treated as fact.
 # =========================================================================
 
 def compact_vs_verbose_comparison(token_estimates: dict) -> dict:
@@ -172,7 +174,7 @@ def compact_vs_verbose_comparison(token_estimates: dict) -> dict:
     return {
         "instructor_cited_figures": {
             "found_locally": True,
-            "location": "docs/archive/initial_project_plan.md section 22.2",
+            "location": "section 22.2 of the initial project planning document (removed from the repository, see git history)",
             "verification_result": (
                 "These are the INSTRUCTOR's estimate, based on a GPT-5-mini example from the "
                 "Week 3 submission (~644 input / ~449 output tokens, ~$0.001059/9.21s per "

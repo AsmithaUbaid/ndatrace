@@ -6,8 +6,8 @@ experiment in this project was run via a dedicated standalone script in `scripts
 and its config-driven pattern were part of the original plan but were not the pattern actually
 used).
 
-The original experiment register (Section 8 of `docs/archive/initial_project_plan.md`) is
-historical planning, not a live index.
+The original experiment register (Section 8 of the initial project planning document, removed
+from the repository, see git history) was historical planning, not a live index.
 
 ## Final
 

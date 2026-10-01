@@ -1,0 +1,59 @@
+{
+  "source": {
+    "experiment": "E20_final_rag_test",
+    "case_id": "test::446::nda-5",
+    "run_id": "e20_final_rag_test",
+    "artifacts": [
+      "experiments/E20_final_rag_test/results/run_E20_rag_cases.jsonl",
+      "experiments/E20_final_rag_test/manifests/TEST_ALL_2091_RAG_retrieval_v1.json",
+      "experiments/E20_final_rag_test/manifests/TEST_ALL_2091_GOLD_SCORER_ONLY.json",
+      "data/contractnli/test.json (document_id 446)"
+    ],
+    "note": "Pulled verbatim from the real, frozen TEST run used for the final report. Not reconstructed or edited."
+  },
+  "input": {
+    "document_file_name": "1023734_0000912057-96-023266_document_16.txt",
+    "document_tokens_cl100k": 308,
+    "requirement_id": "nda-5",
+    "requirement_text": "Receiving Party may share some Confidential Information with some of Receiving Party's employees."
+  },
+  "retrieval": {
+    "method": "BM25 top-20 -> cross-encoder rerank (ms-marco-MiniLM-L-12-v2) -> top-5",
+    "context_given_to_model": "NAVIDEC, INCORPORATED\nTRADE SECRET/NON-DISCLOSURE AGREEMENT\nIn consideration of the mutual promises made herein, as well as the agreement between Navidec, Incorporated and _______________ , the parties hereby agree as follows:\n____________________ , agrees that, in consideration for being shown or told about certain trade secrets or property belonging to Navidec, Incorporated, ____________________, shall not disclose or cause to be disclosed, disseminated or distributed any information concerning said trade secret or property to any person, entity, business or other individual or company without the prior written permission of Navidec, Incorporated.\nFurther, ___________________ , agrees not to use, either directly or indirectly any of the material, ideas, objects or portions thereof of said trade secret or property disclosed by Navidec, Incorporated in any manner whatsoever without the prior written consent of Navidec, Incorporated.\nAny dispute that arises hereunder shall be resolved by arbitration pursuant to the rules of the American Arbitration Association or the rules of the State of Colorado.\nIn the event that any litigation or arbitration is commenced to enforce any of the provisions of this agreement, the prevailing party of said litigation shall be entitled to all costs thereof including reasonable attorney's fees.\n\n---\n\nThis agreement shall be governed by and interpreted in accordance without the laws of the State of Colorado.\nEXECUTED this _____________ day of __________________ 1996, in Englewood, in the State of Colorado.\nNavidec, Incorporated\n(Signature of Agreeing Party)",
+    "note": "This document is only 308 tokens, so all 5 retrieved chunks together cover almost the entire NDA -- a representative EASY case for retrieval, not a hard one. See examples/case_failure for a harder one."
+  },
+  "model_output": {
+    "model": "openai/gpt-5-mini",
+    "prompt": "GPT-P0 (frozen, prompts/final/gpt_p0.txt)",
+    "raw_response": "{\n  \"label\": \"Contradiction\",\n  \"evidence\": [\n    \"____________________ , agrees that, in consideration for being shown or told about certain trade secrets or property belonging to Navidec, Incorporated, ____________________, shall not disclose or cause to be disclosed, disseminated or distributed any information concerning said trade secret or property to any person, entity, business or other individual or company without the prior written permission of Navidec, Incorporated.\"\n  ]\n}",
+    "parse_status": "strict",
+    "predicted_label": "Contradiction",
+    "predicted_evidence": [
+      "____________________ , agrees that, in consideration for being shown or told about certain trade secrets or property belonging to Navidec, Incorporated, ____________________, shall not disclose or cause to be disclosed, disseminated or distributed any information concerning said trade secret or property to any person, entity, business or other individual or company without the prior written permission of Navidec, Incorporated."
+    ],
+    "cost_usd": 0.0012265
+  },
+  "runtime_validation": {
+    "validator": "pipeline/evidence_validator.py (RUNTIME_EVIDENCE_VALIDATOR_V2)",
+    "checked_against": "the exact context_text shown above, not the full document",
+    "verbatim_quotes": 1,
+    "hallucinated_quotes": 0,
+    "label_evidence_consistent": true,
+    "is_valid": true,
+    "meaning": "The cited quote is a genuine, exact substring of what the model was shown. This check says nothing about whether the LABEL is correct -- see runtime_vs_offline_scoring below."
+  },
+  "offline_scoring": {
+    "gold_label": "Contradiction",
+    "gold_evidence_span_index": 3,
+    "gold_evidence_text": "____________________ , agrees that, in consideration for being shown or told about certain trade secrets or property belonging to Navidec, Incorporated, ____________________, shall not disclose or cause to be disclosed, disseminated or distributed any information concerning said trade secret or property to any person, entity, business or other individual or company without the prior written permission of Navidec, Incorporated.",
+    "label_correct": true,
+    "evidence_matches_gold": true,
+    "joint_correct": true,
+    "scored_by": "evaluation/evidence_matching.py (evidence_evaluator_v2), offline only -- the model never saw this gold data"
+  },
+  "runtime_vs_offline_scoring": "Two separate, non-overlapping checks run on this case: the RUNTIME validator (pipeline/evidence_validator.py) only confirms the quote is real and in-context -- it has no gold label and cannot know if 'Contradiction' is the right answer. The OFFLINE scorer (evaluation/) has the gold label and confirms it. In production only the runtime check exists; the offline check is what builds the metrics in the final report.",
+  "reviewer_decision": {
+    "available": false,
+    "note": "This case comes from the offline E20 TEST evaluation run (2,091 cases, scored in bulk), not from a live reviewed session through the backend's reviewer decision API (POST /review/{review_id}/items/{item_id}/decision). No individual reviewer decision exists for it. See backend/routes/review.py for that live flow."
+  }
+}

@@ -48,7 +48,6 @@ port; set `NEXT_PUBLIC_API_URL` only to point at a different backend host/port.
 | `components/RequirementCard.tsx` | One result: verdict, explanation, source-validated evidence, and subtle retrieval provenance |
 | `components/ResultsSummaryBar.tsx`, `components/FilterTabs.tsx` | Batch-review result filtering by verdict/needs-attention |
 | `components/Checkbox.tsx` | Custom-styled checkbox for the requirement picker |
-| `components/ResultCard.tsx` | Renders a `POST /api/review` result (label, evidence, `needs_human_review`/`source_valid` state, no fabricated confidence) - not currently used by any page since `/final` was removed |
 | `components/LimitationsPanel.tsx` | Collapsible panel stating the system's known limitations (reviewer aid only, human final authority, NotMentioned/injection caveats) |
 | `components/NavBar.tsx` | Top navigation (Review / History / Experiments) |
 | `lib/api.ts` | Fetch wrappers + TypeScript types for every backend endpoint in `../docs/api.md` |

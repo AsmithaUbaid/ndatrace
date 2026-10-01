@@ -47,4 +47,4 @@ for two different purposes.
 
 Verified byte-for-byte identical `results/budget/budget_plan.json` output before and after
 `build_e00b_forecast.py` was switched to read from this file instead of the legacy paths
-(2026-09-29 legacy cleanup pass; see `audit/00_modification_log.md` for the resolution record).
+(2026-09-29 legacy cleanup pass; see git history for that commit).

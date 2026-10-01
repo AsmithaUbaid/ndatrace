@@ -255,6 +255,10 @@ paired significance testing. Source: `experiments/E20_final_rag_test/results/E20
 
 - Retrieval is **not** the bottleneck — only 10% of RAG's failures are retrieval-limited; 78% are
   reasoning/classification errors on evidence the system already found.
+- [`docs/failure_analysis.md`](docs/failure_analysis.md) — the full breakdown and what it implies
+  for future work. [`examples/case_success/`](examples/case_success/) and
+  [`examples/case_failure/`](examples/case_failure/) walk one real correct case and one real
+  failure case, step by step, through every pipeline stage.
 
 ## Business impact
 
@@ -343,7 +347,8 @@ cd frontend && npx tsc --noEmit && npm test && npm run build
 | | Cost | What it proves |
 | --- | --- | --- |
 | **A. Reproduce metrics from saved outputs** | Free, no API key | Every number in this README is recomputed from committed predictions, not re-run against a live model. |
-| **B. Rerun live inference experiments** | Real API cost | Not part of normal verification; not done casually. |
+| **B. Run one real request through the live pipeline** | Free (stub), or ~$0.002 (`--live`, one real call) | The actual production code path — chunk → retrieve → rerank → classify → validate — works end to end on a real input, not just that saved numbers recompute. |
+| **C. Rerun live inference experiments at scale** | Real API cost | Not part of normal verification; not done casually. |
 
 **One command covers (A) end to end:**
 
@@ -380,10 +385,40 @@ ALL CHECKS PASSED
 
 </details>
 
+**One command covers (B) — one real NDA through the real pipeline:**
+
+```bash
+python experiments/E00_smallest_slice/run_smallest_slice.py          # dry-run, $0, no network
+python experiments/E00_smallest_slice/run_smallest_slice.py --live   # one real hosted call, ~$0.002
+```
+
+This is not a saved-output replay: it calls `pipeline/frozen_rag.py` and `pipeline/final_review.py`
+directly — the same functions the backend calls — and prints a complete, real result.
+
+<details>
+<summary>Sample output (dry-run)</summary>
+
+```json
+{
+  "label": "Entailment",
+  "evidence": [
+    "shall not disclose the Confidential Information to any third party without the prior written consent of the Disclosing Party."
+  ],
+  "explanation": "The quoted clause(s) above support this requirement.",
+  "source_valid": true,
+  "needs_human_review": false,
+  "model": "openai/gpt-5-mini",
+  "success": true
+}
+Smallest slice: PASS
+```
+
+</details>
+
 - [Experiment registry](docs/experiment_registry.md) · [Evaluation protocol](docs/evaluation_protocol.md) · [Architecture decisions](docs/architecture_decisions/INDEX.md) · [Data contamination register](docs/data_contamination_register.md)
 - [Technical Tour notebook](notebooks/NDATrace_Complete_Technical_Tour.ipynb) — executable, saved artifacts by default, zero hosted calls.
-- Historical T-series materials pre-date this architecture and are archived under
-  `archive/legacy/` — no current number is computed from them.
+- Historical T-series materials pre-date this architecture and were removed in a later cleanup
+  pass (see `git log`) — no current number is computed from them.
 
 ## See NDATrace in action
 
@@ -435,10 +470,8 @@ reports/       Final report (draft) and a preserved earlier trade-off draft
 
 NTU PE6201 (Emerging AI Technologies) end-of-course project.
 
-- **Trade-off report (draft):** [Markdown](reports/NDATrace_Final_Report.md) ·
-  [PDF](reports/NDATrace_Final_Report.pdf) · [HTML](reports/NDATrace_Final_Report.html) — not yet
-  finalized. Earlier draft preserved at
-  [NDATrace_Business_Technical_Tradeoff_Draft.html](reports/NDATrace_Business_Technical_Tradeoff_Draft.html).
+- **Trade-off report:** submitted separately, not included in this public repository ahead of the
+  submission deadline.
 - **GitHub implementation:** this repository, reproducible end to end via
   [`scripts/verify_reproducibility.py`](#reproducibility).
 - **Problem statement / course materials:** submitted separately through the course platform.

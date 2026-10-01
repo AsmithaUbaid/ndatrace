@@ -59,7 +59,7 @@ these:
 | Architecture freeze — historical only (T031, ADR-009) | `docs/architecture_decisions/INDEX.md` ADR-009 |
 | Final locked test-set eval (T041, ADR-010) | `docs/architecture_decisions/INDEX.md` ADR-010, `results/final/legacy/run_T041_*.jsonl` |
 | Golden battery Categories 1–2 (ADR-011) | `docs/architecture_decisions/INDEX.md` ADR-011 |
-| Original day-by-day planning (not used for execution order) | `docs/archive/initial_project_plan.md` |
+| Original day-by-day planning (not used for execution order) | removed from the repository, see git history |
 
 **ADR-009 in particular is historical evidence only** — per `docs/project_contract.md`, it is
 not treated as the architecture freeze for final. E12 independently re-evaluates

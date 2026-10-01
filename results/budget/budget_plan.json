@@ -34,7 +34,7 @@
   "compact_vs_verbose": {
     "instructor_cited_figures": {
       "found_locally": true,
-      "location": "docs/archive/initial_project_plan.md section 22.2",
+      "location": "section 22.2 of the initial project planning document (removed from the repository, see git history)",
       "verification_result": "These are the INSTRUCTOR's estimate, based on a GPT-5-mini example from the Week 3 submission (~644 input / ~449 output tokens, ~$0.001059/9.21s per case) -- NOT this project's own measured NDATrace data. Not found anywhere in this project's own result files under those exact values. Reported here as correctly attributed, not treated as an NDATrace project fact.",
       "cited_values": {
         "input_tokens": 644,
