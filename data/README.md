@@ -44,6 +44,15 @@ Two further categories (data-leakage prevention, API/error handling) are impleme
 tests rather than JSON case files — see `../docs/evaluation_case_design.md`'s "Where each category
 lives now" table.
 
+**Current execution coverage against today's architecture:** `golden_cases.json`,
+`negative_cases.json`, and the 4 real cases in `evidence_quality_cases.json` (49 cases total) have
+been executed against the **current** frozen Rule/FULL/RAG architecture — see
+`../experiments/E24_targeted_evaluation/`. Every other file in this table had only ever been
+scored against the superseded legacy pipeline until this pass (see
+`../docs/test_coverage_summary.md`); `injection_cases.json`/`llm_behaviour_cases.json` remain
+legacy-only because every entry references a synthetic document whose original text was never
+saved, so there is nothing to faithfully replay.
+
 ## Split membership discipline
 
 Every file above draws exclusively from `data/contractnli/dev.json`. None reference or were built

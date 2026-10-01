@@ -23,18 +23,18 @@ for the open question of whether equivalent cases should also exist on held-out 
 
 ## Where each category lives now
 
-| Category | Original # | Case file / test file | Built as |
-|---|---|---|---|
-| 1. Benchmark — golden/ordinary | 30 | `data/golden/golden_cases.json` | JSON case file |
-| 2. Regression — negative/wrong-behaviour | 15 | `data/golden/negative_cases.json` | JSON case file |
-| 3. Robustness — prompt injection | 10 → **11** (case 056 added) | `data/golden/injection_cases.json` | JSON case file |
-| 4. LLM behaviour | 10 → **7** (3 removed, see note below) | `data/golden/llm_behaviour_cases.json` | JSON case file |
-| 5. Agent behaviour | 10 → **7** (3 removed, see note below) | `data/golden/agent_cases.json` | JSON case file |
-| 6. Confidence & abstention | 5 → **2** (3 removed, see note below) | `data/golden/confidence_cases.json` | JSON case file |
-| 7. Evidence quality | 5 → **4** (1 removed, see note below) | `data/golden/evidence_quality_cases.json` | JSON case file |
-| 8. Data leakage prevention | 5 | `tests/test_data_leakage.py` | 21 pytest tests (not a JSON case file — deterministic, code-level) |
-| 9. API & error handling | 5 | `tests/test_backend.py` + live checks | Code-level tests + manual live verification (blocked until the backend, T032–T033, existed) |
-| 10. Logging & security | 5 | grep/audit checks against `logs/ndatrace.jsonl` | Code-level + live-log audit |
+| Category | Original # | Case file / test file | Built as | Executed under E24 (current architecture)? |
+|---|---|---|---|---|
+| 1. Benchmark — golden/ordinary | 30 | `data/golden/golden_cases.json` | JSON case file | **Yes** — all 30, see `experiments/E24_targeted_evaluation/` |
+| 2. Regression — negative/wrong-behaviour | 15 | `data/golden/negative_cases.json` | JSON case file | **Yes** — all 15 |
+| 3. Robustness — prompt injection | 10 → **11** (case 056 added) | `data/golden/injection_cases.json` | JSON case file | No — every entry references a synthetic document with no stored source text, not replayable. Security robustness is characterized by E16/E21/E22/E23 instead. |
+| 4. LLM behaviour | 10 → **7** (3 removed, see note below) | `data/golden/llm_behaviour_cases.json` | JSON case file | No — same reason (synthetic, no stored source text) |
+| 5. Agent behaviour | 10 → **7** (3 removed, see note below) | `data/golden/agent_cases.json` | JSON case file | No — tests the selective agent, a rejected feature (E11), not part of the shipped architecture |
+| 6. Confidence & abstention | 5 → **2** (3 removed, see note below) | `data/golden/confidence_cases.json` | JSON case file | No — tests an automatic confidence gate, a rejected feature (E15), not part of the shipped architecture |
+| 7. Evidence quality | 5 → **4** (1 removed, see note below) | `data/golden/evidence_quality_cases.json` | JSON case file | **Partial** — the 4 real (non-synthetic) cases, under E24 |
+| 8. Data leakage prevention | 5 | `tests/test_data_leakage.py` | 21 pytest tests (not a JSON case file — deterministic, code-level) | N/A — code-level, runs every `pytest` invocation, not experiment-specific |
+| 9. API & error handling | 5 | `tests/test_backend.py` + live checks | Code-level tests + manual live verification (blocked until the backend, T032–T033, existed) | N/A — code-level |
+| 10. Logging & security | 5 | grep/audit checks against `logs/ndatrace.jsonl` | Code-level + live-log audit | N/A — code-level |
 
 **Correction:** Categories 4–7's JSON case files originally included entries with no
 real `doc_id`/`hypothesis_id` — aggregate historical statistics (e.g. "0/1,344 real classify() calls

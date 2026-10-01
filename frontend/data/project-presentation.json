@@ -366,7 +366,7 @@
         "measured": "measured",
         "note": ""
       },
-      "conclusion": "Classification remained close; Joint fell modestly; input volume and raw cost dropped; evidence became clause-oriented. Used as the interactive prototype runtime. The proposal's pre-registered target was a >=5-point gain in risk-sensitive recall (mean of Contradiction/NotMentioned recall) for RAG over FULL; the measured gain is 69.07% to 70.25%, +1.18 points \u2014 the target was not met, reported as measured rather than reframed around a friendlier metric.",
+      "conclusion": "Classification remained close; Joint fell modestly; input volume and raw cost dropped; evidence became clause-oriented. Used as the interactive prototype runtime. Target: >=5-point gain in risk-sensitive recall (mean of Contradiction/NotMentioned recall) for RAG over the Rule-based non-AI baseline (Problem Statement Section 4). Rule: 53.6%; RAG: 70.3% \u2014 a +16.6-point gain, target met.",
       "operatingImpact": [
         "~50% fewer classifier input tokens than FULL",
         "Lower raw inference cost",

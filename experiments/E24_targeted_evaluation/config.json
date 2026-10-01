@@ -1,0 +1,75 @@
+{
+  "experiment_id": "E24_targeted_evaluation",
+  "frozen_before_run": true,
+  "architectures": {
+    "A0_rule": {
+      "implementation": "pipeline/rule_baseline.py:classify_with_span()",
+      "modified_for_this_experiment": false,
+      "cost": "deterministic, $0"
+    },
+    "A1_full": {
+      "model": "openai/gpt-5-mini",
+      "provider": "openrouter",
+      "temperature": 0.0,
+      "system_prompt_path": "prompts/final/gpt_p0.txt",
+      "system_prompt_sha1": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
+      "context": "full NDA document text (no retrieval)",
+      "user_template": "Requirement: {hypothesis_text}\n\nNDA context: {context_text}",
+      "note": "identical recipe to scripts/e17_common.py's load_frozen() (E17/E17B's FULL arm), asserted by sha1 at runtime, not re-derived",
+      "modified_for_this_experiment": false
+    },
+    "A2_rag": {
+      "implementation": "pipeline/final_review.py:review_final()",
+      "model": "openai/gpt-5-mini",
+      "provider": "openrouter",
+      "temperature": 0.0,
+      "retrieval": {
+        "chunk_method": "clause-aware",
+        "chunk_size": 256,
+        "chunk_overlap": "none -- clause-aware chunking consumes no overlap parameter (see pipeline/frozen_rag.py)",
+        "candidate_pool_size": 20,
+        "method": "BM25",
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-12-v2",
+        "top_k": 5
+      },
+      "system_prompt_path": "prompts/final/gpt_p0.txt",
+      "system_prompt_sha1": "3fcc7c95cf1287c292e403f12b307c9d912278ce",
+      "note": "the real, served production function -- not a reimplementation. Includes the live injection guard (pipeline/injection_guard.py) as the shipped runtime does.",
+      "modified_for_this_experiment": false
+    }
+  },
+  "evaluator": {
+    "evidence_matching_version": "evidence_evaluator_v2",
+    "implementation": "evaluation/evidence_matching.py: evidence_to_span_indices() + joint_success()",
+    "note": "identical functions E17B/E20 use for the 2,091-case TEST scoring -- no alternative metric logic implemented for E24"
+  },
+  "case_set": {
+    "n": 49,
+    "composition": "30 golden_cases.json + 15 negative_cases.json + 4 evidence_quality_cases.json",
+    "split": "ContractNLI dev.json (verified zero overlap with test.json document IDs)",
+    "excluded_from_this_run": {
+      "injection_cases.json (11)": "synthetic docs, no stored source text, not replayable",
+      "llm_behaviour_cases.json (7)": "synthetic docs, no stored source text, not replayable",
+      "agent_cases.json (7)": "tests a rejected architecture (selective agent, E11)",
+      "confidence_cases.json (2)": "tests a rejected feature (automatic confidence gate, E15)"
+    }
+  },
+  "rules_in_effect": [
+    "architectures not modified to improve E24 scores",
+    "official ContractNLI dataset, gold labels, and gold evidence not modified",
+    "E00-E23 experiments and results untouched",
+    "the 2,091-case official TEST benchmark not rerun",
+    "no fabricated predictions, costs, or results -- every row in results/run_E24_predictions.jsonl is a real executed call or a $0 deterministic rule-baseline call"
+  ],
+  "execution": {
+    "mode": "live",
+    "spend_usd": 0.21840850000000003,
+    "wall_seconds": 786.1023872080259,
+    "pre_run_ledger_usd": 11.56523795000004,
+    "post_run_ledger_usd": 11.78364645000004,
+    "n_calls": 98,
+    "n_errors": 0,
+    "n_null_predictions": 0,
+    "note": "originally run under the working directory name E25_golden_battery_final_architecture (same protocol, same code) before this directory was renamed to E24_targeted_evaluation per instruction to reuse the E24 identifier; results/run_E24_predictions.jsonl's embedded run_id field still reads the pre-rename value as an accurate historical record, not altered after the fact"
+  }
+}

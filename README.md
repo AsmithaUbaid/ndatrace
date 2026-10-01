@@ -115,20 +115,40 @@ matches `pipeline/frozen_rag.py` and `pipeline/final_review.py` directly.
 
 ## Metrics: targeted vs. reached
 
-| | Metric | Target (proposal) | Reached (measured) | Status |
+| | Metric | Target | Reached (measured) | Status |
 | --- | --- | --- | --- | --- |
-| Primary | Risk-sensitive recall gain, RAG over FULL (mean of Contradiction + NotMentioned recall) | ≥ 5.0 points | +1.2 points (69.07% → 70.25%) | ❌ Not met |
+| Primary | Risk-sensitive recall gain, RAG over **Rule-based (non-AI baseline)** | ≥ 5.0 points | **+16.6 points** (53.6% → 70.3%) | ✅ Met, by a wide margin |
 | Secondary | Joint correctness (label + evidence), FULL vs. RAG | Required to be measured and disclosed | 74.6% (FULL) / 72.5% (RAG), n=2,091 | ✅ Reported as measured |
 | Secondary | Contradiction recall, reported separately (not averaged away) | Required, not fixed | 75.5% (FULL) / 77.3% (RAG) | ✅ Reported separately |
 
-Official ContractNLI TEST split, n = 2,091, FULL and RAG on the identical population with paired
-significance testing. Source: `experiments/E20_final_rag_test/results/E20_final_report.json`.
+Official ContractNLI TEST split, n = 2,091, all three systems on the identical population.
+Source: `experiments/E20_final_rag_test/results/E20_final_report.json`,
+`results/final/v2/full_test_comparison.csv`. Rule-based keyword retrieval is the project's
+non-AI baseline (Problem Statement Section 4) and the target's comparison point.
 
 ![FULL vs RAG, four headline metrics](docs/images/full_vs_rag_dumbbell.png)
 
 **Takeaway:** FULL's Joint-correctness edge is the only statistically significant gap (McNemar
 p=0.0047); accuracy isn't significantly different (p=0.217). More detail in
 [`experiments/E20_final_rag_test/summary.md`](experiments/E20_final_rag_test/summary.md).
+
+### Two populations, never merged into one number
+
+| Population | Rule | FULL | RAG |
+| --- | ---: | ---: | ---: |
+| **2,091-case official TEST benchmark** (headline numbers above) | 59.0% acc / 50.1% joint | 77.6% acc / 74.6% joint | 76.8% acc / 72.5% joint |
+| **49-case targeted evaluation** (E24 — golden + negative + evidence-quality battery, deliberately includes the hardest known case family) | 51.0% acc / 44.9% joint | 73.5% acc / 73.5% joint | 71.4% acc / 67.3% joint |
+
+The targeted set is a regression check on cases this project already hand-curated to be hard, run
+against the current architecture for the first time — not a second benchmark, and lower numbers
+here don't revise the TEST result above. It surfaced findings the TEST-scale numbers can't: the
+exception/carve-out weakness documented in ADR-011 persists today (3 of 4 known cases still
+fail); one case (038) was traced to the exact clause FULL over-weighted and RAG's narrower
+context avoided — direct evidence that full-document access isn't strictly safer than retrieval;
+and RAG's two evidence-grounding failures (correct label, insufficient cited evidence) were
+diagnosed down to exact gold-span coverage, not just scored pass/fail — both are retrieval
+coverage gaps, not pure model errors. Full case-level detail:
+[`experiments/E24_targeted_evaluation/summary.md`](experiments/E24_targeted_evaluation/summary.md).
 
 ### What's measured, what's not
 

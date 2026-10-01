@@ -1,0 +1,2895 @@
+{
+  "manifest_id": "E24_targeted_evaluation_v1",
+  "n_cases": 49,
+  "summary_by_system": {
+    "rule": {
+      "n": 49,
+      "accuracy": 0.5102,
+      "macro_f1": 0.4571,
+      "joint_correctness": 0.449,
+      "contradiction_recall": 0.1333,
+      "notmentioned_recall": 0.9286,
+      "total_cost_usd": 0,
+      "mean_latency_ms": 0.0,
+      "mean_input_tokens": 0.0
+    },
+    "full": {
+      "n": 49,
+      "accuracy": 0.7347,
+      "macro_f1": 0.7196,
+      "joint_correctness": 0.7347,
+      "contradiction_recall": 0.4667,
+      "notmentioned_recall": 0.7143,
+      "total_cost_usd": 0.128221,
+      "mean_latency_ms": 7983.7,
+      "mean_input_tokens": 3177.6
+    },
+    "rag": {
+      "n": 49,
+      "accuracy": 0.7143,
+      "macro_f1": 0.7079,
+      "joint_correctness": 0.6735,
+      "contradiction_recall": 0.5333,
+      "notmentioned_recall": 0.7143,
+      "total_cost_usd": 0.090187,
+      "mean_latency_ms": 7302.4,
+      "mean_input_tokens": 1117.5
+    }
+  },
+  "failure_analysis": {
+    "all_three_wrong": [
+      "001",
+      "011",
+      "019",
+      "034",
+      "036",
+      "039",
+      "040"
+    ],
+    "full_right_rag_wrong": [
+      "005",
+      "017",
+      "045"
+    ],
+    "rag_right_full_wrong": [
+      "013",
+      "038"
+    ],
+    "correct_label_incorrect_evidence": {
+      "full": [],
+      "rag": [
+        "007",
+        "043"
+      ]
+    }
+  },
+  "case_level": {
+    "001": {
+      "rule": {
+        "case_id": "001",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "001",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.00111775,
+        "latency_ms": 5545.441791880876,
+        "input_tokens": 575,
+        "output_tokens": 487,
+        "error": null
+      },
+      "rag": {
+        "case_id": "001",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Contradiction",
+        "label_correct": false,
+        "predicted_span_idx": [
+          3,
+          4,
+          6
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0025865000000000003,
+        "latency_ms": 9483.946249820292,
+        "input_tokens": 578,
+        "output_tokens": 1221,
+        "error": null
+      }
+    },
+    "002": {
+      "rule": {
+        "case_id": "002",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          39
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "002",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          18,
+          39
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0015917499999999998,
+        "latency_ms": 4135.422540828586,
+        "input_tokens": 2239,
+        "output_tokens": 516,
+        "error": null
+      },
+      "rag": {
+        "case_id": "002",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          39
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.001226,
+        "latency_ms": 6456.782125169411,
+        "input_tokens": 1192,
+        "output_tokens": 464,
+        "error": null
+      }
+    },
+    "003": {
+      "rule": {
+        "case_id": "003",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "003",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          12,
+          13,
+          20
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00571375,
+        "latency_ms": 15052.488875109702,
+        "input_tokens": 6247,
+        "output_tokens": 2076,
+        "error": null
+      },
+      "rag": {
+        "case_id": "003",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.002754,
+        "latency_ms": 9898.023207904771,
+        "input_tokens": 1480,
+        "output_tokens": 1192,
+        "error": null
+      }
+    },
+    "004": {
+      "rule": {
+        "case_id": "004",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          47
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "004",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          47,
+          48
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00237925,
+        "latency_ms": 7997.052041115239,
+        "input_tokens": 2237,
+        "output_tokens": 910,
+        "error": null
+      },
+      "rag": {
+        "case_id": "004",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          47
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0015822499999999999,
+        "latency_ms": 8021.351374918595,
+        "input_tokens": 1153,
+        "output_tokens": 647,
+        "error": null
+      }
+    },
+    "005": {
+      "rule": {
+        "case_id": "005",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "005",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          46,
+          51,
+          52
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.0016745,
+        "latency_ms": 5873.536957893521,
+        "input_tokens": 2234,
+        "output_tokens": 558,
+        "error": null
+      },
+      "rag": {
+        "case_id": "005",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Contradiction",
+        "label_correct": false,
+        "predicted_span_idx": [
+          43,
+          51,
+          52
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.0021135,
+        "latency_ms": 8679.920583032072,
+        "input_tokens": 1150,
+        "output_tokens": 913,
+        "error": null
+      }
+    },
+    "006": {
+      "rule": {
+        "case_id": "006",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          89
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "006",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          89,
+          90
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.002073,
+        "latency_ms": 6476.968999952078,
+        "input_tokens": 2236,
+        "output_tokens": 757,
+        "error": null
+      },
+      "rag": {
+        "case_id": "006",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          89,
+          90
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00113425,
+        "latency_ms": 4981.638040859252,
+        "input_tokens": 1057,
+        "output_tokens": 435,
+        "error": null
+      }
+    },
+    "007": {
+      "rule": {
+        "case_id": "007",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "007",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          12,
+          13,
+          36
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00162225,
+        "latency_ms": 4259.442624868825,
+        "input_tokens": 2241,
+        "output_tokens": 531,
+        "error": null
+      },
+      "rag": {
+        "case_id": "007",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          36,
+          51
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0013185,
+        "latency_ms": 5081.4155410043895,
+        "input_tokens": 1194,
+        "output_tokens": 510,
+        "error": null
+      }
+    },
+    "008": {
+      "rule": {
+        "case_id": "008",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          37
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "008",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          30,
+          35,
+          37,
+          43
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 4,
+        "source_valid": true,
+        "cost_usd": 0.0028347499999999996,
+        "latency_ms": 9726.43170808442,
+        "input_tokens": 2667,
+        "output_tokens": 1084,
+        "error": null
+      },
+      "rag": {
+        "case_id": "008",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          37,
+          43
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00154,
+        "latency_ms": 4959.819916868582,
+        "input_tokens": 1280,
+        "output_tokens": 610,
+        "error": null
+      }
+    },
+    "009": {
+      "rule": {
+        "case_id": "009",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          72
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "009",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          67,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.00333225,
+        "latency_ms": 10856.32274998352,
+        "input_tokens": 4169,
+        "output_tokens": 1145,
+        "error": null
+      },
+      "rag": {
+        "case_id": "009",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          67,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.00296625,
+        "latency_ms": 12053.150250110775,
+        "input_tokens": 1065,
+        "output_tokens": 1350,
+        "error": null
+      }
+    },
+    "010": {
+      "rule": {
+        "case_id": "010",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          34
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "010",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          33,
+          34
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0027567499999999997,
+        "latency_ms": 7291.0428328905255,
+        "input_tokens": 6251,
+        "output_tokens": 597,
+        "error": null
+      },
+      "rag": {
+        "case_id": "010",
+        "group": "golden",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          33,
+          34
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00102775,
+        "latency_ms": 3323.129832977429,
+        "input_tokens": 1183,
+        "output_tokens": 366,
+        "error": null
+      }
+    },
+    "011": {
+      "rule": {
+        "case_id": "011",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "011",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          47,
+          63
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0035600000000000002,
+        "latency_ms": 7341.442666947842,
+        "input_tokens": 5976,
+        "output_tokens": 1033,
+        "error": null
+      },
+      "rag": {
+        "case_id": "011",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          56,
+          62,
+          63
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.0019039999999999999,
+        "latency_ms": 8403.73033285141,
+        "input_tokens": 984,
+        "output_tokens": 829,
+        "error": null
+      }
+    },
+    "012": {
+      "rule": {
+        "case_id": "012",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          17
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "012",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          17
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.00113325,
+        "latency_ms": 3847.890791017562,
+        "input_tokens": 1021,
+        "output_tokens": 439,
+        "error": null
+      },
+      "rag": {
+        "case_id": "012",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          17
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0013,
+        "latency_ms": 4786.9266658090055,
+        "input_tokens": 1024,
+        "output_tokens": 522,
+        "error": null
+      }
+    },
+    "013": {
+      "rule": {
+        "case_id": "013",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          60
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "013",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0039215,
+        "latency_ms": 16942.845000186935,
+        "input_tokens": 2590,
+        "output_tokens": 1637,
+        "error": null
+      },
+      "rag": {
+        "case_id": "013",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00369725,
+        "latency_ms": 14899.644457967952,
+        "input_tokens": 1149,
+        "output_tokens": 1705,
+        "error": null
+      }
+    },
+    "014": {
+      "rule": {
+        "case_id": "014",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "014",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          5,
+          6,
+          9,
+          10
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0019364999999999999,
+        "latency_ms": 7842.944415984675,
+        "input_tokens": 1626,
+        "output_tokens": 765,
+        "error": null
+      },
+      "rag": {
+        "case_id": "014",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          5,
+          6,
+          10
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0018290000000000001,
+        "latency_ms": 6680.751709034666,
+        "input_tokens": 1132,
+        "output_tokens": 773,
+        "error": null
+      }
+    },
+    "015": {
+      "rule": {
+        "case_id": "015",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "015",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          15
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0020425,
+        "latency_ms": 6797.050666064024,
+        "input_tokens": 1578,
+        "output_tokens": 824,
+        "error": null
+      },
+      "rag": {
+        "case_id": "015",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          15
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.002597,
+        "latency_ms": 11327.131249941885,
+        "input_tokens": 1060,
+        "output_tokens": 1166,
+        "error": null
+      }
+    },
+    "016": {
+      "rule": {
+        "case_id": "016",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          17
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "016",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          12,
+          13,
+          17
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0029755,
+        "latency_ms": 14521.631458075717,
+        "input_tokens": 2230,
+        "output_tokens": 1209,
+        "error": null
+      },
+      "rag": {
+        "case_id": "016",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          12,
+          13,
+          17
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0019342499999999998,
+        "latency_ms": 7868.58870787546,
+        "input_tokens": 1081,
+        "output_tokens": 832,
+        "error": null
+      }
+    },
+    "017": {
+      "rule": {
+        "case_id": "017",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          24
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "017",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          24
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.00206,
+        "latency_ms": 5824.691875139251,
+        "input_tokens": 2600,
+        "output_tokens": 705,
+        "error": null
+      },
+      "rag": {
+        "case_id": "017",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0010465000000000001,
+        "latency_ms": 5044.160000048578,
+        "input_tokens": 1074,
+        "output_tokens": 389,
+        "error": null
+      }
+    },
+    "018": {
+      "rule": {
+        "case_id": "018",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "018",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          5,
+          7
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00221825,
+        "latency_ms": 8243.769666878507,
+        "input_tokens": 1689,
+        "output_tokens": 898,
+        "error": null
+      },
+      "rag": {
+        "case_id": "018",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          5,
+          7
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0021645,
+        "latency_ms": 8987.282249843702,
+        "input_tokens": 1042,
+        "output_tokens": 952,
+        "error": null
+      }
+    },
+    "019": {
+      "rule": {
+        "case_id": "019",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          6
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "019",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          12,
+          13,
+          18,
+          52,
+          59
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 4,
+        "source_valid": true,
+        "cost_usd": 0.00442425,
+        "latency_ms": 14209.600625094026,
+        "input_tokens": 3449,
+        "output_tokens": 1781,
+        "error": null
+      },
+      "rag": {
+        "case_id": "019",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          13,
+          59,
+          61
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.00241175,
+        "latency_ms": 10358.618292026222,
+        "input_tokens": 1327,
+        "output_tokens": 1040,
+        "error": null
+      }
+    },
+    "020": {
+      "rule": {
+        "case_id": "020",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "020",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          1,
+          16
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00163825,
+        "latency_ms": 6418.448584154248,
+        "input_tokens": 913,
+        "output_tokens": 705,
+        "error": null
+      },
+      "rag": {
+        "case_id": "020",
+        "group": "golden",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          1,
+          16
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.001593,
+        "latency_ms": 5667.381375096738,
+        "input_tokens": 916,
+        "output_tokens": 682,
+        "error": null
+      }
+    },
+    "021": {
+      "rule": {
+        "case_id": "021",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "021",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0006607500000000001,
+        "latency_ms": 2445.3881250228733,
+        "input_tokens": 1203,
+        "output_tokens": 180,
+        "error": null
+      },
+      "rag": {
+        "case_id": "021",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.000861,
+        "latency_ms": 6996.261999942362,
+        "input_tokens": 1132,
+        "output_tokens": 289,
+        "error": null
+      }
+    },
+    "022": {
+      "rule": {
+        "case_id": "022",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "022",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.000628,
+        "latency_ms": 2759.9621252156794,
+        "input_tokens": 584,
+        "output_tokens": 241,
+        "error": null
+      },
+      "rag": {
+        "case_id": "022",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.00058025,
+        "latency_ms": 2715.1488340459764,
+        "input_tokens": 585,
+        "output_tokens": 217,
+        "error": null
+      }
+    },
+    "023": {
+      "rule": {
+        "case_id": "023",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "023",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.00108275,
+        "latency_ms": 2679.4696249999106,
+        "input_tokens": 2235,
+        "output_tokens": 262,
+        "error": null
+      },
+      "rag": {
+        "case_id": "023",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.00080075,
+        "latency_ms": 3261.8574160151184,
+        "input_tokens": 1187,
+        "output_tokens": 252,
+        "error": null
+      }
+    },
+    "024": {
+      "rule": {
+        "case_id": "024",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "024",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "Contradiction",
+        "label_correct": false,
+        "predicted_span_idx": [
+          28,
+          63,
+          72,
+          78
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 4,
+        "source_valid": true,
+        "cost_usd": 0.00550075,
+        "latency_ms": 14200.249999994412,
+        "input_tokens": 5979,
+        "output_tokens": 2003,
+        "error": null
+      },
+      "rag": {
+        "case_id": "024",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "Contradiction",
+        "label_correct": false,
+        "predicted_span_idx": [
+          28,
+          62,
+          63
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00237425,
+        "latency_ms": 14357.964667025954,
+        "input_tokens": 921,
+        "output_tokens": 1072,
+        "error": null
+      }
+    },
+    "025": {
+      "rule": {
+        "case_id": "025",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "025",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0011740000000000001,
+        "latency_ms": 5323.100042063743,
+        "input_tokens": 2248,
+        "output_tokens": 306,
+        "error": null
+      },
+      "rag": {
+        "case_id": "025",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.00096025,
+        "latency_ms": 3417.9894579574466,
+        "input_tokens": 1201,
+        "output_tokens": 330,
+        "error": null
+      }
+    },
+    "026": {
+      "rule": {
+        "case_id": "026",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "026",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.00272075,
+        "latency_ms": 5281.118416925892,
+        "input_tokens": 5979,
+        "output_tokens": 613,
+        "error": null
+      },
+      "rag": {
+        "case_id": "026",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0008045,
+        "latency_ms": 3514.032166916877,
+        "input_tokens": 954,
+        "output_tokens": 283,
+        "error": null
+      }
+    },
+    "027": {
+      "rule": {
+        "case_id": "027",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "027",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0016045,
+        "latency_ms": 4579.730584053323,
+        "input_tokens": 3442,
+        "output_tokens": 372,
+        "error": null
+      },
+      "rag": {
+        "case_id": "027",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.001363,
+        "latency_ms": 5926.153375068679,
+        "input_tokens": 1196,
+        "output_tokens": 532,
+        "error": null
+      }
+    },
+    "028": {
+      "rule": {
+        "case_id": "028",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "028",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0021537500000000003,
+        "latency_ms": 3575.9657500311732,
+        "input_tokens": 5975,
+        "output_tokens": 330,
+        "error": null
+      },
+      "rag": {
+        "case_id": "028",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.00093475,
+        "latency_ms": 3321.873415959999,
+        "input_tokens": 923,
+        "output_tokens": 352,
+        "error": null
+      }
+    },
+    "029": {
+      "rule": {
+        "case_id": "029",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "029",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.002338,
+        "latency_ms": 5141.457709018141,
+        "input_tokens": 6256,
+        "output_tokens": 387,
+        "error": null
+      },
+      "rag": {
+        "case_id": "029",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0010945,
+        "latency_ms": 3687.433290993795,
+        "input_tokens": 1122,
+        "output_tokens": 407,
+        "error": null
+      }
+    },
+    "030": {
+      "rule": {
+        "case_id": "030",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "030",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0006095,
+        "latency_ms": 3678.48370783031,
+        "input_tokens": 582,
+        "output_tokens": 232,
+        "error": null
+      },
+      "rag": {
+        "case_id": "030",
+        "group": "golden",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.00051775,
+        "latency_ms": 2143.3225001674145,
+        "input_tokens": 583,
+        "output_tokens": 186,
+        "error": null
+      }
+    },
+    "031": {
+      "rule": {
+        "case_id": "031",
+        "group": "negative",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "031",
+        "group": "negative",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.00086875,
+        "latency_ms": 2771.58245886676,
+        "input_tokens": 1635,
+        "output_tokens": 230,
+        "error": null
+      },
+      "rag": {
+        "case_id": "031",
+        "group": "negative",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.00076725,
+        "latency_ms": 4467.006209073588,
+        "input_tokens": 1141,
+        "output_tokens": 241,
+        "error": null
+      }
+    },
+    "032": {
+      "rule": {
+        "case_id": "032",
+        "group": "negative",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "032",
+        "group": "negative",
+        "gold_label": "NotMentioned",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          58,
+          59
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00280925,
+        "latency_ms": 9300.27374997735,
+        "input_tokens": 3445,
+        "output_tokens": 974,
+        "error": null
+      },
+      "rag": {
+        "case_id": "032",
+        "group": "negative",
+        "gold_label": "NotMentioned",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          58,
+          59
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0022105000000000002,
+        "latency_ms": 7890.922416932881,
+        "input_tokens": 1226,
+        "output_tokens": 952,
+        "error": null
+      }
+    },
+    "033": {
+      "rule": {
+        "case_id": "033",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "033",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          18,
+          19
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00187875,
+        "latency_ms": 5736.988333053887,
+        "input_tokens": 2235,
+        "output_tokens": 660,
+        "error": null
+      },
+      "rag": {
+        "case_id": "033",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          18,
+          19
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.001451,
+        "latency_ms": 5858.238167129457,
+        "input_tokens": 1140,
+        "output_tokens": 583,
+        "error": null
+      }
+    },
+    "034": {
+      "rule": {
+        "case_id": "034",
+        "group": "negative",
+        "gold_label": "Contradiction",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "034",
+        "group": "negative",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          3,
+          7,
+          9,
+          22
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 4,
+        "source_valid": true,
+        "cost_usd": 0.00251525,
+        "latency_ms": 9448.354916879907,
+        "input_tokens": 1381,
+        "output_tokens": 1085,
+        "error": null
+      },
+      "rag": {
+        "case_id": "034",
+        "group": "negative",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          3,
+          9,
+          22
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.0023285,
+        "latency_ms": 9161.239665932953,
+        "input_tokens": 1210,
+        "output_tokens": 1013,
+        "error": null
+      }
+    },
+    "035": {
+      "rule": {
+        "case_id": "035",
+        "group": "negative",
+        "gold_label": "NotMentioned",
+        "predicted_label": "NotMentioned",
+        "label_correct": true,
+        "predicted_span_idx": [],
+        "joint_correct": true,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "035",
+        "group": "negative",
+        "gold_label": "NotMentioned",
+        "predicted_label": "Contradiction",
+        "label_correct": false,
+        "predicted_span_idx": [
+          6,
+          7,
+          58
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.0034980000000000002,
+        "latency_ms": 9714.882709085941,
+        "input_tokens": 3440,
+        "output_tokens": 1319,
+        "error": null
+      },
+      "rag": {
+        "case_id": "035",
+        "group": "negative",
+        "gold_label": "NotMentioned",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          56,
+          57,
+          58,
+          59,
+          61
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 4,
+        "source_valid": true,
+        "cost_usd": 0.00314,
+        "latency_ms": 9288.202167022973,
+        "input_tokens": 1320,
+        "output_tokens": 1405,
+        "error": null
+      }
+    },
+    "036": {
+      "rule": {
+        "case_id": "036",
+        "group": "negative",
+        "gold_label": "NotMentioned",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          56
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "036",
+        "group": "negative",
+        "gold_label": "NotMentioned",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          55,
+          56,
+          117
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.0042215,
+        "latency_ms": 9334.874082822353,
+        "input_tokens": 6254,
+        "output_tokens": 1329,
+        "error": null
+      },
+      "rag": {
+        "case_id": "036",
+        "group": "negative",
+        "gold_label": "NotMentioned",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          55,
+          56,
+          58,
+          71
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 4,
+        "source_valid": true,
+        "cost_usd": 0.0032159999999999997,
+        "latency_ms": 9804.989792173728,
+        "input_tokens": 1368,
+        "output_tokens": 1437,
+        "error": null
+      }
+    },
+    "037": {
+      "rule": {
+        "case_id": "037",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          65
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "037",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          48,
+          49,
+          65
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.001826,
+        "latency_ms": 5869.5424168836325,
+        "input_tokens": 2232,
+        "output_tokens": 634,
+        "error": null
+      },
+      "rag": {
+        "case_id": "037",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          49,
+          65
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0010152499999999999,
+        "latency_ms": 3688.713167095557,
+        "input_tokens": 1125,
+        "output_tokens": 367,
+        "error": null
+      }
+    },
+    "038": {
+      "rule": {
+        "case_id": "038",
+        "group": "negative",
+        "gold_label": "Contradiction",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "038",
+        "group": "negative",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          22,
+          23,
+          25,
+          30,
+          31,
+          32
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 4,
+        "source_valid": true,
+        "cost_usd": 0.0033,
+        "latency_ms": 10939.654000103474,
+        "input_tokens": 3064,
+        "output_tokens": 1267,
+        "error": null
+      },
+      "rag": {
+        "case_id": "038",
+        "group": "negative",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          23,
+          25,
+          30,
+          31,
+          32
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.00457475,
+        "latency_ms": 17066.015291027725,
+        "input_tokens": 1283,
+        "output_tokens": 2127,
+        "error": null
+      }
+    },
+    "039": {
+      "rule": {
+        "case_id": "039",
+        "group": "negative",
+        "gold_label": "Contradiction",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "039",
+        "group": "negative",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          6,
+          12,
+          13,
+          16
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.00362275,
+        "latency_ms": 10950.57108416222,
+        "input_tokens": 3443,
+        "output_tokens": 1381,
+        "error": null
+      },
+      "rag": {
+        "case_id": "039",
+        "group": "negative",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          13,
+          15,
+          16,
+          17,
+          58
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.002747,
+        "latency_ms": 11366.129083093256,
+        "input_tokens": 1332,
+        "output_tokens": 1207,
+        "error": null
+      }
+    },
+    "040": {
+      "rule": {
+        "case_id": "040",
+        "group": "negative",
+        "gold_label": "Contradiction",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "040",
+        "group": "negative",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          54,
+          55
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.003216,
+        "latency_ms": 8697.537041967735,
+        "input_tokens": 6256,
+        "output_tokens": 826,
+        "error": null
+      },
+      "rag": {
+        "case_id": "040",
+        "group": "negative",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          54,
+          55
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0015140000000000002,
+        "latency_ms": 4595.581375062466,
+        "input_tokens": 1232,
+        "output_tokens": 603,
+        "error": null
+      }
+    },
+    "041": {
+      "rule": {
+        "case_id": "041",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "041",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          28
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.00130975,
+        "latency_ms": 6032.829583156854,
+        "input_tokens": 1207,
+        "output_tokens": 504,
+        "error": null
+      },
+      "rag": {
+        "case_id": "041",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          27,
+          28
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0019169999999999999,
+        "latency_ms": 8125.613749958575,
+        "input_tokens": 1212,
+        "output_tokens": 807,
+        "error": null
+      }
+    },
+    "042": {
+      "rule": {
+        "case_id": "042",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          23
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "042",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          23,
+          43
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00339875,
+        "latency_ms": 9984.1176669579,
+        "input_tokens": 2243,
+        "output_tokens": 1419,
+        "error": null
+      },
+      "rag": {
+        "case_id": "042",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          23,
+          43
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00215075,
+        "latency_ms": 6808.626665966585,
+        "input_tokens": 1195,
+        "output_tokens": 926,
+        "error": null
+      }
+    },
+    "043": {
+      "rule": {
+        "case_id": "043",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Contradiction",
+        "label_correct": false,
+        "predicted_span_idx": [
+          113
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "043",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          29,
+          30,
+          61
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.004051,
+        "latency_ms": 9796.254167100415,
+        "input_tokens": 5732,
+        "output_tokens": 1309,
+        "error": null
+      },
+      "rag": {
+        "case_id": "043",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          29,
+          61
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00144525,
+        "latency_ms": 4452.608166960999,
+        "input_tokens": 1101,
+        "output_tokens": 585,
+        "error": null
+      }
+    },
+    "044": {
+      "rule": {
+        "case_id": "044",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          22
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "044",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          85,
+          86
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.002554,
+        "latency_ms": 6038.1111248862,
+        "input_tokens": 5976,
+        "output_tokens": 530,
+        "error": null
+      },
+      "rag": {
+        "case_id": "044",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          85,
+          86
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0013805,
+        "latency_ms": 5843.752084067091,
+        "input_tokens": 1066,
+        "output_tokens": 557,
+        "error": null
+      }
+    },
+    "045": {
+      "rule": {
+        "case_id": "045",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          46
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "045",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          128,
+          129
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 4,
+        "source_valid": true,
+        "cost_usd": 0.0072152499999999994,
+        "latency_ms": 18321.077625034377,
+        "input_tokens": 6253,
+        "output_tokens": 2826,
+        "error": null
+      },
+      "rag": {
+        "case_id": "045",
+        "group": "negative",
+        "gold_label": "Entailment",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0024602499999999998,
+        "latency_ms": 9836.984291905537,
+        "input_tokens": 1257,
+        "output_tokens": 1073,
+        "error": null
+      }
+    },
+    "081": {
+      "rule": {
+        "case_id": "081",
+        "group": "evidence_quality",
+        "gold_label": "Entailment",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "081",
+        "group": "evidence_quality",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          15,
+          16,
+          42
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00256975,
+        "latency_ms": 6997.565082972869,
+        "input_tokens": 3439,
+        "output_tokens": 855,
+        "error": null
+      },
+      "rag": {
+        "case_id": "081",
+        "group": "evidence_quality",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          42,
+          43
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.003015,
+        "latency_ms": 10699.532707920298,
+        "input_tokens": 1172,
+        "output_tokens": 1361,
+        "error": null
+      }
+    },
+    "082": {
+      "rule": {
+        "case_id": "082",
+        "group": "evidence_quality",
+        "gold_label": "Entailment",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "082",
+        "group": "evidence_quality",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          42
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.0032517500000000003,
+        "latency_ms": 10292.454292066395,
+        "input_tokens": 3439,
+        "output_tokens": 1196,
+        "error": null
+      },
+      "rag": {
+        "case_id": "082",
+        "group": "evidence_quality",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          15,
+          16,
+          42
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.001329,
+        "latency_ms": 6353.22783398442,
+        "input_tokens": 1172,
+        "output_tokens": 518,
+        "error": null
+      }
+    },
+    "084": {
+      "rule": {
+        "case_id": "084",
+        "group": "evidence_quality",
+        "gold_label": "Entailment",
+        "predicted_label": "NotMentioned",
+        "label_correct": false,
+        "predicted_span_idx": [],
+        "joint_correct": false,
+        "n_evidence_cited": 0,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "084",
+        "group": "evidence_quality",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          42,
+          43
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 2,
+        "source_valid": true,
+        "cost_usd": 0.00264975,
+        "latency_ms": 10648.794875014573,
+        "input_tokens": 3439,
+        "output_tokens": 895,
+        "error": null
+      },
+      "rag": {
+        "case_id": "084",
+        "group": "evidence_quality",
+        "gold_label": "Entailment",
+        "predicted_label": "Entailment",
+        "label_correct": true,
+        "predicted_span_idx": [
+          15,
+          16,
+          42,
+          43
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.001869,
+        "latency_ms": 7799.028666922823,
+        "input_tokens": 1172,
+        "output_tokens": 788,
+        "error": null
+      }
+    },
+    "085": {
+      "rule": {
+        "case_id": "085",
+        "group": "evidence_quality",
+        "gold_label": "Contradiction",
+        "predicted_label": "Entailment",
+        "label_correct": false,
+        "predicted_span_idx": [
+          10
+        ],
+        "joint_correct": false,
+        "n_evidence_cited": 1,
+        "source_valid": true,
+        "cost_usd": 0.0,
+        "latency_ms": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "error": null
+      },
+      "full": {
+        "case_id": "085",
+        "group": "evidence_quality",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          10,
+          11,
+          20
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.0039865,
+        "latency_ms": 11455.713999923319,
+        "input_tokens": 1338,
+        "output_tokens": 1826,
+        "error": null
+      },
+      "rag": {
+        "case_id": "085",
+        "group": "evidence_quality",
+        "gold_label": "Contradiction",
+        "predicted_label": "Contradiction",
+        "label_correct": true,
+        "predicted_span_idx": [
+          10,
+          11,
+          20
+        ],
+        "joint_correct": true,
+        "n_evidence_cited": 3,
+        "source_valid": true,
+        "cost_usd": 0.00263875,
+        "latency_ms": 8406.449374975637,
+        "input_tokens": 1107,
+        "output_tokens": 1181,
+        "error": null
+      }
+    }
+  }
+}

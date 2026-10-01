@@ -12,7 +12,7 @@ from the repository, see git history) was historical planning, not a live index.
 ## Final
 
 New final experiments (`E00` onward) get their own subdirectory here, e.g.
-`experiments/E01_oracle_reasoning_ceiling/`, following the template at
-`experiments/_template/README.md` and the rules in `docs/experiment_protocol.md`. The planned
-sequence and its status is `docs/experiment_registry.md`. No `E##` directories exist yet —
-this phase only adds the scaffolding.
+`experiments/E01_oracle/`, following the template at
+`experiments/_template/README.md` and the rules in `docs/experiment_protocol.md`. The full
+sequence (E00–E24) and its status is `docs/experiment_registry.md` — the canonical index; this
+file only explains the pattern, it does not duplicate the ledger.

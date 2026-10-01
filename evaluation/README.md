@@ -33,10 +33,15 @@ The regression/robustness/behavioural case files this harness scores live in `da
 total), not in this directory. Design rationale per category: `docs/evaluation_case_design.md`.
 Pass/fail results exist for every category in `docs/test_coverage_summary.md`, but those numbers
 were measured against the **legacy pipeline** (RAG + selective agent), not the current final
-architecture — read that distinction before citing any number from it. These case files are
-development-time regression/robustness checks, not the project's headline benchmark; the headline
-numbers are the official ContractNLI TEST results this harness's `harness.py`/`metrics.py`
-compute (see `../README.md`'s Metrics section).
+architecture — read that distinction before citing any number from it. **E24**
+(`../experiments/E24_targeted_evaluation/`) is the first time part of this battery (golden +
+negative + the 4 real evidence-quality cases, 49 total) has been run against the **current**
+architecture — Rule/FULL/RAG, real results, reproducible for $0 via
+`experiments/E24_targeted_evaluation/analyze_e24.py`. The injection, LLM-behaviour, agent, and
+confidence categories remain legacy-pipeline-only (see E24's `config.json` for exactly why each
+was excluded). These case files are development-time regression/robustness checks, not the
+project's headline benchmark; the headline numbers are the official ContractNLI TEST results
+this harness's `harness.py`/`metrics.py` compute (see `../README.md`'s Metrics section).
 
 ## Core harness
 

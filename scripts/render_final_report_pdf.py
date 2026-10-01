@@ -11,11 +11,12 @@ import re
 from pathlib import Path
 
 from reportlab.lib import colors
-from reportlab.lib.pagesizes import LETTER
+from reportlab.lib.enums import TA_LEFT
+from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch
 from reportlab.platypus import (
-    HRFlowable, Image, KeepTogether, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle,
+    HRFlowable, Image, KeepTogether, PageBreak, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,11 +24,14 @@ SOURCE = ROOT / "reports/NDATrace_Final_Report.md"
 TARGET = SOURCE.with_suffix(".pdf")
 
 styles = getSampleStyleSheet()
-title_style = ParagraphStyle("ReportTitle", parent=styles["Title"], fontSize=20, leading=24, spaceAfter=4)
+title_style = ParagraphStyle("ReportTitle", parent=styles["Title"], fontName="Helvetica-Bold", fontSize=22, leading=27,
+                             textColor=colors.HexColor("#19324d"), alignment=TA_LEFT, spaceAfter=5)
 byline_style = ParagraphStyle("Byline", parent=styles["Normal"], fontSize=9.5, textColor=colors.HexColor("#52525b"), spaceAfter=16)
-h2_style = ParagraphStyle("H2", parent=styles["Heading2"], fontSize=13, leading=16, spaceBefore=16, spaceAfter=6,
-                          textColor=colors.HexColor("#18181b"), keepWithNext=True)
-body_style = ParagraphStyle("Body", parent=styles["Normal"], fontSize=10.3, leading=15, spaceAfter=8, alignment=4)  # justify
+h2_style = ParagraphStyle("H2", parent=styles["Heading2"], fontName="Helvetica-Bold", fontSize=13, leading=16,
+                          spaceBefore=13, spaceAfter=6, textColor=colors.HexColor("#19324d"), keepWithNext=True)
+body_style = ParagraphStyle("Body", parent=styles["Normal"], fontName="Helvetica", fontSize=9.6, leading=13.6,
+                            spaceAfter=7, alignment=4)
+table_body_style = ParagraphStyle("TableBody", parent=body_style, fontSize=7.8, leading=10.2, spaceAfter=0, alignment=TA_LEFT)
 caption_style = ParagraphStyle("Caption", parent=styles["Normal"], fontSize=8.8, leading=12,
                                textColor=colors.HexColor("#52525b"), spaceAfter=12)
 
@@ -48,7 +52,7 @@ def build_story(markdown: str) -> list:
 
     def flush_paragraph():
         if paragraph:
-            story.append(Paragraph(inline(" ".join(paragraph)), body_style))
+            story.append(KeepTogether([Paragraph(inline(" ".join(paragraph)), body_style)]))
             paragraph.clear()
 
     def flush_table():
@@ -56,20 +60,28 @@ def build_story(markdown: str) -> list:
             return
         header, *rows = table_rows
         rows = [r for r in rows if not all(set(c) <= {"-", ":"} for c in r)]
-        data = [[Paragraph(f"<b>{inline(c)}</b>", body_style) for c in header]]
+        data = [[Paragraph(f"<b>{inline(c)}</b>", table_body_style) for c in header]]
         for r in rows:
-            data.append([Paragraph(inline(c), body_style) for c in r])
+            data.append([Paragraph(inline(c), table_body_style) for c in r])
         n_cols = len(header)
-        col_width = (LETTER[0] - 1.6 * inch) / n_cols
-        t = Table(data, colWidths=[col_width] * n_cols, repeatRows=1)
+        available = A4[0] - 1.4 * inch
+        if n_cols == 3:
+            col_widths = [available * .22, available * .32, available * .46]
+        elif n_cols == 4:
+            col_widths = [available * .32, available * .226, available * .226, available * .226]
+        else:
+            col_widths = [available / n_cols] * n_cols
+        t = Table(data, colWidths=col_widths, repeatRows=1, hAlign="LEFT")
         t.setStyle(TableStyle([
             ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#f4f4f5")),
             ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#d4d4d8")),
             ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-            ("TOPPADDING", (0, 0), (-1, -1), 5),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+            ("TOPPADDING", (0, 0), (-1, -1), 4),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+            ("LEFTPADDING", (0, 0), (-1, -1), 5),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 5),
         ]))
-        story.append(KeepTogether([Spacer(1, 4), t, Spacer(1, 8)]))
+        story.extend([Spacer(1, 3), t, Spacer(1, 7)])
         table_rows.clear()
 
     for line in markdown.splitlines():
@@ -80,6 +92,9 @@ def build_story(markdown: str) -> list:
         flush_table()
         if not line.strip():
             flush_paragraph()
+        elif line.strip() == "<!-- pagebreak -->":
+            flush_paragraph()
+            story.append(PageBreak())
         elif line.startswith("# "):
             flush_paragraph()
             story.append(Paragraph(inline(line[2:]), title_style))
@@ -89,10 +104,11 @@ def build_story(markdown: str) -> list:
             if match:
                 path = SOURCE.parent / match.group(1)
                 figure = Image(str(path))
-                scale = min((LETTER[0] - 1.6 * inch) / figure.imageWidth,
-                            (3.0 * inch) / figure.imageHeight)
+                scale = min((A4[0] - 1.4 * inch) / figure.imageWidth,
+                            (2.45 * inch) / figure.imageHeight)
                 figure.drawWidth *= scale
                 figure.drawHeight *= scale
+                figure.hAlign = "CENTER"
                 story.append(figure)
         elif line.startswith("*") and line.endswith("*") and not line.startswith("**"):
             flush_paragraph()
@@ -123,10 +139,10 @@ def main() -> None:
         raise SystemExit(f"Refusing to overwrite existing report: {output}. Use --output or pass --force intentionally.")
     output.parent.mkdir(parents=True, exist_ok=True)
     doc = SimpleDocTemplate(
-        str(output), pagesize=LETTER,
-        topMargin=0.85 * inch, bottomMargin=0.85 * inch,
-        leftMargin=0.8 * inch, rightMargin=0.8 * inch,
-        title="NDATrace — Evidence-Grounded NDA Requirement Review",
+        str(output), pagesize=A4,
+        topMargin=0.72 * inch, bottomMargin=0.68 * inch,
+        leftMargin=0.7 * inch, rightMargin=0.7 * inch,
+        title="NDATrace - Does Additional AI Complexity Earn Its Place?",
         author="Ubaidulla Asmitha",
     )
     story = build_story(SOURCE.read_text(encoding="utf-8"))
@@ -134,7 +150,8 @@ def main() -> None:
         canvas.saveState()
         canvas.setFont("Helvetica", 8.5)
         canvas.setFillColor(colors.HexColor("#71717a"))
-        canvas.drawRightString(LETTER[0] - 0.8 * inch, 0.5 * inch, f"NDATrace · {canvas.getPageNumber()}")
+        canvas.drawString(0.7 * inch, 0.42 * inch, "PE6201 | NDATrace")
+        canvas.drawRightString(A4[0] - 0.7 * inch, 0.42 * inch, f"Page {canvas.getPageNumber()}")
         canvas.restoreState()
 
     doc.build(story, onFirstPage=page_number, onLaterPages=page_number)

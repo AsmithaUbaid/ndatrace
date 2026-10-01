@@ -58,3 +58,25 @@ Both results point the same direction as this file's own case study: the errors 
 errors on evidence the system already has, not evidence-access problems an agent or deeper
 retrieval would fix. More retrieval depth or agentic tool use would be solving a problem this
 system mostly doesn't have.
+
+## A smaller-scale, mechanism-level complement (E24)
+
+This file's taxonomy is TEST-scale (n=2,091) and category-level. A separate, smaller targeted
+evaluation (`experiments/E24_targeted_evaluation/`, 49 cases, current architecture, Rule/FULL/RAG)
+traced individual failures down to the clause level — not a replacement for the counts above, a
+finer-grained look at a handful of real cases:
+
+- **Case 038**: a traceable instance of FULL's full-document access acting as a liability, not an
+  asset — FULL over-weighted a real distractor clause; RAG's narrower retrieved context avoided
+  it and predicted correctly. One data point, not a general claim that RAG's evidence selection
+  beats FULL's.
+- **Cases 007/043**: RAG's "evidence selection" failures (predicted label correct, cited evidence
+  insufficient) decomposed into exact gold-span coverage fractions — both cases had gold evidence
+  partially outside RAG's top-5 retrieved context (a genuine retrieval-coverage gap) *and* a gold
+  span RAG didn't cite despite it being retrieved. Neither "pure retrieval miss" nor "pure
+  selection failure" describes these cases accurately on its own.
+- **Exception/carve-out cases (ADR-011)**: re-confirmed under the current architecture — 3 of 4
+  documented cases still fail on both FULL and RAG, consistent with this file's point that
+  exception/polarity handling, not retrieval, is the recurring weakness.
+
+Full diagnostic detail: `experiments/E24_targeted_evaluation/summary.md`.

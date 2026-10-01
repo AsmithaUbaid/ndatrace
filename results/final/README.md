@@ -6,7 +6,7 @@ from. If a number here ever looks wrong, trust the source artifact, not this fil
 
 ## Structure
 
-- **`final_v2/`** — the canonical source for the final report/demo (`docs/architecture.md`).
+- **`v2/`** — the canonical source for the final report/demo (`docs/architecture.md`).
   Final story: **Rule** is the zero-cost baseline, **FULL** (GPT-5-mini + P0, whole document) is
   the strongest *measured benchmark* configuration on the official TEST set, **RAG** (GPT-5-mini +
   P0 + retrieved top-5) is the **retained interactive prototype/runtime** architecture actually
@@ -26,7 +26,7 @@ from. If a number here ever looks wrong, trust the source artifact, not this fil
   authoritative raw sources** — these are convenience summaries and must never replace the raw
   experimental evidence they were generated from.
 
-## Final files (E15–E18; `final_v2/` — this directory's current, final-facing content)
+## Final files (E15–E18; `v2/` — this directory's current, final-facing content)
 
 | File | Source experiment | Source artifact | Source commit | Measured / scenario | Population | Generated |
 |---|---|---|---|---|---|---|
@@ -39,10 +39,19 @@ from. If a number here ever looks wrong, trust the source artifact, not this fil
 | `routing_summary.json` | E15 | `experiments/E15_review_routing/results/validation_results.json` | dcdee80 | measured | n=138 (fresh DEV_ROUTING_v1 validation) | 2026-09-27 |
 | `robustness_summary.json` | E16 | `experiments/E16_robustness_security/results/hosted_results.json` | 5717bdf | measured (small n) | n=20 matched pairs | 2026-09-27 |
 
-All paths above are relative to `final_v2/` (e.g. `full_test_comparison.csv` is
+All paths above are relative to `v2/` (e.g. `full_test_comparison.csv` is
 `results/final/v2/full_test_comparison.csv`). Full detail, uncertainty intervals,
 and every caveat live in each source experiment's own `summary.md` and `results/`.
-`docs/experiment_registry.md` indexes all of E00–E19.
+`docs/experiment_registry.md` indexes all of E00–E24.
+
+## Targeted evaluation (E24 — separate from the files above)
+
+The table above is exclusively the **2,091-case official TEST benchmark** (E15–E18). A smaller,
+deliberately curated 49-case targeted regression comparison (Rule/FULL/RAG on the checked-in
+golden+negative battery, run against the current architecture for the first time) lives entirely
+in `experiments/E24_targeted_evaluation/` (`summary.md`, `config.json`,
+`results/run_E24_predictions.jsonl`) — not duplicated into this directory, to keep the two
+populations from being confused as one comparison.
 
 ## Legacy files (`legacy/` — legacy pipeline, historical, unrelated)
 
