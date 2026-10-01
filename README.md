@@ -10,11 +10,7 @@
 ![Tests](https://img.shields.io/badge/Tests-433%20passing-22C55E)
 ![Status](https://img.shields.io/badge/Status-Academic%20prototype-6B7280)
 
-<p align="center">
-  <img src="docs/screenshots/demo_case.gif"
-       alt="NDATrace end-to-end NDA review demo"
-       width="900">
-</p>
+![NDATrace end-to-end NDA review demo](docs/screenshots/demo_case.gif)
 
 *One NDA requirement from input → retrieved evidence → verdict → reviewer decision.*
 
