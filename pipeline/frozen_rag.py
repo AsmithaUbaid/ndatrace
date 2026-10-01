@@ -18,7 +18,15 @@ from pipeline.sparse_retriever import SparseIndex
 
 CHUNK_METHOD = "clause"
 CHUNK_SIZE = 256
-CHUNK_OVERLAP = 50  # frozen E20 config; clause-aware chunking does not consume overlap
+# UNUSED BY THE CHUNKER: clause_aware_chunk() (pipeline/chunker.py) takes no overlap
+# parameter and never reads this value - clause-aware chunking has no overlap, by
+# design. This constant exists only so (a) scripts/run_e21_owasp.py can record a
+# complete, honest config snapshot ("chunk_overlap_config": 50) in its own saved
+# results, and (b) tests/test_frozen_rag.py can assert that recorded value never
+# silently drifts. Do not change this value - E21's historical artifact already
+# recorded 50 as "the configured-but-inert overlap", and changing it here would
+# make that saved record inconsistent with this file, not the other way around.
+CHUNK_OVERLAP = 50
 CANDIDATE_POOL_SIZE = 20
 TOP_K = 5
 RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-12-v2"

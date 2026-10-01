@@ -57,7 +57,9 @@ class Settings(BaseSettings):
     # runs on Groq's hardware instead of the laptop. Added when local
     # inference was overheating the dev machine during the T041 final
     # test-set run - functionally the same $0-cost comparison arm, just
-    # without the thermal cost.) ---
+    # without the thermal cost. NOT used by the live backend: backend/routes/
+    # review.py's ModelGateway() never passes provider="groq" - the product
+    # always calls OpenRouter + default_model above.) ---
     groq_api_key: str = Field(default="")
     groq_base_url: str = Field(default="https://api.groq.com/openai/v1")
     # gpt-oss-20b, not Llama - Groq's catalog no longer includes a
@@ -66,12 +68,19 @@ class Settings(BaseSettings):
     request_timeout_seconds: int = Field(default=30, ge=1)
 
     # --- Embedding ---
+    # NOT used by the production retriever: pipeline/frozen_rag.py is BM25-only
+    # (SparseIndex) and never loads an embedding model. Read only by
+    # pipeline/embedder.py, used by scripts/run_e06_*.py's historical
+    # dense-vs-BM25 retrieval comparison (E06).
     embedding_model: str = Field(
         default="all-mpnet-base-v2",
         description="Sentence-transformers model name",
     )
 
     # --- Retrieval ---
+    # default_top_k is NOT read by the production retriever either -
+    # pipeline/frozen_rag.py hardcodes its own TOP_K=5 constant. Kept for
+    # scripts/run_e06_retrieval.py's CLI default only.
     default_top_k: int = Field(default=5, ge=1)
     # chunk_size/chunk_overlap are NOT read by the frozen production chunker
     # (pipeline/frozen_rag.py hardcodes CHUNK_SIZE=256, no overlap, via

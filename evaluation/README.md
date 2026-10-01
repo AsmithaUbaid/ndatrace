@@ -8,6 +8,24 @@ against an answer key. Two tiers, by design: offline scoring can be wrong withou
 a reviewer sees; runtime validation can't rely on knowing the "right" answer because in
 production there isn't one on file.
 
+## What each metric means, and how to rerun scoring
+
+| Metric | Definition | Why it's reported |
+| --- | --- | --- |
+| Accuracy | Predicted label == gold label, overall. | Standard baseline comparison point. |
+| Macro-F1 | F1 averaged equally across Entailment/Contradiction/NotMentioned (not weighted by class size). | Prevents the majority class (Entailment) from hiding poor performance on the rarer, higher-stakes classes. |
+| **Joint correctness** | Label correct **and** cited evidence matches a gold span (`evidence_matching.py`). | The project's primary metric — a right label with fabricated or wrong evidence is not "evidence-grounded," so plain accuracy alone overstates quality. |
+| Contradiction recall | Of actual Contradiction cases, how many are correctly flagged. | Missing a real conflicting clause is the costliest failure mode for a reviewer aid — worth tracking even though it's one class among three. |
+
+Full formal definitions, edge cases, and audit trail: `docs/evaluation_protocol.md` (sections
+11–16). To rerun scoring from saved predictions (no paid calls): see the repository root
+README's [Reproducibility](../README.md#reproducibility) section, or run any single script
+listed below directly, e.g. `python scripts/analyze_e20_rag_test.py`.
+
+**Target vs. achieved:** the project's pre-registered target and the measured result are compared
+in the root README's ["Metrics: targeted vs. reached"](../README.md#key-results) table — not
+duplicated here to avoid two copies drifting apart.
+
 ## Core harness
 
 | Module | What it does |
