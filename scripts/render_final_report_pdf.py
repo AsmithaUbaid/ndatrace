@@ -15,7 +15,7 @@ from reportlab.lib.pagesizes import LETTER
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch
 from reportlab.platypus import (
-    HRFlowable, KeepTogether, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle,
+    HRFlowable, Image, KeepTogether, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,12 +25,16 @@ TARGET = SOURCE.with_suffix(".pdf")
 styles = getSampleStyleSheet()
 title_style = ParagraphStyle("ReportTitle", parent=styles["Title"], fontSize=20, leading=24, spaceAfter=4)
 byline_style = ParagraphStyle("Byline", parent=styles["Normal"], fontSize=9.5, textColor=colors.HexColor("#52525b"), spaceAfter=16)
-h2_style = ParagraphStyle("H2", parent=styles["Heading2"], fontSize=13, leading=16, spaceBefore=16, spaceAfter=6, textColor=colors.HexColor("#18181b"))
+h2_style = ParagraphStyle("H2", parent=styles["Heading2"], fontSize=13, leading=16, spaceBefore=16, spaceAfter=6,
+                          textColor=colors.HexColor("#18181b"), keepWithNext=True)
 body_style = ParagraphStyle("Body", parent=styles["Normal"], fontSize=10.3, leading=15, spaceAfter=8, alignment=4)  # justify
+caption_style = ParagraphStyle("Caption", parent=styles["Normal"], fontSize=8.8, leading=12,
+                               textColor=colors.HexColor("#52525b"), spaceAfter=12)
 
 
 def inline(text: str) -> str:
     text = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    text = re.sub(r"\[([^]]+)\]\(([^)]+)\)", r'<link href="\2" color="#245a83">\1</link>', text)
     text = re.sub(r"\*\*([^*]+)\*\*", r"<b>\1</b>", text)
     text = re.sub(r"`([^`]+)`", r"<font face='Courier'>\1</font>", text)
     return text
@@ -40,6 +44,7 @@ def build_story(markdown: str) -> list:
     story: list = []
     paragraph: list[str] = []
     table_rows: list[list[str]] = []
+    byline_seen = False
 
     def flush_paragraph():
         if paragraph:
@@ -78,11 +83,26 @@ def build_story(markdown: str) -> list:
         elif line.startswith("# "):
             flush_paragraph()
             story.append(Paragraph(inline(line[2:]), title_style))
+        elif line.startswith("!["):
+            flush_paragraph()
+            match = re.match(r"!\[[^]]*\]\(([^)]+)\)", line)
+            if match:
+                path = SOURCE.parent / match.group(1)
+                figure = Image(str(path))
+                scale = min((LETTER[0] - 1.6 * inch) / figure.imageWidth,
+                            (3.0 * inch) / figure.imageHeight)
+                figure.drawWidth *= scale
+                figure.drawHeight *= scale
+                story.append(figure)
         elif line.startswith("*") and line.endswith("*") and not line.startswith("**"):
             flush_paragraph()
-            story.append(Paragraph(inline(line.strip("*")), byline_style))
-            story.append(HRFlowable(width="100%", thickness=0.75, color=colors.HexColor("#d4d4d8")))
-            story.append(Spacer(1, 6))
+            if not byline_seen:
+                story.append(Paragraph(inline(line.strip("*")), byline_style))
+                story.append(HRFlowable(width="100%", thickness=0.75, color=colors.HexColor("#d4d4d8")))
+                story.append(Spacer(1, 6))
+                byline_seen = True
+            else:
+                story.append(Paragraph(inline(line.strip("*")), caption_style))
         elif line.startswith("## "):
             flush_paragraph()
             story.append(Paragraph(inline(line[3:]), h2_style))
@@ -110,7 +130,14 @@ def main() -> None:
         author="Ubaidulla Asmitha",
     )
     story = build_story(SOURCE.read_text(encoding="utf-8"))
-    doc.build(story)
+    def page_number(canvas, _doc):
+        canvas.saveState()
+        canvas.setFont("Helvetica", 8.5)
+        canvas.setFillColor(colors.HexColor("#71717a"))
+        canvas.drawRightString(LETTER[0] - 0.8 * inch, 0.5 * inch, f"NDATrace · {canvas.getPageNumber()}")
+        canvas.restoreState()
+
+    doc.build(story, onFirstPage=page_number, onLaterPages=page_number)
     print(f"Wrote {output}")
 
 

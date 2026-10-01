@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NDATrace — Evidence-Grounded NDA Review Report</title>
+  <style>
+    :root { color-scheme: light; --ink:#182337; --muted:#506078; --line:#d8e1e8; --teal:#137d80; --paper:#fbfcfc; --soft:#eef5f5; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:Georgia,"Times New Roman",serif; font-size:18px; line-height:1.62; }
+    main { max-width:900px; margin:0 auto; padding:62px 34px 90px; }
+    header { border-top:7px solid var(--teal); padding-top:34px; margin-bottom:44px; }
+    .eyebrow, .meta, h2, h3, th, figcaption, .note, footer { font-family:Arial,Helvetica,sans-serif; }
+    .eyebrow { margin:0 0 14px; color:var(--teal); font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    h1 { font-size:clamp(38px,6vw,61px); line-height:1.06; letter-spacing:-.035em; max-width:760px; margin:0 0 20px; }
+    .dek { font-size:23px; line-height:1.42; color:#324359; max-width:760px; margin:0 0 23px; }
+    .meta { color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:16px; }
+    h2 { font-size:20px; line-height:1.3; letter-spacing:-.01em; margin:41px 0 12px; }
+    h3 { font-size:16px; line-height:1.3; margin:28px 0 9px; color:#2c4655; }
+    p { margin:0 0 17px; }
+    a { color:#116e76; text-decoration-thickness:1px; text-underline-offset:3px; }
+    strong { color:#102f42; }
+    .lead { border-left:4px solid var(--teal); padding:12px 0 12px 20px; font-size:21px; line-height:1.45; color:#234052; margin:33px 0; }
+    .callout { background:var(--soft); border:1px solid #c9dfdd; border-radius:10px; padding:19px 23px; margin:27px 0; }
+    .callout p:last-child { margin-bottom:0; }
+    .callout .label { font:700 12px Arial,Helvetica,sans-serif; letter-spacing:.11em; text-transform:uppercase; color:#116e76; margin-bottom:8px; }
+    table { width:100%; border-collapse:collapse; font:15px Arial,Helvetica,sans-serif; margin:22px 0 20px; }
+    th,td { text-align:right; padding:11px 13px; border-bottom:1px solid var(--line); }
+    th:first-child,td:first-child { text-align:left; }
+    th { background:#eaf1f3; color:#294258; font-size:13px; }
+    td:first-child { font-weight:600; }
+    tr:last-child td { border-bottom:2px solid #b4c9cc; }
+    figure { margin:27px 0 33px; }
+    figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:9px; background:white; display:block; }
+    figcaption { color:var(--muted); font-size:13px; line-height:1.5; margin-top:10px; }
+    .sources { border-top:1px solid var(--line); padding-top:12px; margin-top:49px; }
+    .sources h2 { margin-top:0; }
+    .sources ul { margin:0; padding-left:20px; font:14px/1.65 Arial,Helvetica,sans-serif; color:var(--muted); }
+    footer { color:#738195; font-size:12px; border-top:1px solid var(--line); margin-top:32px; padding-top:13px; }
+    @media (max-width:640px) { main { padding:38px 20px 65px; } body { font-size:17px; } .dek { font-size:20px; } th,td { padding:9px 7px; font-size:12px; } }
+    @media print { body { background:white; font-size:11pt; } main { max-width:none; padding:0; } header { margin-bottom:24px; } h1 { font-size:31pt; } .dek { font-size:14pt; } h2 { break-after:avoid; margin-top:22px; } p,figure,.callout { break-inside:avoid; } a { color:inherit; } figure img { max-height:2.5in; object-fit:contain; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">PE6201 · End-of-course project report</p>
+    <h1>NDATrace: Evidence-Grounded NDA Review</h1>
+    <p class="dek">A reviewer aid for checking confidentiality requirements against an NDA, with an evaluation of its accuracy, evidence and practical limits.</p>
+    <p class="meta">Ubaidulla Asmitha · 1 October 2026 · Approximately 1,200 words, excluding figures and sources</p>
+  </header>
+
+  <section aria-labelledby="problem">
+    <h2 id="problem">Review context and core problem</h2>
+    <p class="lead">For each confidentiality requirement in a vendor NDA, can a reviewer identify whether the document satisfies it, conflicts with it or says nothing—and verify the clause behind that judgment?</p>
+    <p>Tina, a legal operations analyst, checks vendor NDAs against 17 such requirements before a lawyer acts. Keyword search can miss paraphrases and exceptions; a fluent LLM answer can conceal that it found no relevant clause. A <a href="https://www.legalontech.com/press-releases/2025-survey">vendor survey</a> of 286 legal professionals reports that contract reviews commonly take 2–4 hours. That establishes a plausible workload, not a measured benefit of this project.</p>
+  </section>
+
+  <section aria-labelledby="objective">
+    <h2 id="objective">Objective and scope</h2>
+    <p>NDATrace aims to make each requirement judgment inspectable and correctable. It accepts an NDA and a requirement, returns Entailment, Contradiction or NotMentioned with cited text, and records Tina’s Approve, Override or Reject decision with a note. The working prototype changes what a reviewer can inspect and contest: its output is a traceable claim rather than a bare verdict. It has <strong>not</strong> yet changed a real legal team’s throughput, because no reviewer-time or field study was run. The system never approves an NDA on its own.</p>
+  </section>
+
+  <section aria-labelledby="design">
+    <h2 id="design">Technical approach and design choices</h2>
+    <p>I began with a $0 keyword-rule baseline, then compared full-context GPT-5-mini (FULL), retrieval-augmented GPT-5-mini (RAG), and a selective agent. The rule system achieved 50.1% Joint correctness on TEST. Its failure on paraphrases justified using a language model; it did not automatically justify retrieval or an agent. For RAG, I tested chunking, candidate generation and reranking before freezing a clause-aware, BM25 top-20 → cross-encoder top-5 pipeline.</p>
+    <p>On 4,371 evidence-bearing TRAIN cases, BM25 plus reranking and dense retrieval plus reranking had virtually identical Recall@5: 92.24% versus 92.22%. They agreed on 4,370 cases. The reranker mattered; the embedding index did not earn its extra complexity after reranking was present. A more elaborate GPT prompt briefly improved one TRAIN sample, then reversed direction on a fresh confirmation sample, so I retained the simpler P0 prompt. These are small but consequential decisions: adding machinery only when a repeatable gain survives a fair comparison.</p>
+  </section>
+
+  <section aria-labelledby="eval">
+    <h2 id="eval">Data and evaluation method</h2>
+    <p>ContractNLI contains 607 benchmark NDAs with gold labels and evidence spans. These were withheld from inference and used only for scoring. The matched final comparison covers the same 2,091 TEST cases from 123 NDAs. “Joint” requires both the correct label and correct evidence; label accuracy alone can count an unsupported answer as success. An earlier superseded run had scored TEST once. The final configuration was not tuned on it in this cycle, but calling the comparison fully blind would be misleading.</p>
+  </section>
+
+  <section aria-labelledby="results">
+    <h2 id="results">Findings and error analysis</h2>
+    <table aria-label="Final TEST results across 2091 cases">
+      <thead><tr><th>Metric</th><th>Rule</th><th>FULL</th><th>RAG</th></tr></thead>
+      <tbody>
+        <tr><td>Label accuracy</td><td>59.0%</td><td>77.6%</td><td>76.8%</td></tr>
+        <tr><td>Joint correctness</td><td>50.1%</td><td>74.6%</td><td>72.5%</td></tr>
+        <tr><td>Contradiction recall</td><td>16.8%</td><td>75.5%</td><td>77.3%</td></tr>
+        <tr><td>API cost per case</td><td>$0</td><td>$0.00202</td><td>$0.00168</td></tr>
+      </tbody>
+    </table>
+    <figure>
+      <img src="figures/final_quality.png" alt="Bar chart: rule, FULL and RAG Joint correctness are 50.1, 74.6 and 72.5 percent; Contradiction recall is 16.8, 75.5 and 77.3 percent.">
+      <figcaption>Figure 1 · Measured quality on identical TEST cases. The rule baseline is cheap but misses most actual contradictions.</figcaption>
+    </figure>
+    <p>FULL’s 2.1-point Joint lead over RAG is statistically significant in the paired comparison (McNemar p=0.0047); their label-accuracy gap is not (p=0.217). RAG caught 170/220 Contradictions (77.3%; 95% Wilson interval 71.3–82.3%), but only 153/220 had both the right conflict label and evidence. Its apparently reassuring label number therefore overstates how often a reviewer receives a sound, checkable result. Across all classes, <strong>576/2,091 RAG cases failed Joint</strong>. My proposed ≥5-point gain in risk-sensitive recall for RAG over FULL was also missed: the gain was only 1.18 points. That failure should stay in the conclusion, not disappear behind a different headline.</p>
+    <h3>What the benchmark leaves unanswered</h3>
+    <p>The held-out comparison is reproducible and stronger than hand-picked examples. Yet ContractNLI is a proxy for enterprise contracts, not a test of messy, long, negotiated documents or actual reviewer behavior. The 90.6% macro-F1 oracle result supplied gold evidence on a separate 300-case sample. It locates possible headroom; it is not a production ceiling or directly comparable TEST score.</p>
+    <p>The failure taxonomy sharpens the next question. Of RAG’s 576 non-Joint cases, 448 were classified as reasoning/classification failures, versus 55 retrieval-limited cases. This taxonomy is an analysis of saved errors, not an independent clinical-grade adjudication, but it warns against simply increasing top-k. More retrieved text could add distraction while leaving the model’s interpretation of an available clause wrong.</p>
+    <figure>
+      <img src="figures/rag_failure_taxonomy.png" alt="Bar chart of RAG non-Joint cases: 448 reasoning or classification, 59 evidence selection, 55 retrieval limited and 14 parser or source validity.">
+      <figcaption>Figure 2 · Analysis of 576 non-Joint RAG outcomes. Interpretation dominates the observed failure mix.</figcaption>
+    </figure>
+  </section>
+
+  <section aria-labelledby="decision">
+    <h2 id="decision">Architecture and business trade-offs</h2>
+    <p>I serve RAG in the prototype even though FULL wins Joint on these documents. RAG cut mean model input by 50.4% and measured API spend by 16.8%, while presenting a short ranked evidence set to Tina. Its model context is bounded per requirement, although document ingestion and indexing still scale with length. At ContractNLI’s modest document lengths, FULL’s quality edge may be more valuable than RAG’s fractions-of-a-cent saving; I therefore keep FULL as the quality reference. If real-document tests preserve FULL’s advantage without breaking context or budget, the serving decision should change.</p>
+    <p>The business model is weaker than the technical result. $0.00168 is measured <em>API</em> cost per RAG case, not workflow cost. A $3.33 human-review assumption yields a modeled $0.92 all-in RAG case versus $0.85 for FULL. It charges full review effort only to non-Joint outcomes even though every prototype answer is checked by a person. Without measured review time, the calculation exposes sensitivity to human effort; it does not establish savings or return on investment.</p>
+  </section>
+
+  <section aria-labelledby="rough-edges">
+    <h2 id="rough-edges">Oversight and remaining risks</h2>
+    <p>The selective agent made zero retrieval-tool calls across 15 triggered cases in a 150-case comparison. Its extra steps earned no net Joint improvement, so I removed it from the runtime. Four tested confidence-routing policies could not simultaneously keep review workload under 40% and residual Joint error below 10%; consequently, every result still goes to a reviewer. The reviewer decision log makes that oversight concrete, but a flag and an audit trail do not make a wrong answer safe.</p>
+    <p>Security was similarly mixed. Before remediation, four of eleven injection attacks succeeded. A deterministic guard later improved the targeted prompt-injection check only to PARTIAL; those eleven attacks were not rerun, so a post-fix detection rate would be invented. Request-size, budget and rate controls passed their targeted retest, while authentication and distributed limiting remain absent. This prototype is confined to public or synthetic NDAs.</p>
+  </section>
+
+  <section aria-labelledby="next">
+    <h2 id="next">Conclusion and future work</h2>
+    <p>The next experiment should use permissioned, longer NDAs and legal reviewers, with blinded clause-level adjudication and measured time-to-decision. I would compare FULL and RAG again by document length, error severity and reviewer correction rate, then test whether targeted reasoning changes—not broader retrieval—reduce the 448-case failure bucket. Before any pilot with private contracts, authentication, stronger injection tests and a clear retention policy are necessary. The project has produced an inspectable reviewer aid and a credible benchmark; it has not yet demonstrated dependable legal workflow improvement.</p>
+  </section>
+
+  <aside class="sources" aria-labelledby="sources">
+    <h2 id="sources">Sources and reproducibility</h2>
+    <ul>
+      <li><a href="../experiments/E20_final_rag_test/results/E20_final_report.json">Final matched TEST analysis (E20)</a> and <a href="../results/final/v2/full_test_comparison.csv">rule/FULL baseline comparison</a></li>
+      <li><a href="../experiments/E06_retrieval_optimisation/summary.md">Retrieval tuning (E06)</a> and <a href="../experiments/E12C_gpt_prompt_confirmation/summary.md">prompt confirmation (E12C)</a></li>
+      <li><a href="../experiments/E11_selective_agent_evaluation/summary.md">Agent evaluation (E11)</a> and <a href="../experiments/E15_review_routing/summary.md">routing evaluation (E15)</a></li>
+      <li><a href="../experiments/E16_robustness_security/results/hosted_results.json">Pre-remediation attacks (E16)</a> and <a href="../experiments/E22_targeted_security_remediation/results/final_report.json">targeted security retest (E22)</a></li>
+      <li><a href="https://stanfordnlp.github.io/contract-nli/">ContractNLI dataset</a> and <a href="https://www.legalontech.com/press-releases/2025-survey">LegalOn vendor survey</a></li>
+    </ul>
+  </aside>
+  <footer>NDATrace · Reflective report for review · Figures generated from saved scored results · No paid model calls required to verify the repository</footer>
+</main>
+</body>
+</html>

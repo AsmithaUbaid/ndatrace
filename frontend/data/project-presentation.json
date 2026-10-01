@@ -366,7 +366,7 @@
         "measured": "measured",
         "note": ""
       },
-      "conclusion": "Classification remained close; Joint fell modestly; input volume and raw cost dropped; evidence became clause-oriented. Used as the interactive prototype runtime.",
+      "conclusion": "Classification remained close; Joint fell modestly; input volume and raw cost dropped; evidence became clause-oriented. Used as the interactive prototype runtime. The proposal's pre-registered target was a >=5-point gain in risk-sensitive recall (mean of Contradiction/NotMentioned recall) for RAG over FULL; the measured gain is 69.07% to 70.25%, +1.18 points \u2014 the target was not met, reported as measured rather than reframed around a friendlier metric.",
       "operatingImpact": [
         "~50% fewer classifier input tokens than FULL",
         "Lower raw inference cost",
@@ -393,7 +393,7 @@
       "config": [
         {
           "key": "chunk size / overlap",
-          "value": "256 / 50",
+          "value": "256 / no overlap",
           "source": {
             "experimentId": "E06",
             "sourcePath": "pipeline/frozen_rag.py",
