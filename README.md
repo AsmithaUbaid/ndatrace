@@ -472,7 +472,7 @@ tests/         Unit, integration, robustness, and leakage checks
 | Semantic classification correctness | A separate question. Source-valid evidence doesn't mean the label is correct. |
 | Prompt-injection detection | Partial, not solved. 4 of 11 tested attack patterns still bypass the guard (E16). |
 | Human verification | Every result is shown for review; nothing auto-finalizes. |
-| OWASP LLM Top 10 (2025) | Assessed in full (E21): 3 PASS, 5 PARTIAL, 2 FAIL across all 10 categories. Both FAILs remediated (E22): unbounded consumption now PASS (real cost/rate limits enforced), prompt injection raised to PARTIAL (detection below the pre-declared ≥8/11 bar, reported honestly rather than rounded up). No production authentication (LLM02) remains unremediated. |
+| OWASP LLM Top 10 | Assessed in full against the 2025 edition (E21, run before the 2026 edition existed): 3 PASS, 5 PARTIAL, 2 FAIL across all 10 categories. Both FAILs remediated (E22): unbounded consumption now PASS (real cost/rate limits enforced), prompt injection raised to PARTIAL (detection below the pre-declared ≥8/11 bar, reported honestly rather than rounded up). No production authentication (Sensitive Information Disclosure, LLM02 in both editions) remains unremediated. The 2026 edition reorders and renames some categories but tests the same ten risks; mapping: [`docs/owasp_2026_mapping.md`](docs/owasp_2026_mapping.md). |
 
 No authentication: scoped to public or synthetic NDA text only, not approved for confidential
 documents. ContractNLI is a public benchmark, not evidence of performance on long (50–100 page)
