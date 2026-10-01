@@ -663,7 +663,7 @@ data = {
             "id": "A2", "name": "RAG", "status": "adopted",
             "question": "Can I retain similar classification quality while making the evidence path smaller and easier to inspect?",
             "headline": metric(round(e20_report["RAG_metrics"]["joint"] * 100, 1), "% Joint (TEST) — retained interactive runtime", src("E20", E20_PATH, "TEST n=2,091, same population as FULL")),
-            "conclusion": "Classification remained close; Joint fell modestly; input volume and raw cost dropped; evidence became clause-oriented. Used as the interactive prototype runtime.",
+            "conclusion": "Classification remained close; Joint fell modestly; input volume and raw cost dropped; evidence became clause-oriented. Used as the interactive prototype runtime. The proposal's pre-registered target was a >=5-point gain in risk-sensitive recall (mean of Contradiction/NotMentioned recall) for RAG over FULL; the measured gain is 69.07% to 70.25%, +1.18 points — the target was not met, reported as measured rather than reframed around a friendlier metric.",
             "operatingImpact": ["~50% fewer classifier input tokens than FULL", "Lower raw inference cost", "Clause-level reviewer provenance", "Reusable index across requirements", "Accepts a measured Joint trade-off (statistically significant vs FULL, p=0.0047)"],
             "metrics": {
                 "accuracy": e20_report["RAG_metrics"]["accuracy"], "macroF1": e20_report["RAG_metrics"]["macro_f1"],
@@ -672,7 +672,7 @@ data = {
             },
             "pipeline": ["clause-256 chunk", "BM25 top-20", "rerank L-12", "top-5", "GPT-5-mini + P0", "parser", "evidence validator"],
             "config": [
-                {"key": "chunk size / overlap", "value": "256 / 50", "source": src("E06", "pipeline/frozen_rag.py", "TRAIN n=4,371 evidence-bearing cases")},
+                {"key": "chunk size / overlap", "value": "256 / no overlap", "source": src("E06", "pipeline/frozen_rag.py", "TRAIN n=4,371 evidence-bearing cases")},
                 {"key": "candidate pool (BM25)", "value": "top-20", "source": src("E06", "pipeline/frozen_rag.py", "TRAIN n=4,371")},
                 {"key": "reranker", "value": "cross-encoder/ms-marco-MiniLM-L-12-v2", "source": src("E06", "pipeline/frozen_rag.py", "TRAIN n=4,371")},
                 {"key": "final top_k", "value": "5", "source": src("E06", "pipeline/frozen_rag.py", "TRAIN n=4,371")},
