@@ -1,18 +1,23 @@
-PASS  published HTML exactly matches the fresh authoritative source
+PASS  published HTML is generated from, rather than duplicated from, the editable source
+PASS  published HTML contains no unresolved generation placeholders
+PASS  published HTML has no external figure dependency
+PASS  all nine figures are embedded as accessible inline SVG
+PASS  published HTML has no JavaScript or external stylesheet dependency
 PASS  previous report is preserved and differs from the redesign
+PASS  pre-UI-refinement HTML is preserved and differs from the refined report
 PASS  fresh report does not depend on the former editable source
 PASS  exactly eight required numbered sections
-PASS  all ten report tables have explicit titles
-PASS  all four figures have captions
-PASS  analytical prose count 1109 is within 1,200 +/-15%
-PASS  inclusive numbered-section count 2445 transparently includes tables and captions
+PASS  all eleven main-report tables have explicit titles
+PASS  all nine figures have captions
+PASS  analytical prose count 1114 is within 1,200 +/-15%
+PASS  inclusive numbered-section count 3369 transparently includes tables and captions
+PASS  all three generated word counts are disclosed in the report
+PASS  table-inclusive length exceeds guidance and is explicitly flagged
 PASS  Rule official quality values match canonical TEST artifacts
 PASS  FULL official quality values match canonical TEST artifacts
 PASS  RAG official quality values match canonical TEST artifacts
 PASS  official TEST population is explicit
-PASS  original RAG-versus-FULL target result recomputes to +1.2 points
-PASS  supplementary RAG-versus-Rule result recomputes to +16.6 points
-PASS  historical target is preserved and correctly failed
+PASS  removed target-status table is absent from the analytical report
 PASS  targeted DEV remains a separate 49-case block
 PASS  targeted rule metrics match executed analysis
 PASS  targeted full metrics match executed analysis
@@ -21,6 +26,11 @@ PASS  targeted notebook contains eight executed code cells
 PASS  agent trace set confirms 15 triggers and zero tool calls
 PASS  agent Joint transition and incremental cost are disclosed
 PASS  saved agent comparison confirms zero net Joint change
+PASS  full-agent diagnostic confirms 2/150 tool cases and zero useful recoveries
+PASS  full-agent Joint values match its evaluator-specific control
+PASS  prompt-V2 behavior confirms 30 tool cases, 39 calls and 25 fallbacks
+PASS  prompt-V2 confirms zero useful tool-associated recoveries and 68.7% Joint
+PASS  report includes the complete three-stage agent progression
 PASS  R1 routing workload/capture/residual values recompute
 PASS  R2 routing workload/capture/residual values recompute
 PASS  R3 routing workload/capture/residual values recompute
@@ -31,22 +41,47 @@ PASS  RAG output tokens recompute to approximately 701
 PASS  token, cost and latency values match official artifacts
 PASS  stacked cost totals match declared formula
 PASS  cost figure distinguishes excluded fixed cost and hypothetical rework
+PASS  all cost-sensitivity curves remain inside the plotting boundary
+PASS  cost figure exposes inference-only expense and zero-investigation interpretation
+PASS  annual-volume scenario labels recompute from measured Joint and declared human-cost assumptions
+PASS  annual-volume plot is explicitly labeled as modeled and counterfactual
 PASS  fresh figure exists and is non-trivial: architecture.svg
 PASS  fresh source references architecture.svg
+PASS  fresh figure exists and is non-trivial: oracle.svg
+PASS  fresh source references oracle.svg
+PASS  fresh figure exists and is non-trivial: retrieval.svg
+PASS  fresh source references retrieval.svg
 PASS  fresh figure exists and is non-trivial: quality.svg
 PASS  fresh source references quality.svg
+PASS  fresh figure exists and is non-trivial: agent.svg
+PASS  fresh source references agent.svg
+PASS  fresh figure exists and is non-trivial: routing.svg
+PASS  fresh source references routing.svg
 PASS  fresh figure exists and is non-trivial: failure_distribution.svg
 PASS  fresh source references failure_distribution.svg
+PASS  fresh figure exists and is non-trivial: annual_volume_economics.svg
+PASS  fresh source references annual_volume_economics.svg
 PASS  fresh figure exists and is non-trivial: cost_to_serve.svg
 PASS  fresh source references cost_to_serve.svg
-PASS  all local report image links resolve
+PASS  all editable-source figure links resolve
+PASS  all local experiment links in the matrix resolve
 PASS  no former report figures are reused
 PASS  experimental matrix covers every required family
+PASS  experimental matrix uses the required three-column structure
+PASS  experimental matrix contains all five ordered stage dividers
+PASS  experimental matrix retains thirteen distinct evidence rows
+PASS  experimental matrix repeats headings and protects stage dividers in A4 print
 PASS  unsupported or contradictory conclusion phrases are absent
 PASS  fresh workflow identifies its evidence map
 PASS  professor compliance matrix exists
+PASS  UI-to-report map records the target, overlap and economics discrepancies
+PASS  eight-stage evidence-to-decision map exists
+PASS  complete notebook-plot inventory exists
+PASS  cleanup audit preserves files pending approval
+PASS  README designates the self-contained HTML as authoritative
 
 ALL FRESH-REPORT CHECKS PASSED (offline; zero model calls)
-Analytical prose count: 1109
-Inclusive Sections 1-8 count: 2445
-Counting note: inclusive count includes headings, table cells and captions; references and metadata are excluded.
+Analytical prose count: 1114
+Inclusive Sections 1-8 count: 3369
+Complete document count: 3789
+Counting note: main count includes headings, table cells and captions; SVG label text and CSS are excluded.

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="0 0 1600 720">
+<rect width="1600" height="720" fill="#FFFFFF"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#172033}.title{font-size:40px;font-weight:700;fill:#17324D}.subtitle{font-size:22px;fill:#5B667A}.label{font-size:20px}.small{font-size:17px;fill:#5B667A}.value{font-size:20px;font-weight:700}.section{font-size:17px;font-weight:700;letter-spacing:1px}</style>
+<text class="title" x="60" y="62">More agent activity did not create more value</text>
+<text class="subtitle" x="60" y="103">Three TRAIN evaluations on the same 150-case population; matched controls retained within each evaluator</text>
+<text x="60" y="160" font-size="22" font-weight="700" fill="#17324D">Tool exposure</text>
+<text x="575" y="160" font-size="22" font-weight="700" fill="#17324D">Joint correctness</text>
+<text x="1200" y="160" font-size="22" font-weight="700" fill="#17324D">Added API cost</text>
+<text class="label" x="60" y="230">Selective V1</text>
+<text class="small" x="60" y="257">15 routed; 0 tool calls</text>
+<rect x="320" y="205" width="190" height="35" rx="5" fill="#D8E0E8"/>
+<rect x="320" y="205" width="0.0" height="35" rx="5" fill="#2563A6"/>
+<text class="value" x="520" y="232">0.0%</text>
+<line x1="650" y1="223" x2="1070" y2="223" stroke="#D8E0E8" stroke-width="8"/>
+<circle cx="902.0" cy="223" r="11" fill="#5B667A"/>
+<circle cx="902.0" cy="223" r="13" fill="#C65D21"/>
+<text class="small" x="902.0" y="260" text-anchor="middle">base 74.0%</text>
+<text class="small" x="902.0" y="197" text-anchor="middle">agent 74.0%</text>
+<text class="value" x="1200" y="232">$0.000145/case</text>
+<text class="label" x="60" y="355">Forced full-agent V1</text>
+<text class="small" x="60" y="382">2 tool cases; 0 useful</text>
+<rect x="320" y="330" width="190" height="35" rx="5" fill="#D8E0E8"/>
+<rect x="320" y="330" width="12.7" height="35" rx="5" fill="#2563A6"/>
+<text class="value" x="520" y="357">1.3%</text>
+<line x1="650" y1="348" x2="1070" y2="348" stroke="#D8E0E8" stroke-width="8"/>
+<circle cx="938.4" cy="348" r="11" fill="#5B667A"/>
+<circle cx="882.4" cy="348" r="13" fill="#C65D21"/>
+<text class="small" x="938.4" y="385" text-anchor="middle">base 75.3%</text>
+<text class="small" x="882.4" y="322" text-anchor="middle">agent 73.3%</text>
+<text class="value" x="1200" y="357">$0.001515/case</text>
+<text class="label" x="60" y="480">Investigation prompt V2</text>
+<text class="small" x="60" y="507">30 tool cases; 0 useful</text>
+<rect x="320" y="455" width="190" height="35" rx="5" fill="#D8E0E8"/>
+<rect x="320" y="455" width="190.0" height="35" rx="5" fill="#2563A6"/>
+<text class="value" x="520" y="482">20.0%</text>
+<line x1="650" y1="473" x2="1070" y2="473" stroke="#D8E0E8" stroke-width="8"/>
+<circle cx="938.4" cy="473" r="11" fill="#5B667A"/>
+<circle cx="753.6" cy="473" r="13" fill="#C65D21"/>
+<text class="small" x="938.4" y="510" text-anchor="middle">base 75.3%</text>
+<text class="small" x="753.6" y="447" text-anchor="middle">agent 68.7%</text>
+<text class="value" x="1200" y="482">$0.002659/case</text>
+<rect x="60" y="600" width="1480" height="70" rx="12" fill="#FFF3E9"/>
+<text class="section" x="85" y="630" fill="#C65D21">DECISION</text>
+<text class="label" x="235" y="632">Reject the tested agent. Prompt V2 proved inactivity was partly fixable; zero useful recoveries proved activity was not benefit.</text>
+<text class="small" x="235" y="658">“Useful” is an outcome-associated proxy, not a causal estimate; these TRAIN results do not rule out different tools or tasks.</text>
+</svg>

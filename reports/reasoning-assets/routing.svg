@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="700" viewBox="0 0 1500 700">
+<rect width="1500" height="700" fill="#FFFFFF"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#172033}.title{font-size:40px;font-weight:700;fill:#17324D}.subtitle{font-size:22px;fill:#5B667A}.label{font-size:20px}.small{font-size:17px;fill:#5B667A}.value{font-size:20px;font-weight:700}.section{font-size:17px;font-weight:700;letter-spacing:1px}</style>
+<text class="title" x="60" y="62">Review workload did not buy a safe automation region</text>
+<text class="subtitle" x="60" y="103">E15 validation DEV n=138; provisional target: review ≤40% and residual Joint error &lt;10%</text>
+<line x1="220.0" y1="165" x2="220.0" y2="575" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="220.0" y="610" text-anchor="middle">0%</text>
+<line x1="415.0" y1="165" x2="415.0" y2="575" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="415.0" y="610" text-anchor="middle">10%</text>
+<line x1="610.0" y1="165" x2="610.0" y2="575" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="610.0" y="610" text-anchor="middle">20%</text>
+<line x1="805.0" y1="165" x2="805.0" y2="575" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="805.0" y="610" text-anchor="middle">30%</text>
+<line x1="1000.0" y1="165" x2="1000.0" y2="575" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="1000.0" y="610" text-anchor="middle">40%</text>
+<line x1="1195.0" y1="165" x2="1195.0" y2="575" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="1195.0" y="610" text-anchor="middle">50%</text>
+<line x1="1390.0" y1="165" x2="1390.0" y2="575" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="1390.0" y="610" text-anchor="middle">60%</text>
+<line x1="220" y1="575.0" x2="1390" y2="575.0" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="205" y="581.0" text-anchor="end">0%</text>
+<line x1="220" y1="438.3" x2="1390" y2="438.3" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="205" y="444.3" text-anchor="end">10%</text>
+<line x1="220" y1="301.7" x2="1390" y2="301.7" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="205" y="307.7" text-anchor="end">20%</text>
+<line x1="220" y1="165.0" x2="1390" y2="165.0" stroke="#D8E0E8" stroke-width="2"/>
+<text class="small" x="205" y="171.0" text-anchor="end">30%</text>
+<rect x="220" y="438.3333333333333" width="780.0" height="136.7" fill="#DFF3EA" opacity="0.8"/>
+<line x1="1000.0" y1="165" x2="1000.0" y2="575" stroke="#0F766E" stroke-dasharray="8 7" stroke-width="3"/>
+<line x1="220" y1="438.3" x2="1390" y2="438.3" stroke="#0F766E" stroke-dasharray="8 7" stroke-width="3"/>
+<circle cx="304.8" cy="212.6" r="14" fill="#2563A6" stroke="#FFFFFF" stroke-width="4"/>
+<text class="value" x="322.8" y="202.6" fill="#2563A6">R1</text>
+<text class="small" x="322.8" y="227.6">4.3% review · 26.5% residual</text>
+<circle cx="629.8" cy="261.5" r="14" fill="#C65D21" stroke="#FFFFFF" stroke-width="4"/>
+<text class="value" x="647.8" y="251.5" fill="#C65D21">R2</text>
+<text class="small" x="647.8" y="276.5">21.0% review · 22.9% residual</text>
+<circle cx="1223.3" cy="432.2" r="14" fill="#B33A3A" stroke="#FFFFFF" stroke-width="4"/>
+<text class="value" x="1241.3" y="422.2" fill="#B33A3A">R3</text>
+<text class="small" x="1241.3" y="447.2">51.4% review · 10.4% residual</text>
+<text class="small" x="805" y="645" text-anchor="middle">Human review rate →</text>
+<text class="small" x="60" y="370" transform="rotate(-90 60 370)" text-anchor="middle">Residual Joint error among auto-handled cases →</text>
+<text class="small" x="245" y="557">Target region</text>
+<text class="small" x="60" y="680">Decision: no automatic routing policy. Structural/source-validity checks remain guards, not calibrated semantic confidence.</text>
+</svg>

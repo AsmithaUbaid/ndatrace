@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="760" viewBox="0 0 1700 760">
+<rect width="1700" height="760" fill="#FFFFFF"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#172033}.title{font-size:40px;font-weight:700;fill:#17324D}.subtitle{font-size:22px;fill:#5B667A}.label{font-size:20px}.small{font-size:17px;fill:#5B667A}.value{font-size:20px;font-weight:700}.section{font-size:17px;font-weight:700;letter-spacing:1px}</style>
+<text class="title" x="60" y="62">Retrieval complexity had to earn its place</text>
+<text class="subtitle" x="60" y="103">E06, evidence-bearing TRAIN cases n=4,371; metrics are retrieval diagnostics, not classification accuracy</text>
+<text x="55" y="165" font-size="22" font-weight="700" fill="#17324D">A. Chunking</text>
+<text class="label" x="55" y="235">Sentence</text>
+<rect x="55" y="248" width="440" height="28" rx="5" fill="#D8E0E8"/>
+<rect x="55" y="248" width="282.5" height="28" rx="5" fill="#5B667A"/>
+<text class="value" x="329.5" y="270" text-anchor="end" fill="#FFFFFF">64.2%</text>
+<text class="label" x="55" y="327">Clause-256</text>
+<rect x="55" y="340" width="440" height="28" rx="5" fill="#D8E0E8"/>
+<rect x="55" y="340" width="382.8" height="28" rx="5" fill="#2563A6"/>
+<text class="value" x="429.8" y="362" text-anchor="end" fill="#FFFFFF">87.0%</text>
+<text class="label" x="55" y="419">Fixed-512*</text>
+<rect x="55" y="432" width="440" height="28" rx="5" fill="#D8E0E8"/>
+<rect x="55" y="432" width="430.3" height="28" rx="5" fill="#C65D21"/>
+<text class="value" x="477.3" y="454" text-anchor="end" fill="#FFFFFF">97.8%</text>
+<rect x="55" y="510" width="440" height="95" rx="10" fill="#F4F7FA"/>
+<text class="small" x="73" y="542">*High recall returned nearly the whole document; MRR fell </text>
+<text class="small" x="73" y="568">to 0.183.</text>
+<text class="small" x="73" y="594"></text>
+<text x="600" y="165" font-size="22" font-weight="700" fill="#17324D">B. First-stage Recall@5</text>
+<text class="label" x="600" y="235">Dense BGE</text>
+<rect x="600" y="248" width="440" height="28" rx="5" fill="#D8E0E8"/>
+<rect x="600" y="248" width="389.0" height="28" rx="5" fill="#5B667A"/>
+<text class="value" x="981.0" y="270" text-anchor="end" fill="#FFFFFF">88.4%</text>
+<text class="label" x="600" y="327">BM25</text>
+<rect x="600" y="340" width="440" height="28" rx="5" fill="#D8E0E8"/>
+<rect x="600" y="340" width="398.2" height="28" rx="5" fill="#2563A6"/>
+<text class="value" x="990.2" y="362" text-anchor="end" fill="#FFFFFF">90.5%</text>
+<text class="label" x="600" y="419">Hybrid</text>
+<rect x="600" y="432" width="440" height="28" rx="5" fill="#D8E0E8"/>
+<rect x="600" y="432" width="405.2" height="28" rx="5" fill="#0F766E"/>
+<text class="value" x="997.2" y="454" text-anchor="end" fill="#FFFFFF">92.1%</text>
+<rect x="600" y="510" width="440" height="95" rx="10" fill="#F4F7FA"/>
+<text class="small" x="618" y="542">Before reranking, hybrid led; this was not the final compa</text>
+<text class="small" x="618" y="568">rison.</text>
+<text class="small" x="618" y="594"></text>
+<text x="1145" y="165" font-size="22" font-weight="700" fill="#17324D">C. After identical reranking</text>
+<text class="label" x="1145" y="235">Dense</text>
+<rect x="1145" y="248" width="440" height="28" rx="5" fill="#D8E0E8"/>
+<rect x="1145" y="248" width="405.8" height="28" rx="5" fill="#5B667A"/>
+<text class="value" x="1542.8" y="270" text-anchor="end" fill="#FFFFFF">92.2%</text>
+<text class="label" x="1145" y="327">BM25</text>
+<rect x="1145" y="340" width="440" height="28" rx="5" fill="#D8E0E8"/>
+<rect x="1145" y="340" width="405.8" height="28" rx="5" fill="#2563A6"/>
+<text class="value" x="1542.8" y="362" text-anchor="end" fill="#FFFFFF">92.2%</text>
+<rect x="1145" y="510" width="440" height="95" rx="10" fill="#F4F7FA"/>
+<text class="small" x="1163" y="542">Only 1 of 4,371 cases differed; BM25 avoided an embedding </text>
+<text class="small" x="1163" y="568">index.</text>
+<text class="small" x="1163" y="594"></text>
+<rect x="55" y="645" width="1590" height="70" rx="12" fill="#EDF8F5"/>
+<text class="section" x="80" y="675" fill="#0F766E">FINAL DECISION</text>
+<text class="label" x="265" y="676">Clause-256 → BM25 top-20 → cross-encoder top-5. Reranking raised Recall@5 88.4% → 92.2% (231 recovered, 72 regressed).</text>
+<text class="small" x="265" y="704">Top-5 limits classifier context; candidate recall and final evidence quality are distinct stages.</text>
+</svg>

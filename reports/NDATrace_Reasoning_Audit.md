@@ -28,6 +28,10 @@ The report is no longer an experiment diary. Its argument is:
 | HTML publisher | `scripts/build_reasoning_report.py` |
 | Offline verifier | `scripts/verify_reasoning_report.py` |
 | Evidence map | `reports/NDATrace_Reasoning_Evidence_Map.md` |
+| Evidence-to-decision chain | `reports/NDATrace_Evidence_to_Decision_Map.md` |
+| UI-to-report content map | `reports/NDATrace_UI_to_Report_Map.md` |
+| Notebook plot inventory | `reports/NDATrace_Notebook_Plot_Inventory.md` |
+| Report-file cleanup proposal | `reports/NDATrace_Report_File_Audit.md` |
 | Professor compliance | `reports/NDATrace_Professor_Compliance.md` |
 
-Previous HTML and editable-source versions are preserved as `pre-reasoning-redesign` backups. The PDF workflow, UI, demo script, predictions and gold labels are outside this redesign and remain unchanged.
+The submitted HTML is now self-contained: the publisher embeds all nine generated SVGs and the verifier rejects external image, script or stylesheet dependencies. Previous HTML and editable-source versions remain preserved pending the cleanup approval listed in `NDATrace_Report_File_Audit.md`. The project UI was audited as an analytical index; its strongest verified retrieval, multi-agent and modeled volume-economics findings were incorporated with explicit interpretation boundaries. Frozen experiments, UI, demo script, predictions and gold labels remain unchanged.

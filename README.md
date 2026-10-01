@@ -20,6 +20,10 @@
 
 ---
 
+> **Authoritative final report:** [`reports/NDATrace_Final_Report.html`](reports/NDATrace_Final_Report.html) is the single self-contained submission document. It embeds its CSS and all nine SVG figures and opens directly from a local `file:///` URL. Rebuild it with `python scripts/generate_reasoning_report_assets.py && python scripts/build_reasoning_report.py`; verify it with `python scripts/verify_reasoning_report.py`.
+
+---
+
 > ### "It got the right answer without finding the right clause."
 >
 > That's the failure plain accuracy hides. This project's headline metric is **Joint
