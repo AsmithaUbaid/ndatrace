@@ -57,3 +57,6 @@ build/
 # Secrets
 .env.local
 .env.production
+
+# Local-only rendered submission report
+/report/NDATrace_Final_Report.html
