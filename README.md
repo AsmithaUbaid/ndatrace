@@ -20,13 +20,15 @@
 
 ---
 
-> **Authoritative final report:** [`reports/NDATrace_Final_Report.html`](reports/NDATrace_Final_Report.html) is the single self-contained submission document. It embeds its CSS and all nine SVG figures and opens directly from a local `file:///` URL. Rebuild it with `python scripts/generate_reasoning_report_assets.py && python scripts/build_reasoning_report.py`; verify it with `python scripts/verify_reasoning_report.py`.
+> **Authoritative final report:** [`report/NDATrace_Final_Report.html`](report/NDATrace_Final_Report.html) is my single self-contained submission document. It embeds its own CSS and all seven SVG figures inline and opens directly from a local `file:///` URL, no build step needed. I edit it directly (not generated from a separate source); verify it with `python scripts/verify_v3_report.py`, which recomputes every quantitative claim from canonical experiment artifacts.
+>
+> **Product documentation (persona, input/output, architecture diagram, metrics targeted vs. reached) as a standalone one-pager:** [`PRODUCT.md`](PRODUCT.md).
 
 ---
 
 > ### "It got the right answer without finding the right clause."
 >
-> That's the failure plain accuracy hides. This project's headline metric is **Joint
+> That's the failure plain accuracy hides. My headline metric is **Joint
 > correctness**: label and cited evidence both have to be right, not accuracy alone. Numbers
 > below in [Metrics](#metrics-targeted-vs-reached).
 
@@ -44,26 +46,26 @@ based on.
 
 Today she reads the whole NDA clause by clause to make sure nothing was missed. With NDATrace
 she gets a verdict per requirement, each with its supporting clause, reviews the flagged or
-uncertain ones first, and records her decision. She's never asked to trust the system; she's
-shown what it's based on. No review-time or productivity claim is made here; see
+uncertain ones first, and records her decision. I never ask her to trust the system; I show her
+what it's based on. I make no review-time or productivity claim here; see
 [What's measured](#whats-measured-whats-not).
 
 ### Why not an existing tool
 
 Commercial contract-review products (Ironclad, Luminance, Kira, among others) already support
-AI-assisted review. Their open challenge, and the proposal's stated reason for building this
-instead of buying it, is handling incomplete, conflicting, or ambiguous evidence: whether to
-answer, search further, or escalate to a human. NDATrace is narrower than any of these products
-on purpose. It covers one task (confidentiality requirement classification against ContractNLI's
-17 fixed hypotheses) and treats "cite the clause, let a human verify it, or flag for review" as
-the actual deliverable, not a feature bolted onto a broader platform.
+AI-assisted review. Their open challenge, and my stated reason for building this instead of
+buying it, is handling incomplete, conflicting, or ambiguous evidence: whether to answer, search
+further, or escalate to a human. I kept NDATrace narrower than any of these products on purpose.
+It covers one task (confidentiality requirement classification against ContractNLI's 17 fixed
+hypotheses) and I treat "cite the clause, let a human verify it, or flag for review" as the
+actual deliverable, not a feature bolted onto a broader platform.
 
 ## What NDATrace does
 
-It labels an NDA against each of 17 fixed confidentiality requirements as Entailment,
-Contradiction, or Not Mentioned, cites the supporting clause, flags anything uncertain for human
-review, and records the reviewer's final decision. It doesn't approve an NDA or make a legal call
-on its own.
+I built it to label an NDA against each of 17 fixed confidentiality requirements as Entailment,
+Contradiction, or Not Mentioned, cite the supporting clause, flag anything uncertain for human
+review, and record the reviewer's final decision. It doesn't approve an NDA or make a legal call
+on its own — I kept that authority with the reviewer.
 
 | | |
 | --- | --- |
@@ -106,8 +108,9 @@ flowchart LR
 Each requirement goes through retrieval and classification independently (one model call per
 requirement); nothing about Requirement 1's evidence or verdict influences Requirement 2's.
 
-Built and evaluated on [ContractNLI](https://stanfordnlp.github.io/contract-nli/), a public NDA
-benchmark. That's not a claim of performance on real confidential enterprise contracts.
+I built and evaluated this on [ContractNLI](https://stanfordnlp.github.io/contract-nli/), a
+public NDA benchmark. That's not a claim of performance on real confidential enterprise
+contracts, and I don't make one.
 
 ## High-level architecture
 
@@ -160,8 +163,8 @@ flowchart TD
 ```
 
 Orange is the one LLM call. Green is deterministic code, no model involved. Purple is the human
-in the loop: there's no automatic confidence gate, so every result reaches a reviewer. This
-matches `pipeline/frozen_rag.py` and `pipeline/final_review.py` directly.
+in the loop: I didn't build an automatic confidence gate, so every result reaches a reviewer.
+This matches `pipeline/frozen_rag.py` and `pipeline/final_review.py` directly.
 
 ## Metrics: targeted vs. reached
 
@@ -174,9 +177,9 @@ matches `pipeline/frozen_rag.py` and `pipeline/final_review.py` directly.
 
 Official ContractNLI TEST split, n = 2,091, all three systems on the identical population.
 Source: `experiments/E20_final_rag_test/results/E20_final_report.json`,
-`results/final/v2/full_test_comparison.csv`. Rule-based keyword retrieval is the project's
-non-AI baseline (Problem Statement Section 4) and the target's comparison point; the
-FULL-context wording from Section 7 is reported alongside it, not substituted for it.
+`results/final/v2/full_test_comparison.csv`. I use rule-based keyword retrieval as my non-AI
+baseline (Problem Statement Section 4) and the target's comparison point; I report the
+FULL-context wording from Section 7 alongside it, not substituted for it.
 
 ![FULL vs RAG, four headline metrics](docs/images/full_vs_rag_dumbbell.png)
 
@@ -191,25 +194,25 @@ p=0.0047); accuracy isn't significantly different (p=0.217). More detail in
 | **2,091-case official TEST benchmark** (headline numbers above) | 59.0% acc / 50.1% joint | 77.6% acc / 74.6% joint | 76.8% acc / 72.5% joint |
 | **49-case targeted evaluation** (E24: golden + negative + evidence-quality battery, deliberately includes the hardest known case family) | 51.0% acc / 44.9% joint | 73.5% acc / 73.5% joint | 71.4% acc / 67.3% joint |
 
-The targeted set is a regression check on cases this project already hand-curated to be hard, run
+The targeted set is a regression check on cases I already hand-curated to be hard, which I ran
 against the current architecture for the first time. It's not a second benchmark, and lower numbers
 here don't revise the TEST result above. It surfaced findings the TEST-scale numbers can't: the
 exception/carve-out weakness documented in ADR-011 persists today (3 of 4 known cases still
-fail); one case (038) was traced to the exact clause FULL over-weighted and RAG's narrower
+fail); I traced one case (038) to the exact clause FULL over-weighted and RAG's narrower
 context avoided: direct evidence that full-document access isn't strictly safer than retrieval,
-and RAG's two evidence-grounding failures (correct label, insufficient cited evidence) were
-diagnosed down to exact gold-span coverage, not just scored pass/fail. Both are retrieval
+and I diagnosed RAG's two evidence-grounding failures (correct label, insufficient cited
+evidence) down to exact gold-span coverage, not just scored pass/fail. Both are retrieval
 coverage gaps, not pure model errors. Full case-level detail:
 [`experiments/E24_targeted_evaluation/summary.md`](experiments/E24_targeted_evaluation/summary.md).
 
 ### What's measured, what's not
 
-NDATrace measures inference cost and model quality directly: RAG runs $0.00168/case, FULL
-$0.00202/case (`experiments/E20_final_rag_test/results/E20_final_report.json`). End-to-end
-reviewer time savings have not been measured in this project; no productivity study was run.
-What follows is a modeled, explicit scenario, not a result.
+I measure inference cost and model quality directly: RAG runs $0.00168/case, FULL
+$0.00202/case (`experiments/E20_final_rag_test/results/E20_final_report.json`). I have not
+measured end-to-end reviewer time savings; I ran no productivity study. What follows is a
+modeled, explicit scenario, not a result.
 
-Business impact is modeled using a published contract-review-time benchmark plus explicit
+I model business impact using a published contract-review-time benchmark plus explicit
 scenario assumptions, kept in three separate, clearly labeled categories:
 
 | Category | What it is |
@@ -229,7 +232,7 @@ Formula, fully transparent: `annual_hours = contracts/year × baseline_hours/con
 `hours_saved = annual_hours × assumed_reduction_rate`, `labor_savings = hours_saved × assumed_hourly_rate`.
 Reproduce or change the assumptions: `python scripts/business_economics_scenario.py`.
 
-No productivity study was conducted. These numbers show potential economic scale under stated
+I conducted no productivity study. These numbers show potential economic scale under stated
 assumptions, not a realized or proven ROI. Treat the percentages as illustrative inputs, not
 findings.
 
@@ -237,33 +240,34 @@ findings.
 
 ### The architecture ladder
 
-Start at the cheapest rung, make each escalation earn itself: four architectures were built and
-measured against each other, not assumed, in order.
+I start at the cheapest rung and make each escalation earn itself: I built and measured four
+architectures against each other, not assumed, in order.
 
 | Alternative | Verdict |
 | --- | --- |
+| Majority-class guess (always predict Entailment) | 46.3% accuracy / 0% Joint (`E04B`) — the floor accuracy alone must clear to mean anything |
 | Rule-based keyword baseline | 59.0% accuracy / 50.1% Joint, insufficient, justified an LLM |
 | Full-context LLM (FULL) | Strongest measured quality, kept as the benchmark reference |
 | Retrieval-augmented generation (RAG) | Bounded cost/context, kept as the served architecture |
 | Selective agentic investigation | Zero tool calls on 15 real escalated cases, net benefit 0.0pp, rejected |
 
-Automatic confidence-routing was tested too (E15). No policy hit both an acceptable review
-workload and an acceptable error rate, so every result still routes to a human.
+I tested automatic confidence-routing too (E15). No policy hit both an acceptable review
+workload and an acceptable error rate, so I kept every result routing to a human.
 
 ![Quality vs. cost, all four measured systems](docs/images/quality_cost_frontier.png)
 
 **Takeaway:** Rule → RAG → FULL is the real Pareto frontier; the local Qwen comparator is
 strictly dominated (same $0 cost, lower Joint correctness).
 
-Trade-offs made, explicitly:
+Trade-offs I made, explicitly:
 
-- **Quality for cost/scale.** RAG was retained as the prototype runtime because it provides
+- **Quality for cost/scale.** I retained RAG as the prototype runtime because it provides
   bounded context and lower measured inference cost, while accepting a measured 2.1-point
   Joint-correctness gap to FULL. Long-document scalability remains untested.
-- **Simplicity over capability.** The agent and auto-routing were rejected after measuring them,
+- **Simplicity over capability.** I rejected the agent and auto-routing after measuring them,
   not before. Both added real cost and earned nothing back on this data.
 - **Operational simplicity over retrieval complexity.** BM25 plus a reranker tied dense/hybrid
-  retrieval on quality, and BM25 needs no vector index to operate.
+  retrieval on quality, and BM25 needs no vector index to operate, so I kept BM25.
 
 ![Where RAG actually fails](docs/images/failure_pareto.png)
 
@@ -275,10 +279,23 @@ by step in [`examples/case_failure/`](examples/case_failure/).
 The full 24-experiment ledger (E00–E23), each with its question, finding, and decision, is in
 [`docs/experiment_registry.md`](docs/experiment_registry.md).
 
+### Why not low-code
+
+I didn't try a no-code/low-code tool (a hosted assistant builder, a model playground, a workflow
+builder like n8n or Zapier, an AutoML trainer) before writing code. I decided to go straight to
+code upfront, not after an attempted shortcut failed: the product's actual requirements I needed
+(a reviewer decision API with an append-only audit trail, a deterministic verbatim-evidence
+validator sitting between the model and the user, per-document BM25 retrieval, an offline
+gold-aware evaluation harness kept separate from the gold-blind runtime) are integration and
+control logic, not something a configured prompt-and-parameters console exposes. A low-code tool
+can wrap a single model call; it cannot own the retrieval pipeline, the evidence verification
+step, or the reviewer-decision persistence my core argument depends on. I'm disclosing that
+judgment call here rather than leaving it unstated.
+
 ### Build vs. buy, by layer
 
-What's rented, what's reused off the shelf, and what's actually owned engineering, compared
-against what the proposal originally planned for each layer:
+What I rent, what I reuse off the shelf, and what I actually own as engineering, compared
+against what I originally proposed for each layer:
 
 | Layer | Decision | Proposed (Problem Statement) | Final |
 | --- | --- | --- | --- |
@@ -289,8 +306,8 @@ against what the proposal originally planned for each layer:
 | Retrieval, orchestration, evals | Build | Chunking, indexing, top-K retrieval, evidence mapping, reviewer decision API, evaluation harness | Unchanged, this is the project-specific logic |
 | Serving / interface | Build | Streamlit | **Next.js + FastAPI, not Streamlit as originally proposed.** Streamlit was the Week-3 plan for a quick demo UI; the reviewer decision API (Approve/Override/Reject, append-only audit trail) needed a real backend, so the interface became a proper frontend/backend split instead of a single Streamlit script. |
 
-The model and standard libraries are rented or reused; the retrieval pipeline, evaluation
-harness, reviewer decision API, injection guard, and reproducibility harness are owned,
+I rent or reuse the model and standard libraries; I own the retrieval pipeline, evaluation
+harness, reviewer decision API, injection guard, and reproducibility harness as
 project-specific engineering.
 
 ## Quick start
@@ -321,8 +338,8 @@ cd frontend && npm ci && npm run dev   # http://localhost:3000
 `python scripts/download_models.py`.
 
 To verify instead of run (tests, type-checks, full reproducibility), see
-[Reproducibility](#reproducibility) below. It's kept separate so this section stays about running
-the product, not proving it.
+[Reproducibility](#reproducibility) below. I kept it a separate section so this one stays about
+running the product, not proving it.
 
 ## Reproducibility
 
@@ -346,11 +363,11 @@ python experiments/E00_smallest_slice/run_smallest_slice.py --live   # one real 
 `OPENROUTER_API_KEY` in `.env` (see [Quick start](#quick-start)); nothing else in this section
 requires a key, and A never makes a network call at all.
 
-C has no copy-paste command on purpose: it means re-running a full experiment at TEST scale
-(for example `python scripts/run_e20_hosted_test.py`, the script behind the 2,091-case headline
-result), which costs real money (E20's own run was $3.52) and takes close to an hour. If you want
-to verify it yourself rather than trust the saved output, the script is there, but it's not
-something to run casually or as a routine check.
+I left C with no copy-paste command on purpose: it means re-running a full experiment at TEST
+scale (for example `python scripts/run_e20_hosted_test.py`, the script behind the 2,091-case
+headline result), which costs real money (my own E20 run was $3.52) and takes close to an hour.
+If you want to verify it yourself rather than trust my saved output, the script is there, but I
+don't run it casually or as a routine check, and I don't expect you to either.
 
 <details>
 <summary>Sample output: A</summary>
@@ -383,8 +400,8 @@ python scripts/analyze_e15_validation.py
 python scripts/e18_business_analysis.py
 ```
 
-Each one recomputes its experiment's metrics from saved predictions, zero model calls. Listed
-here so this isn't a black box; see `scripts/verify_reproducibility.py`'s `ANALYSIS_SCRIPTS`.
+Each one recomputes its experiment's metrics from saved predictions, zero model calls. I listed
+them here so this isn't a black box; see `scripts/verify_reproducibility.py`'s `ANALYSIS_SCRIPTS`.
 
 </details>
 
@@ -414,11 +431,11 @@ Frontend checks: `cd frontend && npx tsc --noEmit && npm test && npm run build`.
 | Evals | An offline scoring harness that knows gold labels, kept separate from a runtime validator that never sees them. |
 | Experiments | 24 numbered, frozen experiments (E00–E23), each with its question, finding, and decision. |
 
-Gold labels and evidence are withheld from the model at inference time and scored only
-afterward. The TEST split wasn't tuned against during this project's own development, though a
-superseded earlier run did score it once; that's disclosed in
-[`docs/data_contamination_register.md`](docs/data_contamination_register.md) and not described
-as "blind."
+I withhold gold labels and evidence from the model at inference time and score only afterward. I
+didn't tune against the TEST split during my own development, though a superseded earlier run of
+mine did score it once; I disclose that in
+[`docs/data_contamination_register.md`](docs/data_contamination_register.md) and don't describe
+the split as "blind."
 
 ### Evaluation cases checked into the repo
 
@@ -432,16 +449,17 @@ as "blind."
 | Confidence / abstention | 2 | Confidence and escalation-behaviour checks | `data/golden/confidence_cases.json` |
 | Evidence quality | 4 | Evidence-quality and source-grounding checks | `data/golden/evidence_quality_cases.json` |
 
-These checked-in cases are regression, robustness and behavioural evals used to catch known
-failure modes during development; they are not treated as the project's unbiased headline
-benchmark. Most are drawn from ContractNLI DEV, with some synthetic security cases. Final quality
-numbers come from the official TEST evaluation under the documented final protocol (see
+I use these checked-in cases as regression, robustness and behavioural evals to catch known
+failure modes during development; I don't treat them as my unbiased headline benchmark. Most are
+drawn from ContractNLI DEV, with some synthetic security cases. My final quality numbers come
+from the official TEST evaluation under the documented final protocol (see
 [Metrics](#metrics-targeted-vs-reached) above).
 
 Pass/fail results for every row above are in
-[`docs/test_coverage_summary.md`](docs/test_coverage_summary.md). **Measured against the legacy
-pipeline (RAG + selective agent), not the current final architecture** (GPT-5-mini + FULL); that
-distinction is called out in the summary itself and repeated here so it isn't lost in a link.
+[`docs/test_coverage_summary.md`](docs/test_coverage_summary.md). **I measured these against the
+legacy pipeline (RAG + selective agent), not the current final architecture** (GPT-5-mini +
+FULL); I call out that distinction in the summary itself and repeat it here so it isn't lost in
+a link.
 
 - Data explainer: [`data/README.md`](data/README.md)
 - Eval-case design: [`docs/evaluation_case_design.md`](docs/evaluation_case_design.md)
@@ -480,61 +498,72 @@ tests/         Unit, integration, robustness, and leakage checks
 | Human verification | Every result is shown for review; nothing auto-finalizes. |
 | OWASP LLM Top 10 | Assessed in full against the 2026 edition (E21): 3 PASS, 5 PARTIAL, 2 FAIL across all 10 categories at baseline. Both FAILs remediated (E22): Unbounded Consumption (LLM06) now PASS (real cost/rate limits enforced), Prompt Injection (LLM01) raised to PARTIAL (detection below the pre-declared ≥8/11 bar, reported honestly rather than rounded up). No production authentication (Sensitive Information Disclosure, LLM02) remains unremediated. Full category-by-category results: [`docs/owasp_2026_mapping.md`](docs/owasp_2026_mapping.md). |
 
-No authentication: scoped to public or synthetic NDA text only, not approved for confidential
-documents. ContractNLI is a public benchmark, not evidence of performance on long (50–100 page)
-real enterprise contracts. No production deployment, no production-readiness claim, no complete
-prompt-injection protection claim.
+I scoped this to public or synthetic NDA text only, not approved for confidential documents, and
+built no authentication. ContractNLI is a public benchmark, not evidence of performance on long
+(50–100 page) real enterprise contracts. I make no production deployment claim, no
+production-readiness claim, no complete prompt-injection protection claim.
+
+**The silent failure this system can produce:** a label that is confidently wrong while the cited
+evidence is completely genuine — a real, verbatim quote from the document that the reviewer could
+glance at and accept, backing a conclusion the clause doesn't actually support. This is exactly
+the gap between L1 (structural: is the quote real and well-formed) and L2 (semantic: is the
+conclusion actually right) that I score separately in my evaluation framework. It's measured, not
+hypothetical: on official TEST, 448 of RAG's 576 non-Joint cases are source-valid output with the
+wrong conclusion (`docs/failure_analysis.md`). That's why I require human verification on every
+result rather than auto-finalizing on a passed source check — I treat a valid quotation as
+necessary, never sufficient, for acceptance.
 
 ## Future path
 
-What's complete, for this course submission: a frozen RAG runtime scored against the full TEST
-split, the Rule-based-baseline risk-sensitive recall target met (+16.6pp vs. the required
+What I've completed, for this course submission: a frozen RAG runtime scored against the full
+TEST split, the Rule-based-baseline risk-sensitive recall target met (+16.6pp vs. the required
 ≥5.0pp, with a separate +1.2pp gain over FULL-context processing also reported), a 49-case
-targeted re-check on the current
-architecture (E24), a security assessment against all 10 OWASP LLM Top 10 categories with the two
-baseline FAILs remediated, and a reviewer-facing frontend + API over the frozen pipeline. What's
-deliberately left open, grounded in findings already in this repository rather than speculative:
+targeted re-check on the current architecture (E24), a security assessment against all 10 OWASP
+LLM Top 10 categories with the two baseline FAILs remediated, and a reviewer-facing frontend +
+API over the frozen pipeline. What I've deliberately left open, grounded in findings already in
+this repository rather than speculative:
 
 - **Exception/carve-out clause reasoning is the dominant remaining failure mode, not retrieval.**
   77.8% of TEST failures are reasoning errors on clauses the model already has in context, most
-  often negation and conditional language ("unless," "provided that") — found independently across
-  E03, E04, E17, and reconfirmed in E24 (3 of 4 ADR-011 exception cases still fail under the
-  current architecture). The next highest-leverage experiment is prompt- or training-level work
-  targeted at polarity/exception handling specifically, not more retrieval tuning
-  ([`docs/failure_analysis.md`](docs/failure_analysis.md)).
+  often negation and conditional language ("unless," "provided that") — I found this
+  independently across E03, E04, E17, and reconfirmed it in E24 (3 of 4 ADR-011 exception cases
+  still fail under the current architecture). The next highest-leverage experiment I'd run is
+  prompt- or training-level work targeted at polarity/exception handling specifically, not more
+  retrieval tuning ([`docs/failure_analysis.md`](docs/failure_analysis.md)).
 - **RAG's evidence-selection failures on partial-retrieval-coverage cases (E24 cases 007, 043)
-  are an n=2 finding, not a validated pattern.** A dedicated experiment with a larger scattered-evidence
-  case set is needed before concluding anything general about RAG's citation behavior under partial
-  retrieval coverage.
-- **The golden/negative battery's difficulty tiers ("easy"/"medium"/"hard") were assigned under the
-  legacy pipeline and are not re-validated for the current architecture** — E24 case 001 surfaced
-  one disagreement between the stored tier and the current architecture's actual behavior;
-  systematically re-auditing tier labels is unstarted.
+  are an n=2 finding, not a validated pattern.** I'd need a dedicated experiment with a larger
+  scattered-evidence case set before concluding anything general about RAG's citation behavior
+  under partial retrieval coverage.
+- **The golden/negative battery's difficulty tiers ("easy"/"medium"/"hard") were assigned under
+  the legacy pipeline and I haven't re-validated them for the current architecture** — E24 case
+  001 surfaced one disagreement between the stored tier and the current architecture's actual
+  behavior; I haven't started systematically re-auditing tier labels.
 - **Long, real-world-scale NDAs (50–100 pages) are untested.** ContractNLI documents are short;
-  nothing here measures retrieval or reasoning quality on contracts an order of magnitude longer.
+  I don't measure retrieval or reasoning quality on contracts an order of magnitude longer.
 - **Production authentication remains the one unremediated OWASP finding (LLM02).** `GET /results`
-  and `GET /review/{id}` have no auth; this is a known, disclosed gap, not an oversight, and would
-  be the first fix before any non-local deployment.
-- **The business-economics scenario's assumptions (handoff rate, time saved per review) are modeled
-  from an external survey, not measured on this system.** A real reviewer time-motion study would
-  replace the modeled inputs with measured ones.
+  and `GET /review/{id}` have no auth; this is a known gap I'm disclosing, not an oversight, and
+  it's the first fix I'd make before any non-local deployment.
+- **The business-economics scenario's assumptions (handoff rate, time saved per review) are
+  modeled from an external survey, not measured on this system.** A real reviewer time-motion
+  study would replace my modeled inputs with measured ones.
 
 ## Project deliverables
 
 NTU PE6201 (Emerging AI Technologies) end-of-course project.
 
-- Trade-off report: submitted separately, not included in this public repository ahead of the
-  submission deadline.
-- GitHub implementation: this repository, reproducible end to end via
+- Trade-off report: included in this repository at
+  [`report/NDATrace_Final_Report.html`](report/NDATrace_Final_Report.html) (see the callout at
+  the top of this README).
+- GitHub implementation: this repository, which I made reproducible end to end via
   [`scripts/verify_reproducibility.py`](#reproducibility).
 - Problem statement and course materials: submitted separately through the course platform.
-- Recorded demonstration: not yet recorded.
+- Recorded demonstration: [youtu.be/Bnle3qOZtcA](https://youtu.be/Bnle3qOZtcA).
 
-NDATrace was developed for NTU PE6201 using the
+I developed NDATrace for NTU PE6201 using the
 [ContractNLI](https://stanfordnlp.github.io/contract-nli/) dataset. It's an evidence-grounded
 reviewer-assist prototype, not legal advice or a production approval system.
 
-**Author note.** Built end to end by one author: the retrieval/reranking pipeline and its
+**Author note.** I built this end to end, alone: the retrieval/reranking pipeline and its
 chunking strategy, the evaluation harness and all 24 experiment scripts, the reviewer decision
 API (`backend/routes/review.py`), the injection guard, and the reproducibility harness
 (`scripts/verify_reproducibility.py`).

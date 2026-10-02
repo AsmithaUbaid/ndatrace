@@ -53,6 +53,16 @@ scored against the superseded legacy pipeline until this pass (see
 legacy-only because every entry references a synthetic document whose original text was never
 saved, so there is nothing to faithfully replay.
 
+**No generator script was committed for these synthetic documents.** They were authored directly
+as part of earlier (legacy) test-case construction, before this project adopted the discipline of
+treating a data generator as a regenerable part of the system. That means `injection_cases.json`
+and `llm_behaviour_cases.json` are not reproducible from a script or prompt the way the rest of
+this repo's artifacts are — they are historical, non-regenerable records, disclosed as such rather
+than silently presented as reproducible. Current-architecture security robustness is instead
+characterized by experiments that *do* have a full, real, replayable trail against live model
+calls: E16, E21, E22, E23 (hosted injection attacks against the actual frozen runtime, not
+synthetic fixtures).
+
 ## Split membership discipline
 
 Every file above draws exclusively from `data/contractnli/dev.json`. None reference or were built
