@@ -549,9 +549,7 @@ this repository rather than speculative:
 
 NTU PE6201 (Emerging AI Technologies) end-of-course project.
 
-- Trade-off report: included in this repository at
-  [`report/NDATrace_Final_Report.html`](report/NDATrace_Final_Report.html) (see the callout at
-  the top of this README).
+- Trade-off report: submitted separately through the course platform.
 - GitHub implementation: this repository, which I made reproducible end to end via
   [`scripts/verify_reproducibility.py`](#reproducibility).
 - Problem statement and course materials: submitted separately through the course platform.

@@ -2,7 +2,7 @@
 
 Audit of `frontend/app/project/{OverviewTab,CaseExplorerTab,BuildTab}.tsx` and
 `frontend/data/projectPresentation.ts`/`project-presentation.json` against the final report
-(`report/NDATrace_Final_Report.html`) and canonical experiment artifacts. Source-of-truth
+(submitted separately) and canonical experiment artifacts. Source-of-truth
 order used throughout: Problem Statement > canonical experiment artifacts > notebooks/ADRs > UI.
 The UI is presentation and explanatory material; where it disagreed with a canonical artifact,
 the artifact won and the disagreement is logged below.

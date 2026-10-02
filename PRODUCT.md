@@ -104,4 +104,4 @@ for it.
 Full targeted-vs-reached discussion, the two-population distinction (TEST n=2,091 vs. the
 49-case targeted battery), and business-economics modeling: see
 [`README.md#metrics-targeted-vs-reached`](README.md#metrics-targeted-vs-reached) and the final
-report, [`report/NDATrace_Final_Report.html`](report/NDATrace_Final_Report.html).
+report (submitted separately).

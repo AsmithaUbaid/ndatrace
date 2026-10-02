@@ -120,8 +120,62 @@ def main() -> None:
         f"{full['latency_ms_mean']/1000:.2f} s", f"{rag['latency_ms_mean']/1000:.2f} s",
     ]
     require(all(v in source for v in ops_values), "measured input tokens, API cost and latency all match canonical TEST artifacts")
-    require("727" in source, "FULL mean output tokens are disclosed")
-    require("701" in source, "RAG mean output tokens are disclosed")
+    # Output tokens: use the same `ops` means that drive the reported cost and input tokens (not the
+    # per-case log means, 727.1/699.9). The old bare substring check passed on the Macro-F1 "0.727".
+    gpt_ops = json.loads((ROOT / "results/final/v2/gpt_full_test_metrics.json").read_text())["ops"]
+    full_out = f"{gpt_ops['output_tokens_mean']:,.0f}"
+    rag_out = f"{e20['RAG_metrics']['ops']['output_tokens_mean']:,.0f}"
+    require(re.search(rf"Mean output tokens per case</td><td class=\"num\">—</td><td class=\"num\">{full_out}</td><td class=\"num\">{rag_out}</td>", source),
+            f"Table 4 mean output tokens per case (FULL {full_out}, RAG {rag_out}) match the canonical ops means in the table row itself")
+
+    # Risk-sensitive recall definition: macro-average disclosed; pooled alternative recomputed from counts.
+    require("macro-average of Contradiction and NotMentioned recall" in source and "Risk-sensitive recall is macro-averaged" in source,
+            "risk-sensitive recall is stated as macro-averaged in prose and Table 4 caption")
+    counts = {"Rule": (37, round(systems["Rule"]["nm"] * 903)),
+              "FULL": (166, round(systems["FULL"]["nm"] * 903)),
+              "RAG": (170, round(systems["RAG"]["nm"] * 903))}
+    pooled = {k: (c + nm) / (220 + 903) for k, (c, nm) in counts.items()}
+    require(pooled["Rule"] > pooled["FULL"] and pooled["Rule"] > pooled["RAG"],
+            f"pooled recall would rank Rule first ({pooled['Rule']:.1%} vs FULL {pooled['FULL']:.1%}, RAG {pooled['RAG']:.1%}), which the report's disclosure sentence relies on")
+
+    # Over-inference: NotMentioned gold predicted as Entailment/Contradiction (RAG, official TEST)
+    conf = e20["RAG_metrics"]["confusion_rows_gold_cols_pred"]
+    over_inf = conf["NotMentioned"]["Entailment"] + conf["NotMentioned"]["Contradiction"]
+    label_errors = e20["population"]["n"] - sum(conf[c][c] for c in ("Entailment", "Contradiction", "NotMentioned"))
+    require((over_inf, label_errors) == (330, 486) and "330 of 486" in source,
+            f"NotMentioned over-inference recomputes to {over_inf} of {label_errors} RAG label errors, matching the report")
+    gconf = json.loads((ROOT / "results/final/v2/gpt_full_test_metrics.json").read_text())["confusion_rows_gold_cols_pred"]
+    g_over = gconf["NotMentioned"]["Entailment"] + gconf["NotMentioned"]["Contradiction"]
+    g_err = 2091 - sum(gconf[c][c] for c in ("Entailment", "Contradiction", "NotMentioned"))
+    require(g_over / g_err > 0.5, f"FULL shows the same over-inference tendency ({g_over} of {g_err} label errors), as the report states")
+
+    # Architecture justification: base-scenario cost-to-serve favours FULL, so the report must say so.
+    cts = e20["cost_to_serve_comparison"]
+    require(cts["rag_cheaper_than_full_allin"] is False and "FULL is also cheaper end to end" in source
+            and "engineering decision, not a measured win" in source,
+            "base-scenario cost-to-serve favours FULL and the report frames RAG retention as an engineering decision")
+
+    # Stated GPT-5-mini prices and check date must match the recorded pricing artifact
+    pricing = json.loads((ROOT / "data/cost_estimates.json").read_text())["pricing_assumption"]
+    require(pricing["input_price_per_million_usd"] == 0.25 and pricing["output_price_per_million_usd"] == 2.0
+            and pricing["verified"].startswith("2026-09-22")
+            and "$0.25 input, $2 output per million tokens; OpenRouter, checked 22 September 2026" in source,
+            "stated GPT-5-mini prices and check date match data/cost_estimates.json")
+    require("Ironclad, Luminance and Kira" in source, "closest commercial tools named in Section 1 (as in the Problem Statement)")
+    require("my stand-in for abstention" in source and "51.4% of cases to catch 82.5% of failures" in source,
+            "abstention proxy (E15 routing: 51.4% escalated, 82.5% of failures caught) is reported and the no-abstention decision stated")
+
+    # Security populations: FULL-context arm (E16) vs RAG path (E21) vs guard detection (E22)
+    rob = json.loads((ROOT / "results/final/v2/robustness_summary.json").read_text())
+    e21_llm01 = json.loads((ROOT / "experiments/E21_owasp_llm_top10/results/final_report.json").read_text())["full_category_results"]["LLM01"]["new_rag_path_calls"]
+    e22_guard = json.loads((ROOT / "experiments/E22_targeted_security_remediation/results/llm01_prompt_injection.json").read_text())["local_regression"]["e16_f1_f4_attack_detection"]
+    require(e21_llm01["n_cases"] == 7 and e21_llm01["n_attack_successes"] == 1 and e21_llm01["n_label_hijacks"] == 0
+            and "seven synthetic attack cases; one succeeded" in source and "1/7 attack cases succeeded" in source,
+            "RAG-path security check (E21: 7 cases, 1 success, 0 label hijacks) is reported separately and matches the artifact")
+    require(rob["clean_joint"] == 0.85 and rob["attack_joint"] == 0.75 and "(20 pairs)" in source and "FULL-context arm: 4/11" in source,
+            "FULL-context attack experiment (E16: 20 pairs, 85% -> 75%, 4/11) is attributed to the FULL-context arm")
+    require((e22_guard["detected"], e22_guard["total"]) == (4, 11) and "Guard flags 4/11 of the FULL-context attack variants" in source,
+            "injection-guard detection (E22: 4/11 of E16 FULL-context attack variants) is attributed correctly")
 
     failures = e20["failure_taxonomy"]
     require(sum(failures.values()) == e20["n_total_failures"] == 576, "failure taxonomy sums exactly to 576")
