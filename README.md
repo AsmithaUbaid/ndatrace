@@ -24,6 +24,10 @@
 
 ---
 
+> **Authoritative final submission report:** [NDATrace_Final_Report.pdf](NDATrace_Final_Report.pdf).
+
+---
+
 > ### "It got the right answer without finding the right clause."
 >
 > That's the failure plain accuracy hides. My headline metric is **Joint
@@ -179,6 +183,10 @@ Source: `experiments/E20_final_rag_test/results/E20_final_report.json`,
 `results/final/v2/full_test_comparison.csv`. I use rule-based keyword retrieval as my non-AI
 baseline (Problem Statement Section 4) and the target's comparison point.
 
+**System roles:** RAG is the current interactive prototype; FULL is the quality-reference
+comparator; Rule remains the non-AI baseline, with its existing definition and results unchanged.
+The higher FULL Joint score is reported as measured, not hidden or reinterpreted.
+
 ![FULL vs RAG, four headline metrics](docs/images/full_vs_rag_dumbbell.png)
 
 **Takeaway:** FULL's Joint-correctness edge is the only statistically significant gap (McNemar
@@ -274,7 +282,7 @@ are retrieval-limited; 78% are reasoning errors on evidence it already found. Fu
 [`docs/failure_analysis.md`](docs/failure_analysis.md), with one real case walked through step
 by step in [`examples/case_failure/`](examples/case_failure/).
 
-The full 24-experiment ledger (E00–E23), each with its question, finding, and decision, is in
+The full 25-experiment ledger (E00–E24), each with its question, finding, and decision, is in
 [`docs/experiment_registry.md`](docs/experiment_registry.md).
 
 ### Why not low-code
@@ -310,8 +318,11 @@ project-specific engineering.
 
 ## Quick start
 
-**Requirements:** Python 3.12, Node.js ≥20.9 + npm, internet access for the dataset and model
-downloads. An OpenRouter API key is only needed for billed review calls.
+**Requirements:** Python 3.12, Node.js ≥20.9 + npm. Internet access is required for initial
+dependency installation, the ContractNLI dataset download, and the pretrained embedding/reranker
+model downloads. After dependencies and those assets are present locally, the offline tests and
+saved-result reproducibility checks do not need internet. A valid OpenRouter API key and internet
+connection are needed for hosted review calls.
 
 ```bash
 # 1. Clone and set up Python
@@ -332,7 +343,9 @@ cd frontend && npm ci && npm run dev   # http://localhost:3000
 ```
 
 `GET /health` works without a key. Review endpoints return a clear config error until
-`OPENROUTER_API_KEY` is set. Prefetch the reranker/embedding models with
+`OPENROUTER_API_KEY` is set. The first run of `scripts/download_data.sh` downloads ContractNLI
+and therefore requires internet; later runs verify the local dataset checksums without
+downloading. Prefetch the reranker/embedding models with
 `python scripts/download_models.py`.
 
 To verify instead of run (tests, type-checks, full reproducibility), see
@@ -348,8 +361,9 @@ running the product, not proving it.
 | C. Rerun large-scale paid inference | Real API cost | Not part of normal verification, not done casually. |
 
 ```bash
-# A: one command: dataset checksum, full pytest (433 tests), every offline analysis
-# script, byte-for-byte drift check, and in-process backend checks. No API key needed.
+# A: one command: local dataset checksum, full pytest, every offline analysis script,
+# byte-for-byte drift check, and in-process backend checks. No API key needed.
+# If the dataset is not present, step 1 downloads it and requires internet.
 python scripts/verify_reproducibility.py
 
 # B: one real NDA through the real pipeline (pipeline/frozen_rag.py + final_review.py)
@@ -359,7 +373,9 @@ python experiments/E00_smallest_slice/run_smallest_slice.py --live   # one real 
 
 `--live` is the only command on this page that calls a hosted model. It needs your own
 `OPENROUTER_API_KEY` in `.env` (see [Quick start](#quick-start)); nothing else in this section
-requires a key, and A never makes a network call at all.
+requires a key. Reproducibility check A performs no network requests when the verified dataset is
+already downloaded; its dataset-check step downloads ContractNLI (and therefore requires
+internet) if any split is missing.
 
 I left C with no copy-paste command on purpose: it means re-running a full experiment at TEST
 scale (for example `python scripts/run_e20_hosted_test.py`, the script behind the 2,091-case
@@ -427,7 +443,7 @@ Frontend checks: `cd frontend && npx tsc --noEmit && npm test && npm run build`.
 | --- | --- |
 | Dataset | [ContractNLI](https://stanfordnlp.github.io/contract-nli/) (Koreeda & Manning, EMNLP 2021 Findings), CC BY 4.0, a public benchmark, not confidential company contracts. 607 NDAs, 10,319 examples across the official train/dev/test roles; TEST (2,091 examples, 123 documents) is reserved for the one-time final evaluation. Download + checksum-verify: `bash scripts/download_data.sh`; files live in `data/contractnli/`. |
 | Evals | An offline scoring harness that knows gold labels, kept separate from a runtime validator that never sees them. |
-| Experiments | 24 numbered, frozen experiments (E00–E23), each with its question, finding, and decision. |
+| Experiments | 25 numbered, frozen experiments (E00–E24), each with its question, finding, and decision. |
 
 I withhold gold labels and evidence from the model at inference time and score only afterward. I
 didn't tune against the TEST split during my own development, though a superseded earlier run of
@@ -453,11 +469,12 @@ drawn from ContractNLI DEV, with some synthetic security cases. My final quality
 from the official TEST evaluation under the documented final protocol (see
 [Metrics](#metrics-targeted-vs-reached) above).
 
-Pass/fail results for every row above are in
-[`docs/test_coverage_summary.md`](docs/test_coverage_summary.md). **I measured these against the
-legacy pipeline (RAG + selective agent), not the current final architecture** (GPT-5-mini +
-FULL); I call out that distinction in the summary itself and repeat it here so it isn't lost in
-a link.
+Pass/fail results and their lineage are in
+[`docs/test_coverage_summary.md`](docs/test_coverage_summary.md). The official TEST comparison
+measures the current RAG prototype against the FULL quality-reference comparator and the
+unchanged Rule non-AI baseline; E24 is a targeted check of the current architecture. Categories
+1–10 and the other explicitly labeled legacy rows are historical results from the earlier
+Gemini/RAG + selective-agent pipeline, not current-runtime validation.
 
 - Data explainer: [`data/README.md`](data/README.md)
 - Eval-case design: [`docs/evaluation_case_design.md`](docs/evaluation_case_design.md)
@@ -476,7 +493,7 @@ pipeline/      Frozen RAG runtime: chunking, retrieval, reranking, parsing, vali
 backend/       FastAPI endpoints, persisted review history, reviewer decision API
 frontend/      Next.js reviewer interface and Project Story
 evaluation/    Metrics, evaluators, schemas, and harnesses
-experiments/   Frozen E00–E23 protocols, outputs, and analyses
+experiments/   Frozen E00–E24 protocols, outputs, and analyses
 examples/      One worked success case and one worked failure case
 notebooks/     Executable Technical Tour (saved artifacts by default)
 data/          Public-dataset instructions and tracked regression fixtures
@@ -550,6 +567,7 @@ this repository rather than speculative:
 NTU PE6201 (Emerging AI Technologies) end-of-course project.
 
 - Trade-off report: submitted separately through the course platform.
+- Authoritative report copy: [`NDATrace_Final_Report.pdf`](NDATrace_Final_Report.pdf).
 - GitHub implementation: this repository, which I made reproducible end to end via
   [`scripts/verify_reproducibility.py`](#reproducibility).
 - Problem statement and course materials: submitted separately through the course platform.
@@ -560,6 +578,6 @@ I developed NDATrace for NTU PE6201 using the
 reviewer-assist prototype, not legal advice or a production approval system.
 
 **Author note.** I built this end to end, alone: the retrieval/reranking pipeline and its
-chunking strategy, the evaluation harness and all 24 experiment scripts, the reviewer decision
+chunking strategy, the evaluation harness and the E00–E24 experiment series, the reviewer decision
 API (`backend/routes/review.py`), the injection guard, and the reproducibility harness
 (`scripts/verify_reproducibility.py`).

@@ -29,39 +29,40 @@ final Approve/Override/Reject decision is persisted and auditable; the model nev
 
 ## High-level architecture
 
-How one input (NDA + requirement) transforms into one output (verdict + evidence + reviewer
-decision), and where code logic versus external intelligence (the LLM) sits:
+The current interactive prototype is RAG. FULL is retained as the quality-reference comparator;
+the existing Rule-based system remains the non-AI baseline. The baseline definition and its
+reported results are unchanged.
 
 ```mermaid
 flowchart TD
     IN(["NDA + Requirement"])
 
-    subgraph RETRIEVAL["① Retrieval (deterministic code)"]
+    subgraph RETRIEVAL["① RAG retrieval (deterministic code)"]
         direction LR
-        CHUNK["Clause-aware chunking<br/><i>256 tokens, no overlap</i>"]
-        BM25["BM25 search<br/><i>top-20 candidates</i>"]
-        RERANK["Cross-encoder rerank<br/><i>top-5 kept</i>"]
+        CHUNK["Clause-aware chunking<br/><i>256-token target</i>"]
+        BM25["BM25 retrieval<br/><i>top-20 candidates</i>"]
+        RERANK["Cross-encoder rerank<br/><i>top-5 context</i>"]
         CHUNK --> BM25 --> RERANK
     end
 
-    LLM["② GPT-5-mini classification<br/><i>external intelligence · frozen prompt · temperature 0</i>"]
+    GUARD["Request limits +<br/>injection guard"]
+    LLM["② GPT-5-mini + frozen P0<br/><i>temperature 0 · RAG prototype</i>"]
 
     subgraph VALIDATE["③ Validation & safety (deterministic code)"]
         direction LR
         PARSE["Structured parser"]
-        EVID["Evidence validator<br/><i>verbatim check</i>"]
-        GUARD["Injection guard +<br/><i>rate / cost limits</i>"]
-        PARSE --> EVID --> GUARD
+        EVID["Runtime evidence-source validator v2<br/><i>verbatim source check</i>"]
+        PARSE --> EVID
     end
 
     subgraph HUMAN["④ Human review"]
         direction LR
         REVIEWER["Reviewer sees<br/><i>verdict + evidence + flags</i>"]
-        DECISION(["Recorded decision<br/><b>Approve / Override / Reject</b>"])
+        DECISION(["Human final decision<br/><b>Approve / Override / Reject</b>"])
         REVIEWER --> DECISION
     end
 
-    IN --> RETRIEVAL --> LLM --> VALIDATE --> HUMAN
+    IN --> GUARD --> RETRIEVAL --> LLM --> VALIDATE --> HUMAN
 
     classDef input fill:#f8fafc,stroke:#475569,stroke-width:1.5px,color:#1e293b;
     classDef stage fill:#eff6ff,stroke:#3b82f6,stroke-width:1px,color:#1e3a5f;
@@ -70,9 +71,9 @@ flowchart TD
     classDef human fill:#fdf4ff,stroke:#c084fc,stroke-width:1.5px,color:#581c87;
 
     class IN input;
-    class CHUNK,BM25,RERANK stage;
+    class CHUNK,BM25,RERANK,GUARD stage;
     class LLM model;
-    class PARSE,EVID,GUARD control;
+    class PARSE,EVID control;
     class REVIEWER,DECISION human;
 
     style RETRIEVAL fill:#f8fafc,stroke:#3b82f6,stroke-width:1px
@@ -80,10 +81,11 @@ flowchart TD
     style HUMAN fill:#fdf4ff,stroke:#c084fc,stroke-width:1px
 ```
 
-Orange is the one external-intelligence call (the rented LLM). Blue and green are deterministic,
-project-owned code — no model involved. Purple is the human in the loop: there is no automatic
-confidence gate, so every result reaches a reviewer. Matches `pipeline/frozen_rag.py` and
-`pipeline/final_review.py` directly.
+Orange is the hosted model call. Blue and green are deterministic, project-owned code. Purple is
+the human in the loop: no general automatic uncertainty gate was adopted, so every result is
+reviewed by a person. The runtime source check verifies that cited text occurs in the submitted
+NDA; it does not prove that the classification is semantically correct. See
+`pipeline/final_review.py` and `docs/architecture.md`.
 
 ## Metrics: targeted vs. reached
 
@@ -95,13 +97,14 @@ confidence gate, so every result reaches a reviewer. Matches `pipeline/frozen_ra
 | Secondary | Contradiction recall, reported separately (not averaged away) | Required, not fixed | 75.5% (FULL) / 77.3% (RAG) | Reported separately |
 
 Official ContractNLI TEST split, n = 2,091, all three systems (Rule / FULL / RAG) on the
-identical population. Source: `experiments/E20_final_rag_test/results/E20_final_report.json`,
-`results/final/v2/full_test_comparison.csv`. Rule-based keyword retrieval is the project's
-non-AI baseline (Problem Statement Section 4) and the target's comparison point; the
-FULL-context wording from Problem Statement Section 7 is reported alongside it, not substituted
-for it.
+identical population. RAG is the current prototype; FULL is the quality-reference comparator;
+Rule-based keyword retrieval remains the project's non-AI baseline (Problem Statement Section 4)
+and the target's comparison point. The FULL-context wording from Problem Statement Section 7 is
+reported alongside it, not substituted for the baseline. Source:
+`experiments/E20_final_rag_test/results/E20_final_report.json`,
+`results/final/v2/full_test_comparison.csv`.
 
 Full targeted-vs-reached discussion, the two-population distinction (TEST n=2,091 vs. the
 49-case targeted battery), and business-economics modeling: see
-[`README.md#metrics-targeted-vs-reached`](README.md#metrics-targeted-vs-reached) and the final
-report (submitted separately).
+[`README.md#metrics-targeted-vs-reached`](README.md#metrics-targeted-vs-reached) and the
+[authoritative final submission report](NDATrace_Final_Report.pdf).
