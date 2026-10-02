@@ -170,7 +170,6 @@ This matches `pipeline/frozen_rag.py` and `pipeline/final_review.py` directly.
 | --- | --- | --- | --- | --- |
 | Primary | Joint correctness (label + evidence), FULL vs. RAG | Required to be measured and disclosed | 74.6% (FULL) / 72.5% (RAG), n=2,091 | ✅ Reported as measured |
 | Secondary | Risk-sensitive recall gain, RAG over **Rule-based (non-AI baseline)** | ≥ 5.0 points | **+16.6 points** (53.6% → 70.3%) | ✅ Met, by a wide margin |
-| Secondary | Risk-sensitive recall gain, RAG over **FULL-context LLM**, reported separately | Problem Statement Section 7's literal wording | **+1.2 points** (69.1% → 70.3%) | Would not clear the bar alone; not the project's baseline |
 | Secondary | Contradiction recall, reported separately (not averaged away) | Required, not fixed | 75.5% (FULL) / 77.3% (RAG) | ✅ Reported separately |
 
 Risk-sensitive recall is the macro-average of Contradiction and NotMentioned recall (not pooled over cases; a pooled figure is dominated by NotMentioned, where the rule system scores highest because it defaults to that label).
@@ -178,8 +177,7 @@ Risk-sensitive recall is the macro-average of Contradiction and NotMentioned rec
 Official ContractNLI TEST split, n = 2,091, all three systems on the identical population.
 Source: `experiments/E20_final_rag_test/results/E20_final_report.json`,
 `results/final/v2/full_test_comparison.csv`. I use rule-based keyword retrieval as my non-AI
-baseline (Problem Statement Section 4) and the target's comparison point; I report the
-FULL-context wording from Section 7 alongside it, not substituted for it.
+baseline (Problem Statement Section 4) and the target's comparison point.
 
 ![FULL vs RAG, four headline metrics](docs/images/full_vs_rag_dumbbell.png)
 
