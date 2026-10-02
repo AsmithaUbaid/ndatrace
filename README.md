@@ -175,6 +175,8 @@ This matches `pipeline/frozen_rag.py` and `pipeline/final_review.py` directly.
 | Secondary | Risk-sensitive recall gain, RAG over **FULL-context LLM**, reported separately | Problem Statement Section 7's literal wording | **+1.2 points** (69.1% → 70.3%) | Would not clear the bar alone; not the project's baseline |
 | Secondary | Contradiction recall, reported separately (not averaged away) | Required, not fixed | 75.5% (FULL) / 77.3% (RAG) | ✅ Reported separately |
 
+Risk-sensitive recall is the macro-average of Contradiction and NotMentioned recall (not pooled over cases; a pooled figure is dominated by NotMentioned, where the rule system scores highest because it defaults to that label).
+
 Official ContractNLI TEST split, n = 2,091, all three systems on the identical population.
 Source: `experiments/E20_final_rag_test/results/E20_final_report.json`,
 `results/final/v2/full_test_comparison.csv`. I use rule-based keyword retrieval as my non-AI
@@ -494,7 +496,7 @@ tests/         Unit, integration, robustness, and leakage checks
 | --- | --- |
 | Evidence-source verification | Cited text is checked to appear verbatim in the NDA. |
 | Semantic classification correctness | A separate question. Source-valid evidence doesn't mean the label is correct. |
-| Prompt-injection detection | Partial, not solved. 4 of 11 tested attack patterns still bypass the guard (E16). |
+| Prompt-injection detection | Partial, not solved. The guard flags 4 of the 11 FULL-context attack variants from E16 (E22), so 7 of 11 are not flagged. A separate RAG-path check (E21) had 1 of 7 attack cases succeed. |
 | Human verification | Every result is shown for review; nothing auto-finalizes. |
 | OWASP LLM Top 10 | Assessed in full against the 2026 edition (E21): 3 PASS, 5 PARTIAL, 2 FAIL across all 10 categories at baseline. Both FAILs remediated (E22): Unbounded Consumption (LLM06) now PASS (real cost/rate limits enforced), Prompt Injection (LLM01) raised to PARTIAL (detection below the pre-declared ≥8/11 bar, reported honestly rather than rounded up). No production authentication (Sensitive Information Disclosure, LLM02) remains unremediated. Full category-by-category results: [`docs/owasp_2026_mapping.md`](docs/owasp_2026_mapping.md). |
 
