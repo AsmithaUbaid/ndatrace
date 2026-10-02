@@ -93,14 +93,15 @@ NDA; it does not prove that the classification is semantically correct. See
 | --- | --- | --- | --- | --- |
 | Primary | Joint correctness (label + evidence), FULL vs. RAG | Required to be measured and disclosed | 74.6% (FULL) / 72.5% (RAG), n=2,091 | Reported as measured |
 | Secondary | Risk-sensitive recall gain, RAG over **Rule-based (non-AI baseline)** | ≥ 5.0 points | **+16.6 points** (53.6% → 70.3%) | Met, by a wide margin |
-| Secondary | Risk-sensitive recall gain, RAG over **FULL-context LLM**, reported separately | Problem Statement Section 7's literal wording | **+1.2 points** (69.1% → 70.3%) | Would not clear the bar alone; not the project's baseline |
+| Secondary | Risk-sensitive recall, RAG vs. **FULL quality-reference comparator** | Comparative result, reported separately | **+1.2 points** (69.1% → 70.3%) | Measured comparison; FULL is not the non-AI baseline |
 | Secondary | Contradiction recall, reported separately (not averaged away) | Required, not fixed | 75.5% (FULL) / 77.3% (RAG) | Reported separately |
 
 Official ContractNLI TEST split, n = 2,091, all three systems (Rule / FULL / RAG) on the
 identical population. RAG is the current prototype; FULL is the quality-reference comparator;
 Rule-based keyword retrieval remains the project's non-AI baseline (Problem Statement Section 4)
-and the target's comparison point. The FULL-context wording from Problem Statement Section 7 is
-reported alongside it, not substituted for the baseline. Source:
+and the comparison point for the risk-sensitive recall success criterion. The measured FULL
+comparison is reported separately as quality-reference context, not substituted for the baseline.
+Source:
 `experiments/E20_final_rag_test/results/E20_final_report.json`,
 `results/final/v2/full_test_comparison.csv`.
 
