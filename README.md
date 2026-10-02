@@ -20,8 +20,6 @@
 
 ---
 
-> **Authoritative final report:** [`report/NDATrace_Final_Report.html`](report/NDATrace_Final_Report.html) is my single self-contained submission document. It embeds its own CSS and all seven SVG figures inline and opens directly from a local `file:///` URL, no build step needed. I edit it directly (not generated from a separate source); verify it with `python scripts/verify_v3_report.py`, which recomputes every quantitative claim from canonical experiment artifacts.
->
 > **Product documentation (persona, input/output, architecture diagram, metrics targeted vs. reached) as a standalone one-pager:** [`PRODUCT.md`](PRODUCT.md).
 
 ---
