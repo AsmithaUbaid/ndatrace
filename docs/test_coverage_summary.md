@@ -9,19 +9,20 @@ correction of a prior version. It already reflects the catalogue correction (10
 non-single-case aggregate/structural entries removed from Categories 4–7 — see
 `docs/evaluation_case_design.md`), so the counts below are the final, corrected ones.
 
-**Note on era**: the "Final TEST result" row below is the current, canonical,
-locked result. Every row after it (the independent validation check, the dev sample, and Categories
-1–10) documents the **legacy pipeline's** own test-coverage story (RAG + selective
-agent, `google/gemini-2.5-flash-lite`) — real, historically meaningful work, but **not** the final
-selected architecture. See `docs/architecture_decisions/INDEX.md` for that lineage in full, and
-`docs/architecture.md` for why RAG/the agent were not selected for final.
+**Note on era and roles**: the "Current official TEST evaluation" row is the current, canonical,
+locked result. The interactive runtime is GPT-5-mini + RAG; FULL is the quality-reference
+comparator, and Rule is the non-AI baseline. The two rows explicitly marked *Legacy*, the legacy
+dev sample, and Categories 1–10 document an earlier RAG + selective-agent pipeline using
+`google/gemini-2.5-flash-lite`. That work remains valid historical evidence, but it is not a
+current-runtime validation result. See `docs/architecture_decisions/INDEX.md` for the lineage and
+`docs/architecture.md` for the current frozen RAG path.
 
 | Case collection | Size | Executed against current pipeline? | Result | Source |
 |---|---:|---|---|---|
-| **Final TEST result** | **2,091** | Yes | **GPT-5-mini + P0 + FULL: accuracy 77.6%, macro-F1 0.727, joint 74.6%, Contradiction recall 75.5%, NotMentioned recall 62.7%.** Comparators (same population): Rule 59.0%/joint 50.1%/C-recall 16.8%; local Qwen (ctx16k) 49.9%/joint 39.7%/C-recall 25.5%. The original E17 run used a balanced n=150 hosted sample (now superseded for headline metrics); E17B completed the remaining 1,941 TEST cases to produce this full-population result. | `results/final/v2/{gpt,rule,qwen}_full_test_metrics.json`, `full_test_comparison.csv` |
+| **Current official TEST evaluation** | **2,091** | **Yes — current RAG runtime and matched comparators** | **RAG interactive runtime:** accuracy 76.8%, macro-F1 0.723, joint 72.5%, Contradiction recall 77.3%, NotMentioned recall 63.2%. **FULL quality-reference comparator:** 77.6%/0.727/74.6%/75.5%/62.7%. **Rule non-AI baseline:** 59.0% accuracy/joint 50.1%/C-recall 16.8%. All use the same population. E17's balanced n=150 hosted sample is superseded for headline metrics; E17B plus E20 completed the matched full-population comparison. | `experiments/E20_final_rag_test/results/E20_final_report.json`, `results/final/v2/{gpt,rule}_full_test_metrics.json`, `results/final/v2/full_test_comparison.csv` |
 | *Legacy* official test set (historical, superseded) | 2,091 | Yes (legacy pipeline) | Full-context 81.2% acc / RAG 78.7% / RAG+agent 77.7%; Contradiction recall 59.1%/63.6%/60.5% | `results/final/legacy/run_T041_final_test_*.jsonl` |
 | *Legacy* independent validation check | 340 | Yes (legacy pipeline) | Full-context 80.6% acc / RAG 80.3% / RAG+agent 77.6% (statistically indistinguishable FC vs RAG, p=1.000) | `results/final/legacy/run_AV01_architecture_validation_*.jsonl` |
-| Dev sample (reused, adaptive) | 150 | Yes (repeatedly, across every tuning decision) | See `docs/architecture_decisions/INDEX.md` for the full per-decision breakdown — not a single number, by design | `docs/architecture_decisions/INDEX.md`, various `results/runs/*.jsonl` |
+| *Legacy* dev sample (reused, adaptive) | 150 | Yes (legacy pipeline, repeatedly across tuning decisions) | See `docs/architecture_decisions/INDEX.md` for the full per-decision breakdown — not a single number, by design | `docs/architecture_decisions/INDEX.md`, various `results/runs/*.jsonl` |
 | **Cat. 1 — Benchmark/ordinary** | 30 | Yes (legacy pipeline) | 24/30 = 80.0% | `data/golden_battery_pipeline_verification.json` |
 | **Cat. 2 — Regression/negative** | 15 | Yes (legacy pipeline) | 10/15 = 66.7%; found the 100%-failure exception/carve-out weakness (4/4 cases 034/038/039/040) | `data/golden_battery_pipeline_verification.json`, `docs/architecture_decisions/INDEX.md` ADR-011 |
 | **Cat. 3 — Robustness/injection** | 11 | Yes (legacy pipeline) | 11/11 resisted under the legacy prompt (was 9/10 before the fix) | `docs/architecture_decisions/INDEX.md` ADR-004 |
