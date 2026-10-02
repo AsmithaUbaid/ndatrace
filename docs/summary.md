@@ -1,7 +1,7 @@
 # NDATrace — Project Summary
 
 **NTU PE6201 Emerging AI Technologies.** Full detail is in `docs/experiment_registry.md`
-(final experiment ledger, E00–E20), `docs/architecture_decisions/INDEX.md`
+(final experiment ledger, E00–E24), `docs/architecture_decisions/INDEX.md`
 (final ADRs, incl. historical ADR-001–ADR-011 status), and `docs/architecture.md`
 (implementation) — this page is the 5-minute version of the **final, selected** result.
 
@@ -27,10 +27,12 @@ NDA + requirement
     -> human final decision
 ```
 
-The interactive prototype uses frozen E20 RAG for bounded context, lower input-token use, and
- (evidence-grounded) success was higher than RAG's — and at TEST scale that gap is **statistically
-significant** (74.6% vs 72.5%, McNemar p=0.0047), not just directionally favorable. Classification
-accuracy alone was not distinguishable between the two architectures (p=0.217).
+The interactive prototype uses frozen E20 RAG for bounded context and lower input-token use.
+FULL-context GPT-5-mini remains the strongest measured ContractNLI TEST quality-reference
+configuration. FULL's Joint (evidence-grounded) success was higher than RAG's, and at TEST scale
+that gap is **statistically significant** (74.6% vs 72.5%, McNemar p=0.0047), not just
+directionally favorable. Classification accuracy alone was not distinguishable between the two
+architectures (p=0.217).
 
 **Production-oriented direction: RAG is retained, not because it won on quality, but because of
 its scaling profile.** RAG cut input tokens 50.4% and API cost 16.8% on E20's TEST run, and its

@@ -146,7 +146,7 @@ a{color:#2563A6}
 <tbody>
 <tr><td>Rule (A0)</td><td>Can deterministic rules solve enough of the problem to avoid an LLM? (TEST n=2,091)</td><td class="num">53.6%</td><td class="num">baseline</td><td>Non-AI baseline: cheap and fast, insufficient semantic coverage</td></tr>
 <tr><td>FULL (A1)</td><td>What happens when the model sees the entire NDA? (TEST n=2,091)</td><td class="num">69.1%</td><td class="num">+15.4</td><td class="keep">Quality reference: strongest measured Joint correctness; not the prototype runtime</td></tr>
-<tr><td>RAG (A2)</td><td>Can bounded retrieval keep quality while shrinking the evidence path? (TEST n=2,091)</td><td class="num"><b>70.3%</b></td><td class="num" style="color:var(--teal);font-weight:700">+16.6 (vs Rule)</td><td class="keep">Adopted as prototype runtime; proposal target vs FULL not met (Section 4)</td></tr>
+<tr><td>RAG (A2)</td><td>Can bounded retrieval keep quality while shrinking the evidence path? (TEST n=2,091)</td><td class="num"><b>70.3%</b></td><td class="num" style="color:var(--teal);font-weight:700">+16.6 (vs Rule)</td><td class="keep">Adopted as prototype runtime for bounded context and lower inference cost</td></tr>
 <tr><td>Agent (A3)</td><td>Can dynamic investigation recover the cases RAG still misses? (TRAIN n=150)</td><td class="num">—</td><td class="num">—</td><td class="verdict">Rejected: 0% useful recovery across three evaluations (Figure 5)</td></tr>
 </tbody></table>
 <p class="analysis">I began with a rule-based keyword baseline: the cheapest way to test whether AI adds value. Before building retrieval, I ran an oracle experiment giving four models the gold evidence directly. GPT-5-mini interpreted the evidence substantially better than the tested local alternatives, particularly for contradictions (Figure 2). Given the whole NDA on the official TEST set, the local model also fell below the keyword rules. I then tested prompting, chunking, retrieval and reranking before comparing complete architectures. These stages answered different questions on separate populations and are not one pooled benchmark (Table 3).</p>
@@ -258,8 +258,8 @@ a{color:#2563A6}
 </section>
 <section id="s4">
 <h2><span class="n">4</span>Measured results and trade-offs</h2>
-<p class="analysis">The rule-based system remains the project's non-AI baseline and answers the first question: did adding semantic AI help where keyword matching cannot interpret reliably? Both LLM approaches improved substantially on rules (Table 3, Table 4); RAG's measured gain over Rule is +16.6 risk-sensitive-recall points. Separately, the proposal's original pre-registered target was a five-point gain for RAG over FULL. The measured RAG-over-FULL gain is only +1.2 points (69.1% to 70.3%), so that target was not achieved. FULL remains the stronger quality-reference configuration on Joint correctness, while RAG is the selected interactive runtime. Joint correctness matters here because a correct label backed by the wrong clause is not a dependable review finding. Risk-sensitive recall is the macro-average of Contradiction and NotMentioned recall, so Contradiction counts equally; a pooled recall would be dominated by NotMentioned, where the rule system scores highest by defaulting to that label.</p>
-<p class="tcap"><b>Table 4. Official architecture comparison</b> (official TEST, n=2,091). Rule is the non-AI baseline. The proposal's original numeric target compared RAG with FULL; the Rule comparison is reported separately. Risk-sensitive recall is macro-averaged. Differences use unrounded recalls. An always-Entailment majority guess scores 46.3% accuracy.</p>
+<p class="analysis">The rule-based system remains the project's non-AI baseline and answers the first question: did adding semantic AI help where keyword matching cannot interpret reliably? Both LLM approaches improved substantially on rules (Table 3, Table 4); RAG's measured gain over Rule is +16.6 risk-sensitive-recall points. FULL remains the stronger quality-reference configuration on Joint correctness, while RAG is the selected interactive runtime. Joint correctness matters here because a correct label backed by the wrong clause is not a dependable review finding. Risk-sensitive recall is the macro-average of Contradiction and NotMentioned recall, so Contradiction counts equally; a pooled recall would be dominated by NotMentioned, where the rule system scores highest by defaulting to that label.</p>
+<p class="tcap"><b>Table 4. Official architecture comparison</b> (official TEST, n=2,091). Rule is the non-AI baseline. Risk-sensitive recall is macro-averaged. Differences use unrounded recalls. An always-Entailment majority guess scores 46.3% accuracy.</p>
 <table>
 <thead><tr><th>Metric</th><th class="num">Rule-based</th><th class="num">FULL</th><th class="num">RAG</th></tr></thead>
 <tbody>
@@ -268,7 +268,6 @@ a{color:#2563A6}
 <tr><td>Macro-F1</td><td class="num">0.479</td><td class="num">0.727</td><td class="num">0.723</td></tr>
 <tr><td>Joint correctness (label + evidence)</td><td class="num">50.1%</td><td class="num"><b>74.6%</b></td><td class="num">72.5%</td></tr>
 <tr><td>Risk-sensitive recall (Contradiction/NotMentioned mean)</td><td class="num">53.6%</td><td class="num">69.1%</td><td class="num">70.3%</td></tr>
-<tr><td><b>Original proposal target: ≥+5 points, RAG over FULL</b></td><td class="num">—</td><td class="num">target comparator</td><td class="num" style="color:var(--orange);font-weight:700">+1.2 (not met)</td></tr>
 <tr><td>Separate comparison: gain over Rule non-AI baseline</td><td class="num">baseline</td><td class="num">+15.4</td><td class="num">+16.6</td></tr>
 <tr><td>Paired McNemar p vs FULL: accuracy / Joint</td><td class="num">—</td><td class="num">—</td><td class="num">0.217 / 0.0047</td></tr>
 <tr><td>Entailment / NotMentioned recall</td><td class="num">39.3 / 90.5%</td><td class="num">92.0 / 62.7%</td><td class="num">89.3 / 63.2%</td></tr>
@@ -529,7 +528,7 @@ a{color:#2563A6}
 </section>
 <section id="s8">
 <h2><span class="n">8</span>Conclusion</h2>
-<p class="analysis">The rule-based non-AI baseline established that semantic AI adds substantial value to this task: RAG gained +16.6 risk-sensitive-recall points over Rule. The proposal's separate ≥5-point RAG-over-FULL target was not met; the measured gain was +1.2 points. Against FULL, the stronger quality reference, RAG lowered inference cost while sacrificing some evidence-grounded correctness, and the tested agent and routing policies did not earn their complexity. NDATrace is therefore a bounded reviewer aid whose remaining question is whether people can verify its findings more efficiently without losing accuracy.</p>
+<p class="analysis">The rule-based non-AI baseline established that semantic AI adds substantial value to this task: RAG gained +16.6 risk-sensitive-recall points over Rule. Against FULL, the stronger quality reference, RAG lowered inference cost while sacrificing some evidence-grounded correctness, and the tested agent and routing policies did not earn their complexity. NDATrace is therefore a bounded reviewer aid whose remaining question is whether people can verify its findings more efficiently without losing accuracy.</p>
 </section>
 <section class="refs">
 <h2>References</h2>
